@@ -1122,7 +1122,7 @@
 
 	<macrodef name="setup-testable-tomcat-logging">
 		<sequential>
-			<if>
+<!--			<if>
 				<not>
 					<resourcecontains resource="${app.server.tomcat.dir}/conf/logging.properties" substring="org.apache.catalina.level" />
 				</not>
@@ -1136,7 +1136,7 @@ org.apache.catalina.loader.WebappLoader.level=INFO
 org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 					</echo>
 				</then>
-			</if>
+			</if>-->
 		</sequential>
 	</macrodef>
 
