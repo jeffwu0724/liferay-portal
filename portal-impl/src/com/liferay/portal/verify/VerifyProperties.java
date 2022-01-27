@@ -1669,6 +1669,9 @@ public class VerifyProperties extends VerifyProcess {
 			"configuration.jsp",
 		"editor.wysiwyg.portal-web.docroot.html.portlet.login.configuration." +
 			"jsp",
+		"editor.wysiwyg.portal-web.docroot.html.portlet.mail." + "edit.jsp",
+		"editor.wysiwyg.portal-web.docroot.html.portlet.mail." +
+			"edit_message.jsp",
 		"editor.wysiwyg.portal-web.docroot.html.portlet.message_boards." +
 			"configuration.jsp",
 		"editor.wysiwyg.portal-web.docroot.html.portlet.message_boards." +
