@@ -2087,10 +2087,6 @@ public interface PropsKeys {
 		"module.framework.web.generator.headers.";
 
 	public static final String
-		MODULE_FRAMEWORK_WEB_GENERATOR_JSP_COMPILER_DEPENDENCIES =
-			"module.framework.web.generator.jsp.compiler.dependencies";
-
-	public static final String
 		MODULE_FRAMEWORK_WEB_SERVLET_ANNOTATION_SCANNING_BLACKLIST =
 			"module.framework.web.servlet.annotation.scanning.blacklist";
 
