@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 /**
- * @author Michael C. Han
+ * @author Michael C. Han lol
  */
 public class BaseRelatedEntryIndexer implements RelatedEntryIndexer {
 
