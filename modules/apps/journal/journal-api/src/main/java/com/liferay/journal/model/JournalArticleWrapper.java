@@ -1137,15 +1137,6 @@ public class JournalArticleWrapper
 		return model.isSmallImage();
 	}
 
-	/**
-	 * @deprecated As of Wilberforce (7.0.x), with no direct replacement
-	 */
-	@Deprecated
-	@Override
-	public boolean isTemplateDriven() {
-		return model.isTemplateDriven();
-	}
-
 	@Override
 	public void persist() {
 		model.persist();

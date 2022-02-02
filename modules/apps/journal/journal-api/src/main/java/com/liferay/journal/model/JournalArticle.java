@@ -214,12 +214,6 @@ public interface JournalArticle
 	public boolean hasApprovedVersion();
 
 	/**
-	 * @deprecated As of Wilberforce (7.0.x), with no direct replacement
-	 */
-	@Deprecated
-	public boolean isTemplateDriven();
-
-	/**
 	 * @deprecated As of Judson (7.1.x)
 	 */
 	@Deprecated

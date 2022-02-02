@@ -733,15 +733,6 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	}
 
 	/**
-	 * @deprecated As of Wilberforce (7.0.x), with no direct replacement
-	 */
-	@Deprecated
-	@Override
-	public boolean isTemplateDriven() {
-		return true;
-	}
-
-	/**
 	 * @deprecated As of Judson (7.1.x)
 	 */
 	@Deprecated
