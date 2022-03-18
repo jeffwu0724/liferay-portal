@@ -305,19 +305,6 @@ public interface PropsKeys {
 		BLOGS_ENTRY_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED =
 			"blogs.entry.previous.and.next.navigation.enabled";
 
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String BLOGS_IMAGE_EXTENSIONS =
-		"blogs.image.extensions";
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String BLOGS_IMAGE_MAX_SIZE = "blogs.image.max.size";
-
 	public static final String BLOGS_LINKBACK_EXCERPT_LENGTH =
 		"blogs.linkback.excerpt.length";
 
@@ -346,14 +333,6 @@ public interface PropsKeys {
 		"browser.cache.signed.in.disabled";
 
 	public static final String BROWSER_LAUNCHER_URL = "browser.launcher.url";
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #VIEW_COUNT_ENABLED}
-	 */
-	@Deprecated
-	public static final String BUFFERED_INCREMENT_ENABLED =
-		"buffered.increment.enabled";
 
 	public static final String BUFFERED_INCREMENT_STANDBY_QUEUE_THRESHOLD =
 		"buffered.increment.standby.queue.threshold";
@@ -498,13 +477,6 @@ public interface PropsKeys {
 		COMPANY_SECURITY_PASSWORD_REMINDER_QUERY_FORM_AUTOCOMPLETE =
 			"company.security.password.reminder.query.form.autocomplete";
 
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String COMPANY_SECURITY_SEND_PASSWORD =
-		"company.security.send.password";
-
 	public static final String COMPANY_SECURITY_SEND_PASSWORD_RESET_LINK =
 		"company.security.send.password.reset.link";
 
@@ -583,20 +555,6 @@ public interface PropsKeys {
 
 	public static final String DATA_LIMIT_MAIL_MESSAGE_MAX_PERIOD =
 		"data.limit.mail.message.max.period";
-
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String DATA_LIMIT_MAX_MAIL_MESSAGE_COUNT =
-		"data.limit.max.mail.message.count";
-
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String DATA_LIMIT_MAX_MAIL_MESSAGE_PERIOD =
-		"data.limit.max.mail.message.period";
 
 	public static final String DATA_LIMIT_SITE_MAX_COUNT =
 		"data.limit.site.max.count";
@@ -736,26 +694,6 @@ public interface PropsKeys {
 
 	public static final String DISCUSSION_COMMENTS_FORMAT =
 		"discussion.comments.format";
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String DISCUSSION_EMAIL_BODY = "discussion.email.body";
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String DISCUSSION_EMAIL_COMMENTS_ADDED_ENABLED =
-		"discussion.email.comments.added.enabled";
-
-	/**
-	 * @deprecated As of Mueller (7.2.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String DISCUSSION_EMAIL_SUBJECT =
-		"discussion.email.subject";
 
 	public static final String DISCUSSION_MAX_COMMENTS =
 		"discussion.max.comments";
@@ -1111,13 +1049,6 @@ public interface PropsKeys {
 	public static final String
 		FIELD_ENABLE_COM_LIFERAY_PORTAL_KERNEL_MODEL_ORGANIZATION_STATUS =
 			"field.enable.com.liferay.portal.kernel.model.Organization.status";
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
-	 */
-	@Deprecated
-	public static final String FINALIZE_MANAGER_THREAD_ENABLED =
-		"finalize.manager.thread.enabled";
 
 	public static final String FULL_PAGE_DISPLAYABLE = "full.page.displayable";
 
@@ -3142,14 +3073,6 @@ public interface PropsKeys {
 	 */
 	@Deprecated
 	public static final String VERIFY_PROCESSES = "verify.processes";
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             com.liferay.view.count.configuration.ViewCountsConfiguration
-	 *             #enabled()}
-	 */
-	@Deprecated
-	public static final String VIEW_COUNT_ENABLED = "view.count.enabled";
 
 	public static final String VIRTUAL_HOSTS_DEFAULT_SITE_NAME =
 		"virtual.hosts.default.site.name";
