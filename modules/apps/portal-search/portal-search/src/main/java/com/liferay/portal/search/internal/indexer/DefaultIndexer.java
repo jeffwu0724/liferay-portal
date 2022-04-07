@@ -233,12 +233,6 @@ public class DefaultIndexer<T extends BaseModel<?>> implements Indexer<T> {
 	}
 
 	@Override
-	public void postProcessSearchQuery(
-			BooleanQuery searchQuery, SearchContext searchContext)
-		throws Exception {
-	}
-
-	@Override
 	public void registerIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
 
