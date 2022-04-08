@@ -14,22 +14,14 @@
 
 package com.liferay.portal.search.internal.sort;
 
-import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistry;
-import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.search.contributor.constants.ContributorConstants;
-import com.liferay.portal.search.contributor.sort.SortFieldNameTranslator;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.Test;
 
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -66,113 +58,6 @@ public class SortFieldBuilderImplTest {
 			});
 
 		_sortFieldBuilderImpl.activate();
-	}
-
-	@Test
-	public void testGetSortFieldWithNoSortFieldTranslator() {
-		Mockito.when(
-			_indexer.getSortField(Mockito.anyString())
-		).thenAnswer(
-			invocation -> invocation.getArgumentAt(0, String.class)
-		);
-
-		String sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField");
-
-		Assert.assertEquals("testField", sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "firstName");
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("firstName"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.DOUBLE_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.FLOAT_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.INT_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.LONG_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-	}
-
-	@Test
-	public void testGetSortFieldWithSortFieldTranslator() {
-		SortFieldNameTranslator sortFieldNameTranslator = Mockito.mock(
-			SortFieldNameTranslator.class);
-
-		Mockito.when(
-			sortFieldNameTranslator.getSortFieldName(Mockito.anyString())
-		).then(
-			invocation -> {
-				String orderByCol = invocation.getArgumentAt(0, String.class);
-
-				return StringUtil.upperCaseFirstLetter(orderByCol);
-			}
-		);
-
-		_sortFieldBuilderImpl.addSortFieldNameTranslator(
-			sortFieldNameTranslator,
-			HashMapBuilder.<String, Object>put(
-				ContributorConstants.ENTRY_CLASS_NAME_PROPERTY_KEY,
-				"modelClassName"
-			).build());
-
-		Mockito.when(
-			_indexer.getSortField(Mockito.anyString())
-		).thenAnswer(
-			invocation -> invocation.getArgumentAt(0, String.class)
-		);
-
-		String sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField");
-
-		Assert.assertEquals("TestField", sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "firstName");
-
-		Assert.assertEquals("FirstName", sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.DOUBLE_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.FLOAT_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.INT_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
-
-		sortFieldName = _sortFieldBuilderImpl.getSortField(
-			"modelClassName", "testField", Sort.LONG_TYPE);
-
-		Assert.assertEquals(
-			Field.getSortableFieldName("testField"), sortFieldName);
 	}
 
 	@Mock

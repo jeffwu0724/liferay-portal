@@ -15,7 +15,6 @@
 package com.liferay.portal.search.internal.sort;
 
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistry;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -118,9 +117,7 @@ public class SortFieldBuilderImpl implements SortFieldBuilder {
 			_sortFieldNameTranslators.get(entityClassName);
 
 		if (sortFieldNameTranslator == null) {
-			Indexer<?> indexer = indexerRegistry.getIndexer(entityClassName);
-
-			return indexer.getSortField(orderByCol);
+			return getSortField(entityClassName, orderByCol);
 		}
 
 		return sortFieldNameTranslator.getSortFieldName(orderByCol);

@@ -16,7 +16,6 @@ package com.liferay.portal.search.internal.indexer;
 
 import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.change.tracking.CTCollectionThreadLocal;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.change.tracking.CTModel;
@@ -143,11 +142,6 @@ public class DefaultIndexer<T extends BaseModel<?>> implements Indexer<T> {
 	@Override
 	public String getSearchEngineId() {
 		return _modelSearchSettings.getSearchEngineId();
-	}
-
-	@Override
-	public String getSortField(String orderByCol) {
-		return StringPool.BLANK;
 	}
 
 	@Override

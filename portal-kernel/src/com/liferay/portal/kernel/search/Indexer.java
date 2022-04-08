@@ -53,13 +53,6 @@ public interface Indexer<T> {
 
 	public String getSearchEngineId();
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             com.liferay.portal.sort.SortFieldBuilder}
-	 */
-	@Deprecated
-	public String getSortField(String orderByCol);
-
 	public Summary getSummary(
 			Document document, String snippet, PortletRequest portletRequest,
 			PortletResponse portletResponse)

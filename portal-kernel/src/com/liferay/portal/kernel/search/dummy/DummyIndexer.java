@@ -81,11 +81,6 @@ public class DummyIndexer implements Indexer<Object> {
 	}
 
 	@Override
-	public String getSortField(String orderByCol) {
-		return StringPool.BLANK;
-	}
-
-	@Override
 	public Summary getSummary(
 		Document document, String snippet, PortletRequest portletRequest,
 		PortletResponse portletResponse) {

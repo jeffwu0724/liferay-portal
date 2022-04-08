@@ -290,23 +290,6 @@ public abstract class BaseIndexer<T> implements Indexer<T> {
 		return _searchEngineId;
 	}
 
-	/**
-	 * @deprecated As of Judson (7.1.x), replaced by {@link
-	 *             com.liferay.portal.search.sort.SortFieldBuilder
-	 *             #getSortField}
-	 */
-	@Deprecated
-	@Override
-	public String getSortField(String orderByCol) {
-		String sortField = doGetSortField(orderByCol);
-
-		if (_document.isDocumentSortableTextField(sortField)) {
-			return Field.getSortableFieldName(sortField);
-		}
-
-		return sortField;
-	}
-
 	@Override
 	public Summary getSummary(
 			Document document, String snippet, PortletRequest portletRequest,
