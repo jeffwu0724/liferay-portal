@@ -956,14 +956,6 @@ public class SubscriptionSender implements Serializable {
 		}
 	}
 
-	/**
-	 * @deprecated As of Mueller (7.2.x)
-	 */
-	@Deprecated
-	protected void sendNotification(User user) throws Exception {
-		sendNotification(user, true);
-	}
-
 	protected void sendNotification(User user, boolean notifyImmediately)
 		throws Exception {
 
@@ -980,14 +972,6 @@ public class SubscriptionSender implements Serializable {
 		}
 
 		sendUserNotification(user, notifyImmediately);
-	}
-
-	/**
-	 * @deprecated As of Mueller (7.2.x)
-	 */
-	@Deprecated
-	protected void sendUserNotification(User user) throws Exception {
-		sendNotification(user, true);
 	}
 
 	protected void sendUserNotification(User user, boolean notifyImmediately)
