@@ -18,7 +18,7 @@ import com.liferay.data.engine.internal.upgrade.v1_0_0.SchemaUpgradeProcess;
 import com.liferay.data.engine.internal.upgrade.v2_0_0.UpgradeCompanyId;
 import com.liferay.portal.kernel.upgrade.CTModelUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.DummyUpgradeStep;
-import com.liferay.portal.kernel.upgrade.UpgradeMVCCVersion;
+import com.liferay.portal.kernel.upgrade.MVCCVersionUpgradeProcess;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +52,7 @@ public class DEServiceUpgrade implements UpgradeStepRegistrator {
 
 		registry.register(
 			"2.1.1", "2.2.0",
-			new UpgradeMVCCVersion() {
+			new MVCCVersionUpgradeProcess() {
 
 				@Override
 				protected String[] getModuleTableNames() {

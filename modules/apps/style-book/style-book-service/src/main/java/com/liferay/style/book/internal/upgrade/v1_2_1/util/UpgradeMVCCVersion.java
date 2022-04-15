@@ -14,11 +14,12 @@
 
 package com.liferay.style.book.internal.upgrade.v1_2_1.util;
 
+import com.liferay.portal.kernel.upgrade.MVCCVersionUpgradeProcess;
+
 /**
  * @author Víctor Galán
  */
-public class UpgradeMVCCVersion
-	extends com.liferay.portal.kernel.upgrade.UpgradeMVCCVersion {
+public class UpgradeMVCCVersion extends MVCCVersionUpgradeProcess {
 
 	@Override
 	protected String[] getModuleTableNames() {
