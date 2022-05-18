@@ -31,6 +31,7 @@ Import-Package:\
 	!org.tukaani.*,\
 	\
 	*
+-fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
 -includeresource:\
 	commons-collections4-[0-9.]*.jar;lib:=true,\
 	commons-compress-[0-9.]*.jar;lib:=true,\
