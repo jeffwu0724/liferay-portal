@@ -77,10 +77,10 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.batch.engine.service.jar!poi-ooxml-schemas.jar</file-name>
-				<version>4.1.2</version>
+				<file-name>com.liferay.batch.engine.service.jar!poi-ooxml-lite.jar</file-name>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -90,9 +90,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.batch.engine.service.jar!poi-ooxml.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -102,9 +102,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.batch.engine.service.jar!poi.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - Common</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -751,10 +751,10 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.commerce.report.impl.jar!poi-ooxml-schemas.jar</file-name>
-				<version>4.1.2</version>
+				<file-name>com.liferay.commerce.report.impl.jar!poi-ooxml-lite.jar</file-name>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -764,9 +764,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.commerce.report.impl.jar!poi-ooxml.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -776,9 +776,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.commerce.report.impl.jar!poi.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - Common</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -881,10 +881,10 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.content.dashboard.web.jar!poi-ooxml-schemas.jar</file-name>
-				<version>4.1.2</version>
+				<file-name>com.liferay.content.dashboard.web.jar!poi-ooxml-lite.jar</file-name>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -894,9 +894,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.content.dashboard.web.jar!poi-ooxml.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -906,9 +906,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.content.dashboard.web.jar!poi.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - Common</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -1533,10 +1533,10 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.dynamic.data.lists.service.jar!poi-ooxml-schemas.jar</file-name>
-				<version>4.1.2</version>
+				<file-name>com.liferay.dynamic.data.lists.service.jar!poi-ooxml-lite.jar</file-name>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -1546,9 +1546,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.dynamic.data.lists.service.jar!poi-ooxml.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -1558,9 +1558,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.dynamic.data.lists.service.jar!poi.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - Common</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -1829,10 +1829,10 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.dynamic.data.mapping.service.jar!poi-ooxml-schemas.jar</file-name>
-				<version>4.1.2</version>
+				<file-name>com.liferay.dynamic.data.mapping.service.jar!poi-ooxml-lite.jar</file-name>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -1842,9 +1842,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.dynamic.data.mapping.service.jar!poi-ooxml.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -1854,9 +1854,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.dynamic.data.mapping.service.jar!poi.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - Common</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -2320,6 +2320,137 @@
 					<license>
 						<license-name>LGPL 2.1</license-name>
 						<license-url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!accessors-smart.jar</file-name>
+				<version>2.4.2</version>
+				<project-name>ASM based accessors helper used by json-smart</project-name>
+				<project-url>https://urielch.github.io/</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!activation.jar</file-name>
+				<version>1.1.1</version>
+				<project-name>Sun Java System Application Server</project-name>
+				<project-url>http://java.sun.com/javase/technologies/desktop/javabeans/jaf/index.jsp</project-url>
+				<licenses>
+					<license>
+						<license-name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</license-name>
+						<license-url>https://glassfish.dev.java.net/public/CDDLv1.0.html</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!asm.jar</file-name>
+				<version>5.0.4</version>
+				<project-name>ASM Core</project-name>
+				<project-url>http://asm.objectweb.org</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!commons-lang3.jar</file-name>
+				<version>3.4</version>
+				<project-name>Apache Commons Lang</project-name>
+				<project-url>http://commons.apache.org/proper/commons-lang/</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!content-type.jar</file-name>
+				<version>2.0</version>
+				<project-name>Nimbus Content Type</project-name>
+				<project-url>https://connect2id.com</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!jakarta.mail.jar</file-name>
+				<version>1.6.6</version>
+				<project-name>Jakarta Mail API</project-name>
+				<project-url>http://www.oracle.com</project-url>
+				<licenses>
+					<license>
+						<license-name>http://www.eclipse.org/legal/epl-2.0, https://www.gnu.org/software/classpath/license.html, http://www.eclipse.org/org/documents/edl-v10.php</license-name>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!jcip-annotations.jar</file-name>
+				<version>1.0-1</version>
+				<project-name>JCIP Annotations under Apache License</project-name>
+				<project-url>http://stephenc.github.com/jcip-annotations</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!json-smart.jar</file-name>
+				<version>2.4.5</version>
+				<project-name>JSON Small and Fast Parser</project-name>
+				<project-url>https://urielch.github.io/</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!lang-tag.jar</file-name>
+				<version>1.4.4</version>
+				<project-name>Nimbus LangTag</project-name>
+				<project-url>https://bitbucket.org/connect2id/nimbus-language-tags</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!nimbus-jose-jwt.jar</file-name>
+				<version>8.14.1</version>
+				<project-name>Nimbus JOSE+JWT</project-name>
+				<project-url>https://bitbucket.org/connect2id/nimbus-jose-jwt</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.oauth.client.persistence.service.jar!oauth2-oidc-sdk.jar</file-name>
+				<version>8.4.3</version>
+				<project-name>OAuth 2.0 SDK with OpenID Connect extensions</project-name>
+				<project-url>https://connect2id.com</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache License, version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.html‎</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -4444,10 +4575,10 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.portal.tika.jar!poi-ooxml-schemas.jar</file-name>
-				<version>4.1.2</version>
+				<file-name>com.liferay.portal.tika.jar!poi-ooxml-lite.jar</file-name>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -4457,9 +4588,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.tika.jar!poi-ooxml.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -4469,9 +4600,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.tika.jar!poi-scratchpad.jar</file-name>
-				<version>4.1.2</version>
+				<version>5.2.2</version>
 				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -4481,9 +4612,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.tika.jar!poi.jar</file-name>
-				<version>4.1.2</version>
-				<project-name>Apache POI</project-name>
-				<project-url>http://poi.apache.org/</project-url>
+				<version>5.2.2</version>
+				<project-name>Apache POI - Common</project-name>
+				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
@@ -4895,17 +5026,6 @@
 				<file-name>com.liferay.portal.vulcan.impl.jar!swagger-jaxrs2.jar</file-name>
 				<version>2.0.6</version>
 				<project-name>swagger-jaxrs2</project-name>
-				<licenses>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.html</license-url>
-					</license>
-				</licenses>
-			</library>
-			<library>
-				<file-name>com.liferay.portal.vulcan.impl.jar!swagger-models.jar</file-name>
-				<version>2.0.6</version>
-				<project-name>swagger-models</project-name>
 				<licenses>
 					<license>
 						<license-name>Apache License 2.0</license-name>
