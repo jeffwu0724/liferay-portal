@@ -7,10 +7,15 @@ Import-Package:\
 	!com.graphbuilder.*,\
 	\
 	!com.microsoft.schemas.office.*,\
+	!com.microsoft.schemas.office.x2006.encryption,\
+	!com.microsoft.schemas.office.x2006.keyEncryptor.certificate,\
+	!com.microsoft.schemas.office.x2006.keyEncryptor.password,\
 	\
 	!com.sun.*,\
 	\
 	!com.zaxxer.sparsebits.*,\
+	\
+	!de.rototor.pdfbox.graphics2d,\
 	\
 	!net.sf.*,\
 	\
@@ -28,6 +33,8 @@ Import-Package:\
 	!org.openxmlformats.*,\
 	\
 	!org.tukaani.*,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	*
 -fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning

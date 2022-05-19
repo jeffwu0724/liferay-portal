@@ -4,7 +4,15 @@ Bundle-Version: 2.0.52
 Import-Package:\
 	!com.graphbuilder.*,\
 	\
+	!com.microsoft.schemas.office.x2006.encryption,\
+	!com.microsoft.schemas.office.x2006.keyEncryptor.certificate,\
+	!com.microsoft.schemas.office.x2006.keyEncryptor.password,\
+	\
+	!de.rototor.pdfbox.graphics2d,\
+	\
 	!org.apache.tools.ant.*,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	com.microsoft.schemas.office.powerpoint.*;resolution:=optional,\
 	com.microsoft.schemas.office.word.*;resolution:=optional,\

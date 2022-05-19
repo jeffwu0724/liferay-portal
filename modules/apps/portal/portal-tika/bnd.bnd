@@ -4,10 +4,18 @@ Bundle-SymbolicName: com.liferay.portal.tika
 Bundle-Version: 1.0.11
 Eclipse-BuddyPolicy: parent
 Import-Package:\
+	!com.microsoft.schemas.office.x2006.encryption,\
+	!com.microsoft.schemas.office.x2006.keyEncryptor.certificate,\
+	!com.microsoft.schemas.office.x2006.keyEncryptor.password,\
+	\
+	!de.rototor.pdfbox.graphics2d,\
+	\
 	!org.apache.pdfbox.preflight.*,\
 	!org.apache.pdfbox.tools.imageio,\
 	\
 	!org.junit,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	com.rometools.*,\
 	\
