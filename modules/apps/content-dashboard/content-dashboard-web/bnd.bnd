@@ -30,3 +30,4 @@ Import-Package:\
 	\
 	*
 Web-ContextPath: /content-dashboard-web
+-fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
