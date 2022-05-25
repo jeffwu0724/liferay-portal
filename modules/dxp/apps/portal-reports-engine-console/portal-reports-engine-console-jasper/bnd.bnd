@@ -120,3 +120,4 @@ Import-Package:\
 	\
 	*
 Liferay-Releng-Module-Group-Title: Liferay JasperReports
+-fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
