@@ -2260,9 +2260,6 @@ public interface PropsKeys {
 	public static final String REQUEST_SHARED_ATTRIBUTES =
 		"request.shared.attributes";
 
-	public static final String REQUEST_UNWRAP_PACKAGES =
-		"request.unwrap.packages";
-
 	public static final String RESOURCE_ACTIONS_CONFIGS =
 		"resource.actions.configs";
 

@@ -5384,14 +5384,6 @@ public class PortalImpl implements Portal {
 				return (UploadServletRequest)currentHttpServletRequest;
 			}
 
-			Class<?> currentRequestClass = currentHttpServletRequest.getClass();
-
-			String currentRequestClassName = currentRequestClass.getName();
-
-			if (!isUnwrapRequest(currentRequestClassName)) {
-				break;
-			}
-
 			if (currentHttpServletRequest instanceof
 					PersistentHttpServletRequestWrapper) {
 
@@ -7798,16 +7790,6 @@ public class PortalImpl implements Portal {
 				alwaysAllowDoAsUser.getStrutsActions();
 
 			if (strutsActions.contains(strutsAction)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	protected boolean isUnwrapRequest(String currentRequestClassName) {
-		for (String packageName : PropsValues.REQUEST_UNWRAP_PACKAGES) {
-			if (currentRequestClassName.startsWith(packageName)) {
 				return true;
 			}
 		}
