@@ -2,7 +2,12 @@ Bundle-Name: Liferay Document Library Opener Google Drive Web
 Bundle-SymbolicName: com.liferay.document.library.opener.google.drive.web
 Bundle-Version: 3.0.27
 Import-Package:\
+	!.io.grpc.*,\
+	\
+	!com.google.api.client.json.gson,\
 	!com.google.common.util.concurrent.*,\
+	\
+	!io.opencensus.*,\
 	\
 	!javax.jdo.*,\
 	\
