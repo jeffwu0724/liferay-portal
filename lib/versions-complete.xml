@@ -1276,8 +1276,19 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>com.liferay.document.library.opener.google.drive.web.jar!google-http-client-gson.jar</file-name>
+				<version>1.42.0</version>
+				<project-name>GSON extensions to the Google HTTP Client Library for Java.</project-name>
+				<licenses>
+					<license>
+						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>com.liferay.document.library.opener.google.drive.web.jar!google-http-client-jackson2.jar</file-name>
-				<version>1.23.0</version>
+				<version>1.42.0</version>
 				<project-name>Jackson 2 extensions to the Google HTTP Client Library for Java.</project-name>
 				<licenses>
 					<license>
@@ -1288,8 +1299,9 @@
 			</library>
 			<library>
 				<file-name>com.liferay.document.library.opener.google.drive.web.jar!google-http-client.jar</file-name>
-				<version>1.23.0</version>
+				<version>1.42.0</version>
 				<project-name>Google HTTP Client Library for Java</project-name>
+				<project-url>https://www.google.com/</project-url>
 				<licenses>
 					<license>
 						<license-name>The Apache Software License, Version 2.0</license-name>
@@ -1299,7 +1311,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.document.library.opener.google.drive.web.jar!google-oauth-client-java6.jar</file-name>
-				<version>1.31.0</version>
+				<version>1.34.1</version>
 				<project-name>Java 6 (and higher) extensions to the Google OAuth Client Library for Java.</project-name>
 				<project-url>https://www.google.com/</project-url>
 				<licenses>
@@ -1311,7 +1323,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.document.library.opener.google.drive.web.jar!google-oauth-client-servlet.jar</file-name>
-				<version>1.31.0</version>
+				<version>1.34.1</version>
 				<project-name>Servlet and JDO extensions to the Google OAuth Client Library for Java.</project-name>
 				<project-url>https://www.google.com/</project-url>
 				<licenses>
@@ -1323,12 +1335,36 @@
 			</library>
 			<library>
 				<file-name>com.liferay.document.library.opener.google.drive.web.jar!google-oauth-client.jar</file-name>
-				<version>1.31.0</version>
+				<version>1.34.1</version>
 				<project-name>Google OAuth Client Library for Java</project-name>
 				<project-url>https://www.google.com/</project-url>
 				<licenses>
 					<license>
 						<license-name>The Apache Software License, Version 2.0</license-name>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.document.library.opener.google.drive.web.jar!grpc-context.jar</file-name>
+				<version>1.36.0</version>
+				<project-name>io.grpc:grpc-context</project-name>
+				<project-url>https://github.com/grpc/grpc-java</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache 2.0</license-name>
+						<license-url>https://opensource.org/licenses/Apache-2.0</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.document.library.opener.google.drive.web.jar!gson.jar</file-name>
+				<version>2.9.0</version>
+				<project-name>Gson</project-name>
+				<project-url>https://github.com/google/gson/gson</project-url>
+				<licenses>
+					<license>
+						<license-name>Apache-2.0</license-name>
 						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
@@ -1341,6 +1377,30 @@
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.document.library.opener.google.drive.web.jar!opencensus-api.jar</file-name>
+				<version>0.28.3</version>
+				<project-name>opencensus-api</project-name>
+				<project-url>https://github.com/census-instrumentation/opencensus-java</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache License, Version 2.0</license-name>
+						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.document.library.opener.google.drive.web.jar!opencensus-contrib-http-util.jar</file-name>
+				<version>0.28.3</version>
+				<project-name>opencensus-contrib-http-util</project-name>
+				<project-url>https://github.com/census-instrumentation/opencensus-java</project-url>
+				<licenses>
+					<license>
+						<license-name>The Apache License, Version 2.0</license-name>
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
@@ -4460,7 +4520,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.gcs.jar!google-oauth-client.jar</file-name>
-				<version>1.31.4</version>
+				<version>1.34.1</version>
 				<project-name>Google OAuth Client Library for Java</project-name>
 				<project-url>https://www.google.com/</project-url>
 				<licenses>
