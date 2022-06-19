@@ -13,3 +13,4 @@ Import-Package:\
 	\
 	*
 Web-ContextPath: /document-library-opener-google-drive-web
+-fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
