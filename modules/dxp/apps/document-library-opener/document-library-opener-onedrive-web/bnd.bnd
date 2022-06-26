@@ -19,12 +19,15 @@ Import-Package:\
 	!com.sun.javadoc.*,\
 	!com.sun.tools.javadoc.*,\
 	\
+	!de.rototor.pdfbox.graphics2d,\
+	\
 	!javax.annotation.meta.*,\
 	\
 	!junit.framework,\
 	\
 	!net.sf.saxon.*,\
 	\
+	!org.apache.batik.*,\
 	!org.apache.batik.anim.dom.*,\
 	!org.apache.batik.bridge.*,\
 	!org.apache.batik.ext.awt.*,\
@@ -53,6 +56,8 @@ Import-Package:\
 	\
 	!org.openxmlformats.schemas.officeDocument.x2006.*,\
 	!org.openxmlformats.schemas.schemaLibrary.x2006.*,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	org.brotli.*;resolution:=optional,\
 	\

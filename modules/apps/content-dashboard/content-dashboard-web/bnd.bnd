@@ -4,7 +4,12 @@ Bundle-Version: 2.0.58
 Import-Package:\
 	!com.graphbuilder.*,\
 	\
+	!de.rototor.pdfbox.graphics2d,\
+	\
+	!org.apache.batik.*,\
 	!org.apache.tools.ant.*,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	com.microsoft.schemas.office.powerpoint.*;resolution:=optional,\
 	com.microsoft.schemas.office.word.*;resolution:=optional,\

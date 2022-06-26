@@ -4,7 +4,12 @@ Bundle-Version: 4.0.48
 Import-Package:\
 	!com.graphbuilder.*,\
 	\
+	!de.rototor.pdfbox.graphics2d,\
+	\
+	!org.apache.batik.dom,\
 	!org.apache.tools.ant.*,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	com.github.*;resolution:=optional,\
 	\
