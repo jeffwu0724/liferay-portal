@@ -4,10 +4,15 @@ Bundle-SymbolicName: com.liferay.portal.tika
 Bundle-Version: 1.0.15
 Eclipse-BuddyPolicy: parent
 Import-Package:\
+	!de.rototor.pdfbox.graphics2d,\
+	\
+	!org.apache.batik.*,\
 	!org.apache.pdfbox.preflight.*,\
 	!org.apache.pdfbox.tools.imageio,\
 	\
 	!org.junit,\
+	\
+	!org.w3c.dom.svg,\
 	\
 	com.rometools.*,\
 	\

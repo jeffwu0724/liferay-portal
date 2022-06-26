@@ -17,6 +17,8 @@ Import-Package:\
 	\
 	!com.thoughtworks.*,\
 	\
+	!de.rototor.pdfbox.graphics2d,\
+	\
 	!groovyjarjarasm.asm.tree.analysis.*,\
 	\
 	!javax.accessibility.*,\
@@ -39,6 +41,7 @@ Import-Package:\
 	\
 	!net.sourceforge.barbecue.*,\
 	\
+	!org.apache.batik.*,\
 	!org.apache.bcel.*,\
 	!org.apache.bsf.*,\
 	!org.apache.commons.cli.*,\
@@ -82,6 +85,7 @@ Import-Package:\
 	\
 	!org.osgi.service.prefs.*,\
 	\
+	!org.w3c.dom.svg,\
 	!org.w3c.dom.svg.*,\
 	\
 	!schemasMicrosoftComOfficePowerpoint,\
