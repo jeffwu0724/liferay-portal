@@ -2,6 +2,7 @@ Bundle-Name: Liferay Dynamic Data Lists Service
 Bundle-SymbolicName: com.liferay.dynamic.data.lists.service
 Bundle-Version: 5.0.27
 Import-Package:\
+	!org.apache.poi.hssf.usermodel,\
 	!com.graphbuilder.*,\
 	\
 	!org.apache.tools.ant.*,\
