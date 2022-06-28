@@ -3,6 +3,7 @@ Bundle-SymbolicName: com.liferay.commerce.report.impl
 Bundle-Version: 1.0.9
 DynamicImport-Package: *
 Import-Package:\
+	!com.github.javaparser,\
 	!org.apache.poi.common.usermodel,\
 	!antlr.*,\
 	\

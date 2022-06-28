@@ -2,6 +2,11 @@ Bundle-Name: Liferay Shared Dependencies POI
 Bundle-SymbolicName: com.liferay.shared.dependencies.poi
 Bundle-Version: 1.0.0
 Import-Package:\
+	!org.apache.tools.ant.*,\
+	!org.apache.maven.*,\
+	!net.sf.saxon.*,\
+	!com.sun.org.apache.xml.internal.resolver.*,\
+	!com.github.javaparser.*,\
 	!com.graphbuilder.curve,\
 	!com.graphbuilder.geom,\
 	\
