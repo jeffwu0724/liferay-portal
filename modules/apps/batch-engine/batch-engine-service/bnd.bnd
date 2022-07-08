@@ -2,6 +2,7 @@ Bundle-Name: Liferay Batch Engine Service
 Bundle-SymbolicName: com.liferay.batch.engine.service
 Bundle-Version: 4.0.48
 Import-Package:\
+	!org.apache.maven.*,\
 	!com.graphbuilder.*,\
 	\
 	!de.rototor.pdfbox.graphics2d,\
