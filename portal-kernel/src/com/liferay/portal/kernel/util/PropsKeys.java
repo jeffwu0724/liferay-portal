@@ -2484,6 +2484,30 @@ public interface PropsKeys {
 	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME =
 		"setup.database.driverClassName";
 
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_DB2 =
+		"com.ibm.db2.jcc.DB2Driver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_HYPERSONIC =
+		"org.hsqldb.jdbc.JDBCDriver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_MARIADB =
+		"org.mariadb.jdbc.Driver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_MYSQL =
+		"com.mysql.cj.jdbc.Driver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_ORACLE =
+		"oracle.jdbc.OracleDriver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_POSTGRESQL =
+		"org.postgresql.Driver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_SQLSERVER =
+		"com.microsoft.sqlserver.jdbc.SQLServerDriver";
+
+	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME_SYBASE =
+		"com.sybase.jdbc4.jdbc.SybDriver";
+
 	public static final String SETUP_DATABASE_JAR_NAME =
 		"setup.database.jar.name";
 
