@@ -108,6 +108,10 @@ public class XSLContentUtil {
 		TransformerFactory transformerFactory =
 			TransformerFactory.newInstance();
 
+		transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
 		transformerFactory.setFeature(
 			XMLConstants.FEATURE_SECURE_PROCESSING,
 			xslContentConfiguration.xslSecureProcessingEnabled());

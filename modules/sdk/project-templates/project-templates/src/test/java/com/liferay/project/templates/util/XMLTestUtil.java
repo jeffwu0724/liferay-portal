@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -148,6 +149,10 @@ public class XMLTestUtil {
 	static {
 		TransformerFactory transformerFactory =
 			TransformerFactory.newInstance();
+
+		transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 		try {
 			_transformer = transformerFactory.newTransformer();

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -99,6 +100,11 @@ public class XSLTBuilder {
 
 			TransformerFactory transformerFactory =
 				TransformerFactory.newInstance();
+
+			transformerFactory.setAttribute(
+				XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			transformerFactory.setAttribute(
+				XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 			Transformer transformer = transformerFactory.newTransformer(
 				new StreamSource(xsl));

@@ -67,6 +67,7 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -857,6 +858,10 @@ public interface BaseProjectTemplatesTestCase {
 
 		TransformerFactory transformerFactory =
 			TransformerFactory.newInstance();
+
+		transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 		Transformer transformer = transformerFactory.newTransformer();
 

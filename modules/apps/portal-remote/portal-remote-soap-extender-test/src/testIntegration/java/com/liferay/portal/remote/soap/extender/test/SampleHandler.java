@@ -16,6 +16,7 @@ package com.liferay.portal.remote.soap.extender.test;
 
 import java.net.URL;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
@@ -33,6 +34,10 @@ public class SampleHandler implements LogicalHandler<LogicalMessageContext> {
 
 	public SampleHandler() {
 		_transformerFactory = TransformerFactory.newInstance();
+
+		_transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+		_transformerFactory.setAttribute(
+			XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 		_url = SampleHandler.class.getResource("dependencies/template.xsl");
 	}

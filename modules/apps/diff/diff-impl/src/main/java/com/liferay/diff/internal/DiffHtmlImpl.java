@@ -24,6 +24,7 @@ import java.io.Reader;
 
 import java.util.Locale;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
@@ -86,6 +87,11 @@ public class DiffHtmlImpl implements DiffHtml {
 		try {
 			SAXTransformerFactory saxTransformerFactory =
 				(SAXTransformerFactory)TransformerFactory.newInstance();
+
+			saxTransformerFactory.setAttribute(
+				XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			saxTransformerFactory.setAttribute(
+				XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 			TransformerHandler tranformHandler =
 				saxTransformerFactory.newTransformerHandler();

@@ -60,6 +60,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -616,6 +617,11 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 
 				TransformerFactory transformerFactory =
 					TransformerFactory.newInstance();
+
+				transformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_DTD, "");
+				transformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 				Transformer transformer = transformerFactory.newTransformer();
 

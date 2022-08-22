@@ -45,6 +45,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -119,6 +120,11 @@ public class SPDXBuilder {
 
 			TransformerFactory transformerFactory =
 				TransformerFactory.newInstance();
+
+			transformerFactory.setAttribute(
+				XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			transformerFactory.setAttribute(
+				XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 			Transformer transformer = transformerFactory.newTransformer(
 				new StreamSource(
