@@ -40,7 +40,7 @@ public class ContainerLPKGUtil {
 	public static List<File> deploy(File lpkgFile, Properties properties)
 		throws IOException {
 
-		List<File> lpkgFiles = new ArrayList<>();
+		List<File> innerLPKGFiles = new ArrayList<>();
 
 		try (ZipFile zipFile = new ZipFile(lpkgFile)) {
 			Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
@@ -67,13 +67,13 @@ public class ContainerLPKGUtil {
 					return null;
 				}
 
-				File insideLPKGFile = new File(
+				File innerLPKGFile = new File(
 					PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR, name);
 
-				String insideLPKGCanonicalPath =
-					insideLPKGFile.getCanonicalPath();
+				String innerLPKGCanonicalPath =
+					innerLPKGFile.getCanonicalPath();
 
-				if (!insideLPKGCanonicalPath.startsWith(
+				if (!innerLPKGCanonicalPath.startsWith(
 						PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR +
 							File.separator)) {
 
@@ -85,20 +85,20 @@ public class ContainerLPKGUtil {
 				}
 
 				Files.copy(
-					zipFile.getInputStream(zipEntry), insideLPKGFile.toPath(),
+					zipFile.getInputStream(zipEntry), innerLPKGFile.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 
-				lpkgFiles.add(insideLPKGFile);
+				innerLPKGFiles.add(innerLPKGFile);
 			}
 		}
 
-		if (lpkgFiles.isEmpty()) {
+		if (innerLPKGFiles.isEmpty()) {
 			return null;
 		}
 
 		lpkgFile.delete();
 
-		return lpkgFiles;
+		return innerLPKGFiles;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
