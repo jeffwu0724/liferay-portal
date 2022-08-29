@@ -14,6 +14,8 @@
 
 package com.liferay.project.templates.util;
 
+import com.liferay.portal.kernel.util.TransformerFactoryUtil;
+
 import java.io.StringWriter;
 
 import java.nio.file.Path;
@@ -147,7 +149,7 @@ public class XMLTestUtil {
 
 	static {
 		TransformerFactory transformerFactory =
-			TransformerFactory.newInstance();
+			TransformerFactoryUtil.newInstance();
 
 		try {
 			_transformer = transformerFactory.newTransformer();

@@ -15,6 +15,7 @@
 package com.liferay.gradle.plugins.maven.plugin.builder.internal.util;
 
 import com.liferay.gradle.util.Validator;
+import com.liferay.portal.kernel.util.TransformerFactoryUtil;
 
 import java.io.File;
 
@@ -57,7 +58,7 @@ public class XMLUtil {
 
 	public static void write(Document document, File file) throws Exception {
 		TransformerFactory transformerFactory =
-			TransformerFactory.newInstance();
+			TransformerFactoryUtil.newInstance();
 
 		Transformer transformer = transformerFactory.newTransformer();
 

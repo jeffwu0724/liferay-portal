@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TransformerFactoryUtil;
 import com.liferay.portal.xml.SAXReaderFactory;
 
 import java.io.BufferedReader;
@@ -98,7 +99,7 @@ public class XSLTBuilder {
 			}
 
 			TransformerFactory transformerFactory =
-				TransformerFactory.newInstance();
+				TransformerFactoryUtil.newInstance();
 
 			Transformer transformer = transformerFactory.newTransformer(
 				new StreamSource(xsl));

@@ -17,6 +17,7 @@ package com.liferay.project.templates;
 import aQute.bnd.main.bnd;
 
 import com.liferay.maven.executor.MavenExecutor;
+import com.liferay.portal.kernel.util.TransformerFactoryUtil;
 import com.liferay.project.templates.extensions.ProjectTemplatesArgs;
 import com.liferay.project.templates.extensions.util.FileUtil;
 import com.liferay.project.templates.extensions.util.ProjectTemplatesUtil;
@@ -856,7 +857,7 @@ public interface BaseProjectTemplatesTestCase {
 		throws Exception {
 
 		TransformerFactory transformerFactory =
-			TransformerFactory.newInstance();
+			TransformerFactoryUtil.newInstance();
 
 		Transformer transformer = transformerFactory.newTransformer();
 

@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TransformerFactoryUtil;
 import com.liferay.xsl.content.web.internal.configuration.XSLContentConfiguration;
 
 import java.io.ByteArrayInputStream;
@@ -106,7 +107,7 @@ public class XSLContentUtil {
 		throws Exception {
 
 		TransformerFactory transformerFactory =
-			TransformerFactory.newInstance();
+			TransformerFactoryUtil.newInstance();
 
 		transformerFactory.setFeature(
 			XMLConstants.FEATURE_SECURE_PROCESSING,

@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TransformerFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -615,7 +616,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 				Writer writer = new UnsyncStringWriter();
 
 				TransformerFactory transformerFactory =
-					TransformerFactory.newInstance();
+					TransformerFactoryUtil.newInstance();
 
 				Transformer transformer = transformerFactory.newTransformer();
 
