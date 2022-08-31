@@ -17,8 +17,6 @@ package com.liferay.portal.lpkg.deployer.internal;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.StreamUtil;
-import com.liferay.portal.lpkg.deployer.test.util.LPKGTestUtil;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
@@ -27,15 +25,11 @@ import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import java.util.Arrays;
 import java.util.List;
@@ -126,28 +120,14 @@ public class ContainerLPKGUtilTest {
 				new FileOutputStream(lpkgFile))) {
 
 			for (String entry : entries) {
-				Path path = Paths.get(_tempFolder.toString(), entry);
-
-				LPKGTestUtil.createLPKG(path, _SYMBOLIC_NAME, true);
-
 				zipOutputStream.putNextEntry(new ZipEntry(entry));
 
-				try (InputStream inputStream = new FileInputStream(
-						path.toFile());
-					OutputStream outputStream = StreamUtil.uncloseable(
-						zipOutputStream)) {
-
-					StreamUtil.transfer(inputStream, outputStream);
-				}
-
-				Files.delete(path);
+				zipOutputStream.write("FAKE LPKG".getBytes());
 			}
 		}
 
 		return lpkgFile;
 	}
-
-	private static final String _SYMBOLIC_NAME = "container.lpkg.test";
 
 	private static File _tempFolder;
 
