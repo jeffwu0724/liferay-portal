@@ -16,12 +16,10 @@ package com.liferay.portal.lpkg.deployer.internal;
 
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -62,26 +60,29 @@ public class ContainerLPKGUtilTest {
 			PropsValues.class, "MODULE_FRAMEWORK_MARKETPLACE_DIR",
 			tempPath.toString());
 
-		ReflectionTestUtil.setFieldValue(
-			FileUtil.class, "_file", FileImpl.getInstance());
-
 		_tempFolder = tempPath.toFile();
 	}
 
 	@After
 	public void tearDown() {
-		FileUtil.deltree(_tempFolder);
+		for (File file : _tempFolder.listFiles()) {
+			file.delete();
+		}
+
+		_tempFolder.delete();
 	}
 
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testDeploy() throws Exception {
+		File innerLPKG = new File(_tempFolder, "inner.lpkg");
+
 		Assert.assertEquals(
-			Arrays.asList(new File(_tempFolder, "inner.lpkg")),
+			Arrays.asList(innerLPKG),
 			ContainerLPKGUtil.deploy(
 				_createLPKGContainerFile("inner.lpkg"), null));
 
-		Assert.assertTrue(FileUtil.exists(new File(_tempFolder, "inner.lpkg")));
+		Assert.assertTrue(innerLPKG.exists());
 	}
 
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
@@ -90,17 +91,17 @@ public class ContainerLPKGUtilTest {
 		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
 				ContainerLPKGUtil.class.getName(), Level.WARNING)) {
 
+			File goodLPKG = new File(_tempFolder, "good.lpkg");
+			File badLPKG = new File(_tempFolder, "bad.lpkg");
+
 			Assert.assertEquals(
-				Arrays.asList(new File(_tempFolder, "good.lpkg")),
+				Arrays.asList(goodLPKG),
 				ContainerLPKGUtil.deploy(
 					_createLPKGContainerFile("good.lpkg", "../bad.lpkg"),
 					null));
 
-			Assert.assertTrue(
-				FileUtil.exists(new File(_tempFolder, "good.lpkg")));
-
-			Assert.assertFalse(
-				FileUtil.exists(new File(_tempFolder.getParent(), "bad.lpkg")));
+			Assert.assertTrue(goodLPKG.exists());
+			Assert.assertFalse(badLPKG.exists());
 
 			List<LogEntry> logEntries = logCapture.getLogEntries();
 
