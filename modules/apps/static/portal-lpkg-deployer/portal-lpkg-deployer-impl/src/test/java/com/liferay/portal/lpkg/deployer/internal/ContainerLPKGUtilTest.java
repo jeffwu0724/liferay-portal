@@ -83,7 +83,7 @@ public class ContainerLPKGUtilTest {
 	@Test
 	public void testDeploy() throws Exception {
 		Assert.assertEquals(
-			_createExpectedOutputFileList("inner.lpkg"),
+			Arrays.asList(new File(_tempFolder, "inner.lpkg")),
 			ContainerLPKGUtil.deploy(
 				_createLPKGContainerFile("inner.lpkg"), null));
 
@@ -97,7 +97,7 @@ public class ContainerLPKGUtilTest {
 				ContainerLPKGUtil.class.getName(), Level.WARNING)) {
 
 			Assert.assertEquals(
-				_createExpectedOutputFileList("good.lpkg"),
+				Arrays.asList(new File(_tempFolder, "good.lpkg")),
 				ContainerLPKGUtil.deploy(
 					_createLPKGContainerFile("good.lpkg", "../bad.lpkg"),
 					null));
@@ -117,10 +117,6 @@ public class ContainerLPKGUtilTest {
 			Assert.assertEquals(
 				"Invalid LPKG File name: ../bad.lpkg", logEntry.getMessage());
 		}
-	}
-
-	private List<File> _createExpectedOutputFileList(String fileName) {
-		return Arrays.asList(new File(_tempFolder, fileName));
 	}
 
 	private File _createLPKGContainerFile(String... entries) throws Exception {
