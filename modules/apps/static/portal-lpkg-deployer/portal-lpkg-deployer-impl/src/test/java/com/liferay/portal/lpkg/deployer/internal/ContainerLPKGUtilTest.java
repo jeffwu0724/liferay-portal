@@ -130,6 +130,6 @@ public class ContainerLPKGUtilTest {
 		return lpkgFile;
 	}
 
-	private static File _tempFolder;
+	private File _tempFolder;
 
 }
