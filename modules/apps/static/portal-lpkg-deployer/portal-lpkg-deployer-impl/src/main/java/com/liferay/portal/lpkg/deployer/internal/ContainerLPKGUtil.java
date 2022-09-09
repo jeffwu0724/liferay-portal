@@ -14,7 +14,7 @@
 
 package com.liferay.portal.lpkg.deployer.internal;
 
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.kernel.util.PropsKeys;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,8 +43,10 @@ public class ContainerLPKGUtil {
 			File lpkgFile, BundleContext bundleContext, Properties properties)
 		throws IOException {
 
-		Path deployerDirPath = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+		//		Path deployerDirPath = Paths.get(
+		//			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+
+		Path deployerDirPath = Paths.get(_MODULE_FRAMEWORK_MARKETPLACE_DIR);
 
 		List<File> lpkgFiles = new ArrayList<>();
 
@@ -91,5 +93,9 @@ public class ContainerLPKGUtil {
 
 		return lpkgFiles;
 	}
+
+	private static final String _MODULE_FRAMEWORK_MARKETPLACE_DIR =
+		new DefaultLPKGDeployer().getPropsValue(
+			PropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
 
 }
