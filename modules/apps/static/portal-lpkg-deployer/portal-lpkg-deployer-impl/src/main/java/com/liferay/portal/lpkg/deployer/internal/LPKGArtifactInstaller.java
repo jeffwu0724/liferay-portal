@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.lpkg.deployer.LPKGDeployer;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.InputStream;
@@ -155,14 +154,14 @@ public class LPKGArtifactInstaller implements FileInstaller {
 					if (header == null) {
 						BundleStartLevelUtil.setStartLevelAndStart(
 							bundle,
-							PropsValues.
+							LPKGNeededProps.
 								MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
 							_bundleContext);
 					}
 					else {
 						BundleStartLevelUtil.setStartLevelAndStart(
 							bundle,
-							PropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL,
+							LPKGNeededProps.MODULE_FRAMEWORK_WEB_START_LEVEL,
 							_bundleContext);
 					}
 				}
