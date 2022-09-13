@@ -522,14 +522,17 @@ public class SetupWizardUtil {
 			return _driverClassNames.contains(driverClassName);
 		}
 
-		private static final Set<String> _driverClassNames;
+		private static final Set<String> _driverClassNames =
+			new HashSet<String>() {
+				{
+					Properties properties = PropsUtil.getProperties(
+						PropsKeys.SETUP_DATABASE_DRIVER_CLASS_NAME, true);
 
-		static {
-			Properties properties = PropsUtil.getProperties(
-				PropsKeys.SETUP_DATABASE_DRIVER_CLASS_NAME, true);
-
-			_driverClassNames = new HashSet<>(properties.values());
-		}
+					for (Object value : properties.values()) {
+						add((String)value);
+					}
+				}
+			};
 
 	}
 
