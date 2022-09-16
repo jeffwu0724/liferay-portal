@@ -34,5 +34,8 @@ Import-Package:\
 	!org.w3c.dom.svg,\
 	\
 	*
--exportcontents: org.apache.poi.*
+-exportcontents:\
+	org.apache.poi.*,\
+	\
+	org.openxmlformats.schemas.*
 -fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
