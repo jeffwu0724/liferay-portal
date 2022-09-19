@@ -25,13 +25,14 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.lpkg.StaticLPKGResolver;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.lpkg.deployer.internal.wrapper.bundle.URLStreamHandlerServiceServiceTrackerCustomizer;
 import com.liferay.portal.lpkg.deployer.internal.wrapper.bundle.activator.WARBundleWrapperBundleActivator;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -82,6 +83,8 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.Version;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.url.URLConstants;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -89,6 +92,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author Shuyang Zhou
  */
+@Component(immediate = true, service = LPKGBundleTrackerCustomizer.class)
 public class LPKGBundleTrackerCustomizer
 	implements BundleTrackerCustomizer<List<Bundle>> {
 
@@ -335,14 +339,19 @@ public class LPKGBundleTrackerCustomizer
 					if (header != null) {
 						BundleStartLevelUtil.setStartLevelAndStart(
 							installedBundle,
-							PropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL,
+							GetterUtil.getInteger(
+								_props.get(
+									PropsKeys.
+										MODULE_FRAMEWORK_WEB_START_LEVEL)),
 							_bundleContext);
 					}
 					else {
 						BundleStartLevelUtil.setStartLevelAndStart(
 							installedBundle,
-							PropsValues.
-								MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
+							GetterUtil.getInteger(
+								_props.get(
+									PropsKeys.
+										MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL)),
 							_bundleContext);
 					}
 				}
@@ -911,7 +920,10 @@ public class LPKGBundleTrackerCustomizer
 		attributes.putValue(
 			"Liferay-WAB-Start-Level",
 			String.valueOf(
-				PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL));
+				GetterUtil.getInteger(
+					_props.get(
+						PropsKeys.
+							MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL))));
 		attributes.putValue("Manifest-Version", "2");
 		attributes.putValue("Wrapper-Bundle", "true");
 
@@ -940,6 +952,10 @@ public class LPKGBundleTrackerCustomizer
 	private final Set<String> _outdatedRemoteAppIds = new HashSet<>();
 	private final Set<String> _overrideFileNames;
 	private final Properties _properties = new Properties();
+
+	@Reference
+	private Props _props;
+
 	private final Map<String, URL> _urls;
 
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.portal.lpkg.deployer.internal;
 
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.kernel.util.Props;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,18 +33,22 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Matthew Tambara
  */
+@Component(immediate = true, service = ContainerLPKGUtil.class)
 public class ContainerLPKGUtil {
 
 	public static List<File> deploy(
 			File lpkgFile, BundleContext bundleContext, Properties properties)
 		throws IOException {
 
-		Path deployerDirPath = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+		Path deployerDirPath = Paths.get(_marketplaceDir);
 
 		List<File> lpkgFiles = new ArrayList<>();
 
@@ -91,5 +95,20 @@ public class ContainerLPKGUtil {
 
 		return lpkgFiles;
 	}
+
+	@Activate
+	protected void activate(BundleContext bundleContext) throws IOException {
+		_marketplaceDir = _props.get("module.framework.marketplace.dir");
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_marketplaceDir = null;
+	}
+
+	private static String _marketplaceDir;
+
+	@Reference
+	private Props _props;
 
 }
