@@ -1,0 +1,12 @@
+Bundle-Name: Liferay Shared Dependencies Xmlbeans
+Bundle-SymbolicName: com.liferay.shared.dependencies.xmlbeans
+Bundle-Version: 1.0.0
+Import-Package: !com.github.javaparser
+-exportcontents:\
+	org.apache.xmlbeans.*,\
+	\
+	schema.*,\
+	\
+	schemaorg_apache_xmlbeans.*,\
+	\
+	zipcompare.*
