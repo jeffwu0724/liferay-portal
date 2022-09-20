@@ -27,7 +27,10 @@ import com.liferay.portal.kernel.license.util.LicenseManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.framework.ThrowableCollector;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
@@ -35,7 +38,6 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.lpkg.deployer.LPKGDeployer;
 import com.liferay.portal.lpkg.deployer.LPKGVerifier;
 import com.liferay.portal.lpkg.deployer.LPKGVerifyException;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -169,7 +171,10 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 				BundleStartLevel.class);
 
 			bundleStartLevel.setStartLevel(
-				PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL);
+				GetterUtil.getInteger(
+					_props.get(
+						PropsKeys.
+							MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL)));
 
 			bundles.add(lpkgBundle);
 
@@ -413,7 +418,7 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 
 	private Path _getDeploymentDirPath() throws Exception {
 		File deploymentDir = new File(
-			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+			_props.get(PropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR));
 
 		deploymentDir = deploymentDir.getCanonicalFile();
 
@@ -464,7 +469,10 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 
 			BundleStartLevelUtil.setStartLevelAndStart(
 				jarBundle,
-				PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
+				GetterUtil.getInteger(
+					_props.get(
+						PropsKeys.
+							MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL)),
 				bundleContext);
 
 			if (_log.isInfoEnabled()) {
@@ -479,7 +487,8 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 
 		Properties properties = _loadOverrideWarsProperties(bundleContext);
 
-		Path osgiWarDir = Paths.get(PropsValues.MODULE_FRAMEWORK_WAR_DIR);
+		Path osgiWarDir = Paths.get(
+			_props.get(PropsKeys.MODULE_FRAMEWORK_WAR_DIR));
 
 		boolean modified = false;
 
@@ -775,6 +784,9 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 
 	@Reference
 	private LPKGVerifier _lpkgVerifier;
+
+	@Reference
+	private Props _props;
 
 	@Reference(target = "(throwable.collector=initial.bundles)")
 	private ThrowableCollector _throwableCollector;
