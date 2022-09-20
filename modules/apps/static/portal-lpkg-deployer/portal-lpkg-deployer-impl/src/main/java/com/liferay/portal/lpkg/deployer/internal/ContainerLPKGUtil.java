@@ -14,8 +14,6 @@
 
 package com.liferay.portal.lpkg.deployer.internal;
 
-import com.liferay.portal.util.PropsValues;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,11 +38,11 @@ import org.osgi.framework.BundleContext;
 public class ContainerLPKGUtil {
 
 	public static List<File> deploy(
-			File lpkgFile, BundleContext bundleContext, Properties properties)
+			File lpkgFile, BundleContext bundleContext, Properties properties,
+			String marketplaceDir)
 		throws IOException {
 
-		Path deployerDirPath = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+		Path deployerDirPath = Paths.get(marketplaceDir);
 
 		List<File> lpkgFiles = new ArrayList<>();
 
