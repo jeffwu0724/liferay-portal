@@ -25,13 +25,14 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.lpkg.StaticLPKGResolver;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.lpkg.deployer.internal.wrapper.bundle.URLStreamHandlerServiceServiceTrackerCustomizer;
 import com.liferay.portal.lpkg.deployer.internal.wrapper.bundle.activator.WARBundleWrapperBundleActivator;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -94,11 +95,12 @@ public class LPKGBundleTrackerCustomizer
 
 	public LPKGBundleTrackerCustomizer(
 		BundleContext bundleContext, Map<String, URL> urls,
-		Set<String> overrideFileNames) {
+		Set<String> overrideFileNames, Props props) {
 
 		_bundleContext = bundleContext;
 		_urls = urls;
 		_overrideFileNames = overrideFileNames;
+		_props = props;
 
 		Bundle bundle = bundleContext.getBundle();
 
@@ -335,14 +337,19 @@ public class LPKGBundleTrackerCustomizer
 					if (header != null) {
 						BundleStartLevelUtil.setStartLevelAndStart(
 							installedBundle,
-							PropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL,
+							GetterUtil.getInteger(
+								_props.get(
+									PropsKeys.
+										MODULE_FRAMEWORK_WEB_START_LEVEL)),
 							_bundleContext);
 					}
 					else {
 						BundleStartLevelUtil.setStartLevelAndStart(
 							installedBundle,
-							PropsValues.
-								MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
+							GetterUtil.getInteger(
+								_props.get(
+									PropsKeys.
+										MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL)),
 							_bundleContext);
 					}
 				}
@@ -911,7 +918,10 @@ public class LPKGBundleTrackerCustomizer
 		attributes.putValue(
 			"Liferay-WAB-Start-Level",
 			String.valueOf(
-				PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL));
+				GetterUtil.getInteger(
+					_props.get(
+						PropsKeys.
+							MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL))));
 		attributes.putValue("Manifest-Version", "2");
 		attributes.putValue("Wrapper-Bundle", "true");
 
@@ -940,6 +950,7 @@ public class LPKGBundleTrackerCustomizer
 	private final Set<String> _outdatedRemoteAppIds = new HashSet<>();
 	private final Set<String> _overrideFileNames;
 	private final Properties _properties = new Properties();
+	private final Props _props;
 	private final Map<String, URL> _urls;
 
 }

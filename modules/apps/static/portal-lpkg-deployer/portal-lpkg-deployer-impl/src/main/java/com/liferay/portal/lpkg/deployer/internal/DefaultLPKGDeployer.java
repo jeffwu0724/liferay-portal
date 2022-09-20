@@ -327,7 +327,7 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 
 		LPKGBundleTrackerCustomizer lpkgBundleTrackerCustomizer =
 			new LPKGBundleTrackerCustomizer(
-				bundleContext, _urls, _toFileNames(jarFiles, warFiles));
+				bundleContext, _urls, _toFileNames(jarFiles, warFiles), _props);
 
 		_lpkgBundleTracker = new BundleTracker<>(
 			bundleContext, ~Bundle.UNINSTALLED, lpkgBundleTrackerCustomizer);
