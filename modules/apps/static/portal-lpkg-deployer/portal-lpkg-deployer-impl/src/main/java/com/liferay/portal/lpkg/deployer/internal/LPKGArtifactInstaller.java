@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ModuleFrameworkPropsValues;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.lpkg.deployer.LPKGDeployer;
 
@@ -84,7 +86,8 @@ public class LPKGArtifactInstaller implements FileInstaller {
 		Properties properties = new Properties();
 
 		List<File> lpkgFiles = ContainerLPKGUtil.deploy(
-			file, _bundleContext, properties);
+			file, _bundleContext, properties,
+			_props.get(PropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR));
 
 		if (lpkgFiles == null) {
 			_install(file, properties);
@@ -357,6 +360,9 @@ public class LPKGArtifactInstaller implements FileInstaller {
 
 	@Reference
 	private LPKGDeployer _lpkgDeployer;
+
+	@Reference
+	private Props _props;
 
 	@Reference(target = "(" + URLConstants.URL_HANDLER_PROTOCOL + "=webbundle)")
 	private URLStreamHandlerService _urlStreamHandlerService;
