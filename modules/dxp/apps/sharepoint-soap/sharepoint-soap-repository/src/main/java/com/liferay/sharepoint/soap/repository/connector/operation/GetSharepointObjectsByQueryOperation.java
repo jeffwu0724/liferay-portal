@@ -91,7 +91,7 @@ public final class GetSharepointObjectsByQueryOperation extends BaseOperation {
 		String... queryFieldNames) {
 
 		GetListItemsDocument getListItemsDocument =
-			GetListItemsDocument.Factory.newInstance();
+			(GetListItemsDocument)GetListItemsDocument.Factory.newInstance();
 
 		GetListItemsDocument.GetListItems getListItems =
 			getListItemsDocument.addNewGetListItems();
@@ -147,7 +147,9 @@ public final class GetSharepointObjectsByQueryOperation extends BaseOperation {
 
 	protected GetListItemsDocument.GetListItems.Query getQuery(Query query) {
 		GetListItemsDocument.GetListItems.Query getListItemsQuery =
-			GetListItemsDocumentImpl.GetListItems.Query.Factory.newInstance();
+			(GetListItemsDocument.GetListItems.Query)
+				GetListItemsDocumentImpl.GetListItems.Query.Factory.
+					newInstance();
 
 		Node node = getListItemsQuery.getDomNode();
 
@@ -164,8 +166,9 @@ public final class GetSharepointObjectsByQueryOperation extends BaseOperation {
 		QueryOptionsList queryOptionsList) {
 
 		GetListItemsDocument.GetListItems.QueryOptions queryOptions =
-			GetListItemsDocumentImpl.GetListItems.QueryOptions.Factory.
-				newInstance();
+			(GetListItemsDocument.GetListItems.QueryOptions)
+				GetListItemsDocumentImpl.GetListItems.QueryOptions.Factory.
+					newInstance();
 
 		Node node = queryOptions.getDomNode();
 
@@ -265,8 +268,9 @@ public final class GetSharepointObjectsByQueryOperation extends BaseOperation {
 		String... queryFieldNames) {
 
 		GetListItemsDocument.GetListItems.ViewFields viewFields =
-			GetListItemsDocumentImpl.GetListItems.ViewFields.Factory.
-				newInstance();
+			(GetListItemsDocument.GetListItems.ViewFields)
+				GetListItemsDocumentImpl.GetListItems.ViewFields.Factory.
+					newInstance();
 
 		Node node = viewFields.getDomNode();
 

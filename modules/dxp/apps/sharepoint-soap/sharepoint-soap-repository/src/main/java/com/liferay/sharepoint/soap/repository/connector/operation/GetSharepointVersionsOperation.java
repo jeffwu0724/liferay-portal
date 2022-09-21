@@ -83,7 +83,7 @@ public final class GetSharepointVersionsOperation extends BaseOperation {
 
 	protected GetVersionsDocument getGetVersionsDocument(String filePath) {
 		GetVersionsDocument getVersionsDocument =
-			GetVersionsDocument.Factory.newInstance();
+			(GetVersionsDocument)GetVersionsDocument.Factory.newInstance();
 
 		GetVersionsDocument.GetVersions getVersions =
 			getVersionsDocument.addNewGetVersions();

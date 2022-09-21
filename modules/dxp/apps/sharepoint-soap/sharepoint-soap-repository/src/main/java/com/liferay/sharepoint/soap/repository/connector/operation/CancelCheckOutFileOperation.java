@@ -43,7 +43,7 @@ public final class CancelCheckOutFileOperation extends BaseOperation {
 
 	private UndoCheckOutDocument _getUndoCheckOutDocument(String filePath) {
 		UndoCheckOutDocument undoCheckOutDocument =
-			UndoCheckOutDocument.Factory.newInstance();
+			(UndoCheckOutDocument)UndoCheckOutDocument.Factory.newInstance();
 
 		UndoCheckOutDocument.UndoCheckOut undoCheckOut =
 			undoCheckOutDocument.addNewUndoCheckOut();

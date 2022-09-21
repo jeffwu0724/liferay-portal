@@ -53,7 +53,8 @@ public final class BatchOperation extends BaseOperation {
 
 	private UpdateListItemsDocument _getUpdateListItemsDocument(Batch batch) {
 		UpdateListItemsDocument updateListItemsDocument =
-			UpdateListItemsDocument.Factory.newInstance();
+			(UpdateListItemsDocument)
+				UpdateListItemsDocument.Factory.newInstance();
 
 		UpdateListItemsDocument.UpdateListItems updateListItems =
 			updateListItemsDocument.addNewUpdateListItems();

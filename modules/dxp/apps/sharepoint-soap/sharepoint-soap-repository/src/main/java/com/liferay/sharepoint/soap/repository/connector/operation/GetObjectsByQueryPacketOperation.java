@@ -71,7 +71,8 @@ public final class GetObjectsByQueryPacketOperation extends BaseOperation {
 	}
 
 	private QueryDocument _getQueryDocument(String queryPacket) {
-		QueryDocument queryDocument = QueryDocument.Factory.newInstance();
+		QueryDocument queryDocument =
+			(QueryDocument)QueryDocument.Factory.newInstance();
 
 		QueryDocument.Query query = queryDocument.addNewQuery();
 

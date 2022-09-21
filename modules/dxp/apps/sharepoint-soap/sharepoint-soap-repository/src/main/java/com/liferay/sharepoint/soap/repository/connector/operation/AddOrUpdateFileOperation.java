@@ -86,7 +86,7 @@ public final class AddOrUpdateFileOperation extends BaseOperation {
 		throws SharepointException {
 
 		CopyIntoItemsDocument copyIntoItemsDocument =
-			CopyIntoItemsDocument.Factory.newInstance();
+			(CopyIntoItemsDocument)CopyIntoItemsDocument.Factory.newInstance();
 
 		CopyIntoItemsDocument.CopyIntoItems copyIntoItems =
 			copyIntoItemsDocument.addNewCopyIntoItems();
@@ -104,7 +104,8 @@ public final class AddOrUpdateFileOperation extends BaseOperation {
 		String filePath) {
 
 		DestinationUrlCollection destinationUrlCollection =
-			DestinationUrlCollection.Factory.newInstance();
+			(DestinationUrlCollection)
+				DestinationUrlCollection.Factory.newInstance();
 
 		destinationUrlCollection.addString(String.valueOf(toURL(filePath)));
 
@@ -113,7 +114,8 @@ public final class AddOrUpdateFileOperation extends BaseOperation {
 
 	private FieldInformationCollection _getFieldInformationCollection() {
 		FieldInformationCollection fieldInformationCollection =
-			FieldInformationCollection.Factory.newInstance();
+			(FieldInformationCollection)
+				FieldInformationCollection.Factory.newInstance();
 
 		fieldInformationCollection.setFieldInformationArray(
 			_EMPTY_FIELD_INFORMATIONS);
