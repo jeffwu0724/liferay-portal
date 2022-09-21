@@ -44,7 +44,7 @@ public final class CheckOutFileOperation extends BaseOperation {
 
 	private CheckOutFileDocument _getCheckOutFileDocument(String filePath) {
 		CheckOutFileDocument checkOutFileDocument =
-			CheckOutFileDocument.Factory.newInstance();
+			(CheckOutFileDocument)CheckOutFileDocument.Factory.newInstance();
 
 		CheckOutFileDocument.CheckOutFile checkOutFile =
 			checkOutFileDocument.addNewCheckOutFile();

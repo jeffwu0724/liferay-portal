@@ -130,13 +130,15 @@ public final class CopySharepointObjectOperation extends BaseOperation {
 		String path, String newPath) {
 
 		CopyIntoItemsLocalDocument copyIntoItemsLocalDocument =
-			CopyIntoItemsLocalDocument.Factory.newInstance();
+			(CopyIntoItemsLocalDocument)
+				CopyIntoItemsLocalDocument.Factory.newInstance();
 
 		CopyIntoItemsLocalDocument.CopyIntoItemsLocal copyIntoItemsLocal =
 			copyIntoItemsLocalDocument.addNewCopyIntoItemsLocal();
 
 		DestinationUrlCollection destinationUrlCollection =
-			DestinationUrlCollection.Factory.newInstance();
+			(DestinationUrlCollection)
+				DestinationUrlCollection.Factory.newInstance();
 
 		destinationUrlCollection.addString(String.valueOf(toURL(newPath)));
 

@@ -51,7 +51,7 @@ public final class CheckInFileOperation extends BaseOperation {
 		SharepointConnection.CheckInType checkInType) {
 
 		CheckInFileDocument checkInFileDocument =
-			CheckInFileDocument.Factory.newInstance();
+			(CheckInFileDocument)CheckInFileDocument.Factory.newInstance();
 
 		CheckInFileDocument.CheckInFile checkInFile =
 			checkInFileDocument.addNewCheckInFile();
