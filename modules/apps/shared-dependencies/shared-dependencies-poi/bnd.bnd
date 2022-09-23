@@ -52,6 +52,7 @@ Import-Package:\
 	*
 -exportcontents:\
 	org.apache.poi.*,\
+	org.apache.xmlbeans.*,\
 	\
 	org.openxmlformats.schemas.*
 -fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
