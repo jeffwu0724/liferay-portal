@@ -2,4 +2,6 @@ dependencies {
 	compileInclude group: "org.apache.xmlbeans", name: "xmlbeans", version: "5.0.3"
 	compileInclude group: "org.apache.logging.log4j", name: "log4j-core", version: "2.17.1"
 	compileInclude group: "org.apache.logging.log4j", name: "log4j-api", version: "2.17.1"
+	compileInclude group: "com.github.javaparser", name: "javaparser-core", version: "3.23.1"
+	compileInclude group: "net.sf.saxon", name: "Saxon-HE", version: "10.6"
 }

@@ -1,6 +1,28 @@
 Bundle-Name: Liferay Shared Dependencies Xmlbeans
 Bundle-SymbolicName: com.liferay.shared.dependencies.xmlbeans
 Bundle-Version: 1.0.0
-Import-Package: !com.github.javaparser
+Import-Package:\
+	!com.conversantmedia.util.concurrent,\
+	!com.fasterxml.jackson.dataformat.xml,\
+	!com.fasterxml.jackson.dataformat.xml.annotation,\
+	!com.fasterxml.jackson.dataformat.xml.util,\
+	!com.fasterxml.jackson.dataformat.yaml,\
+	!com.lmax.disruptor,\
+	!com.lmax.disruptor.dsl,\
+	!com.sun.org.apache.xml.internal.resolver,\
+	!com.sun.org.apache.xml.internal.resolver.tools,\
+	!javax.jms,\
+	!jline.console,\
+	!jline.console.completer,\
+	!jline.internal,\
+	!org.apache.kafka.clients.producer,\
+	!org.apache.maven.*,\
+	!org.apache.tools.ant.*,\
+	!org.apache.xml.resolver.*,\
+	!org.fusesource.jansi.*,\
+	!org.jctools.queues,\
+	!org.zeromq,\
+	\
+	*
 -exportcontents: org.apache.xmlbeans.*
 -fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
