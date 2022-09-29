@@ -17,6 +17,7 @@ package com.liferay.portal.log.assertor;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.IOException;
@@ -117,7 +118,7 @@ public class PortalLogAssertorTest {
 		content = "<log4j>" + content + "</log4j>";
 
 		DocumentBuilderFactory documentBuilderFactory =
-			DocumentBuilderFactory.newInstance();
+			SecureXMLFactoryProviderUtil.newDocumentBuilderFactory();
 
 		try {
 			DocumentBuilder documentBuilder =

@@ -15,6 +15,7 @@
 package com.liferay.portal.monitoring.internal;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.portal.monitoring.internal.configuration.MonitoringConfiguration;
 
 import java.io.InputStream;
@@ -79,7 +80,7 @@ public class MonitoringGateKeeper {
 		List<String> services = new ArrayList<>();
 
 		DocumentBuilderFactory documentBuilderFactory =
-			DocumentBuilderFactory.newInstance();
+			SecureXMLFactoryProviderUtil.newDocumentBuilderFactory();
 
 		DocumentBuilder documentBuilder =
 			documentBuilderFactory.newDocumentBuilder();

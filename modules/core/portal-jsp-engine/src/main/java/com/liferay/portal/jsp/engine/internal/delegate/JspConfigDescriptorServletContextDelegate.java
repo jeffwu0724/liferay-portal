@@ -14,6 +14,7 @@
 
 package com.liferay.portal.jsp.engine.internal.delegate;
 
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.shielded.container.ShieldedContainerInitializer;
 
 import java.io.InputStream;
@@ -52,7 +53,7 @@ public class JspConfigDescriptorServletContextDelegate {
 		List<TaglibDescriptor> taglibDescriptors = new ArrayList<>();
 
 		DocumentBuilderFactory documentBuilderFactory =
-			DocumentBuilderFactory.newInstance();
+			SecureXMLFactoryProviderUtil.newDocumentBuilderFactory();
 
 		try (InputStream inputStream = _servletContext.getResourceAsStream(
 				ShieldedContainerInitializer.SHIELDED_CONTAINER_WEB_XML)) {
