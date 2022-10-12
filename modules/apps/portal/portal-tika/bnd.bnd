@@ -14,6 +14,4 @@ Import-Package:\
 	org.apache.commons.compress.*,\
 	org.apache.pdfbox.*,\
 	\
-	org.jdom2.*,\
-	\
-	*;resolution:=optional
+	org.jdom2.*

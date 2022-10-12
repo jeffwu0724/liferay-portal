@@ -5,8 +5,4 @@ Import-Package: !com.github.javaparser
 -exportcontents:\
 	org.apache.xmlbeans.*,\
 	\
-	schema.*,\
-	\
-	schemaorg_apache_xmlbeans.*,\
-	\
-	zipcompare.*
+	schemaorg_apache_xmlbeans.*
