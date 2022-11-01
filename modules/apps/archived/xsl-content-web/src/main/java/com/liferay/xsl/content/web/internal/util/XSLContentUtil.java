@@ -86,7 +86,7 @@ public class XSLContentUtil {
 		throws Exception {
 
 		DocumentBuilderFactory documentBuilderFactory =
-			DocumentBuilderFactory.newInstance();
+			SecureXMLFactoryProviderUtil.newDocumentBuilderFactory();
 
 		documentBuilderFactory.setFeature(
 			"http://apache.org/xml/features/disallow-doctype-decl",

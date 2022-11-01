@@ -15,6 +15,7 @@
 package com.liferay.portal.web.internal;
 
 import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.portal.kernel.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.servlet.SerializableSessionAttributeListener;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -74,7 +75,7 @@ public class PortalWebShieldedContainerInitializer
 		}
 
 		DocumentBuilderFactory documentBuilderFactory =
-			DocumentBuilderFactory.newInstance();
+			SecureXMLFactoryProviderUtil.newDocumentBuilderFactory();
 
 		try (InputStream inputStream = servletContext.getResourceAsStream(
 				ShieldedContainerInitializer.SHIELDED_CONTAINER_WEB_XML)) {
