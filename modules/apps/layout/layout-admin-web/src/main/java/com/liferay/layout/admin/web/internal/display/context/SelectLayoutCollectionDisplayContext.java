@@ -19,10 +19,10 @@ import com.liferay.asset.list.service.AssetListEntryServiceUtil;
 import com.liferay.asset.list.util.AssetListPortletUtil;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItem;
 import com.liferay.info.collection.provider.InfoCollectionProvider;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
-import com.liferay.layout.admin.web.internal.info.search.InfoSearchClassMapperTrackerUtil;
+import com.liferay.layout.admin.web.internal.info.search.InfoSearchClassMapperRegistryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -56,11 +56,11 @@ import javax.servlet.http.HttpServletRequest;
 public class SelectLayoutCollectionDisplayContext {
 
 	public SelectLayoutCollectionDisplayContext(
-		InfoItemServiceTracker infoItemServiceTracker,
+		InfoItemServiceRegistry infoItemServiceRegistry,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse) {
 
-		_infoItemServiceTracker = infoItemServiceTracker;
+		_infoItemServiceRegistry = infoItemServiceRegistry;
 		_liferayPortletRequest = liferayPortletRequest;
 		_liferayPortletResponse = liferayPortletResponse;
 
@@ -200,7 +200,7 @@ public class SelectLayoutCollectionDisplayContext {
 	private List<InfoCollectionProvider<?>> _getInfoCollectionProviders() {
 		List<InfoCollectionProvider<?>> infoCollectionProviders =
 			(List<InfoCollectionProvider<?>>)
-				(List<?>)_infoItemServiceTracker.getAllInfoItemServices(
+				(List<?>)_infoItemServiceRegistry.getAllInfoItemServices(
 					InfoCollectionProvider.class);
 
 		return ListUtil.filter(
@@ -233,11 +233,12 @@ public class SelectLayoutCollectionDisplayContext {
 		List<String> infoItemClassNames = new ArrayList<>();
 
 		for (String className :
-				_infoItemServiceTracker.getInfoItemClassNames(
+				_infoItemServiceRegistry.getInfoItemClassNames(
 					InfoItemFormProvider.class)) {
 
 			infoItemClassNames.add(
-				InfoSearchClassMapperTrackerUtil.getSearchClassName(className));
+				InfoSearchClassMapperRegistryUtil.getSearchClassName(
+					className));
 		}
 
 		return infoItemClassNames;
@@ -313,7 +314,7 @@ public class SelectLayoutCollectionDisplayContext {
 
 	private final GroupDisplayContextHelper _groupDisplayContextHelper;
 	private final HttpServletRequest _httpServletRequest;
-	private final InfoItemServiceTracker _infoItemServiceTracker;
+	private final InfoItemServiceRegistry _infoItemServiceRegistry;
 	private String _keywords;
 	private final LiferayPortletRequest _liferayPortletRequest;
 	private final LiferayPortletResponse _liferayPortletResponse;

@@ -30,7 +30,7 @@ import com.liferay.info.constants.InfoDisplayWebKeys;
 import com.liferay.info.form.InfoForm;
 import com.liferay.info.item.InfoItemDetails;
 import com.liferay.info.item.InfoItemReference;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemDetailsProvider;
 import com.liferay.info.list.renderer.DefaultInfoListRendererContext;
 import com.liferay.info.list.renderer.InfoListRenderer;
@@ -42,7 +42,7 @@ import com.liferay.layout.page.template.util.LayoutStructureUtil;
 import com.liferay.layout.responsive.ResponsiveLayoutStructureUtil;
 import com.liferay.layout.taglib.internal.display.context.RenderCollectionLayoutStructureItemDisplayContext;
 import com.liferay.layout.taglib.internal.display.context.RenderLayoutStructureDisplayContext;
-import com.liferay.layout.taglib.internal.info.search.InfoSearchClassMapperTrackerUtil;
+import com.liferay.layout.taglib.internal.info.search.InfoSearchClassMapperRegistryUtil;
 import com.liferay.layout.taglib.internal.servlet.ServletContextUtil;
 import com.liferay.layout.taglib.internal.util.SegmentsExperienceUtil;
 import com.liferay.layout.util.constants.LayoutStructureConstants;
@@ -339,13 +339,13 @@ public class RenderLayoutStructureTag extends IncludeTag {
 
 				containerTag.doStartTag();
 
-				InfoItemServiceTracker infoItemServiceTracker =
-					ServletContextUtil.getInfoItemServiceTracker();
+				InfoItemServiceRegistry infoItemServiceRegistry =
+					ServletContextUtil.getInfoItemServiceRegistry();
 
 				InfoItemDetailsProvider infoItemDetailsProvider =
-					infoItemServiceTracker.getFirstInfoItemService(
+					infoItemServiceRegistry.getFirstInfoItemService(
 						InfoItemDetailsProvider.class,
-						InfoSearchClassMapperTrackerUtil.getClassName(
+						InfoSearchClassMapperRegistryUtil.getClassName(
 							renderCollectionLayoutStructureItemDisplayContext.
 								getCollectionItemType()));
 

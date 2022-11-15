@@ -16,7 +16,7 @@ package com.liferay.portal.util;
 
 import com.liferay.portal.json.JSONObjectImpl;
 import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.util.CookieKeys;
+import com.liferay.portal.kernel.cookies.constants.CookiesConstants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -397,7 +397,7 @@ public class PropsValues {
 	public static final int COMPANY_SECURITY_AUTO_LOGIN_MAX_AGE =
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.COMPANY_SECURITY_AUTO_LOGIN_MAX_AGE),
-			CookieKeys.MAX_AGE);
+			CookiesConstants.MAX_AGE);
 
 	public static final boolean COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE =
 		GetterUtil.getBoolean(
@@ -538,10 +538,10 @@ public class PropsValues {
 	public static final String DEFAULT_PORTLET_DECORATOR_ID = PropsUtil.get(
 		PropsKeys.DEFAULT_PORTLET_DECORATOR_ID);
 
-	public static final String DEFAULT_REGULAR_COLOR_SCHEME_ID = PropsUtil.get(
+	public static String DEFAULT_REGULAR_COLOR_SCHEME_ID = PropsUtil.get(
 		PropsKeys.DEFAULT_REGULAR_COLOR_SCHEME_ID);
 
-	public static final String DEFAULT_REGULAR_THEME_ID = PropsUtil.get(
+	public static String DEFAULT_REGULAR_THEME_ID = PropsUtil.get(
 		PropsKeys.DEFAULT_REGULAR_THEME_ID);
 
 	public static final String DEFAULT_USER_PRIVATE_LAYOUT_FRIENDLY_URL =

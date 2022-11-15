@@ -26,10 +26,10 @@ import com.liferay.fragment.service.FragmentEntryLocalServiceUtil;
 import com.liferay.frontend.token.definition.FrontendTokenDefinition;
 import com.liferay.frontend.token.definition.FrontendTokenDefinitionRegistry;
 import com.liferay.info.collection.provider.item.selector.criterion.InfoCollectionProviderItemSelectorCriterion;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.info.list.provider.item.selector.criterion.InfoListProviderItemSelectorReturnType;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
 import com.liferay.item.selector.criteria.DownloadFileEntryItemSelectorReturnType;
@@ -172,8 +172,8 @@ public class ContentPageEditorDisplayContext {
 		FragmentEntryLinkManager fragmentEntryLinkManager,
 		FrontendTokenDefinitionRegistry frontendTokenDefinitionRegistry,
 		HttpServletRequest httpServletRequest,
-		InfoItemServiceTracker infoItemServiceTracker,
-		InfoSearchClassMapperTracker infoSearchClassMapperTracker,
+		InfoItemServiceRegistry infoItemServiceRegistry,
+		InfoSearchClassMapperRegistry infoSearchClassMapperRegistry,
 		ItemSelector itemSelector,
 		PageEditorConfiguration pageEditorConfiguration,
 		PortletRequest portletRequest, RenderResponse renderResponse,
@@ -192,8 +192,8 @@ public class ContentPageEditorDisplayContext {
 		_segmentsExperienceManager = segmentsExperienceManager;
 
 		this.httpServletRequest = httpServletRequest;
-		this.infoItemServiceTracker = infoItemServiceTracker;
-		this.infoSearchClassMapperTracker = infoSearchClassMapperTracker;
+		this.infoItemServiceRegistry = infoItemServiceRegistry;
+		this.infoSearchClassMapperRegistry = infoSearchClassMapperRegistry;
 		this.portletRequest = portletRequest;
 		this.stagingGroupHelper = stagingGroupHelper;
 
@@ -330,7 +330,7 @@ public class ContentPageEditorDisplayContext {
 			).put(
 				"formTypes",
 				MappingTypesUtil.getMappingTypesJSONArray(
-					infoItemServiceTracker, EditPageInfoItemCapability.KEY,
+					infoItemServiceRegistry, EditPageInfoItemCapability.KEY,
 					themeDisplay)
 			).put(
 				"fragmentCompositionDescriptionMaxLength",
@@ -608,9 +608,9 @@ public class ContentPageEditorDisplayContext {
 			).put(
 				"themeColorsCssClasses", _getThemeColorsCssClasses()
 			).put(
-				"unmarkItemForDeletionURL",
+				"unmarkItemsForDeletionURL",
 				getFragmentEntryActionURL(
-					"/layout_content_page_editor/unmark_item_for_deletion")
+					"/layout_content_page_editor/unmark_items_for_deletion")
 			).put(
 				"updateCollectionDisplayConfigURL",
 				getFragmentEntryActionURL(
@@ -941,8 +941,8 @@ public class ContentPageEditorDisplayContext {
 	}
 
 	protected final HttpServletRequest httpServletRequest;
-	protected final InfoItemServiceTracker infoItemServiceTracker;
-	protected final InfoSearchClassMapperTracker infoSearchClassMapperTracker;
+	protected final InfoItemServiceRegistry infoItemServiceRegistry;
+	protected final InfoSearchClassMapperRegistry infoSearchClassMapperRegistry;
 	protected final PortletRequest portletRequest;
 	protected final StagingGroupHelper stagingGroupHelper;
 	protected final ThemeDisplay themeDisplay;
@@ -1312,12 +1312,12 @@ public class ContentPageEditorDisplayContext {
 		Set<String> infoItemClassNames = new HashSet<>();
 
 		for (String infoItemClassName :
-				infoItemServiceTracker.getInfoItemClassNames(
+				infoItemServiceRegistry.getInfoItemClassNames(
 					InfoItemFormProvider.class)) {
 
 			infoItemClassNames.add(infoItemClassName);
 			infoItemClassNames.add(
-				infoSearchClassMapperTracker.getSearchClassName(
+				infoSearchClassMapperRegistry.getSearchClassName(
 					infoItemClassName));
 		}
 
@@ -1500,9 +1500,8 @@ public class ContentPageEditorDisplayContext {
 				MappingContentUtil.getMappingFieldsJSONArray(
 					String.valueOf(
 						layoutDisplayPageObjectProvider.getClassTypeId()),
-					themeDisplay.getScopeGroupId(), infoItemServiceTracker,
-					PortalUtil.getClassName(
-						layoutDisplayPageObjectProvider.getClassNameId()),
+					themeDisplay.getScopeGroupId(), infoItemServiceRegistry,
+					layoutDisplayPageObjectProvider.getClassName(),
 					themeDisplay.getLocale()));
 		}
 

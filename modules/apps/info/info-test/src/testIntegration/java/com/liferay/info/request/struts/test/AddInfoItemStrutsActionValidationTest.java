@@ -19,7 +19,7 @@ import com.liferay.exportimport.kernel.service.StagingLocalService;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.entry.processor.constants.FragmentEntryProcessorConstants;
 import com.liferay.fragment.listener.FragmentEntryLinkListener;
-import com.liferay.fragment.listener.FragmentEntryLinkListenerTracker;
+import com.liferay.fragment.listener.FragmentEntryLinkListenerRegistry;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.info.exception.InfoFormException;
@@ -29,7 +29,7 @@ import com.liferay.info.exception.InfoFormValidationException;
 import com.liferay.info.field.InfoField;
 import com.liferay.info.field.InfoFieldSet;
 import com.liferay.info.field.type.TextInfoFieldType;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.localized.InfoLocalizedValue;
 import com.liferay.info.test.util.MockInfoServiceRegistrationHolder;
 import com.liferay.info.test.util.info.item.creator.MockInfoItemCreator;
@@ -565,7 +565,7 @@ public class AddInfoItemStrutsActionValidationTest {
 				editableValuesJSONObject.toString());
 
 		for (FragmentEntryLinkListener fragmentEntryLinkListener :
-				_fragmentEntryLinkListenerTracker.
+				_fragmentEntryLinkListenerRegistry.
 					getFragmentEntryLinkListeners()) {
 
 			fragmentEntryLinkListener.onUpdateFragmentEntryLink(
@@ -583,7 +583,8 @@ public class AddInfoItemStrutsActionValidationTest {
 	private EditPageInfoItemCapability _editPageInfoItemCapability;
 
 	@Inject
-	private FragmentEntryLinkListenerTracker _fragmentEntryLinkListenerTracker;
+	private FragmentEntryLinkListenerRegistry
+		_fragmentEntryLinkListenerRegistry;
 
 	@Inject
 	private FragmentEntryLinkLocalService _fragmentEntryLinkLocalService;
@@ -592,7 +593,7 @@ public class AddInfoItemStrutsActionValidationTest {
 	private Group _group;
 
 	@Inject
-	private InfoItemServiceTracker _infoItemServiceTracker;
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Inject
 	private LayoutPageTemplateStructureLocalService

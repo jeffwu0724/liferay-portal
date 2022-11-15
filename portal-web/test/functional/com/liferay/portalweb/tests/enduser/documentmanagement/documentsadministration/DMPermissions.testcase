@@ -479,7 +479,7 @@ definition {
 			category = "Content & Data",
 			portlet = "Documents and Media");
 
-		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "DM Folder Name");
+		DMNavigator.gotoFolderPermissions(dmFolderName = "DM Folder Name");
 
 		PermissionsInline.addOrRemoveAccessPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
@@ -653,7 +653,7 @@ definition {
 			category = "Content & Data",
 			portlet = "Documents and Media");
 
-		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "DM Folder Name");
+		DMNavigator.gotoFolderPermissions(dmFolderName = "DM Folder Name");
 
 		PermissionsInline.addOrRemoveAccessPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
@@ -2386,7 +2386,7 @@ definition {
 
 		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "site-name");
 
-		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "DM Folder Name");
+		DMNavigator.gotoFolderPermissions(dmFolderName = "DM Folder Name");
 
 		PermissionsInline.addOrRemoveAccessPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
@@ -3104,6 +3104,7 @@ definition {
 	test ViewSearchResultsForChildObjectRespectsParentFolderPermissions {
 		property custom.properties = "jsonws.web.service.paths.excludes=";
 		property portal.acceptance = "quarantine";
+		property test.name.skip.portal.instance = "DMPermissions#ViewSearchResultsForChildObjectRespectsParentFolderPermissions";
 		property testray.component.names = "Training";
 
 		SearchAdministration.executeReindex();
@@ -3215,7 +3216,7 @@ definition {
 			category = "Content & Data",
 			portlet = "Documents and Media");
 
-		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "DM Folder Name");
+		DMNavigator.gotoFolderPermissions(dmFolderName = "DM Folder Name");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Remove",
@@ -3229,7 +3230,7 @@ definition {
 
 		DMNavigator.gotoFolder(dmFolderName = "DM Folder Name");
 
-		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "DM SubFolder Name");
+		DMNavigator.gotoFolderPermissions(dmFolderName = "DM SubFolder Name");
 
 		PermissionsInline.viewPermissionsChecked(
 			permissionDefinitionKey = "CONFIGURATION_PERMISSIONS_VIEW_CHECKBOX",

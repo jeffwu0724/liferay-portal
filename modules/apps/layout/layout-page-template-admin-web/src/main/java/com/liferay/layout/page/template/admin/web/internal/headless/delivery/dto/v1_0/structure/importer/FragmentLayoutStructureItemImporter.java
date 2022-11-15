@@ -17,7 +17,7 @@ package com.liferay.layout.page.template.admin.web.internal.headless.delivery.dt
 import com.liferay.document.library.util.DLURLHelperUtil;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.constants.FragmentEntryLinkConstants;
-import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
+import com.liferay.fragment.contributor.FragmentCollectionContributorRegistry;
 import com.liferay.fragment.entry.processor.constants.FragmentEntryProcessorConstants;
 import com.liferay.fragment.entry.processor.util.EditableFragmentEntryProcessorUtil;
 import com.liferay.fragment.model.FragmentCollection;
@@ -27,7 +27,7 @@ import com.liferay.fragment.processor.DefaultFragmentEntryProcessorContext;
 import com.liferay.fragment.processor.FragmentEntryProcessorContext;
 import com.liferay.fragment.processor.FragmentEntryProcessorRegistry;
 import com.liferay.fragment.renderer.FragmentRenderer;
-import com.liferay.fragment.renderer.FragmentRendererTracker;
+import com.liferay.fragment.renderer.FragmentRendererRegistry;
 import com.liferay.fragment.service.FragmentCollectionService;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLocalService;
@@ -248,7 +248,7 @@ public class FragmentLayoutStructureItemImporter
 			layout.getCompanyId(), layout.getGroupId(), fragmentKey);
 
 		FragmentRenderer fragmentRenderer =
-			_fragmentRendererTracker.getFragmentRenderer(fragmentKey);
+			_fragmentRendererRegistry.getFragmentRenderer(fragmentKey);
 
 		if ((fragmentEntry == null) && (fragmentRenderer == null)) {
 			warningMessages.add(
@@ -742,7 +742,7 @@ public class FragmentLayoutStructureItemImporter
 			return fragmentEntry;
 		}
 
-		return _fragmentCollectionContributorTracker.getFragmentEntry(
+		return _fragmentCollectionContributorRegistry.getFragmentEntry(
 			fragmentKey);
 	}
 
@@ -1115,8 +1115,8 @@ public class FragmentLayoutStructureItemImporter
 	private CompanyLocalService _companyLocalService;
 
 	@Reference
-	private FragmentCollectionContributorTracker
-		_fragmentCollectionContributorTracker;
+	private FragmentCollectionContributorRegistry
+		_fragmentCollectionContributorRegistry;
 
 	@Reference
 	private FragmentCollectionService _fragmentCollectionService;
@@ -1134,7 +1134,7 @@ public class FragmentLayoutStructureItemImporter
 	private FragmentEntryValidator _fragmentEntryValidator;
 
 	@Reference
-	private FragmentRendererTracker _fragmentRendererTracker;
+	private FragmentRendererRegistry _fragmentRendererRegistry;
 
 	@Reference
 	private JSONFactory _jsonFactory;

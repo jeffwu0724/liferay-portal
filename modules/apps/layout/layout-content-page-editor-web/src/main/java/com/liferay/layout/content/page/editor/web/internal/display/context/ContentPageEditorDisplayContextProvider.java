@@ -15,8 +15,8 @@
 package com.liferay.layout.content.page.editor.web.internal.display.context;
 
 import com.liferay.frontend.token.definition.FrontendTokenDefinitionRegistry;
-import com.liferay.info.item.InfoItemServiceTracker;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorWebKeys;
 import com.liferay.layout.content.page.editor.sidebar.panel.ContentPageEditorSidebarPanel;
@@ -74,7 +74,7 @@ public class ContentPageEditorDisplayContextProvider {
 				_getContentPageEditorSidebarPanels(),
 				_fragmentCollectionManager, _fragmentEntryLinkManager,
 				_frontendTokenDefinitionRegistry, httpServletRequest,
-				_infoItemServiceTracker, _infoSearchClassMapperTracker,
+				_infoItemServiceRegistry, _infoSearchClassMapperRegistry,
 				_itemSelector, _pageEditorConfiguration, portletRequest,
 				renderResponse, _segmentsConfigurationProvider,
 				new SegmentsExperienceManager(_segmentsExperienceLocalService),
@@ -100,8 +100,8 @@ public class ContentPageEditorDisplayContextProvider {
 		return new ContentPageEditorLayoutPageTemplateDisplayContext(
 			_getContentPageEditorSidebarPanels(), _fragmentCollectionManager,
 			_fragmentEntryLinkManager, _frontendTokenDefinitionRegistry,
-			httpServletRequest, _infoItemServiceTracker,
-			_infoSearchClassMapperTracker, _itemSelector,
+			httpServletRequest, _infoItemServiceRegistry,
+			_infoSearchClassMapperRegistry, _itemSelector,
 			_pageEditorConfiguration, pageIsDisplayPage, portletRequest,
 			renderResponse, _segmentsConfigurationProvider,
 			new SegmentsExperienceManager(_segmentsExperienceLocalService),
@@ -149,10 +149,10 @@ public class ContentPageEditorDisplayContextProvider {
 	private FrontendTokenDefinitionRegistry _frontendTokenDefinitionRegistry;
 
 	@Reference
-	private InfoItemServiceTracker _infoItemServiceTracker;
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
-	private InfoSearchClassMapperTracker _infoSearchClassMapperTracker;
+	private InfoSearchClassMapperRegistry _infoSearchClassMapperRegistry;
 
 	@Reference
 	private ItemSelector _itemSelector;

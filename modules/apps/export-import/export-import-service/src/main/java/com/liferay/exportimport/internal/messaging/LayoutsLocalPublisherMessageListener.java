@@ -42,7 +42,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = "destination.name=" + DestinationNames.LAYOUTS_LOCAL_PUBLISHER,
-	service = LayoutsLocalPublisherMessageListener.class
+	service = MessageListener.class
 )
 public class LayoutsLocalPublisherMessageListener
 	extends BasePublisherMessageListener {

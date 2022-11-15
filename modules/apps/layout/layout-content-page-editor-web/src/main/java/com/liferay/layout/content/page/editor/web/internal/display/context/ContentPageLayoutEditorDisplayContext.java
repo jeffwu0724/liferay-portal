@@ -25,9 +25,9 @@ import com.liferay.asset.list.service.AssetListEntryLocalServiceUtil;
 import com.liferay.frontend.token.definition.FrontendTokenDefinitionRegistry;
 import com.liferay.info.collection.provider.InfoCollectionProvider;
 import com.liferay.info.collection.provider.SingleFormVariationInfoCollectionProvider;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.list.provider.item.selector.criterion.InfoListProviderItemSelectorReturnType;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.criteria.InfoListItemSelectorReturnType;
 import com.liferay.layout.content.page.editor.sidebar.panel.ContentPageEditorSidebarPanel;
@@ -103,8 +103,8 @@ public class ContentPageLayoutEditorDisplayContext
 		FragmentEntryLinkManager fragmentEntryLinkManager,
 		FrontendTokenDefinitionRegistry frontendTokenDefinitionRegistry,
 		HttpServletRequest httpServletRequest,
-		InfoItemServiceTracker infoItemServiceTracker,
-		InfoSearchClassMapperTracker infoSearchClassMapperTracker,
+		InfoItemServiceRegistry infoItemServiceRegistry,
+		InfoSearchClassMapperRegistry infoSearchClassMapperRegistry,
 		ItemSelector itemSelector,
 		PageEditorConfiguration pageEditorConfiguration,
 		PortletRequest portletRequest, RenderResponse renderResponse,
@@ -115,10 +115,11 @@ public class ContentPageLayoutEditorDisplayContext
 		super(
 			contentPageEditorSidebarPanels, fragmentCollectionManager,
 			fragmentEntryLinkManager, frontendTokenDefinitionRegistry,
-			httpServletRequest, infoItemServiceTracker,
-			infoSearchClassMapperTracker, itemSelector, pageEditorConfiguration,
-			portletRequest, renderResponse, segmentsConfigurationProvider,
-			segmentsExperienceManager, stagingGroupHelper);
+			httpServletRequest, infoItemServiceRegistry,
+			infoSearchClassMapperRegistry, itemSelector,
+			pageEditorConfiguration, portletRequest, renderResponse,
+			segmentsConfigurationProvider, segmentsExperienceManager,
+			stagingGroupHelper);
 	}
 
 	@Override
@@ -377,7 +378,7 @@ public class ContentPageLayoutEditorDisplayContext
 
 		List<InfoCollectionProvider<?>> infoCollectionProviders =
 			(List<InfoCollectionProvider<?>>)
-				(List<?>)infoItemServiceTracker.getAllInfoItemServices(
+				(List<?>)infoItemServiceRegistry.getAllInfoItemServices(
 					InfoCollectionProvider.class);
 
 		Stream<InfoCollectionProvider<?>> stream =

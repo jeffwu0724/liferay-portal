@@ -15,11 +15,11 @@
 package com.liferay.layout.page.template.admin.web.internal.headless.delivery.dto.v1_0.structure.importer;
 
 import com.liferay.fragment.contributor.FragmentCollectionContributor;
-import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
+import com.liferay.fragment.contributor.FragmentCollectionContributorRegistry;
 import com.liferay.fragment.model.FragmentCollection;
 import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.renderer.FragmentRenderer;
-import com.liferay.fragment.renderer.FragmentRendererTracker;
+import com.liferay.fragment.renderer.FragmentRendererRegistry;
 import com.liferay.fragment.service.FragmentCollectionLocalService;
 import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.headless.delivery.dto.v1_0.PageElement;
@@ -158,7 +158,7 @@ public class DropZoneLayoutStructureItemImporter
 		}
 
 		List<FragmentCollectionContributor> fragmentCollectionContributors =
-			_fragmentCollectionContributorTracker.
+			_fragmentCollectionContributorRegistry.
 				getFragmentCollectionContributors();
 
 		for (FragmentCollectionContributor fragmentCollectionContributor :
@@ -175,7 +175,7 @@ public class DropZoneLayoutStructureItemImporter
 		}
 
 		FragmentRenderer fragmentRenderer =
-			_fragmentRendererTracker.getFragmentRenderer(fragmentKey);
+			_fragmentRendererRegistry.getFragmentRenderer(fragmentKey);
 
 		if (fragmentRenderer != null) {
 			return fragmentRenderer.getCollectionKey();
@@ -191,8 +191,8 @@ public class DropZoneLayoutStructureItemImporter
 	private static final String _KEY_UNALLOWED_FRAGMENTS = "unallowedFragments";
 
 	@Reference
-	private FragmentCollectionContributorTracker
-		_fragmentCollectionContributorTracker;
+	private FragmentCollectionContributorRegistry
+		_fragmentCollectionContributorRegistry;
 
 	@Reference
 	private FragmentCollectionLocalService _fragmentCollectionLocalService;
@@ -201,6 +201,6 @@ public class DropZoneLayoutStructureItemImporter
 	private FragmentEntryLocalService _fragmentEntryLocalService;
 
 	@Reference
-	private FragmentRendererTracker _fragmentRendererTracker;
+	private FragmentRendererRegistry _fragmentRendererRegistry;
 
 }

@@ -22,6 +22,7 @@
 JournalArticle article = (JournalArticle)request.getAttribute("liferay-journal:journal-article:article");
 JournalArticleDisplay articleDisplay = (JournalArticleDisplay)request.getAttribute("liferay-journal:journal-article:articleDisplay");
 boolean dataAnalyticsTrackingEnabled = GetterUtil.getBoolean(request.getAttribute("liferay-journal:journal-article:dataAnalyticsTrackingEnabled"));
+PortletURL paginationURL = (PortletURL)request.getAttribute("liferay-journal:journal-article:paginationURL");
 String viewMode = ParamUtil.getString(PortalUtil.getOriginalServletRequest(request), "p_l_mode", Constants.VIEW);
 String wrapperCssClass = (String)request.getAttribute("liferay-journal:journal-article:wrapperCssClass");
 %>
@@ -44,6 +45,25 @@ String wrapperCssClass = (String)request.getAttribute("liferay-journal:journal-a
 			</c:if>
 
 			<%= articleDisplay.getContent() %>
+
+			<c:if test="<%= articleDisplay.isPaginate() && (paginationURL != null) %>">
+				<div>
+					<react:component
+						module="journal_article/js/JournalArticlePagination.es"
+						props='<%=
+							HashMapBuilder.<String, Object>put(
+								"activePage", articleDisplay.getCurrentPage()
+							).put(
+								"namespace", liferayPortletResponse.getNamespace()
+							).put(
+								"paginationURL", String.valueOf(paginationURL)
+							).put(
+								"totalPages", articleDisplay.getNumberOfPages()
+							).build()
+						%>'
+					/>
+				</div>
+			</c:if>
 		</div>
 
 		<%

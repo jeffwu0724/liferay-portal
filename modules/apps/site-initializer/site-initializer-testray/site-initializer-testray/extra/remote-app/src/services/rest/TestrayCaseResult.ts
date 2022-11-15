@@ -13,9 +13,12 @@
  */
 
 import yupSchema from '../../schema/yup';
+import {searchUtil} from '../../util/search';
 import {CaseResultStatuses} from '../../util/statuses';
 import {Liferay} from '../liferay';
 import Rest from './Rest';
+import {testrayCaseResultsIssuesImpl} from './TestrayCaseresultsIssues';
+import {testrayIssueImpl} from './TestrayIssues';
 import {TestrayCaseResult} from './types';
 
 type CaseResultForm = typeof yupSchema.caseResult.__outputType;
@@ -117,13 +120,49 @@ class TestrayCaseResultRest extends Rest<CaseResultForm, TestrayCaseResult> {
 			userId: this.UNASSIGNED_USER_ID,
 		});
 	}
+
+	public async assignCaseResultIssue(caseResultId: number, issues: string[]) {
+		const caseResultIssuesResponse = await testrayCaseResultsIssuesImpl.getAll(
+			searchUtil.eq('caseResultId', caseResultId)
+		);
+
+		for (const issue of issues) {
+			const testrayIssue = await testrayIssueImpl.createIfNotExist(issue);
+
+			await testrayCaseResultsIssuesImpl.createIfNotExist({
+				caseResultId,
+				issueId: testrayIssue?.id,
+				name: `${issue}-${caseResultId}`,
+			});
+		}
+
+		if (caseResultIssuesResponse?.items) {
+			const caseResultIssuesTransform = testrayCaseResultsIssuesImpl.transformDataFromList(
+				caseResultIssuesResponse
+			);
+
+			const caseResulIssueIdsToRemove = caseResultIssuesTransform.items
+				.filter(({issue}) => !issues.includes(issue?.name || ''))
+				.map(({id}) => id);
+
+			for (const caseResultIssueId of caseResulIssueIdsToRemove) {
+				await testrayCaseResultsIssuesImpl.remove(caseResultIssueId);
+			}
+		}
+	}
+
+	public async update(
+		id: number,
+		data: Partial<CaseResultForm & {issues: string[]}>
+	): Promise<TestrayCaseResult> {
+		const caseResult = await super.update(id, data);
+
+		const issues = data.issues || [];
+
+		await this.assignCaseResultIssue(id, issues);
+
+		return caseResult;
+	}
 }
 
-const nestedFieldsParam =
-	'nestedFields=case.caseType,component,build.productVersion,build.routine,run,user&nestedFieldsDepth=3';
-
-const caseResultsResource = `/caseresults?${nestedFieldsParam}`;
-
 export const testrayCaseResultImpl = new TestrayCaseResultRest();
-
-export {caseResultsResource};

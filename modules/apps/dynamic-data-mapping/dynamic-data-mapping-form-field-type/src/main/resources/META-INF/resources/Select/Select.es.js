@@ -229,10 +229,7 @@ const DropdownListWithSearch = ({
 
 	return (
 		<>
-			<ClayDropDown.Search
-				onChange={(event) => setQuery(event.target.value)}
-				value={query}
-			/>
+			<ClayDropDown.Search onChange={setQuery} value={query} />
 			{filteredOptions.length ? (
 				<DropdownList
 					currentValue={currentValue}

@@ -112,7 +112,7 @@ public class ObjectFieldLocalServiceTest {
 
 		_listTypeDefinition =
 			_listTypeDefinitionLocalService.addListTypeDefinition(
-				TestPropsValues.getUserId(),
+				null, TestPropsValues.getUserId(),
 				LocalizedMapUtil.getLocalizedMap(
 					RandomTestUtil.randomString()));
 
@@ -164,19 +164,16 @@ public class ObjectFieldLocalServiceTest {
 			}
 		}
 
-		ObjectFieldBuilder objectFieldBuilder = new ObjectFieldBuilder();
-
 		_testAddCustomObjectField(
 			"List type definition ID is 0",
-			objectFieldBuilder.businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_MULTISELECT_PICKLIST
 			).labelMap(
 				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString())
 			).name(
 				"a" + RandomTestUtil.randomString()
 			).build());
-
-		objectFieldBuilder = new ObjectFieldBuilder();
 
 		String defaultValue = RandomTestUtil.randomString();
 
@@ -185,22 +182,22 @@ public class ObjectFieldLocalServiceTest {
 				"Default value \"", defaultValue, "\" is not a list entry in ",
 				"list definition ",
 				_listTypeDefinition.getListTypeDefinitionId()),
-			objectFieldBuilder.businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_PICKLIST
-			).listTypeDefinitionId(
-				_listTypeDefinition.getListTypeDefinitionId()
 			).defaultValue(
 				defaultValue
+			).listTypeDefinitionId(
+				_listTypeDefinition.getListTypeDefinitionId()
 			).build());
-
-		//objectFieldBuilder = new ObjectFieldBuilder();
 
 		_testAddCustomObjectField(
 			StringBundler.concat(
 				"Object field can only have a default type when the business ",
 				"type is \"", ObjectFieldConstants.BUSINESS_TYPE_PICKLIST,
 				"\""),
-			objectFieldBuilder.businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_TEXT
 			).dbType(
 				ObjectFieldConstants.DB_TYPE_STRING
@@ -214,22 +211,32 @@ public class ObjectFieldLocalServiceTest {
 				_getObjectFieldSettings(ObjectFieldConstants.BUSINESS_TYPE_TEXT)
 			).build());
 
-		//objectFieldBuilder = new ObjectFieldBuilder();
-
 		_testAddCustomObjectField(
 			"Object field default value can only be set when the picklist is " +
 				"a state",
-			objectFieldBuilder.businessType(
+			new ObjectFieldBuilder(
+			).businessType(
 				ObjectFieldConstants.BUSINESS_TYPE_PICKLIST
 			).defaultValue(
 				_listTypeEntryKey
+			).listTypeDefinitionId(
+				_listTypeDefinition.getListTypeDefinitionId()
 			).build());
-
-		//objectFieldBuilder = new ObjectFieldBuilder();
 
 		_testAddCustomObjectField(
 			"Object field must be required when the state is true",
-			objectFieldBuilder.state(
+			new ObjectFieldBuilder(
+			).businessType(
+				ObjectFieldConstants.BUSINESS_TYPE_PICKLIST
+			).defaultValue(
+				_listTypeEntryKey
+			).labelMap(
+				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString())
+			).listTypeDefinitionId(
+				_listTypeDefinition.getListTypeDefinitionId()
+			).name(
+				"a" + RandomTestUtil.randomString()
+			).state(
 				true
 			).build());
 	}

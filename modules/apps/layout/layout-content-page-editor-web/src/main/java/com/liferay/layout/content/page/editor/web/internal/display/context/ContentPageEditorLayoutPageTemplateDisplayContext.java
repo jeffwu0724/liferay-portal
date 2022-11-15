@@ -23,12 +23,12 @@ import com.liferay.frontend.token.definition.FrontendTokenDefinitionRegistry;
 import com.liferay.info.collection.provider.item.selector.criterion.RelatedInfoItemCollectionProviderItemSelectorCriterion;
 import com.liferay.info.item.InfoItemClassDetails;
 import com.liferay.info.item.InfoItemFormVariation;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemDetailsProvider;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.info.item.provider.InfoItemFormVariationsProvider;
 import com.liferay.info.list.provider.item.selector.criterion.InfoListProviderItemSelectorReturnType;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
 import com.liferay.item.selector.criteria.InfoItemItemSelectorReturnType;
@@ -75,8 +75,8 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 		FragmentEntryLinkManager fragmentEntryLinkManager,
 		FrontendTokenDefinitionRegistry frontendTokenDefinitionRegistry,
 		HttpServletRequest httpServletRequest,
-		InfoItemServiceTracker infoItemServiceTracker,
-		InfoSearchClassMapperTracker infoSearchClassMapperTracker,
+		InfoItemServiceRegistry infoItemServiceRegistry,
+		InfoSearchClassMapperRegistry infoSearchClassMapperRegistry,
 		ItemSelector itemSelector,
 		PageEditorConfiguration pageEditorConfiguration,
 		boolean pageIsDisplayPage, PortletRequest portletRequest,
@@ -88,10 +88,11 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 		super(
 			contentPageEditorSidebarPanels, fragmentCollectionManager,
 			fragmentEntryLinkManager, frontendTokenDefinitionRegistry,
-			httpServletRequest, infoItemServiceTracker,
-			infoSearchClassMapperTracker, itemSelector, pageEditorConfiguration,
-			portletRequest, renderResponse, segmentsConfigurationProvider,
-			segmentsExperienceManager, stagingGroupHelper);
+			httpServletRequest, infoItemServiceRegistry,
+			infoSearchClassMapperRegistry, itemSelector,
+			pageEditorConfiguration, portletRequest, renderResponse,
+			segmentsConfigurationProvider, segmentsExperienceManager,
+			stagingGroupHelper);
 
 		_itemSelector = itemSelector;
 		_pageIsDisplayPage = pageIsDisplayPage;
@@ -169,7 +170,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 
 		AssetRendererFactory<?> assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
-				infoSearchClassMapperTracker.getSearchClassName(className));
+				infoSearchClassMapperRegistry.getSearchClassName(className));
 
 		if (assetRendererFactory != null) {
 			sourceItemTypes.add(AssetEntry.class.getName());
@@ -200,7 +201,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 				key,
 				MappingContentUtil.getMappingFieldsJSONArray(
 					String.valueOf(layoutPageTemplateEntry.getClassTypeId()),
-					themeDisplay.getScopeGroupId(), infoItemServiceTracker,
+					themeDisplay.getScopeGroupId(), infoItemServiceRegistry,
 					layoutPageTemplateEntry.getClassName(),
 					themeDisplay.getLocale()));
 		}
@@ -274,7 +275,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 			_getLayoutPageTemplateEntry();
 
 		InfoItemFormVariationsProvider<?> infoItemFormVariationsProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFormVariationsProvider.class,
 				layoutPageTemplateEntry.getClassName());
 
@@ -299,7 +300,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 			_getLayoutPageTemplateEntry();
 
 		InfoItemFormProvider<?> infoItemFormProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFormProvider.class,
 				layoutPageTemplateEntry.getClassName());
 
@@ -308,7 +309,7 @@ public class ContentPageEditorLayoutPageTemplateDisplayContext
 		}
 
 		InfoItemDetailsProvider<?> infoItemDetailsProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemDetailsProvider.class,
 				layoutPageTemplateEntry.getClassName());
 

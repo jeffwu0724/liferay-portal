@@ -16,7 +16,7 @@ package com.liferay.layout.content.page.editor.web.internal.util;
 
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.constants.FragmentEntryLinkConstants;
-import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
+import com.liferay.fragment.contributor.FragmentCollectionContributorRegistry;
 import com.liferay.fragment.entry.processor.util.EditableFragmentEntryProcessorUtil;
 import com.liferay.fragment.helper.FragmentEntryLinkHelper;
 import com.liferay.fragment.model.FragmentEntry;
@@ -24,13 +24,13 @@ import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.renderer.DefaultFragmentRendererContext;
 import com.liferay.fragment.renderer.FragmentRenderer;
 import com.liferay.fragment.renderer.FragmentRendererController;
-import com.liferay.fragment.renderer.FragmentRendererTracker;
+import com.liferay.fragment.renderer.FragmentRendererRegistry;
 import com.liferay.fragment.renderer.constants.FragmentRendererConstants;
 import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
 import com.liferay.info.exception.NoSuchFormVariationException;
 import com.liferay.info.form.InfoForm;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.layout.content.page.editor.web.internal.comment.CommentUtil;
@@ -88,7 +88,7 @@ public class FragmentEntryLinkManager {
 		}
 
 		Map<String, FragmentEntry> fragmentEntries =
-			_fragmentCollectionContributorTracker.getFragmentEntries(locale);
+			_fragmentCollectionContributorRegistry.getFragmentEntries(locale);
 
 		return fragmentEntries.get(fragmentEntryKey);
 	}
@@ -264,7 +264,7 @@ public class FragmentEntryLinkManager {
 					}
 
 					FragmentRenderer fragmentRenderer =
-						_fragmentRendererTracker.getFragmentRenderer(
+						_fragmentRendererRegistry.getFragmentRenderer(
 							rendererKey);
 
 					if (fragmentRenderer != null) {
@@ -411,7 +411,7 @@ public class FragmentEntryLinkManager {
 		}
 
 		InfoItemFormProvider<Object> infoItemFormProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
+			_infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFormProvider.class, _portal.getClassName(classNameId));
 
 		if (infoItemFormProvider != null) {
@@ -463,8 +463,8 @@ public class FragmentEntryLinkManager {
 	private CommentManager _commentManager;
 
 	@Reference
-	private FragmentCollectionContributorTracker
-		_fragmentCollectionContributorTracker;
+	private FragmentCollectionContributorRegistry
+		_fragmentCollectionContributorRegistry;
 
 	@Reference
 	private FragmentEntryConfigurationParser _fragmentEntryConfigurationParser;
@@ -479,10 +479,10 @@ public class FragmentEntryLinkManager {
 	private FragmentRendererController _fragmentRendererController;
 
 	@Reference
-	private FragmentRendererTracker _fragmentRendererTracker;
+	private FragmentRendererRegistry _fragmentRendererRegistry;
 
 	@Reference
-	private InfoItemServiceTracker _infoItemServiceTracker;
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
 	private ItemSelector _itemSelector;

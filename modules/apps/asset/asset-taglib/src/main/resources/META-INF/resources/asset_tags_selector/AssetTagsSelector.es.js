@@ -17,9 +17,9 @@ import {useResource} from '@clayui/data-provider';
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayMultiSelect, {itemLabelFilter} from '@clayui/multi-select';
 import {usePrevious} from '@liferay/frontend-js-react-web';
-import {objectToFormData, openSelectionModal} from 'frontend-js-web';
+import {objectToFormData, openSelectionModal, sub} from 'frontend-js-web';
 import PropTypes from 'prop-types';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 const noop = () => {};
 
@@ -29,7 +29,7 @@ function AssetTagsSelector({
 	id,
 	inputName,
 	inputValue,
-	label,
+	label = Liferay.Language.get('tags'),
 	onInputValueChange = noop,
 	onSelectedItemsChange = noop,
 	portletURL,
@@ -37,6 +37,8 @@ function AssetTagsSelector({
 	selectedItems = [],
 	showSelectButton,
 }) {
+	const selectButtonRef = useRef();
+
 	const {refetch, resource} = useResource({
 		fetchOptions: {
 			'body': objectToFormData({
@@ -132,6 +134,9 @@ function AssetTagsSelector({
 			buttonAddLabel: Liferay.Language.get('done'),
 			getSelectedItemsOnly: false,
 			multiple: true,
+			onClose: () => {
+				selectButtonRef.current?.focus();
+			},
 			onSelect: (dialogSelectedItems) => {
 				if (!dialogSelectedItems?.length) {
 					return;
@@ -204,9 +209,7 @@ function AssetTagsSelector({
 	return (
 		<div className="lfr-tags-selector-content" id={id}>
 			<ClayForm.Group>
-				<label htmlFor={inputName + '_MultiSelect'}>
-					{label || Liferay.Language.get('tags')}
-				</label>
+				<label htmlFor={inputName + '_MultiSelect'}>{label}</label>
 
 				<ClayInput.Group>
 					<ClayInput.GroupItem>
@@ -237,8 +240,14 @@ function AssetTagsSelector({
 					{showSelectButton && (
 						<ClayInput.GroupItem shrink>
 							<ClayButton
+								aria-haspopup="dialog"
+								aria-label={sub(
+									Liferay.Language.get('select-x'),
+									label
+								)}
 								displayType="secondary"
 								onClick={handleSelectButtonClick}
+								ref={selectButtonRef}
 							>
 								{Liferay.Language.get('select')}
 							</ClayButton>

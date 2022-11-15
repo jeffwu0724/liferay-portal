@@ -29,11 +29,11 @@ import com.liferay.info.item.ClassPKInfoItemIdentifier;
 import com.liferay.info.item.InfoItemFieldValues;
 import com.liferay.info.item.InfoItemIdentifier;
 import com.liferay.info.item.InfoItemReference;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemDetailsProvider;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.layout.display.page.LayoutDisplayPageObjectProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageProviderTracker;
@@ -104,21 +104,15 @@ public abstract class BaseAssetDisplayPageFriendlyURLResolver
 
 		httpServletRequest.setAttribute(InfoDisplayWebKeys.INFO_ITEM, infoItem);
 
-		String infoItemClassName = portal.getClassName(
-			layoutDisplayPageObjectProvider.getClassNameId());
-
 		InfoItemDetailsProvider infoItemDetailsProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemDetailsProvider.class, infoItemClassName);
+			infoItemServiceRegistry.getFirstInfoItemService(
+				InfoItemDetailsProvider.class,
+				layoutDisplayPageObjectProvider.getClassName());
 
 		httpServletRequest.setAttribute(
 			InfoDisplayWebKeys.INFO_ITEM_DETAILS,
 			infoItemDetailsProvider.getInfoItemDetails(infoItem));
 
-		httpServletRequest.setAttribute(
-			InfoDisplayWebKeys.INFO_ITEM_FIELD_VALUES_PROVIDER,
-			infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemFieldValuesProvider.class, infoItemClassName));
 		httpServletRequest.setAttribute(
 			LayoutDisplayPageWebKeys.LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER,
 			layoutDisplayPageObjectProvider);
@@ -141,10 +135,9 @@ public abstract class BaseAssetDisplayPageFriendlyURLResolver
 			layoutDisplayPageProvider);
 
 		InfoItemFieldValuesProvider<Object> infoItemFieldValuesProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFieldValuesProvider.class,
-				portal.getClassName(
-					layoutDisplayPageObjectProvider.getClassNameId()));
+				layoutDisplayPageObjectProvider.getClassName());
 
 		InfoItemFieldValues infoItemFieldValues =
 			infoItemFieldValuesProvider.getInfoItemFieldValues(
@@ -247,10 +240,10 @@ public abstract class BaseAssetDisplayPageFriendlyURLResolver
 	protected AssetEntryService assetEntryLocalService;
 
 	@Reference
-	protected InfoItemServiceTracker infoItemServiceTracker;
+	protected InfoItemServiceRegistry infoItemServiceRegistry;
 
 	@Reference
-	protected InfoSearchClassMapperTracker infoSearchClassMapperTracker;
+	protected InfoSearchClassMapperRegistry infoSearchClassMapperRegistry;
 
 	@Reference
 	protected LayoutDisplayPageProviderTracker layoutDisplayPageProviderTracker;
@@ -270,9 +263,8 @@ public abstract class BaseAssetDisplayPageFriendlyURLResolver
 	private AssetEntry _getAssetEntry(
 		LayoutDisplayPageObjectProvider<?> layoutDisplayPageObjectProvider) {
 
-		String className = infoSearchClassMapperTracker.getSearchClassName(
-			portal.getClassName(
-				layoutDisplayPageObjectProvider.getClassNameId()));
+		String className = infoSearchClassMapperRegistry.getSearchClassName(
+			layoutDisplayPageObjectProvider.getClassName());
 
 		AssetRendererFactory<?> assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
@@ -325,10 +317,9 @@ public abstract class BaseAssetDisplayPageFriendlyURLResolver
 
 		InfoItemObjectProvider<Object> infoItemObjectProvider =
 			(InfoItemObjectProvider<Object>)
-				infoItemServiceTracker.getFirstInfoItemService(
+				infoItemServiceRegistry.getFirstInfoItemService(
 					InfoItemObjectProvider.class,
-					portal.getClassName(
-						layoutDisplayPageObjectProvider.getClassNameId()),
+					layoutDisplayPageObjectProvider.getClassName(),
 					infoItemIdentifier.getInfoItemServiceFilter());
 
 		infoItemIdentifier.setVersion(version);
@@ -374,8 +365,7 @@ public abstract class BaseAssetDisplayPageFriendlyURLResolver
 					AssetDisplayPageConstants.TYPE_INHERITED)) {
 
 				InfoItemReference infoItemReference = new InfoItemReference(
-					portal.getClassName(
-						layoutDisplayPageObjectProvider.getClassNameId()),
+					layoutDisplayPageObjectProvider.getClassName(),
 					layoutDisplayPageObjectProvider.getClassPK());
 
 				LayoutDisplayPageObjectProvider<?>

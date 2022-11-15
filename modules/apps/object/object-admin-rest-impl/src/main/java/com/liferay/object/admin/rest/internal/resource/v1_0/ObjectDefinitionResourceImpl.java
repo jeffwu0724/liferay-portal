@@ -51,7 +51,7 @@ import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.object.service.ObjectViewService;
 import com.liferay.object.system.SystemObjectDefinitionMetadata;
-import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
+import com.liferay.object.system.SystemObjectDefinitionMetadataRegistry;
 import com.liferay.object.util.LocalizedMapUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -303,6 +303,21 @@ public class ObjectDefinitionResourceImpl
 			_addListTypeDefinition(objectDefinition);
 		}
 
+		long accountEntryRestrictedObjectFieldId = 0;
+
+		com.liferay.object.model.ObjectField
+			accountEntryRestrictedServiceBuilderObjectField =
+				_objectFieldLocalService.fetchObjectField(
+					objectDefinitionId,
+					objectDefinition.
+						getAccountEntryRestrictedObjectFieldName());
+
+		if (accountEntryRestrictedServiceBuilderObjectField != null) {
+			accountEntryRestrictedObjectFieldId =
+				accountEntryRestrictedServiceBuilderObjectField.
+					getObjectFieldId();
+		}
+
 		long titleObjectFieldId = 0;
 
 		com.liferay.object.model.ObjectField titleServiceBuilderObjectField =
@@ -324,9 +339,8 @@ public class ObjectDefinitionResourceImpl
 		serviceBuilderObjectDefinition =
 			_objectDefinitionService.updateCustomObjectDefinition(
 				objectDefinition.getExternalReferenceCode(), objectDefinitionId,
-				GetterUtil.getLong(
-					objectDefinition.getAccountEntryRestrictedObjectFieldId()),
-				0, titleObjectFieldId,
+				GetterUtil.getLong(accountEntryRestrictedObjectFieldId), 0,
+				titleObjectFieldId,
 				GetterUtil.getBoolean(
 					objectDefinition.getAccountEntryRestricted()),
 				GetterUtil.getBoolean(objectDefinition.getActive(), true),
@@ -348,13 +362,14 @@ public class ObjectDefinitionResourceImpl
 				_objectFieldLocalService.getObjectFields(objectDefinitionId));
 
 		for (ObjectField objectField : objectDefinition.getObjectFields()) {
+			long listTypeDefinitionId = ObjectFieldUtil.getListTypeDefinitionId(
+				serviceBuilderObjectDefinition.getCompanyId(),
+				_listTypeDefinitionLocalService, objectField);
+
 			_objectFieldLocalService.updateObjectField(
 				objectField.getExternalReferenceCode(),
 				GetterUtil.getLong(objectField.getId()),
-				contextUser.getUserId(),
-				ObjectFieldUtil.getListTypeDefinitionId(
-					serviceBuilderObjectDefinition.getCompanyId(),
-					_listTypeDefinitionLocalService, objectField),
+				contextUser.getUserId(), listTypeDefinitionId,
 				objectDefinitionId, objectField.getBusinessTypeAsString(), null,
 				null, objectField.getDBTypeAsString(),
 				objectField.getDefaultValue(), objectField.getIndexed(),
@@ -370,7 +385,8 @@ public class ObjectDefinitionResourceImpl
 					objectFieldSetting ->
 						ObjectFieldSettingUtil.toObjectFieldSetting(
 							objectField.getBusinessTypeAsString(),
-							objectFieldSetting, _objectFieldSettingLocalService,
+							listTypeDefinitionId, objectFieldSetting,
+							_objectFieldSettingLocalService,
 							_objectFilterLocalService)));
 
 			serviceBuilderObjectFields.removeIf(
@@ -547,7 +563,7 @@ public class ObjectDefinitionResourceImpl
 
 		if (objectDefinition.isSystem()) {
 			SystemObjectDefinitionMetadata systemObjectDefinitionMetadata =
-				_systemObjectDefinitionMetadataTracker.
+				_systemObjectDefinitionMetadataRegistry.
 					getSystemObjectDefinitionMetadata(
 						objectDefinition.getName());
 
@@ -566,8 +582,6 @@ public class ObjectDefinitionResourceImpl
 			{
 				accountEntryRestricted =
 					objectDefinition.isAccountEntryRestricted();
-				accountEntryRestrictedObjectFieldId =
-					objectDefinition.getAccountEntryRestrictedObjectFieldId();
 				actions = HashMapBuilder.put(
 					"delete",
 					() -> {
@@ -703,6 +717,20 @@ public class ObjectDefinitionResourceImpl
 
 				system = objectDefinition.isSystem();
 
+				setAccountEntryRestrictedObjectFieldName(
+					() -> {
+						com.liferay.object.model.ObjectField
+							serviceBuilderObjectField =
+								_objectFieldLocalService.fetchObjectField(
+									objectDefinition.
+										getAccountEntryRestrictedObjectFieldId());
+
+						if (serviceBuilderObjectField == null) {
+							return "";
+						}
+
+						return serviceBuilderObjectField.getName();
+					});
 				setTitleObjectFieldName(
 					() -> {
 						com.liferay.object.model.ObjectField
@@ -785,7 +813,7 @@ public class ObjectDefinitionResourceImpl
 	private ObjectViewService _objectViewService;
 
 	@Reference
-	private SystemObjectDefinitionMetadataTracker
-		_systemObjectDefinitionMetadataTracker;
+	private SystemObjectDefinitionMetadataRegistry
+		_systemObjectDefinitionMetadataRegistry;
 
 }

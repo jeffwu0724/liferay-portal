@@ -16,10 +16,10 @@ package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
 import com.liferay.info.form.InfoForm;
 import com.liferay.info.item.InfoItemFormVariation;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.info.item.provider.InfoItemFormVariationsProvider;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
 import com.liferay.layout.content.page.editor.web.internal.util.MappingContentUtil;
 import com.liferay.petra.string.StringPool;
@@ -65,13 +65,13 @@ public class GetCollectionMappingFieldsMVCResourceCommand
 		String itemSubtype = ParamUtil.getString(
 			resourceRequest, "itemSubtype");
 
-		String itemType = _infoSearchClassMapperTracker.getClassName(
+		String itemType = _infoSearchClassMapperRegistry.getClassName(
 			ParamUtil.getString(resourceRequest, "itemType"));
 
 		String itemSubtypeLabel = StringPool.BLANK;
 
 		InfoItemFormVariationsProvider<?> infoItemFormVariationsProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
+			_infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFormVariationsProvider.class, itemType);
 
 		if (infoItemFormVariationsProvider != null) {
@@ -86,7 +86,7 @@ public class GetCollectionMappingFieldsMVCResourceCommand
 		}
 
 		InfoItemFormProvider<?> infoItemFormProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
+			_infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFormProvider.class, itemType);
 
 		try {
@@ -104,7 +104,7 @@ public class GetCollectionMappingFieldsMVCResourceCommand
 					"mappingFields",
 					MappingContentUtil.getMappingFieldsJSONArray(
 						itemSubtype, themeDisplay.getScopeGroupId(),
-						_infoItemServiceTracker, itemType,
+						_infoItemServiceRegistry, itemType,
 						themeDisplay.getLocale())
 				));
 		}
@@ -125,10 +125,10 @@ public class GetCollectionMappingFieldsMVCResourceCommand
 		GetCollectionMappingFieldsMVCResourceCommand.class);
 
 	@Reference
-	private InfoItemServiceTracker _infoItemServiceTracker;
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
-	private InfoSearchClassMapperTracker _infoSearchClassMapperTracker;
+	private InfoSearchClassMapperRegistry _infoSearchClassMapperRegistry;
 
 	@Reference
 	private Language _language;

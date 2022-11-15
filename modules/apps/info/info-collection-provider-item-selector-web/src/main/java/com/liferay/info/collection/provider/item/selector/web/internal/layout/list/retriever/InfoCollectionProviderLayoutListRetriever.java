@@ -26,12 +26,12 @@ import com.liferay.info.item.ClassPKInfoItemIdentifier;
 import com.liferay.info.item.InfoItemFieldValues;
 import com.liferay.info.item.InfoItemIdentifier;
 import com.liferay.info.item.InfoItemReference;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.list.provider.item.selector.criterion.InfoListProviderItemSelectorReturnType;
 import com.liferay.info.pagination.InfoPage;
 import com.liferay.info.pagination.Pagination;
-import com.liferay.info.search.InfoSearchClassMapperTracker;
+import com.liferay.info.search.InfoSearchClassMapperRegistry;
 import com.liferay.layout.list.retriever.KeyListObjectReference;
 import com.liferay.layout.list.retriever.LayoutListRetriever;
 import com.liferay.layout.list.retriever.LayoutListRetrieverContext;
@@ -61,13 +61,14 @@ public class InfoCollectionProviderLayoutListRetriever
 		LayoutListRetrieverContext layoutListRetrieverContext) {
 
 		InfoCollectionProvider<Object> infoCollectionProvider =
-			_infoItemServiceTracker.getInfoItemService(
+			_infoItemServiceRegistry.getInfoItemService(
 				InfoCollectionProvider.class, keyListObjectReference.getKey());
 
 		if (infoCollectionProvider == null) {
-			infoCollectionProvider = _infoItemServiceTracker.getInfoItemService(
-				RelatedInfoItemCollectionProvider.class,
-				keyListObjectReference.getKey());
+			infoCollectionProvider =
+				_infoItemServiceRegistry.getInfoItemService(
+					RelatedInfoItemCollectionProvider.class,
+					keyListObjectReference.getKey());
 		}
 
 		if (infoCollectionProvider == null) {
@@ -137,13 +138,14 @@ public class InfoCollectionProviderLayoutListRetriever
 		LayoutListRetrieverContext layoutListRetrieverContext) {
 
 		InfoCollectionProvider<?> infoCollectionProvider =
-			_infoItemServiceTracker.getInfoItemService(
+			_infoItemServiceRegistry.getInfoItemService(
 				InfoCollectionProvider.class, keyListObjectReference.getKey());
 
 		if (infoCollectionProvider == null) {
-			infoCollectionProvider = _infoItemServiceTracker.getInfoItemService(
-				RelatedInfoItemCollectionProvider.class,
-				keyListObjectReference.getKey());
+			infoCollectionProvider =
+				_infoItemServiceRegistry.getInfoItemService(
+					RelatedInfoItemCollectionProvider.class,
+					keyListObjectReference.getKey());
 		}
 
 		if (infoCollectionProvider == null) {
@@ -207,13 +209,14 @@ public class InfoCollectionProviderLayoutListRetriever
 		KeyListObjectReference keyListObjectReference) {
 
 		InfoCollectionProvider<Object> infoCollectionProvider =
-			_infoItemServiceTracker.getInfoItemService(
+			_infoItemServiceRegistry.getInfoItemService(
 				InfoCollectionProvider.class, keyListObjectReference.getKey());
 
 		if (infoCollectionProvider == null) {
-			infoCollectionProvider = _infoItemServiceTracker.getInfoItemService(
-				RelatedInfoItemCollectionProvider.class,
-				keyListObjectReference.getKey());
+			infoCollectionProvider =
+				_infoItemServiceRegistry.getInfoItemService(
+					RelatedInfoItemCollectionProvider.class,
+					keyListObjectReference.getKey());
 		}
 
 		if (infoCollectionProvider == null) {
@@ -242,7 +245,7 @@ public class InfoCollectionProviderLayoutListRetriever
 		}
 
 		InfoItemFieldValuesProvider<Object> infoItemFieldValuesProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
+			_infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFieldValuesProvider.class,
 				_getModelClassName(contextObject));
 
@@ -262,7 +265,7 @@ public class InfoCollectionProviderLayoutListRetriever
 		ClassPKInfoItemIdentifier classPKInfoItemIdentifier =
 			(ClassPKInfoItemIdentifier)infoItemIdentifier;
 
-		String className = _infoSearchClassMapperTracker.getSearchClassName(
+		String className = _infoSearchClassMapperRegistry.getSearchClassName(
 			infoItemReference.getClassName());
 
 		return _assetEntryLocalService.fetchEntry(
@@ -283,9 +286,9 @@ public class InfoCollectionProviderLayoutListRetriever
 	private AssetEntryLocalService _assetEntryLocalService;
 
 	@Reference
-	private InfoItemServiceTracker _infoItemServiceTracker;
+	private InfoItemServiceRegistry _infoItemServiceRegistry;
 
 	@Reference
-	private InfoSearchClassMapperTracker _infoSearchClassMapperTracker;
+	private InfoSearchClassMapperRegistry _infoSearchClassMapperRegistry;
 
 }

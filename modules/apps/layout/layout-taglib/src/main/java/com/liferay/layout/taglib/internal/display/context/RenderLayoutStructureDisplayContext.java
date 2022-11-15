@@ -33,12 +33,12 @@ import com.liferay.info.item.ClassPKInfoItemIdentifier;
 import com.liferay.info.item.InfoItemDetails;
 import com.liferay.info.item.InfoItemIdentifier;
 import com.liferay.info.item.InfoItemReference;
-import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.item.provider.InfoItemFormProvider;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
 import com.liferay.info.type.WebImage;
-import com.liferay.layout.taglib.internal.info.search.InfoSearchClassMapperTrackerUtil;
+import com.liferay.layout.taglib.internal.info.search.InfoSearchClassMapperRegistryUtil;
 import com.liferay.layout.taglib.internal.servlet.ServletContextUtil;
 import com.liferay.layout.util.constants.LayoutDataItemTypeConstants;
 import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
@@ -199,12 +199,12 @@ public class RenderLayoutStructureDisplayContext {
 					InfoDisplayWebKeys.INFO_ITEM_DETAILS);
 
 			if ((infoItem != null) && (infoItemDetails != null)) {
-				InfoItemServiceTracker infoItemServiceTracker =
-					ServletContextUtil.getInfoItemServiceTracker();
+				InfoItemServiceRegistry infoItemServiceRegistry =
+					ServletContextUtil.getInfoItemServiceRegistry();
 
 				InfoItemFieldValuesProvider<Object>
 					infoItemFieldValuesProvider =
-						infoItemServiceTracker.getFirstInfoItemService(
+						infoItemServiceRegistry.getFirstInfoItemService(
 							InfoItemFieldValuesProvider.class,
 							infoItemDetails.getClassName());
 
@@ -238,18 +238,18 @@ public class RenderLayoutStructureDisplayContext {
 			long classPK = linkJSONObject.getLong("classPK");
 
 			if ((classNameId != 0L) && (classPK != 0L)) {
-				InfoItemServiceTracker infoItemServiceTracker =
-					ServletContextUtil.getInfoItemServiceTracker();
+				InfoItemServiceRegistry infoItemServiceRegistry =
+					ServletContextUtil.getInfoItemServiceRegistry();
 
 				String className = PortalUtil.getClassName(classNameId);
 
 				InfoItemFieldValuesProvider<Object>
 					infoItemFieldValuesProvider =
-						infoItemServiceTracker.getFirstInfoItemService(
+						infoItemServiceRegistry.getFirstInfoItemService(
 							InfoItemFieldValuesProvider.class, className);
 
 				InfoItemObjectProvider<Object> infoItemObjectProvider =
-					infoItemServiceTracker.getFirstInfoItemService(
+					infoItemServiceRegistry.getFirstInfoItemService(
 						InfoItemObjectProvider.class, className);
 
 				if ((infoItemObjectProvider != null) &&
@@ -461,11 +461,11 @@ public class RenderLayoutStructureDisplayContext {
 			return null;
 		}
 
-		InfoItemServiceTracker infoItemServiceTracker =
-			ServletContextUtil.getInfoItemServiceTracker();
+		InfoItemServiceRegistry infoItemServiceRegistry =
+			ServletContextUtil.getInfoItemServiceRegistry();
 
 		InfoItemFormProvider<Object> infoItemFormProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFormProvider.class,
 				PortalUtil.getClassName(classNameId));
 
@@ -702,12 +702,12 @@ public class RenderLayoutStructureDisplayContext {
 					InfoDisplayWebKeys.INFO_ITEM_DETAILS);
 
 			if ((infoItem != null) && (infoItemDetails != null)) {
-				InfoItemServiceTracker infoItemServiceTracker =
-					ServletContextUtil.getInfoItemServiceTracker();
+				InfoItemServiceRegistry infoItemServiceRegistry =
+					ServletContextUtil.getInfoItemServiceRegistry();
 
 				InfoItemFieldValuesProvider<Object>
 					infoItemFieldValuesProvider =
-						infoItemServiceTracker.getFirstInfoItemService(
+						infoItemServiceRegistry.getFirstInfoItemService(
 							InfoItemFieldValuesProvider.class,
 							infoItemDetails.getClassName());
 
@@ -747,18 +747,18 @@ public class RenderLayoutStructureDisplayContext {
 			long classPK = jsonObject.getLong("classPK");
 
 			if ((classNameId != 0L) && (classPK != 0L)) {
-				InfoItemServiceTracker infoItemServiceTracker =
-					ServletContextUtil.getInfoItemServiceTracker();
+				InfoItemServiceRegistry infoItemServiceRegistry =
+					ServletContextUtil.getInfoItemServiceRegistry();
 
 				String className = PortalUtil.getClassName(classNameId);
 
 				InfoItemFieldValuesProvider<Object>
 					infoItemFieldValuesProvider =
-						infoItemServiceTracker.getFirstInfoItemService(
+						infoItemServiceRegistry.getFirstInfoItemService(
 							InfoItemFieldValuesProvider.class, className);
 
 				InfoItemObjectProvider<Object> infoItemObjectProvider =
-					infoItemServiceTracker.getFirstInfoItemService(
+					infoItemServiceRegistry.getFirstInfoItemService(
 						InfoItemObjectProvider.class, className);
 
 				if ((infoItemObjectProvider != null) &&
@@ -962,11 +962,11 @@ public class RenderLayoutStructureDisplayContext {
 		InfoItemIdentifier infoItemIdentifier =
 			infoItemReference.getInfoItemIdentifier();
 
-		InfoItemServiceTracker infoItemServiceTracker =
-			ServletContextUtil.getInfoItemServiceTracker();
+		InfoItemServiceRegistry infoItemServiceRegistry =
+			ServletContextUtil.getInfoItemServiceRegistry();
 
 		InfoItemObjectProvider<Object> infoItemObjectProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemObjectProvider.class, infoItemReference.getClassName(),
 				infoItemIdentifier.getInfoItemServiceFilter());
 
@@ -993,14 +993,14 @@ public class RenderLayoutStructureDisplayContext {
 	private String _getMappedCollectionValue(
 		String collectionFieldId, InfoItemReference infoItemReference) {
 
-		String className = InfoSearchClassMapperTrackerUtil.getClassName(
+		String className = InfoSearchClassMapperRegistryUtil.getClassName(
 			infoItemReference.getClassName());
 
-		InfoItemServiceTracker infoItemServiceTracker =
-			ServletContextUtil.getInfoItemServiceTracker();
+		InfoItemServiceRegistry infoItemServiceRegistry =
+			ServletContextUtil.getInfoItemServiceRegistry();
 
 		InfoItemFieldValuesProvider<Object> infoItemFieldValuesProvider =
-			infoItemServiceTracker.getFirstInfoItemService(
+			infoItemServiceRegistry.getFirstInfoItemService(
 				InfoItemFieldValuesProvider.class, className);
 
 		if (infoItemFieldValuesProvider == null) {

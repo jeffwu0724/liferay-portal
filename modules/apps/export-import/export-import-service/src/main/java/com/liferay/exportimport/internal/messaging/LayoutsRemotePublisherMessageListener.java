@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = "destination.name=" + DestinationNames.LAYOUTS_REMOTE_PUBLISHER,
-	service = LayoutsRemotePublisherMessageListener.class
+	service = MessageListener.class
 )
 public class LayoutsRemotePublisherMessageListener
 	extends BasePublisherMessageListener {

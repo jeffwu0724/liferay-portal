@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.SearchDisplayStyleUtil;
@@ -259,7 +260,28 @@ public class AssetListDisplayContext {
 		return _assetListEntryType;
 	}
 
+	public String getAssetListEntryTypeLabel(AssetListEntry assetListEntry) {
+		if (assetListEntry.getType() ==
+				AssetListEntryTypeConstants.TYPE_DYNAMIC) {
+
+			return LanguageUtil.get(
+				_themeDisplay.getLocale(), "dynamic-collection");
+		}
+
+		return LanguageUtil.get(_themeDisplay.getLocale(), "manual-collection");
+	}
+
 	public int getAssetListEntryUsageCount(AssetListEntry assetListEntry) {
+		Group group = _themeDisplay.getScopeGroup();
+
+		if (group.getType() == GroupConstants.TYPE_DEPOT) {
+			return AssetListEntryUsageLocalServiceUtil.
+				getCompanyAssetListEntryUsagesCount(
+					_themeDisplay.getCompanyId(),
+					PortalUtil.getClassNameId(AssetListEntry.class),
+					String.valueOf(assetListEntry.getAssetListEntryId()));
+		}
+
 		return AssetListEntryUsageLocalServiceUtil.getAssetListEntryUsagesCount(
 			_themeDisplay.getScopeGroupId(),
 			PortalUtil.getClassNameId(AssetListEntry.class),

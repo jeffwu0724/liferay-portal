@@ -111,6 +111,11 @@ const yupSchema = {
 		startDate: yup.string().nullable(),
 		userId: yup.number(),
 	}),
+	caseResultIssues: yup.object({
+		caseResultId: yup.number(),
+		issueId: yup.number(),
+		name: yup.string(),
+	}),
 	caseType: yup.object({
 		name: yup.string().required(),
 	}),
@@ -148,6 +153,10 @@ const yupSchema = {
 		buildId: yup.number(),
 		id: yup.string(),
 		number: yup.number(),
+	}),
+	issue: yup.object({
+		id: yup.string().nullable(),
+		name: yup.string(),
 	}),
 	option: yup.object({
 		name: yup.string(),
