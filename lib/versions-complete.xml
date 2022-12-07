@@ -33,34 +33,6 @@
 				<latest-version-publish-date>2020-11-17 12:39:46</latest-version-publish-date>
 			</library>
 			<library>
-				<file-name>com.liferay.alloy.mvc.jar!asm-util.jar</file-name>
-				<version>4.1</version>
-				<project-name>ASM Utilities</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2012-10-14 15:39:00</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:25</latest-version-publish-date>
-			</library>
-			<library>
-				<file-name>com.liferay.alloy.mvc.jar!asm.jar</file-name>
-				<version>4.1</version>
-				<project-name>ASM Core</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2012-10-14 15:37:45</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:11</latest-version-publish-date>
-			</library>
-			<library>
 				<file-name>com.liferay.batch.engine.service.jar!commons-collections4.jar</file-name>
 				<version>4.3</version>
 				<project-name>Apache Commons Collections</project-name>
@@ -1675,20 +1647,6 @@
 				<latest-version-publish-date>2019-09-05 16:41:38</latest-version-publish-date>
 			</library>
 			<library>
-				<file-name>com.liferay.dynamic.data.mapping.data.provider.impl.jar!asm.jar</file-name>
-				<version>5.0.3</version>
-				<project-name>ASM Core</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2014-05-24 08:30:12</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:11</latest-version-publish-date>
-			</library>
-			<library>
 				<file-name>com.liferay.dynamic.data.mapping.data.provider.impl.jar!commons-configuration.jar</file-name>
 				<version>1.8</version>
 				<project-name>Commons Configuration</project-name>
@@ -2271,62 +2229,6 @@
 				<latest-version-publish-date>2022-10-31 19:18:15</latest-version-publish-date>
 			</library>
 			<library>
-				<file-name>com.liferay.knowledge.base.markdown.converter.impl.jar!asm-analysis.jar</file-name>
-				<version>4.1</version>
-				<project-name>ASM static code analysis framework</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2012-10-14 15:38:04</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:14</latest-version-publish-date>
-			</library>
-			<library>
-				<file-name>com.liferay.knowledge.base.markdown.converter.impl.jar!asm-tree.jar</file-name>
-				<version>4.1</version>
-				<project-name>ASM Tree class visitor</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2012-10-14 15:38:39</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:22</latest-version-publish-date>
-			</library>
-			<library>
-				<file-name>com.liferay.knowledge.base.markdown.converter.impl.jar!asm-util.jar</file-name>
-				<version>4.1</version>
-				<project-name>ASM Utilities</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2012-10-14 15:39:00</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:25</latest-version-publish-date>
-			</library>
-			<library>
-				<file-name>com.liferay.knowledge.base.markdown.converter.impl.jar!asm.jar</file-name>
-				<version>4.1</version>
-				<project-name>ASM Core</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2012-10-14 15:37:45</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:11</latest-version-publish-date>
-			</library>
-			<library>
 				<file-name>com.liferay.knowledge.base.markdown.converter.impl.jar!parboiled-core.jar</file-name>
 				<version>1.1.6</version>
 				<project-name>org.parboiled.core</project-name>
@@ -2422,20 +2324,6 @@
 				</licenses>
 				<current-version-publish-date>2009-10-23 18:26:03</current-version-publish-date>
 				<latest-version-publish-date>2009-10-23 18:26:03</latest-version-publish-date>
-			</library>
-			<library>
-				<file-name>com.liferay.oauth.client.persistence.service.jar!asm.jar</file-name>
-				<version>5.0.4</version>
-				<project-name>ASM Core</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2015-05-15 15:04:55</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:11</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.oauth.client.persistence.service.jar!commons-lang3.jar</file-name>
@@ -2546,7 +2434,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2020-05-31 11:45:35</current-version-publish-date>
-				<latest-version-publish-date>2022-12-06 09:58:57</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 12:27:40</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.oauth2.provider.rest.jar!javax.annotation-api.jar</file-name>
@@ -3511,7 +3399,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-09-22 16:39:02</current-version-publish-date>
-				<latest-version-publish-date>2022-11-17 15:46:46</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 23:21:15</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.scheduler.quartz.jar!org.quartz.jar</file-name>
@@ -3539,20 +3427,6 @@
 				</licenses>
 				<current-version-publish-date>2020-12-03 11:01:54</current-version-publish-date>
 				<latest-version-publish-date>2022-10-16 05:03:04</latest-version-publish-date>
-			</library>
-			<library>
-				<file-name>com.liferay.portal.search.elasticsearch7.impl.jar!asm-debug-all.jar</file-name>
-				<version>5.1</version>
-				<project-name>ASM all classes with debug info</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2016-03-05 13:43:31</current-version-publish-date>
-				<latest-version-publish-date>2017-07-17 18:45:10</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.search.elasticsearch7.impl.jar!commons-codec.jar</file-name>
@@ -4295,20 +4169,6 @@
 				<latest-version-publish-date>2009-10-23 18:26:03</latest-version-publish-date>
 			</library>
 			<library>
-				<file-name>com.liferay.portal.security.sso.openid.connect.impl.jar!asm.jar</file-name>
-				<version>5.0.4</version>
-				<project-name>ASM Core</project-name>
-				<project-url>http://asm.objectweb.org</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
-					</license>
-				</licenses>
-				<current-version-publish-date>2015-05-15 15:04:55</current-version-publish-date>
-				<latest-version-publish-date>2022-10-02 07:17:11</latest-version-publish-date>
-			</library>
-			<library>
 				<file-name>com.liferay.portal.security.sso.openid.connect.impl.jar!commons-lang3.jar</file-name>
 				<version>3.4</version>
 				<project-name>Apache Commons Lang</project-name>
@@ -4417,7 +4277,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2020-05-31 11:45:35</current-version-publish-date>
-				<latest-version-publish-date>2022-12-06 09:58:57</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 12:27:40</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.security.sso.openid.connect.persistence.service.jar!accessors-smart.jar</file-name>
@@ -4515,7 +4375,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2020-05-31 11:45:35</current-version-publish-date>
-				<latest-version-publish-date>2022-12-06 09:58:57</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 12:27:40</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.gcs.jar!api-common.jar</file-name>
@@ -4529,7 +4389,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2020-10-16 20:08:49</current-version-publish-date>
-				<latest-version-publish-date>2022-10-27 20:08:58</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 18:20:56</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.gcs.jar!auto-value-annotations.jar</file-name>
@@ -4998,7 +4858,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-15 20:54:32</current-version-publish-date>
-				<latest-version-publish-date>2022-12-05 21:36:30</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 21:38:55</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.s3.jar!aws-java-sdk-kms.jar</file-name>
@@ -5012,7 +4872,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-15 20:54:29</current-version-publish-date>
-				<latest-version-publish-date>2022-12-05 21:37:25</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 21:38:17</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.s3.jar!aws-java-sdk-s3.jar</file-name>
@@ -5026,7 +4886,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-15 20:53:45</current-version-publish-date>
-				<latest-version-publish-date>2022-12-05 21:37:04</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 21:38:54</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.s3.jar!commons-codec.jar</file-name>
@@ -5718,7 +5578,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-26 23:55:52</current-version-publish-date>
-				<latest-version-publish-date>2022-12-06 04:35:20</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 23:50:45</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.vulcan.impl.jar!guava.jar</file-name>
@@ -6922,7 +6782,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2020-10-16 20:08:49</current-version-publish-date>
-				<latest-version-publish-date>2022-10-27 20:08:58</latest-version-publish-date>
+				<latest-version-publish-date>2022-12-06 18:20:56</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.site.initializer.testray.dispatch.task.executor.jar!auto-value-annotations.jar</file-name>
