@@ -12,5 +12,6 @@ Import-Package:\
 	org.apache.commons.codec.*,\
 	org.apache.commons.compress.*,\
 	org.apache.commons.csv,\
+	org.apache.commons.digester.*,\
 	org.apache.commons.math3.*,\
 	org.apache.commons.validator.routines
