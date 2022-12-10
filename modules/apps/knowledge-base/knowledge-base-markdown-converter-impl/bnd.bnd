@@ -1,9 +1,3 @@
 Bundle-Name: Liferay Knowledge Base Markdown Converter Implementation
 Bundle-SymbolicName: com.liferay.knowledge.base.markdown.converter.impl
 Bundle-Version: 4.0.8
-Import-Package:\
-	!org.parboiled.*,\
-	\
-	!org.pegdown.*,\
-	\
-	*
