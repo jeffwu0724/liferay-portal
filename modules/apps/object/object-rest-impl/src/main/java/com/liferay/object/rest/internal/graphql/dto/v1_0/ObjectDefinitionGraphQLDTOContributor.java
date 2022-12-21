@@ -58,8 +58,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Javier de Arcos
@@ -224,16 +222,15 @@ public class ObjectDefinitionGraphQLDTOContributor
 
 		Collection<ObjectEntry> items = page.getItems();
 
-		Stream<ObjectEntry> stream = items.stream();
+		List<Map<String, Object>> filteredItems = new ArrayList<>();
+
+		for (ObjectEntry item : items) {
+			filteredItems.add(_toMap(item));
+		}
 
 		return Page.of(
-			page.getActions(), page.getFacets(),
-			stream.map(
-				this::_toMap
-			).collect(
-				Collectors.toList()
-			),
-			pagination, page.getTotalCount());
+			page.getActions(), page.getFacets(), filteredItems, pagination,
+			page.getTotalCount());
 	}
 
 	@Override
