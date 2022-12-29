@@ -21,8 +21,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Portal;
 
-import java.util.Optional;
-
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -30,9 +29,7 @@ import javax.ws.rs.core.UriInfo;
  */
 public class CreatorUtil {
 
-	public static Creator toCreator(
-		Portal portal, Optional<UriInfo> uriInfoOptional, User user) {
-
+	public static Creator toCreator(Portal portal, UriInfo uriInfo, User user) {
 		if ((user == null) || user.isDefaultUser()) {
 			return null;
 		}
@@ -62,16 +59,14 @@ public class CreatorUtil {
 					});
 				setProfileURL(
 					() -> {
-						if (uriInfoOptional.map(
-								UriInfo::getQueryParameters
-							).map(
-								parameters -> parameters.getFirst(
-									"nestedFields")
-							).map(
-								fields -> fields.contains("profileURL")
-							).orElse(
-								false
-							)) {
+						MultivaluedMap<String, String> queryParameters =
+							uriInfo.getQueryParameters();
+
+						String nestedFields = queryParameters.getFirst(
+							"nestedFields");
+
+						if ((nestedFields != null) &&
+							nestedFields.contains("profileURL")) {
 
 							Group group = user.getGroup();
 

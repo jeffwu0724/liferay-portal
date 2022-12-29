@@ -76,7 +76,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
@@ -105,10 +104,7 @@ public class ObjectEntryDTOConverter
 			com.liferay.object.model.ObjectEntry objectEntry)
 		throws Exception {
 
-		Optional<UriInfo> uriInfoOptional =
-			dtoConverterContext.getUriInfoOptional();
-
-		UriInfo uriInfo = uriInfoOptional.orElse(null);
+		UriInfo uriInfo = dtoConverterContext.getUriInfo();
 
 		if (uriInfo == null) {
 			return _toDTO(
@@ -156,10 +152,7 @@ public class ObjectEntryDTOConverter
 	private DTOConverterContext _getDTOConverterContext(
 		DTOConverterContext dtoConverterContext, long objectEntryId) {
 
-		Optional<UriInfo> uriInfoOptional =
-			dtoConverterContext.getUriInfoOptional();
-
-		UriInfo uriInfo = uriInfoOptional.orElse(null);
+		UriInfo uriInfo = dtoConverterContext.getUriInfo();
 
 		return new DefaultDTOConverterContext(
 			dtoConverterContext.isAcceptAllLanguages(), null,
@@ -291,7 +284,7 @@ public class ObjectEntryDTOConverter
 			{
 				actions = dtoConverterContext.getActions();
 				creator = CreatorUtil.toCreator(
-					_portal, dtoConverterContext.getUriInfoOptional(),
+					_portal, dtoConverterContext.getUriInfo(),
 					_userLocalService.fetchUser(objectEntry.getUserId()));
 				dateCreated = objectEntry.getCreateDate();
 				dateModified = objectEntry.getModifiedDate();
@@ -479,19 +472,15 @@ public class ObjectEntryDTOConverter
 						objectEntryId = (long)serializable;
 					}
 
-					Optional<UriInfo> uriInfoOptional =
-						dtoConverterContext.getUriInfoOptional();
+					UriInfo uriInfo = dtoConverterContext.getUriInfo();
 
-					Optional<String> nestedFieldsOptional = uriInfoOptional.map(
-						UriInfo::getQueryParameters
-					).map(
-						queryParameters -> queryParameters.getFirst(
-							"nestedFields")
-					);
+					MultivaluedMap<String, String> queryParameters =
+						uriInfo.getQueryParameters();
 
-					if ((objectEntryId != 0) &&
-						nestedFieldsOptional.isPresent()) {
+					String nestedFields = queryParameters.getFirst(
+						"nestedFields");
 
+					if ((objectEntryId != 0) && (nestedFields != null)) {
 						ObjectDefinition relatedObjectDefinition =
 							_objectDefinitionLocalService.getObjectDefinition(
 								objectRelationship.getObjectDefinitionId1());
@@ -514,8 +503,8 @@ public class ObjectEntryDTOConverter
 							}
 
 							_addNestedFields(
-								map, nestedFieldsOptional.get(),
-								objectFieldName, objectRelationship,
+								map, nestedFields, objectFieldName,
+								objectRelationship,
 								ObjectFieldFormulaEvaluatorUtil.evaluate(
 									_ddmExpressionFactory,
 									_objectFieldLocalService.getObjectFields(
@@ -526,8 +515,8 @@ public class ObjectEntryDTOConverter
 						}
 						else {
 							_addNestedFields(
-								map, nestedFieldsOptional.get(),
-								objectFieldName, objectRelationship,
+								map, nestedFields, objectFieldName,
+								objectRelationship,
 								_toDTO(
 									_getDTOConverterContext(
 										dtoConverterContext, objectEntryId),
@@ -572,27 +561,17 @@ public class ObjectEntryDTOConverter
 				_objectRelationshipLocalService.getObjectRelationships(
 					objectDefinition.getObjectDefinitionId());
 
-			Optional<UriInfo> uriInfoOptional =
-				dtoConverterContext.getUriInfoOptional();
+			UriInfo uriInfo = dtoConverterContext.getUriInfo();
+
+			MultivaluedMap<String, String> queryParameters =
+				uriInfo.getQueryParameters();
+
+			String nestedFields = queryParameters.getFirst("nestedFields");
 
 			for (ObjectRelationship objectRelationship : objectRelationships) {
-				if (!uriInfoOptional.map(
-						UriInfo::getQueryParameters
-					).map(
-						queryParameters -> queryParameters.getFirst(
-							"nestedFields")
-					).map(
-						nestedFields -> {
-							List<String> strings = Arrays.asList(
-								nestedFields.split(","));
+				List<String> strings = Arrays.asList(nestedFields.split(","));
 
-							return strings.contains(
-								objectRelationship.getName());
-						}
-					).orElse(
-						false
-					)) {
-
+				if (strings.contains(objectRelationship.getName())) {
 					continue;
 				}
 
