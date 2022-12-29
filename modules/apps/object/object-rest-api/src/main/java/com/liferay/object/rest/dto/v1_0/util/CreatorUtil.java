@@ -59,25 +59,27 @@ public class CreatorUtil {
 					});
 				setProfileURL(
 					() -> {
-						MultivaluedMap<String, String> queryParameters =
-							uriInfo.getQueryParameters();
+						if (uriInfo != null) {
+							MultivaluedMap<String, String> queryParameters =
+								uriInfo.getQueryParameters();
 
-						String nestedFields = queryParameters.getFirst(
-							"nestedFields");
+							String nestedFields = queryParameters.getFirst(
+								"nestedFields");
 
-						if ((nestedFields != null) &&
-							nestedFields.contains("profileURL")) {
+							if ((nestedFields != null) &&
+								nestedFields.contains("profileURL")) {
 
-							Group group = user.getGroup();
+								Group group = user.getGroup();
 
-							ThemeDisplay themeDisplay = new ThemeDisplay() {
-								{
-									setPortalURL(StringPool.BLANK);
-									setSiteGroupId(group.getGroupId());
-								}
-							};
+								ThemeDisplay themeDisplay = new ThemeDisplay() {
+									{
+										setPortalURL(StringPool.BLANK);
+										setSiteGroupId(group.getGroupId());
+									}
+								};
 
-							return group.getDisplayURL(themeDisplay);
+								return group.getDisplayURL(themeDisplay);
+							}
 						}
 
 						return null;

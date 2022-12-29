@@ -474,55 +474,61 @@ public class ObjectEntryDTOConverter
 
 					UriInfo uriInfo = dtoConverterContext.getUriInfo();
 
-					MultivaluedMap<String, String> queryParameters =
-						uriInfo.getQueryParameters();
+					if (uriInfo != null) {
+						MultivaluedMap<String, String> queryParameters =
+							uriInfo.getQueryParameters();
 
-					String nestedFields = queryParameters.getFirst(
-						"nestedFields");
+						String nestedFields = queryParameters.getFirst(
+							"nestedFields");
 
-					if ((objectEntryId != 0) && (nestedFields != null)) {
-						ObjectDefinition relatedObjectDefinition =
-							_objectDefinitionLocalService.getObjectDefinition(
-								objectRelationship.getObjectDefinitionId1());
+						if ((objectEntryId != 0) && (nestedFields != null)) {
+							ObjectDefinition relatedObjectDefinition =
+								_objectDefinitionLocalService.
+									getObjectDefinition(
+										objectRelationship.
+											getObjectDefinitionId1());
 
-						if (relatedObjectDefinition.isSystem()) {
-							Map<String, Serializable> variables =
-								new HashMap<>();
+							if (relatedObjectDefinition.isSystem()) {
+								Map<String, Serializable> variables =
+									new HashMap<>();
 
-							Map<String, Object> systemModelAttributes =
-								_objectEntryLocalService.
-									getSystemModelAttributes(
-										relatedObjectDefinition, objectEntryId);
+								Map<String, Object> systemModelAttributes =
+									_objectEntryLocalService.
+										getSystemModelAttributes(
+											relatedObjectDefinition,
+											objectEntryId);
 
-							for (Map.Entry<String, Object> entry :
-									systemModelAttributes.entrySet()) {
+								for (Map.Entry<String, Object> entry :
+										systemModelAttributes.entrySet()) {
 
-								variables.put(
-									entry.getKey(),
-									(Serializable)entry.getValue());
+									variables.put(
+										entry.getKey(),
+										(Serializable)entry.getValue());
+								}
+
+								_addNestedFields(
+									map, nestedFields, objectFieldName,
+									objectRelationship,
+									ObjectFieldFormulaEvaluatorUtil.evaluate(
+										_ddmExpressionFactory,
+										_objectFieldLocalService.
+											getObjectFields(
+												relatedObjectDefinition.
+													getObjectDefinitionId()),
+										_objectFieldSettingLocalService,
+										_userLocalService, variables));
 							}
-
-							_addNestedFields(
-								map, nestedFields, objectFieldName,
-								objectRelationship,
-								ObjectFieldFormulaEvaluatorUtil.evaluate(
-									_ddmExpressionFactory,
-									_objectFieldLocalService.getObjectFields(
-										relatedObjectDefinition.
-											getObjectDefinitionId()),
-									_objectFieldSettingLocalService,
-									_userLocalService, variables));
-						}
-						else {
-							_addNestedFields(
-								map, nestedFields, objectFieldName,
-								objectRelationship,
-								_toDTO(
-									_getDTOConverterContext(
-										dtoConverterContext, objectEntryId),
-									nestedFieldsDepth - 1,
-									_objectEntryLocalService.getObjectEntry(
-										objectEntryId)));
+							else {
+								_addNestedFields(
+									map, nestedFields, objectFieldName,
+									objectRelationship,
+									_toDTO(
+										_getDTOConverterContext(
+											dtoConverterContext, objectEntryId),
+										nestedFieldsDepth - 1,
+										_objectEntryLocalService.getObjectEntry(
+											objectEntryId)));
+							}
 						}
 					}
 				}
@@ -557,44 +563,49 @@ public class ObjectEntryDTOConverter
 		}
 
 		if (nestedFieldsDepth > 0) {
-			List<ObjectRelationship> objectRelationships =
-				_objectRelationshipLocalService.getObjectRelationships(
-					objectDefinition.getObjectDefinitionId());
-
 			UriInfo uriInfo = dtoConverterContext.getUriInfo();
 
-			MultivaluedMap<String, String> queryParameters =
-				uriInfo.getQueryParameters();
+			if (uriInfo != null) {
+				List<ObjectRelationship> objectRelationships =
+					_objectRelationshipLocalService.getObjectRelationships(
+						objectDefinition.getObjectDefinitionId());
 
-			String nestedFields = queryParameters.getFirst("nestedFields");
+				MultivaluedMap<String, String> queryParameters =
+					uriInfo.getQueryParameters();
 
-			for (ObjectRelationship objectRelationship : objectRelationships) {
-				List<String> strings = Arrays.asList(nestedFields.split(","));
+				String nestedFields = queryParameters.getFirst("nestedFields");
 
-				if (strings.contains(objectRelationship.getName())) {
-					continue;
-				}
+				for (ObjectRelationship objectRelationship :
+						objectRelationships) {
 
-				ObjectEntry[] objectEntries = new ObjectEntry[0];
+					List<String> strings = Arrays.asList(
+						nestedFields.split(","));
 
-				if (Objects.equals(
-						objectRelationship.getType(),
-						ObjectRelationshipConstants.TYPE_MANY_TO_MANY)) {
+					if (strings.contains(objectRelationship.getName())) {
+						continue;
+					}
 
-					objectEntries = _getManyToManyRelationshipObjectEntries(
-						dtoConverterContext, nestedFieldsDepth, objectEntry,
-						objectRelationship);
-				}
-				else if (Objects.equals(
+					ObjectEntry[] objectEntries = new ObjectEntry[0];
+
+					if (Objects.equals(
 							objectRelationship.getType(),
-							ObjectRelationshipConstants.TYPE_ONE_TO_MANY)) {
+							ObjectRelationshipConstants.TYPE_MANY_TO_MANY)) {
 
-					objectEntries = _getOneToManyRelationshipObjectEntries(
-						dtoConverterContext, nestedFieldsDepth, objectEntry,
-						objectRelationship);
+						objectEntries = _getManyToManyRelationshipObjectEntries(
+							dtoConverterContext, nestedFieldsDepth, objectEntry,
+							objectRelationship);
+					}
+					else if (Objects.equals(
+								objectRelationship.getType(),
+								ObjectRelationshipConstants.TYPE_ONE_TO_MANY)) {
+
+						objectEntries = _getOneToManyRelationshipObjectEntries(
+							dtoConverterContext, nestedFieldsDepth, objectEntry,
+							objectRelationship);
+					}
+
+					map.put(objectRelationship.getName(), objectEntries);
 				}
-
-				map.put(objectRelationship.getName(), objectEntries);
 			}
 		}
 
