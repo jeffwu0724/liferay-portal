@@ -34,17 +34,16 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
-
+import com.liferay.petra.function.transform.TransformUtil;
 /**
  * @author ${configYAML.author}
  * @generated
@@ -224,29 +223,26 @@ public interface ${schemaName}Resource {
 
 						<#if bodyJavaMethodParameters?has_content>
 							httpInvoker.body(
-								<#list bodyJavaMethodParameters as javaMethodParameter>
-									<#if javaMethodParameter?is_last>
-										<#if javaMethodParameter.parameterType?starts_with("[L")>
-											Stream.of(
-												${javaMethodParameter.parameterName}
-											).map(
-												value ->
+                            <#list bodyJavaMethodParameters as javaMethodParameter>
+                                <#if javaMethodParameter?is_last>
+                                    <#if javaMethodParameter.parameterType?starts_with("[L")>
+										TransformUtil.transformToList(
+                                        ${javaMethodParameter.parameterName},
 
-												<#if javaMethodParameter.parameterType?contains("String")>
-													"\"" + String.valueOf(value) + "\""
-												<#else>
-													String.valueOf(value)
-												</#if>
-											).collect(
-												Collectors.toList()
-											).toString()
-										<#else>
-											${javaMethodParameter.parameterName}.toString()
-										</#if>
-									</#if>
-								</#list>
+										value ->
+                                        <#if javaMethodParameter.parameterType?contains("String")>
+											"\"" + String.valueOf(value) + "\""
+                                        <#else>
+											String.valueOf(value)
+                                        </#if>
+										).toString()
+                                    <#else>
+                                        ${javaMethodParameter.parameterName}.toString()
+                                    </#if>
+                                </#if>
+                            </#list>
 
-								, "application/json");
+							, "application/json");
 						</#if>
 					</#if>
 				</#if>
