@@ -15,17 +15,17 @@
 package com.liferay.portal.search.internal.indexer;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * @author André de Oliveira
  */
 public class IncludeExcludeUtil {
 
-	public static <T> Stream<T> stream(
-		Stream<T> stream, Collection<String> includeIds,
+	public static <T> List<T> stream(
+		List<T> stream, Collection<String> includeIds,
 		Collection<String> excludeIds, Function<T, String> function) {
 
 		return _exclude(
@@ -38,27 +38,31 @@ public class IncludeExcludeUtil {
 		return ids.contains(function.apply(t));
 	}
 
-	private static <T> Stream<T> _exclude(
-		Stream<T> stream, Collection<String> ids,
-		Function<T, String> function) {
+	private static <T> List<T> _exclude(
+		List<T> stream, Collection<String> ids, Function<T, String> function) {
 
 		return _filter(stream, ids, t -> !isPresent(t, ids, function));
 	}
 
-	private static <T> Stream<T> _filter(
-		Stream<T> stream, Collection<String> ids,
+	private static <T> List<T> _filter(
+		List<T> stream, Collection<String> ids,
 		Predicate<? super T> predicate) {
 
 		if ((ids == null) || ids.isEmpty()) {
 			return stream;
 		}
 
-		return stream.filter(predicate);
+		for (T cur : stream)
+
+			if (!predicate.equals(true)) {
+				stream.remove(cur);
+			}
+
+		return stream;
 	}
 
-	private static <T> Stream<T> _include(
-		Stream<T> stream, Collection<String> ids,
-		Function<T, String> function) {
+	private static <T> List<T> _include(
+		List<T> stream, Collection<String> ids, Function<T, String> function) {
 
 		return _filter(stream, ids, t -> isPresent(t, ids, function));
 	}
