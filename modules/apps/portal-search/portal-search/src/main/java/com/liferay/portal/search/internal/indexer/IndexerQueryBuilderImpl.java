@@ -147,11 +147,11 @@ public class IndexerQueryBuilderImpl<T extends BaseModel<?>>
 	}
 
 	protected void contribute(
-		Stream<KeywordQueryContributor> stream, BooleanQuery booleanQuery,
+		List<KeywordQueryContributor> stream, BooleanQuery booleanQuery,
 		SearchContext searchContext) {
 
-		stream.forEach(
-			keywordQueryContributor -> keywordQueryContributor.contribute(
+		for(KeywordQueryContributor keywordQueryContributor : stream){
+			keywordQueryContributor.contribute(
 				searchContext.getKeywords(), booleanQuery,
 				new KeywordQueryContributorHelper() {
 
@@ -171,7 +171,9 @@ public class IndexerQueryBuilderImpl<T extends BaseModel<?>>
 						return searchContext;
 					}
 
-				}));
+				});
+		}
+
 	}
 
 	private void _add(

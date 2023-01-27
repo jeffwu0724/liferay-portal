@@ -16,7 +16,9 @@ package com.liferay.portal.search.internal.indexer;
 
 import com.liferay.portal.search.spi.model.query.contributor.KeywordQueryContributor;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -33,12 +35,13 @@ public class ModelKeywordQueryContributorsRegistryImpl
 	}
 
 	@Override
-	public Stream<KeywordQueryContributor> stream(
+	public List<KeywordQueryContributor> stream(
 		Collection<String> excludes, Collection<String> includes) {
 
+		List<KeywordQueryContributor> stream = new ArrayList<>();
+		_keywordQueryContributors.spliterator().forEachRemaining(stream::add);
 		return IncludeExcludeUtil.stream(
-			StreamSupport.stream(
-				_keywordQueryContributors.spliterator(), false),
+			stream,
 			includes, excludes, object -> getClassName(object));
 	}
 
