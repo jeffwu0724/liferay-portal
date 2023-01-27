@@ -1,0 +1,5 @@
+dependencies {
+	compileInclude group: "net.sf.jasperreports", name: "jasperreports", version: "6.20.0"
+	compileInclude group: "net.sf.jasperreports", name: "jasperreports-fonts", version: "6.20.0"
+	compileInclude group: "net.sf.jasperreports", name: "jasperreports-metadata", version: "6.20.0"
+}
