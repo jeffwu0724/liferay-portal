@@ -189,7 +189,7 @@ public class PreFilterContributorHelperImpl
 	private void _addPreFilters(
 		BooleanFilter booleanFilter, SearchContext searchContext) {
 
-		Stream<QueryPreFilterContributor> stream =
+		List<QueryPreFilterContributor> stream =
 			queryPreFilterContributorsRegistry.stream(
 				getStrings(
 					"search.full.query.clause.contributors.excludes",
@@ -198,9 +198,11 @@ public class PreFilterContributorHelperImpl
 					"search.full.query.clause.contributors.includes",
 					searchContext));
 
-		stream.forEach(
-			queryPreFilterContributor -> queryPreFilterContributor.contribute(
-				booleanFilter, searchContext));
+		for(QueryPreFilterContributor queryPreFilterContributor : stream){
+			queryPreFilterContributor.contribute(
+				booleanFilter, searchContext);
+		}
+
 	}
 
 	private Filter _createPreFilterForEntryClassName(

@@ -17,6 +17,7 @@ package com.liferay.portal.search.internal.indexer;
 import com.liferay.portal.search.spi.model.query.contributor.QueryPreFilterContributor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
  */
 public interface QueryPreFilterContributorsRegistry {
 
-	public Stream<QueryPreFilterContributor> stream(
+	public List<QueryPreFilterContributor> stream(
 		Collection<String> excludes, Collection<String> includes);
 
 }

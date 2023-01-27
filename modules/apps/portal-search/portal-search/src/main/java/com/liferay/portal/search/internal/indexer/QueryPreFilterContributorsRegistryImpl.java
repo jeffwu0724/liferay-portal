@@ -18,7 +18,9 @@ import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.portal.search.spi.model.query.contributor.QueryPreFilterContributor;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -35,11 +37,12 @@ public class QueryPreFilterContributorsRegistryImpl
 	implements QueryPreFilterContributorsRegistry {
 
 	@Override
-	public Stream<QueryPreFilterContributor> stream(
+	public List<QueryPreFilterContributor> stream(
 		Collection<String> excludes, Collection<String> includes) {
 
-		Stream<QueryPreFilterContributor> stream = StreamSupport.stream(
-			_serviceTrackerList.spliterator(), false);
+
+		List<QueryPreFilterContributor> stream = new ArrayList<>();
+		_serviceTrackerList.spliterator().forEachRemaining(stream::add);
 
 		return IncludeExcludeUtil.stream(
 			stream, includes, excludes, object -> getClassName(object));
