@@ -41,16 +41,16 @@ import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.http.message.StatusLine;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -143,7 +143,7 @@ public class EditWorkspaceConnectionMVCActionCommand
 			CloseableHttpResponse closeableHttpResponse =
 				closeableHttpClient.execute(httpPost);
 
-			StatusLine statusLine = closeableHttpResponse.getStatusLine();
+			StatusLine statusLine = new StatusLine(closeableHttpResponse);
 
 			if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
 				_log.error(
@@ -219,7 +219,7 @@ public class EditWorkspaceConnectionMVCActionCommand
 					"api/1.0/data-sources/%s/disconnect", dataSourceId),
 				projectId);
 
-			StatusLine statusLine = httpResponse.getStatusLine();
+			StatusLine statusLine = new StatusLine(httpResponse);
 
 			if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
 				SessionErrors.add(
