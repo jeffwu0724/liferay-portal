@@ -44,15 +44,15 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Set;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.StatusLine;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -220,7 +220,7 @@ public class AnalyticsMessageSenderClientImpl
 			CloseableHttpResponse closeableHttpResponse =
 				closeableHttpClient.execute(httpUriRequest);
 
-			StatusLine statusLine = closeableHttpResponse.getStatusLine();
+			StatusLine statusLine = new StatusLine(closeableHttpResponse);
 
 			boolean disconnected = false;
 			JSONObject responseJSONObject = _jsonFactory.createJSONObject();
