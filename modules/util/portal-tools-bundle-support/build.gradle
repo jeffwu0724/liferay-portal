@@ -22,6 +22,7 @@ dependencies {
 	compileInclude group: "org.apache.commons", name: "commons-compress", version: "1.21"
 	compileInclude group: "org.apache.httpcomponents.client5", name: "httpclient5", version: "5.2.1"
 	compileInclude group: "org.apache.httpcomponents.core5", name: "httpcore5", version: "5.2.1"
+	compileInclude group: "org.apache.httpcomponents.core5", name: "httpcore5-h2", version: "5.2.1"
 	compileInclude group: "org.tukaani", name: "xz", version: "1.6"
 
 	compileOnly group: "org.apache.ant", name: "ant", transitive: false, version: "1.10.11"
