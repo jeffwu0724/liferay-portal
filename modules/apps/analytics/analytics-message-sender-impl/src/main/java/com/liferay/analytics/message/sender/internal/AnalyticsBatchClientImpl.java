@@ -31,18 +31,18 @@ import java.text.Format;
 
 import java.util.Date;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.StatusLine;
+import org.apache.hc.core5.net.URIBuilder;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -87,7 +87,7 @@ public class AnalyticsBatchClientImpl
 			CloseableHttpResponse closeableHttpResponse =
 				closeableHttpClient.execute(httpGet);
 
-			StatusLine statusLine = closeableHttpResponse.getStatusLine();
+			StatusLine statusLine = new StatusLine(closeableHttpResponse);
 
 			if (statusLine.getStatusCode() == HttpStatus.SC_FORBIDDEN) {
 				JSONObject responseJSONObject = _jsonFactory.createJSONObject(
@@ -145,7 +145,7 @@ public class AnalyticsBatchClientImpl
 			CloseableHttpResponse closeableHttpResponse =
 				closeableHttpClient.execute(httpPost);
 
-			StatusLine statusLine = closeableHttpResponse.getStatusLine();
+			StatusLine statusLine = new StatusLine(closeableHttpResponse);
 
 			int statusCode = statusLine.getStatusCode();
 
