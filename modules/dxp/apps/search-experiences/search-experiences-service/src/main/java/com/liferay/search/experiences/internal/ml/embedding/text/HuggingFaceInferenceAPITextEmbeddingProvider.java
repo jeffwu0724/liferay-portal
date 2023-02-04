@@ -92,7 +92,6 @@ public class HuggingFaceInferenceAPITextEmbeddingProvider
 			options.setBody(
 				jsonObject.toString(), ContentTypes.APPLICATION_JSON,
 				StringPool.UTF8);
-			options.setCookieSpec(Http.CookieSpec.STANDARD);
 			options.setLocation(
 				"https://api-inference.huggingface.co/models/" +
 					MapUtil.getString(attributes, "model"));
