@@ -33,7 +33,6 @@ import com.liferay.portal.kernel.util.WebKeys;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
@@ -74,21 +73,21 @@ public class LayoutItemSelectorViewDisplayContext {
 		List<ItemSelectorReturnType> desiredItemSelectorReturnTypes =
 			_layoutItemSelectorCriterion.getDesiredItemSelectorReturnTypes();
 
-		Stream<ItemSelectorReturnType> desiredItemSelectorReturnTypesStream =
-			desiredItemSelectorReturnTypes.stream();
+		for (ItemSelectorReturnType itemSelectorReturnType :
+				desiredItemSelectorReturnTypes) {
 
-		_itemSelectedReturnType = desiredItemSelectorReturnTypesStream.map(
-			itemSelectorReturnType -> {
-				Class<?> clazz = itemSelectorReturnType.getClass();
+			Class<?> clazz = itemSelectorReturnType.getClass();
 
-				return clazz.getName();
+			if (_supportedItemSelectorReturnTypesClassNames.contains(
+					clazz.getName())) {
+
+				_itemSelectedReturnType = clazz.getName();
+
+				return _itemSelectedReturnType;
 			}
-		).filter(
-			_supportedItemSelectorReturnTypesClassNames::contains
-		).findFirst(
-		).orElse(
-			URLItemSelectorReturnType.class.getName()
-		);
+		}
+
+		_itemSelectedReturnType = URLItemSelectorReturnType.class.getName();
 
 		return _itemSelectedReturnType;
 	}
