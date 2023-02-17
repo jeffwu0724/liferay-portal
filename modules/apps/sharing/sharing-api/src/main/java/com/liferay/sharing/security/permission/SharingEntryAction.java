@@ -14,10 +14,10 @@
 
 package com.liferay.sharing.security.permission;
 
+import com.liferay.petra.function.transform.TransformUtil;
+
 import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Provides the actions that users can perform on resources shared with them.
@@ -39,14 +39,17 @@ public enum SharingEntryAction {
 	public static Collection<SharingEntryAction> getSharingEntryActions(
 		long bitwiseValue) {
 
-		return Stream.of(
-			values()
-		).filter(
-			sharingEntryAction ->
-				(sharingEntryAction.getBitwiseValue() & bitwiseValue) != 0
-		).collect(
-			Collectors.toList()
-		);
+		return TransformUtil.transformToList(
+			values(),
+			sharingEntryAction -> {
+				if ((sharingEntryAction.getBitwiseValue() & bitwiseValue) ==
+						0) {
+
+					return null;
+				}
+
+				return sharingEntryAction;
+			});
 	}
 
 	/**
