@@ -116,6 +116,13 @@ public class CalendarBookingIndexerLocalizedContentTest
 		List<String> titles = new ArrayList<>(
 			Arrays.asList(full, partial1, partial2));
 
+		LocalizedValuesMap descriptionMap = new LocalizedValuesMap() {
+			{
+				put(LocaleUtil.US, description);
+				put(LocaleUtil.HUNGARY, description);
+			}
+		};
+
 		for (String title : titles) {
 			addCalendarBooking(
 				new LocalizedValuesMap() {
@@ -123,18 +130,7 @@ public class CalendarBookingIndexerLocalizedContentTest
 						put(LocaleUtil.JAPAN, title);
 					}
 				},
-				new LocalizedValuesMap() {
-					{
-						put(LocaleUtil.US, description);
-						put(LocaleUtil.HUNGARY, description);
-					}
-				},
-				new LocalizedValuesMap() {
-					{
-						put(LocaleUtil.US, description);
-						put(LocaleUtil.HUNGARY, description);
-					}
-				});
+				descriptionMap, descriptionMap);
 		}
 
 		Map<String, String> titleMap = HashMapBuilder.put(
