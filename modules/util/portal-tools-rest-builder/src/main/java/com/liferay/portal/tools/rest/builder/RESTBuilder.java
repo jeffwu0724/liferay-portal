@@ -54,8 +54,10 @@ import com.liferay.portal.tools.rest.builder.internal.yaml.openapi.Response;
 import com.liferay.portal.tools.rest.builder.internal.yaml.openapi.ResponseCode;
 import com.liferay.portal.tools.rest.builder.internal.yaml.openapi.Schema;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -82,6 +84,8 @@ import java.util.TreeMap;
 public class RESTBuilder {
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("HEELLO this is my jar");
+
 		RESTBuilderArgs restBuilderArgs = new RESTBuilderArgs();
 
 		JCommander jCommander = new JCommander(restBuilderArgs);
@@ -186,6 +190,8 @@ public class RESTBuilder {
 			_createApplicationFile(context);
 		}
 
+		boolean flag = false;
+
 		if (Validator.isNotNull(_configYAML.getClientDir())) {
 			_createClientAggregationFile(context);
 			_createClientBaseJSONParserFile(context);
@@ -196,6 +202,8 @@ public class RESTBuilder {
 			_createClientPermissionFile(context);
 			_createClientProblemFile(context);
 			_createClientUnsafeSupplierFile(context);
+
+			flag = true;
 		}
 
 		List<String> validationErrorMessages = new ArrayList<>();
@@ -353,8 +361,42 @@ public class RESTBuilder {
 				if (Validator.isNotNull(_configYAML.getTestDir())) {
 					_createBaseResourceTestCaseFile(
 						context, escapedVersion, schemaName);
+
+					flag = true;
+
 					_createResourceTestFile(
 						context, escapedVersion, schemaName);
+				}
+			}
+
+			if (flag) {
+				File gradleFile = new File(_configDir, "build.gradle");
+
+				String content = FileUtil.read(gradleFile);
+
+				if (!content.contains("petra-function")) {
+					StringBundler sb = new StringBundler();
+
+					BufferedReader br = new BufferedReader(
+						new FileReader(gradleFile));
+
+					while (br.ready()) {
+						String line = br.readLine();
+
+						sb.append(line);
+
+						sb.append(StringPool.NEW_LINE);
+
+						if (line.contains("dependencies {")) {
+							sb.append("\tcompileOnly project(\":");
+							sb.append("core:petra:petra-function\")");
+							sb.append(StringPool.NEW_LINE);
+						}
+					}
+
+					sb.setIndex(sb.index() - 1);
+
+					FileUtil.write(gradleFile, sb.toString());
 				}
 			}
 		}
