@@ -436,15 +436,23 @@ public class RESTBuilder {
 		}
 	}
 
-	private void _addNewDependencies(String...  dependencies)
+	private void _addNewDependencies(String location, String...  dependencies)
 		throws Exception {
-		System.out.println(_configYAML.getClientDir());
-		String clinetDir = _configYAML.getClientDir().replace("src/main/java", "");
-		System.out.println(clinetDir);
+		System.out.println(location);
+		String dir = null;
+		if(location.contains("client")){
+			dir = location.replace("src/main/java", "");
+		}else if(location.contains("test")){
+			dir = location.replace("src/testIntegration/java", "");
+		}
+
+		System.out.println(dir);
 
 
-
-		File gradleFile = new File(clinetDir, "build.gradle");
+		File gradleFile = new File(dir, "build.gradle");
+		if(!gradleFile.exists()){
+			return;
+		}
 
 		String content = FileUtil.read(gradleFile);
 
@@ -459,7 +467,7 @@ public class RESTBuilder {
 			if(content.isEmpty()){
 				sb.append("dependencies {");
 				for(String dependency : dependencies){
-					sb.append(dependency);
+					sb.append("\t" + dependency);
 					sb.append(StringPool.NEW_LINE);
 				}
 				sb.append("}");
@@ -477,7 +485,7 @@ public class RESTBuilder {
 //					sb.append("\tcompileOnly project(\":");
 //					sb.append("core:petra:petra-function\")");
 					for(String dependency : dependencies){
-						sb.append(dependency);
+						sb.append("\t" + dependency);
 						sb.append(StringPool.NEW_LINE);
 					}
 
@@ -652,7 +660,7 @@ public class RESTBuilder {
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "base_resource_test_case", context));
 
-		_addNewDependencies("compileOnly project(\":core:petra:petra-function\")");
+		_addNewDependencies(_configYAML.getTestDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientAggregationFile(Map<String, Object> context)
@@ -688,7 +696,7 @@ public class RESTBuilder {
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_base_json_parser", context));
 
-		_addNewDependencies("compileOnly project(\":core:petra:petra-function\")");
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientDTOFile(
@@ -779,7 +787,7 @@ public class RESTBuilder {
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_page", context));
 
-		_addNewDependencies("compileOnly project(\":core:petra:petra-function\")");
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientPaginationFile(Map<String, Object> context)
@@ -852,7 +860,7 @@ public class RESTBuilder {
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_resource", context));
 
-		_addNewDependencies("compileOnly project(\":core:petra:petra-function\")");
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientSerDesFile(
@@ -874,7 +882,7 @@ public class RESTBuilder {
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_serdes", context));
 
-		_addNewDependencies("compileOnly project(\":core:petra:petra-function\")");
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientUnsafeSupplierFile(Map<String, Object> context)
