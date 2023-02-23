@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.SocketUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.StringUtil_IW;
 import com.liferay.portal.kernel.util.TextFormatter;
@@ -54,8 +55,11 @@ import com.liferay.portal.tools.rest.builder.internal.yaml.openapi.Response;
 import com.liferay.portal.tools.rest.builder.internal.yaml.openapi.ResponseCode;
 import com.liferay.portal.tools.rest.builder.internal.yaml.openapi.Schema;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -82,6 +86,8 @@ import java.util.TreeMap;
 public class RESTBuilder {
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("HEELLO this is my jar");
+
 		RESTBuilderArgs restBuilderArgs = new RESTBuilderArgs();
 
 		JCommander jCommander = new JCommander(restBuilderArgs);
@@ -186,6 +192,8 @@ public class RESTBuilder {
 			_createApplicationFile(context);
 		}
 
+		boolean flag = false;
+
 		if (Validator.isNotNull(_configYAML.getClientDir())) {
 			_createClientAggregationFile(context);
 			_createClientBaseJSONParserFile(context);
@@ -196,6 +204,8 @@ public class RESTBuilder {
 			_createClientPermissionFile(context);
 			_createClientProblemFile(context);
 			_createClientUnsafeSupplierFile(context);
+
+			flag = true;
 		}
 
 		List<String> validationErrorMessages = new ArrayList<>();
@@ -353,10 +363,54 @@ public class RESTBuilder {
 				if (Validator.isNotNull(_configYAML.getTestDir())) {
 					_createBaseResourceTestCaseFile(
 						context, escapedVersion, schemaName);
+
+					flag = true;
+
 					_createResourceTestFile(
 						context, escapedVersion, schemaName);
 				}
 			}
+
+//			if (flag) {
+//				System.out.println(_configYAML.getClientDir());
+//				String clinetDir = _configYAML.getClientDir().replace("src/main/java", "");
+//				System.out.println(clinetDir);
+//
+//				if(clinetDir.contains("dispatch-rest-client")){
+//					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!");
+//					continue;
+//				}
+//				File gradleFile = new File(clinetDir, "build.gradle");
+//
+//				String content = FileUtil.read(gradleFile);
+//
+//				System.out.println(content);
+//
+//				if (!content.contains("petra-function")) {
+//					StringBundler sb = new StringBundler();
+//
+//					BufferedReader br = new BufferedReader(
+//						new FileReader(gradleFile));
+//
+//					while (br.ready()) {
+//						String line = br.readLine();
+//
+//						sb.append(line);
+//
+//						sb.append(StringPool.NEW_LINE);
+//
+//						if (line.contains("dependencies {")) {
+//							sb.append("\tcompileOnly project(\":");
+//							sb.append("core:petra:petra-function\")");
+//							sb.append(StringPool.NEW_LINE);
+//						}
+//					}
+//
+//					//sb.setIndex(sb.index() - 1);
+//
+//					FileUtil.write(gradleFile, sb.toString());
+//				}
+//			}
 		}
 
 		if (!validationErrorMessages.isEmpty()) {
@@ -379,6 +433,69 @@ public class RESTBuilder {
 
 		if (Validator.isNotNull(_configYAML.getTestDir())) {
 			FileUtil.deleteFiles(_configYAML.getTestDir(), _files);
+		}
+	}
+
+	private void _addNewDependencies(String location, String...  dependencies)
+		throws Exception {
+		System.out.println(location);
+		String dir = null;
+		if(location.contains("client")){
+			dir = location.replace("src/main/java", "");
+		}else if(location.contains("test")){
+			dir = location.replace("src/testIntegration/java", "");
+		}
+
+		System.out.println(dir);
+
+
+		File gradleFile = new File(dir, "build.gradle");
+		if(!gradleFile.exists()){
+			return;
+		}
+
+		String content = FileUtil.read(gradleFile);
+
+		System.out.println(content);
+
+		if (!content.contains("petra-function")) {
+			StringBundler sb = new StringBundler();
+
+			BufferedReader br = new BufferedReader(
+				new FileReader(gradleFile));
+
+			if(content.isEmpty()){
+				sb.append("dependencies {");
+				for(String dependency : dependencies){
+					sb.append("\t" + dependency);
+					sb.append(StringPool.NEW_LINE);
+				}
+				sb.append("}");
+				FileUtil.write(gradleFile, sb.toString());
+				return;
+			}
+
+			while (br.ready()) {
+				String line = br.readLine();
+
+				sb.append(line);
+
+				sb.append(StringPool.NEW_LINE);
+
+				if (line.contains("dependencies {")) {
+//					sb.append("\tcompileOnly project(\":");
+//					sb.append("core:petra:petra-function\")");
+					for(String dependency : dependencies){
+						sb.append("\t" + dependency);
+						sb.append(StringPool.NEW_LINE);
+					}
+
+				}
+			}
+
+			//sb.setIndex(sb.index() - 1);
+
+			FileUtil.write(gradleFile, sb.toString());
 		}
 	}
 
@@ -543,6 +660,8 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "base_resource_test_case", context));
+
+		_addNewDependencies(_configYAML.getTestDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientAggregationFile(Map<String, Object> context)
@@ -577,6 +696,8 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_base_json_parser", context));
+
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientDTOFile(
@@ -666,6 +787,8 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_page", context));
+
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientPaginationFile(Map<String, Object> context)
@@ -737,6 +860,8 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_resource", context));
+
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientSerDesFile(
@@ -757,6 +882,8 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "client_serdes", context));
+
+		_addNewDependencies(_configYAML.getClientDir(),"compileOnly project(\":core:petra:petra-function\")");
 	}
 
 	private void _createClientUnsafeSupplierFile(Map<String, Object> context)
