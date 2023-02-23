@@ -471,6 +471,7 @@ public class RESTBuilder {
 					sb.append(StringPool.NEW_LINE);
 				}
 				sb.append("}");
+				FileUtil.write(gradleFile, sb.toString());
 				return;
 			}
 
