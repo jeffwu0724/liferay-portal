@@ -29,6 +29,8 @@ import ${configYAML.apiPackagePath}.client.problem.Problem;
 	import ${configYAML.apiPackagePath}.client.serdes.${escapedVersion}.${schemaName}SerDes;
 </#list>
 
+import com.liferay.petra.function.transform.TransformUtil;
+
 import java.io.File;
 
 import java.text.DateFormat;
@@ -43,7 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Generated;
-import com.liferay.petra.function.transform.TransformUtil;
+
 /**
  * @author ${configYAML.author}
  * @generated
@@ -223,24 +225,24 @@ public interface ${schemaName}Resource {
 
 						<#if bodyJavaMethodParameters?has_content>
 							httpInvoker.body(
-                            <#list bodyJavaMethodParameters as javaMethodParameter>
-                                <#if javaMethodParameter?is_last>
-                                    <#if javaMethodParameter.parameterType?starts_with("[L")>
+							<#list bodyJavaMethodParameters as javaMethodParameter>
+								<#if javaMethodParameter?is_last>
+									<#if javaMethodParameter.parameterType?starts_with("[L")>
 										TransformUtil.transformToList(
-                                        ${javaMethodParameter.parameterName},
+										${javaMethodParameter.parameterName},
 
 										value ->
-                                        <#if javaMethodParameter.parameterType?contains("String")>
+										<#if javaMethodParameter.parameterType?contains("String")>
 											"\"" + String.valueOf(value) + "\""
-                                        <#else>
+										<#else>
 											String.valueOf(value)
-                                        </#if>
+										</#if>
 										).toString()
-                                    <#else>
-                                        ${javaMethodParameter.parameterName}.toString()
-                                    </#if>
-                                </#if>
-                            </#list>
+									<#else>
+										${javaMethodParameter.parameterName}.toString()
+									</#if>
+								</#if>
+							</#list>
 
 							, "application/json");
 						</#if>

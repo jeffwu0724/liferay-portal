@@ -14,6 +14,8 @@ package ${configYAML.apiPackagePath}.client.serdes.${escapedVersion};
 
 import ${configYAML.apiPackagePath}.client.json.BaseJSONParser;
 
+import com.liferay.petra.function.transform.TransformUtil;
+
 import java.math.BigDecimal;
 
 import java.text.DateFormat;
@@ -25,7 +27,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import com.liferay.petra.function.transform.TransformUtil;
 
 import javax.annotation.Generated;
 
@@ -293,7 +294,7 @@ public class ${schemaName}SerDes {
 						<#elseif propertyType?ends_with("[]") && (allExternalSchemas?keys?seq_contains(propertyType?remove_ending("[]")) || allSchemas?keys?seq_contains(propertyType?remove_ending("[]")))>
 							TransformUtil.transform(toStrings((Object[])jsonParserFieldValue),
 								object -> ${propertyType?remove_ending("[]")}SerDes.toDTO((String)object),
-                            		${propertyType?remove_ending("[]")}.class)
+									${propertyType?remove_ending("[]")}.class)
 						<#elseif enumSchemas?keys?seq_contains(properties[propertyName])>
 							${schemaName}.${propertyType}.create((String)jsonParserFieldValue)
 						<#else>
