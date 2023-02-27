@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -167,13 +166,10 @@ public class GridSerDes {
 			if (Objects.equals(jsonParserFieldName, "columns")) {
 				if (jsonParserFieldValue != null) {
 					grid.setColumns(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FormFieldOptionSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FormFieldOption[size]
+							new FormFieldOption[0]
 						));
 				}
 			}
@@ -185,13 +181,10 @@ public class GridSerDes {
 			else if (Objects.equals(jsonParserFieldName, "rows")) {
 				if (jsonParserFieldValue != null) {
 					grid.setRows(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FormFieldOptionSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FormFieldOption[size]
+							new FormFieldOption[0]
 						));
 				}
 			}

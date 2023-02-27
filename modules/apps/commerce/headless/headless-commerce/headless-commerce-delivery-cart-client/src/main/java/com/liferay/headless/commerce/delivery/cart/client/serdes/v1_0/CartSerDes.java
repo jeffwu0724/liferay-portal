@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -872,12 +871,10 @@ public class CartSerDes {
 			else if (Objects.equals(jsonParserFieldName, "cartItems")) {
 				if (jsonParserFieldValue != null) {
 					cart.setCartItems(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CartItemSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CartItem[size]
+							new CartItem[0]
 						));
 				}
 			}
@@ -935,12 +932,10 @@ public class CartSerDes {
 			else if (Objects.equals(jsonParserFieldName, "notes")) {
 				if (jsonParserFieldValue != null) {
 					cart.setNotes(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CartCommentSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CartComment[size]
+							new CartComment[0]
 						));
 				}
 			}

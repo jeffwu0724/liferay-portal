@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -872,26 +871,20 @@ public class DiscountSerDes {
 
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountAccountGroups(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountAccountGroupSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountAccountGroup[size]
+							new DiscountAccountGroup[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "discountAccounts")) {
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountAccounts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountAccountSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountAccount[size]
+							new DiscountAccount[0]
 						));
 				}
 			}
@@ -900,26 +893,20 @@ public class DiscountSerDes {
 
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountCategories(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountCategorySerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountCategory[size]
+							new DiscountCategory[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "discountChannels")) {
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountChannels(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountChannelSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountChannel[size]
+							new DiscountChannel[0]
 						));
 				}
 			}
@@ -928,13 +915,10 @@ public class DiscountSerDes {
 
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountOrderTypes(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountOrderTypeSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountOrderType[size]
+							new DiscountOrderType[0]
 						));
 				}
 			}
@@ -943,38 +927,30 @@ public class DiscountSerDes {
 
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountProductGroups(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountProductGroupSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountProductGroup[size]
+							new DiscountProductGroup[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "discountProducts")) {
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountProducts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountProductSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountProduct[size]
+							new DiscountProduct[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "discountRules")) {
 				if (jsonParserFieldValue != null) {
 					discount.setDiscountRules(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DiscountRuleSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DiscountRule[size]
+							new DiscountRule[0]
 						));
 				}
 			}

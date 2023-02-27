@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -387,12 +386,10 @@ public class AccountSerDes {
 			if (Objects.equals(jsonParserFieldName, "accountUserAccounts")) {
 				if (jsonParserFieldValue != null) {
 					account.setAccountUserAccounts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> UserAccountSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new UserAccount[size]
+							new UserAccount[0]
 						));
 				}
 			}
@@ -405,12 +402,10 @@ public class AccountSerDes {
 			else if (Objects.equals(jsonParserFieldName, "customFields")) {
 				if (jsonParserFieldValue != null) {
 					account.setCustomFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomFieldSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomField[size]
+							new CustomField[0]
 						));
 				}
 			}

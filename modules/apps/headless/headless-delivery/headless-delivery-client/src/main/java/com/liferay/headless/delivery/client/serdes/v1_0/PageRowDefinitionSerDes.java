@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -446,13 +445,10 @@ public class PageRowDefinitionSerDes {
 
 				if (jsonParserFieldValue != null) {
 					pageRowDefinition.setCustomCSSViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomCSSViewportSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomCSSViewport[size]
+							new CustomCSSViewport[0]
 						));
 				}
 			}
@@ -466,13 +462,10 @@ public class PageRowDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "fragmentViewports")) {
 				if (jsonParserFieldValue != null) {
 					pageRowDefinition.setFragmentViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FragmentViewportSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FragmentViewport[size]
+							new FragmentViewport[0]
 						));
 				}
 			}
@@ -519,12 +512,10 @@ public class PageRowDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "rowViewports")) {
 				if (jsonParserFieldValue != null) {
 					pageRowDefinition.setRowViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RowViewportSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new RowViewport[size]
+							new RowViewport[0]
 						));
 				}
 			}

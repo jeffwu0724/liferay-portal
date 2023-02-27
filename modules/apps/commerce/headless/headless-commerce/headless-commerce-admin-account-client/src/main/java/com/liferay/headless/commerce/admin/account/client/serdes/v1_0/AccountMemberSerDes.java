@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -257,12 +256,10 @@ public class AccountMemberSerDes {
 			else if (Objects.equals(jsonParserFieldName, "accountRoles")) {
 				if (jsonParserFieldValue != null) {
 					accountMember.setAccountRoles(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> AccountRoleSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new AccountRole[size]
+							new AccountRole[0]
 						));
 				}
 			}

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -214,13 +213,10 @@ public class WidgetInstanceSerDes {
 			else if (Objects.equals(jsonParserFieldName, "widgetPermissions")) {
 				if (jsonParserFieldValue != null) {
 					widgetInstance.setWidgetPermissions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> WidgetPermissionSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new WidgetPermission[size]
+							new WidgetPermission[0]
 						));
 				}
 			}

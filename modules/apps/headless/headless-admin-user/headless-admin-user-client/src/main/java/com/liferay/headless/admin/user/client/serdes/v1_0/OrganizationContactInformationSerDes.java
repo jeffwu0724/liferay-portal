@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -257,48 +256,40 @@ public class OrganizationContactInformationSerDes {
 			if (Objects.equals(jsonParserFieldName, "emailAddresses")) {
 				if (jsonParserFieldValue != null) {
 					organizationContactInformation.setEmailAddresses(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> EmailAddressSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new EmailAddress[size]
+							new EmailAddress[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "postalAddresses")) {
 				if (jsonParserFieldValue != null) {
 					organizationContactInformation.setPostalAddresses(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PostalAddressSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PostalAddress[size]
+							new PostalAddress[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "telephones")) {
 				if (jsonParserFieldValue != null) {
 					organizationContactInformation.setTelephones(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PhoneSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Phone[size]
+							new Phone[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "webUrls")) {
 				if (jsonParserFieldValue != null) {
 					organizationContactInformation.setWebUrls(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> WebUrlSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new WebUrl[size]
+							new WebUrl[0]
 						));
 				}
 			}

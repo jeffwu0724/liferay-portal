@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -732,12 +731,10 @@ public class SkuSerDes {
 			else if (Objects.equals(jsonParserFieldName, "skuOptions")) {
 				if (jsonParserFieldValue != null) {
 					sku.setSkuOptions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> SkuOptionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new SkuOption[size]
+							new SkuOption[0]
 						));
 				}
 			}

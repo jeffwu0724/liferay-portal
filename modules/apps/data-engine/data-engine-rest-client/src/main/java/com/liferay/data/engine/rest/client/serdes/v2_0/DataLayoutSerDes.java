@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -423,24 +422,20 @@ public class DataLayoutSerDes {
 			else if (Objects.equals(jsonParserFieldName, "dataLayoutPages")) {
 				if (jsonParserFieldValue != null) {
 					dataLayout.setDataLayoutPages(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DataLayoutPageSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DataLayoutPage[size]
+							new DataLayoutPage[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "dataRules")) {
 				if (jsonParserFieldValue != null) {
 					dataLayout.setDataRules(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DataRuleSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DataRule[size]
+							new DataRule[0]
 						));
 				}
 			}

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -395,12 +394,10 @@ public class OptionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "optionValues")) {
 				if (jsonParserFieldValue != null) {
 					option.setOptionValues(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> OptionValueSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new OptionValue[size]
+							new OptionValue[0]
 						));
 				}
 			}

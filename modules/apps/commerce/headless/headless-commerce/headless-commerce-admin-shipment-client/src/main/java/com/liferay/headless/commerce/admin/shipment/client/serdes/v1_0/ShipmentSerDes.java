@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -553,12 +552,10 @@ public class ShipmentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "customFields")) {
 				if (jsonParserFieldValue != null) {
 					shipment.setCustomFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomFieldSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomField[size]
+							new CustomField[0]
 						));
 				}
 			}
@@ -596,12 +593,10 @@ public class ShipmentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "shipmentItems")) {
 				if (jsonParserFieldValue != null) {
 					shipment.setShipmentItems(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ShipmentItemSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ShipmentItem[size]
+							new ShipmentItem[0]
 						));
 				}
 			}

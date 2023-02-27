@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -183,13 +182,10 @@ public class ObjectStateSerDes {
 
 				if (jsonParserFieldValue != null) {
 					objectState.setObjectStateTransitions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ObjectStateTransitionSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ObjectStateTransition[size]
+							new ObjectStateTransition[0]
 						));
 				}
 			}

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -208,12 +207,10 @@ public class ShippingMethodSerDes {
 			else if (Objects.equals(jsonParserFieldName, "shippingOptions")) {
 				if (jsonParserFieldValue != null) {
 					shippingMethod.setShippingOptions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ShippingOptionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ShippingOption[size]
+							new ShippingOption[0]
 						));
 				}
 			}

@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -582,12 +581,10 @@ public class InstanceSerDes {
 			else if (Objects.equals(jsonParserFieldName, "assignees")) {
 				if (jsonParserFieldValue != null) {
 					instance.setAssignees(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> AssigneeSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Assignee[size]
+							new Assignee[0]
 						));
 				}
 			}
@@ -656,12 +653,10 @@ public class InstanceSerDes {
 			else if (Objects.equals(jsonParserFieldName, "slaResults")) {
 				if (jsonParserFieldValue != null) {
 					instance.setSlaResults(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> SLAResultSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new SLAResult[size]
+							new SLAResult[0]
 						));
 				}
 			}
@@ -681,12 +676,10 @@ public class InstanceSerDes {
 			else if (Objects.equals(jsonParserFieldName, "transitions")) {
 				if (jsonParserFieldValue != null) {
 					instance.setTransitions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> TransitionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Transition[size]
+							new Transition[0]
 						));
 				}
 			}

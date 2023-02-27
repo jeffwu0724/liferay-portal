@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -434,12 +433,10 @@ public class CountrySerDes {
 			else if (Objects.equals(jsonParserFieldName, "regions")) {
 				if (jsonParserFieldValue != null) {
 					country.setRegions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RegionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Region[size]
+							new Region[0]
 						));
 				}
 			}

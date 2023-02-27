@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -723,12 +722,10 @@ public class DocumentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "adaptedImages")) {
 				if (jsonParserFieldValue != null) {
 					document.setAdaptedImages(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> AdaptedImageSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new AdaptedImage[size]
+							new AdaptedImage[0]
 						));
 				}
 			}
@@ -763,12 +760,10 @@ public class DocumentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "customFields")) {
 				if (jsonParserFieldValue != null) {
 					document.setCustomFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomFieldSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomField[size]
+							new CustomField[0]
 						));
 				}
 			}
@@ -839,25 +834,20 @@ public class DocumentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "relatedContents")) {
 				if (jsonParserFieldValue != null) {
 					document.setRelatedContents(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RelatedContentSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new RelatedContent[size]
+							new RelatedContent[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "renderedContents")) {
 				if (jsonParserFieldValue != null) {
 					document.setRenderedContents(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RenderedContentSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new RenderedContent[size]
+							new RenderedContent[0]
 						));
 				}
 			}
@@ -878,13 +868,10 @@ public class DocumentSerDes {
 
 				if (jsonParserFieldValue != null) {
 					document.setTaxonomyCategoryBriefs(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> TaxonomyCategoryBriefSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new TaxonomyCategoryBrief[size]
+							new TaxonomyCategoryBrief[0]
 						));
 				}
 			}

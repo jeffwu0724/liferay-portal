@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -899,12 +898,10 @@ public class StructuredContentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "contentFields")) {
 				if (jsonParserFieldValue != null) {
 					structuredContent.setContentFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ContentFieldSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ContentField[size]
+							new ContentField[0]
 						));
 				}
 			}
@@ -925,12 +922,10 @@ public class StructuredContentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "customFields")) {
 				if (jsonParserFieldValue != null) {
 					structuredContent.setCustomFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomFieldSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomField[size]
+							new CustomField[0]
 						));
 				}
 			}
@@ -1020,25 +1015,20 @@ public class StructuredContentSerDes {
 			else if (Objects.equals(jsonParserFieldName, "relatedContents")) {
 				if (jsonParserFieldValue != null) {
 					structuredContent.setRelatedContents(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RelatedContentSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new RelatedContent[size]
+							new RelatedContent[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "renderedContents")) {
 				if (jsonParserFieldValue != null) {
 					structuredContent.setRenderedContents(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RenderedContentSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new RenderedContent[size]
+							new RenderedContent[0]
 						));
 				}
 			}
@@ -1067,13 +1057,10 @@ public class StructuredContentSerDes {
 
 				if (jsonParserFieldValue != null) {
 					structuredContent.setTaxonomyCategoryBriefs(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> TaxonomyCategoryBriefSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new TaxonomyCategoryBrief[size]
+							new TaxonomyCategoryBrief[0]
 						));
 				}
 			}

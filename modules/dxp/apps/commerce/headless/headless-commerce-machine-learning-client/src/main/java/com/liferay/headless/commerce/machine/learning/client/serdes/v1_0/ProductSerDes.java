@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -723,12 +722,10 @@ public class ProductSerDes {
 			else if (Objects.equals(jsonParserFieldName, "productOptions")) {
 				if (jsonParserFieldValue != null) {
 					product.setProductOptions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ProductOptionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ProductOption[size]
+							new ProductOption[0]
 						));
 				}
 			}
@@ -737,13 +734,10 @@ public class ProductSerDes {
 
 				if (jsonParserFieldValue != null) {
 					product.setProductSpecifications(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ProductSpecificationSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ProductSpecification[size]
+							new ProductSpecification[0]
 						));
 				}
 			}
@@ -755,12 +749,10 @@ public class ProductSerDes {
 			else if (Objects.equals(jsonParserFieldName, "skus")) {
 				if (jsonParserFieldValue != null) {
 					product.setSkus(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> SkuSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Sku[size]
+							new Sku[0]
 						));
 				}
 			}

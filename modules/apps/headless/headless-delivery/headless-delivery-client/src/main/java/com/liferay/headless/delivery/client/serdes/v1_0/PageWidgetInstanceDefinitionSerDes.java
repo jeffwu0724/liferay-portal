@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -327,13 +326,10 @@ public class PageWidgetInstanceDefinitionSerDes {
 
 				if (jsonParserFieldValue != null) {
 					pageWidgetInstanceDefinition.setCustomCSSViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomCSSViewportSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomCSSViewport[size]
+							new CustomCSSViewport[0]
 						));
 				}
 			}
@@ -347,13 +343,10 @@ public class PageWidgetInstanceDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "fragmentViewports")) {
 				if (jsonParserFieldValue != null) {
 					pageWidgetInstanceDefinition.setFragmentViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FragmentViewportSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FragmentViewport[size]
+							new FragmentViewport[0]
 						));
 				}
 			}
