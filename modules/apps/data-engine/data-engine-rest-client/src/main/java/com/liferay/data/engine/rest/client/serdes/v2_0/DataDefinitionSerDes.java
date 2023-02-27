@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -465,13 +464,10 @@ public class DataDefinitionSerDes {
 
 				if (jsonParserFieldValue != null) {
 					dataDefinition.setDataDefinitionFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DataDefinitionFieldSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DataDefinitionField[size]
+							new DataDefinitionField[0]
 						));
 				}
 			}
@@ -484,12 +480,10 @@ public class DataDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "dataRules")) {
 				if (jsonParserFieldValue != null) {
 					dataDefinition.setDataRules(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DataRuleSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DataRule[size]
+							new DataRule[0]
 						));
 				}
 			}

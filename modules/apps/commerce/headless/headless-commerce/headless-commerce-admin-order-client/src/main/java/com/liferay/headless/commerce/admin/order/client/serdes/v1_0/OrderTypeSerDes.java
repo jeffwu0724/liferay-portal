@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -431,13 +430,10 @@ public class OrderTypeSerDes {
 			else if (Objects.equals(jsonParserFieldName, "orderTypeChannels")) {
 				if (jsonParserFieldValue != null) {
 					orderType.setOrderTypeChannels(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> OrderTypeChannelSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new OrderTypeChannel[size]
+							new OrderTypeChannel[0]
 						));
 				}
 			}

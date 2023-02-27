@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -498,24 +497,20 @@ public class AccountSerDes {
 			if (Objects.equals(jsonParserFieldName, "accountAddresses")) {
 				if (jsonParserFieldValue != null) {
 					account.setAccountAddresses(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> AccountAddressSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new AccountAddress[size]
+							new AccountAddress[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "accountMembers")) {
 				if (jsonParserFieldValue != null) {
 					account.setAccountMembers(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> AccountMemberSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new AccountMember[size]
+							new AccountMember[0]
 						));
 				}
 			}
@@ -524,13 +519,10 @@ public class AccountSerDes {
 
 				if (jsonParserFieldValue != null) {
 					account.setAccountOrganizations(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> AccountOrganizationSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new AccountOrganization[size]
+							new AccountOrganization[0]
 						));
 				}
 			}

@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -409,12 +408,10 @@ public class PlanSerDes {
 			else if (Objects.equals(jsonParserFieldName, "mappings")) {
 				if (jsonParserFieldValue != null) {
 					plan.setMappings(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> MappingSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Mapping[size]
+							new Mapping[0]
 						));
 				}
 			}
@@ -426,12 +423,10 @@ public class PlanSerDes {
 			else if (Objects.equals(jsonParserFieldName, "policies")) {
 				if (jsonParserFieldValue != null) {
 					plan.setPolicies(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PolicySerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Policy[size]
+							new Policy[0]
 						));
 				}
 			}

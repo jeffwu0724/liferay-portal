@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -423,12 +422,10 @@ public class ImportTaskSerDes {
 			else if (Objects.equals(jsonParserFieldName, "failedItems")) {
 				if (jsonParserFieldValue != null) {
 					importTask.setFailedItems(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FailedItemSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FailedItem[size]
+							new FailedItem[0]
 						));
 				}
 			}

@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -367,24 +366,20 @@ public class DSEnvelopeSerDes {
 			else if (Objects.equals(jsonParserFieldName, "dsDocument")) {
 				if (jsonParserFieldValue != null) {
 					dsEnvelope.setDsDocument(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DSDocumentSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DSDocument[size]
+							new DSDocument[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "dsRecipient")) {
 				if (jsonParserFieldValue != null) {
 					dsEnvelope.setDsRecipient(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DSRecipientSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DSRecipient[size]
+							new DSRecipient[0]
 						));
 				}
 			}

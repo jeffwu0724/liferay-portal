@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -447,13 +446,10 @@ public class PageFragmentInstanceDefinitionSerDes {
 
 				if (jsonParserFieldValue != null) {
 					pageFragmentInstanceDefinition.setCustomCSSViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> CustomCSSViewportSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new CustomCSSViewport[size]
+							new CustomCSSViewport[0]
 						));
 				}
 			}
@@ -473,12 +469,10 @@ public class PageFragmentInstanceDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "fragmentFields")) {
 				if (jsonParserFieldValue != null) {
 					pageFragmentInstanceDefinition.setFragmentFields(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FragmentFieldSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FragmentField[size]
+							new FragmentField[0]
 						));
 				}
 			}
@@ -492,13 +486,10 @@ public class PageFragmentInstanceDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "fragmentViewports")) {
 				if (jsonParserFieldValue != null) {
 					pageFragmentInstanceDefinition.setFragmentViewports(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FragmentViewportSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FragmentViewport[size]
+							new FragmentViewport[0]
 						));
 				}
 			}
@@ -517,12 +508,10 @@ public class PageFragmentInstanceDefinitionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "widgetInstances")) {
 				if (jsonParserFieldValue != null) {
 					pageFragmentInstanceDefinition.setWidgetInstances(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> WidgetInstanceSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new WidgetInstance[size]
+							new WidgetInstance[0]
 						));
 				}
 			}

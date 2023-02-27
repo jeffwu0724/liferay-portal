@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -574,13 +573,10 @@ public class PriceModifierSerDes {
 
 				if (jsonParserFieldValue != null) {
 					priceModifier.setPriceModifierCategories(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceModifierCategorySerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceModifierCategory[size]
+							new PriceModifierCategory[0]
 						));
 				}
 			}
@@ -589,13 +585,10 @@ public class PriceModifierSerDes {
 
 				if (jsonParserFieldValue != null) {
 					priceModifier.setPriceModifierProductGroups(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceModifierProductGroupSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceModifierProductGroup[size]
+							new PriceModifierProductGroup[0]
 						));
 				}
 			}
@@ -604,13 +597,10 @@ public class PriceModifierSerDes {
 
 				if (jsonParserFieldValue != null) {
 					priceModifier.setPriceModifierProducts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceModifierProductSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceModifierProduct[size]
+							new PriceModifierProduct[0]
 						));
 				}
 			}

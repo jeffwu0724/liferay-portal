@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -200,24 +199,20 @@ public class DataDefinitionFieldLinkSerDes {
 			else if (Objects.equals(jsonParserFieldName, "dataLayouts")) {
 				if (jsonParserFieldValue != null) {
 					dataDefinitionFieldLink.setDataLayouts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DataLayoutSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DataLayout[size]
+							new DataLayout[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "dataListViews")) {
 				if (jsonParserFieldValue != null) {
 					dataDefinitionFieldLink.setDataListViews(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> DataListViewSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new DataListView[size]
+							new DataListView[0]
 						));
 				}
 			}

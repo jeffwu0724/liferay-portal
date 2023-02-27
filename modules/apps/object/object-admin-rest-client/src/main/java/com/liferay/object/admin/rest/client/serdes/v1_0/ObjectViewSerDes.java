@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -418,13 +417,10 @@ public class ObjectViewSerDes {
 			else if (Objects.equals(jsonParserFieldName, "objectViewColumns")) {
 				if (jsonParserFieldValue != null) {
 					objectView.setObjectViewColumns(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ObjectViewColumnSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ObjectViewColumn[size]
+							new ObjectViewColumn[0]
 						));
 				}
 			}
@@ -433,13 +429,10 @@ public class ObjectViewSerDes {
 
 				if (jsonParserFieldValue != null) {
 					objectView.setObjectViewFilterColumns(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ObjectViewFilterColumnSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ObjectViewFilterColumn[size]
+							new ObjectViewFilterColumn[0]
 						));
 				}
 			}
@@ -448,13 +441,10 @@ public class ObjectViewSerDes {
 
 				if (jsonParserFieldValue != null) {
 					objectView.setObjectViewSortColumns(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ObjectViewSortColumnSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ObjectViewSortColumn[size]
+							new ObjectViewSortColumn[0]
 						));
 				}
 			}

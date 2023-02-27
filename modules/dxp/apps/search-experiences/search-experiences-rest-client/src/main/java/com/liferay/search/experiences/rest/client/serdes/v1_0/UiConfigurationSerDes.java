@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -128,12 +127,10 @@ public class UiConfigurationSerDes {
 			if (Objects.equals(jsonParserFieldName, "fieldSets")) {
 				if (jsonParserFieldValue != null) {
 					uiConfiguration.setFieldSets(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FieldSetSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FieldSet[size]
+							new FieldSet[0]
 						));
 				}
 			}

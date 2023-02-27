@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -462,12 +461,10 @@ public class WorkflowTaskSerDes {
 			else if (Objects.equals(jsonParserFieldName, "assigneeRoles")) {
 				if (jsonParserFieldValue != null) {
 					workflowTask.setAssigneeRoles(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RoleSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Role[size]
+							new Role[0]
 						));
 				}
 			}

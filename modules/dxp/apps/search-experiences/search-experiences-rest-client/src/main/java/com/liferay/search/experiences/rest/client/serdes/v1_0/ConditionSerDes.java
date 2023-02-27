@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -253,24 +252,20 @@ public class ConditionSerDes {
 			if (Objects.equals(jsonParserFieldName, "allConditions")) {
 				if (jsonParserFieldValue != null) {
 					condition.setAllConditions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ConditionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Condition[size]
+							new Condition[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "anyConditions")) {
 				if (jsonParserFieldValue != null) {
 					condition.setAnyConditions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ConditionSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Condition[size]
+							new Condition[0]
 						));
 				}
 			}

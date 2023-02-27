@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -814,12 +813,10 @@ public class PriceListSerDes {
 			else if (Objects.equals(jsonParserFieldName, "priceEntries")) {
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceEntries(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceEntrySerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceEntry[size]
+							new PriceEntry[0]
 						));
 				}
 			}
@@ -828,39 +825,30 @@ public class PriceListSerDes {
 
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceListAccountGroups(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceListAccountGroupSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceListAccountGroup[size]
+							new PriceListAccountGroup[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "priceListAccounts")) {
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceListAccounts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceListAccountSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceListAccount[size]
+							new PriceListAccount[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "priceListChannels")) {
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceListChannels(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceListChannelSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceListChannel[size]
+							new PriceListChannel[0]
 						));
 				}
 			}
@@ -869,13 +857,10 @@ public class PriceListSerDes {
 
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceListDiscounts(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceListDiscountSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceListDiscount[size]
+							new PriceListDiscount[0]
 						));
 				}
 			}
@@ -884,25 +869,20 @@ public class PriceListSerDes {
 
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceListOrderTypes(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceListOrderTypeSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceListOrderType[size]
+							new PriceListOrderType[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "priceModifiers")) {
 				if (jsonParserFieldValue != null) {
 					priceList.setPriceModifiers(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> PriceModifierSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new PriceModifier[size]
+							new PriceModifier[0]
 						));
 				}
 			}

@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -361,13 +360,10 @@ public class ObjectLayoutSerDes {
 			else if (Objects.equals(jsonParserFieldName, "objectLayoutTabs")) {
 				if (jsonParserFieldValue != null) {
 					objectLayout.setObjectLayoutTabs(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ObjectLayoutTabSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new ObjectLayoutTab[size]
+							new ObjectLayoutTab[0]
 						));
 				}
 			}

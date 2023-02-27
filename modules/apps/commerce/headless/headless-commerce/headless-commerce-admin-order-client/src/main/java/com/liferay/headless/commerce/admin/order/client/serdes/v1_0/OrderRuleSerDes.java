@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -595,13 +594,10 @@ public class OrderRuleSerDes {
 			else if (Objects.equals(jsonParserFieldName, "orderRuleAccount")) {
 				if (jsonParserFieldValue != null) {
 					orderRule.setOrderRuleAccount(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> OrderRuleAccountSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new OrderRuleAccount[size]
+							new OrderRuleAccount[0]
 						));
 				}
 			}
@@ -610,26 +606,20 @@ public class OrderRuleSerDes {
 
 				if (jsonParserFieldValue != null) {
 					orderRule.setOrderRuleAccountGroup(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> OrderRuleAccountGroupSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new OrderRuleAccountGroup[size]
+							new OrderRuleAccountGroup[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "orderRuleChannel")) {
 				if (jsonParserFieldValue != null) {
 					orderRule.setOrderRuleChannel(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> OrderRuleChannelSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new OrderRuleChannel[size]
+							new OrderRuleChannel[0]
 						));
 				}
 			}
@@ -638,13 +628,10 @@ public class OrderRuleSerDes {
 
 				if (jsonParserFieldValue != null) {
 					orderRule.setOrderRuleOrderType(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> OrderRuleOrderTypeSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new OrderRuleOrderType[size]
+							new OrderRuleOrderType[0]
 						));
 				}
 			}

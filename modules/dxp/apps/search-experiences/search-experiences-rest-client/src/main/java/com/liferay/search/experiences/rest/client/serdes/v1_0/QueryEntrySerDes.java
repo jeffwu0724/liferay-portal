@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -215,12 +214,10 @@ public class QueryEntrySerDes {
 			if (Objects.equals(jsonParserFieldName, "clauses")) {
 				if (jsonParserFieldValue != null) {
 					queryEntry.setClauses(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ClauseSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Clause[size]
+							new Clause[0]
 						));
 				}
 			}
@@ -238,24 +235,20 @@ public class QueryEntrySerDes {
 			else if (Objects.equals(jsonParserFieldName, "postFilterClauses")) {
 				if (jsonParserFieldValue != null) {
 					queryEntry.setPostFilterClauses(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> ClauseSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Clause[size]
+							new Clause[0]
 						));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "rescores")) {
 				if (jsonParserFieldValue != null) {
 					queryEntry.setRescores(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> RescoreSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new Rescore[size]
+							new Rescore[0]
 						));
 				}
 			}

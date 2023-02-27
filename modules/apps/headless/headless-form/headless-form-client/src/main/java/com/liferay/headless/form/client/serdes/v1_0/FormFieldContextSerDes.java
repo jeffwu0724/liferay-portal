@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -285,13 +284,10 @@ public class FormFieldContextSerDes {
 			else if (Objects.equals(jsonParserFieldName, "formFieldOptions")) {
 				if (jsonParserFieldValue != null) {
 					formFieldContext.setFormFieldOptions(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FormFieldOptionSerDes.toDTO(
-								(String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FormFieldOption[size]
+							new FormFieldOption[0]
 						));
 				}
 			}

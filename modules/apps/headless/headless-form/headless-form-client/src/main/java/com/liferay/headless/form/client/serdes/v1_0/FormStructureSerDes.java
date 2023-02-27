@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
@@ -406,12 +405,10 @@ public class FormStructureSerDes {
 			else if (Objects.equals(jsonParserFieldName, "formPages")) {
 				if (jsonParserFieldValue != null) {
 					formStructure.setFormPages(
-						Stream.of(
-							toStrings((Object[])jsonParserFieldValue)
-						).map(
-							object -> FormPageSerDes.toDTO((String)object)
+						transformAndParseToDTO(
+							jsonParserFieldValue
 						).toArray(
-							size -> new FormPage[size]
+							new FormPage[0]
 						));
 				}
 			}
