@@ -2573,16 +2573,16 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.k8s.agent.impl.jar!jackson-dataformat-yaml.jar</file-name>
-				<version>2.13.2</version>
+				<version>2.14.2</version>
 				<project-name>Jackson-dataformat-YAML</project-name>
 				<project-url>https://github.com/FasterXML/jackson-dataformats-text</project-url>
 				<licenses>
 					<license>
 						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2022-03-06 21:07:12</current-version-publish-date>
+				<current-version-publish-date>2023-01-29 01:53:15</current-version-publish-date>
 				<latest-version-publish-date>2023-01-29 01:53:15</latest-version-publish-date>
 			</library>
 			<library>
@@ -2933,7 +2933,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.k8s.agent.impl.jar!snakeyaml.jar</file-name>
-				<version>1.32</version>
+				<version>2.0</version>
 				<project-name>SnakeYAML</project-name>
 				<project-url>https://bitbucket.org/snakeyaml/snakeyaml</project-url>
 				<licenses>
@@ -2942,7 +2942,7 @@
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2022-09-12 16:20:02</current-version-publish-date>
+				<current-version-publish-date>2023-02-26 11:07:37</current-version-publish-date>
 				<latest-version-publish-date>2023-02-26 11:07:37</latest-version-publish-date>
 			</library>
 			<library>
@@ -3406,16 +3406,16 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.search.elasticsearch7.impl.jar!jackson-dataformat-yaml.jar</file-name>
-				<version>2.10.4</version>
+				<version>2.14.2</version>
 				<project-name>Jackson-dataformat-YAML</project-name>
 				<project-url>https://github.com/FasterXML/jackson-dataformats-text</project-url>
 				<licenses>
 					<license>
 						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2020-05-02 23:18:12</current-version-publish-date>
+				<current-version-publish-date>2023-01-29 01:53:15</current-version-publish-date>
 				<latest-version-publish-date>2023-01-29 01:53:15</latest-version-publish-date>
 			</library>
 			<library>
@@ -3607,7 +3607,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.search.elasticsearch7.impl.jar!snakeyaml.jar</file-name>
-				<version>1.32</version>
+				<version>2.0</version>
 				<project-name>SnakeYAML</project-name>
 				<project-url>https://bitbucket.org/snakeyaml/snakeyaml</project-url>
 				<licenses>
@@ -3616,7 +3616,7 @@
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2022-09-12 16:20:02</current-version-publish-date>
+				<current-version-publish-date>2023-02-26 11:07:37</current-version-publish-date>
 				<latest-version-publish-date>2023-02-26 11:07:37</latest-version-publish-date>
 			</library>
 			<library>
@@ -4484,7 +4484,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-15 20:54:32</current-version-publish-date>
-				<latest-version-publish-date>2023-02-27 22:23:06</latest-version-publish-date>
+				<latest-version-publish-date>2023-02-28 23:41:45</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.s3.jar!aws-java-sdk-kms.jar</file-name>
@@ -4498,7 +4498,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-15 20:54:29</current-version-publish-date>
-				<latest-version-publish-date>2023-02-27 22:22:18</latest-version-publish-date>
+				<latest-version-publish-date>2023-02-28 23:41:07</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.s3.jar!aws-java-sdk-s3.jar</file-name>
@@ -4512,7 +4512,7 @@
 					</license>
 				</licenses>
 				<current-version-publish-date>2022-07-15 20:53:45</current-version-publish-date>
-				<latest-version-publish-date>2023-02-27 22:23:03</latest-version-publish-date>
+				<latest-version-publish-date>2023-02-28 23:42:59</latest-version-publish-date>
 			</library>
 			<library>
 				<file-name>com.liferay.portal.store.s3.jar!commons-logging.jar</file-name>
@@ -4970,7 +4970,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.vulcan.api.jar!snakeyaml.jar</file-name>
-				<version>1.32</version>
+				<version>2.0</version>
 				<project-name>SnakeYAML</project-name>
 				<project-url>https://bitbucket.org/snakeyaml/snakeyaml</project-url>
 				<licenses>
@@ -4979,7 +4979,7 @@
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2022-09-12 16:20:02</current-version-publish-date>
+				<current-version-publish-date>2023-02-26 11:07:37</current-version-publish-date>
 				<latest-version-publish-date>2023-02-26 11:07:37</latest-version-publish-date>
 			</library>
 			<library>
@@ -5151,16 +5151,16 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.vulcan.impl.jar!jackson-dataformat-yaml.jar</file-name>
-				<version>2.9.8</version>
+				<version>2.14.2</version>
 				<project-name>Jackson-dataformat-YAML</project-name>
 				<project-url>https://github.com/FasterXML/jackson-dataformats-text</project-url>
 				<licenses>
 					<license>
 						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2018-12-15 22:55:18</current-version-publish-date>
+				<current-version-publish-date>2023-01-29 01:53:15</current-version-publish-date>
 				<latest-version-publish-date>2023-01-29 01:53:15</latest-version-publish-date>
 			</library>
 			<library>
@@ -5261,7 +5261,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.vulcan.impl.jar!snakeyaml.jar</file-name>
-				<version>1.32</version>
+				<version>2.0</version>
 				<project-name>SnakeYAML</project-name>
 				<project-url>https://bitbucket.org/snakeyaml/snakeyaml</project-url>
 				<licenses>
@@ -5270,7 +5270,7 @@
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
-				<current-version-publish-date>2022-09-12 16:20:02</current-version-publish-date>
+				<current-version-publish-date>2023-02-26 11:07:37</current-version-publish-date>
 				<latest-version-publish-date>2023-02-26 11:07:37</latest-version-publish-date>
 			</library>
 			<library>
