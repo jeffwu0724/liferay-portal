@@ -46,3 +46,4 @@ Import-Package:\
 	\
 	*
 -includeresource: @graphql-java-annotations-[0-9.]*.jar!/graphql/annotations/annotationTypes/*
+-fixupmessages: Classes found in the wrong directory: ...;is:=ignore
