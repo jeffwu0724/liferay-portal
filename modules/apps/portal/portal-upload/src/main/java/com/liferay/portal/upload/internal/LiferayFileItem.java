@@ -17,6 +17,7 @@ package com.liferay.portal.upload.internal;
 import com.liferay.petra.memory.DeleteFileFinalizeAction;
 import com.liferay.petra.memory.FinalizeManager;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upload.FileItem;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
  * @author Brian Wing Shun Chan
@@ -144,6 +146,23 @@ public class LiferayFileItem extends DiskFileItem implements FileItem {
 	@Override
 	public int getSizeThreshold() {
 		return _sizeThreshold;
+	}
+
+	@Override
+	public File getStoreLocation() {
+		try {
+			if (getOutputStream() == null) {
+				return null;
+			}
+
+			DeferredFileOutputStream deferredFileOutputStream =
+				(DeferredFileOutputStream)getOutputStream();
+
+			return deferredFileOutputStream.getFile();
+		}
+		catch (IOException ioException) {
+			throw new SystemException(ioException);
+		}
 	}
 
 	@Override
