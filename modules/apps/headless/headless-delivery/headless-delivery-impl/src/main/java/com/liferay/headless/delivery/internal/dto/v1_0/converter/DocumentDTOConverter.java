@@ -134,7 +134,7 @@ public class DocumentDTOConverter
 					fileEntry, fileVersion, null, "");
 				contentValue = ContentValueUtil.toContentValue(
 					"contentValue", fileEntry::getContentStream,
-					dtoConverterContext.getUriInfoOptional());
+					dtoConverterContext.getUriInfo());
 				creator = CreatorUtil.toCreator(
 					_portal, dtoConverterContext.getUriInfoOptional(),
 					_userLocalService.fetchUser(fileEntry.getUserId()));
@@ -209,7 +209,7 @@ public class DocumentDTOConverter
 					AMImageQueryBuilder.ConfigurationStatus.ANY
 				).done()),
 			adaptiveMedia -> _toAdaptedImage(
-				adaptiveMedia, dtoConverterContext.getUriInfoOptional()),
+				adaptiveMedia, dtoConverterContext.getUriInfo()),
 			AdaptedImage.class);
 	}
 
@@ -271,8 +271,7 @@ public class DocumentDTOConverter
 	}
 
 	private AdaptedImage _toAdaptedImage(
-			AdaptiveMedia<AMImageProcessor> adaptiveMedia,
-			Optional<UriInfo> uriInfoOptional)
+			AdaptiveMedia<AMImageProcessor> adaptiveMedia, UriInfo uriInfo)
 		throws Exception {
 
 		if (adaptiveMedia == null) {
@@ -284,7 +283,7 @@ public class DocumentDTOConverter
 				contentUrl = String.valueOf(adaptiveMedia.getURI());
 				contentValue = ContentValueUtil.toContentValue(
 					"adaptedImages.contentValue", adaptiveMedia::getInputStream,
-					uriInfoOptional);
+					uriInfo);
 				height = _getValue(
 					adaptiveMedia, AMImageAttribute.AM_IMAGE_ATTRIBUTE_HEIGHT);
 				resolutionName = _getValue(
