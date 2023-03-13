@@ -292,10 +292,11 @@ public class ${schemaName}SerDes {
 						<#elseif allExternalSchemas?keys?seq_contains(propertyType) || allSchemas?keys?seq_contains(propertyType)>
 							${propertyType}SerDes.toDTO((String)jsonParserFieldValue)
 						<#elseif propertyType?ends_with("[]") && (allExternalSchemas?keys?seq_contains(propertyType?remove_ending("[]")) || allSchemas?keys?seq_contains(propertyType?remove_ending("[]")))>
-							TransformUtil.transform(
-								(Object[])jsonParserFieldValue,
-								object -> ${propertyType?remove_ending("[]")}SerDes.toDTO((String)object),
-									${propertyType?remove_ending("[]")}.class)
+							transformAndParseToDTO(
+								jsonParserFieldValue
+							).toArray(
+								new ${propertyType?remove_ending("[]")}[0]
+							)
 						<#elseif enumSchemas?keys?seq_contains(properties[propertyName])>
 							${schemaName}.${propertyType}.create((String)jsonParserFieldValue)
 						<#else>
