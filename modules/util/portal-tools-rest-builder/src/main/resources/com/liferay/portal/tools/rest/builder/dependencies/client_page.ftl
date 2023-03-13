@@ -177,10 +177,7 @@ public class Page<T> {
 			}
 			else if (Objects.equals(jsonParserFieldName, "items")) {
 				if (jsonParserFieldValue != null) {
-					page.setItems(
-						TransformUtil.transformToList(
-							(Object[])jsonParserFieldValue,
-							object -> _toDTOFunction.apply((String)object)));
+					page.setItems(transformAndParseToDTO(jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "lastPage")) {

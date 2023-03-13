@@ -32,6 +32,12 @@ public abstract class BaseJSONParser<T> {
 		{"\t", "\\t"}
 	};
 
+	public List<T> transformAndParseToDTO(Object jsonParserFieldValue){
+		return TransformUtil.transformToList(
+			(Object[])jsonParserFieldValue,
+			object -> parseToDTO((String)object));
+	}
+
 	public T parseToDTO(String json) {
 		if (json == null) {
 			throw new IllegalArgumentException("JSON is null");
