@@ -209,7 +209,7 @@ public class Page<T> {
 			for(Object object1 : (Object[])jsonParserFieldValue){
 				List<Facet.FacetValue> facetValues = new ArrayList<>();
 
-				Map<String, Object> jsonParserFieldValuesMap = this.parseToMap((String)object1);
+				Map<String, Object> jsonParserFieldValuesMap = this.parseToMap(String.class.cast(object1));
 
 				for(Object object2 : (Object[])jsonParserFieldValuesMap.get("facetValues")){
 					Map<String, Object> facetValueMap = this.parseToMap((String)object2);
