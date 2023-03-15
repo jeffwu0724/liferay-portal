@@ -232,7 +232,7 @@ public class Page<T> {
 				List<Facet.FacetValue> facetValues = new ArrayList<>();
 
 				Map<String, Object> jsonParserFieldValuesMap = this.parseToMap(
-					(String)object1);
+					String.class.cast(object1));
 
 				for (Object object2 :
 						(Object[])jsonParserFieldValuesMap.get("facetValues")) {

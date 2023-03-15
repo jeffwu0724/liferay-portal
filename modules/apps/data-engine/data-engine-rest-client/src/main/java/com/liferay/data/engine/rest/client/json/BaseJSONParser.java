@@ -44,7 +44,7 @@ public abstract class BaseJSONParser<T> {
 	public List<T> transformAndParseToDTO(Object jsonParserFieldValue) {
 		return TransformUtil.transformToList(
 			(Object[])jsonParserFieldValue,
-			object -> parseToDTO((String)object));
+			object -> parseToDTO(String.class.cast(object)));
 	}
 
 	public T parseToDTO(String json) {
