@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.util.Collection;
 
@@ -54,6 +55,8 @@ public interface FileItem {
 	public Collection<String> getHeaders(String name);
 
 	public InputStream getInputStream() throws IOException;
+
+	public OutputStream getOutputStream() throws IOException;
 
 	public long getSize();
 

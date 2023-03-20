@@ -50,6 +50,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.http.fileupload.DeferredFileOutputStream;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Zongliang Li
@@ -285,6 +287,11 @@ public class UploadServletRequestImpl
 
 		if (liferayFileItem.isInMemory() && forceCreate) {
 			try {
+				DeferredFileOutputStream deferredFileOutputStream =
+					(DeferredFileOutputStream)liferayFileItem.getOutputStream();
+
+				file = deferredFileOutputStream.getFile();
+
 				FileUtil.write(file, liferayFileItem.getInputStream());
 			}
 			catch (IOException ioException) {
@@ -375,7 +382,7 @@ public class UploadServletRequestImpl
 				FileItem liferayFileItem = liferayFileItems[i];
 
 				if (Validator.isNotNull(liferayFileItem.getFileName())) {
-					files[i] = liferayFileItem.getStoreLocation();
+					files[i] = getFile(name);
 				}
 			}
 
