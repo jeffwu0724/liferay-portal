@@ -56,6 +56,8 @@ public interface FileItem {
 
 	public InputStream getInputStream() throws IOException;
 
+	public File getLocationWhileInMemory();
+
 	public OutputStream getOutputStream() throws IOException;
 
 	public long getSize();

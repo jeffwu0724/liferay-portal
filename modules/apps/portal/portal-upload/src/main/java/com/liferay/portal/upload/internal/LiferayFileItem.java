@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.output.DeferredFileOutputStream;
 
 /**
  * @author Brian Wing Shun Chan
@@ -139,6 +140,31 @@ public class LiferayFileItem extends DiskFileItem implements FileItem {
 		iterator.forEachRemaining(headers::add);
 
 		return headers;
+	}
+
+	public File getRealLocation() {
+		File file = null;
+
+		try {
+			DeferredFileOutputStream deferredFileOutputStream =
+				(DeferredFileOutputStream)getOutputStream();
+
+			file = deferredFileOutputStream.getFile();
+		}
+		catch (IOException ioException) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to write temporary file " + file.getAbsolutePath(),
+					ioException);
+			}
+		}
+
+		return file;
+	}
+
+	@Override
+	public File getRealTempFile() {
+		return super.getTempFile();
 	}
 
 	@Override

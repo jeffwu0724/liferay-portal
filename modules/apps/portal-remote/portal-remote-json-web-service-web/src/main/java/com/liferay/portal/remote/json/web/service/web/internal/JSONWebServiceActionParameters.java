@@ -38,8 +38,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.output.DeferredFileOutputStream;
-
 /**
  * @author Igor Spasic
  */
@@ -240,11 +238,7 @@ public class JSONWebServiceActionParameters {
 
 					if (fileItem.isInMemory()) {
 						try {
-							DeferredFileOutputStream deferredFileOutputStream =
-								(DeferredFileOutputStream)
-									fileItem.getOutputStream();
-
-							file = deferredFileOutputStream.getFile();
+							file = fileItem.getLocationWhileInMemory();
 
 							FileUtil.write(file, fileItem.getInputStream());
 						}
