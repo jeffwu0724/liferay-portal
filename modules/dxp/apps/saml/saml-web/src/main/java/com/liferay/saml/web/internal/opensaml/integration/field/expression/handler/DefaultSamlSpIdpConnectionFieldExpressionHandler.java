@@ -16,7 +16,7 @@ package com.liferay.saml.web.internal.opensaml.integration.field.expression.hand
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;

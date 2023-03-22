@@ -14,7 +14,7 @@
 
 package com.liferay.portal.upload;
 
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadException;
 
 import java.util.List;

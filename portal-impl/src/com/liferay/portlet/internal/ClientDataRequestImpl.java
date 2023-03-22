@@ -16,7 +16,7 @@ package com.liferay.portlet.internal;
 
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.servlet.HttpMethods;
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StringUtil;

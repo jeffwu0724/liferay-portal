@@ -16,7 +16,7 @@ package com.liferay.saml.opensaml.integration.processor.context;
 
 import com.liferay.petra.function.UnsafeBiConsumer;
 import com.liferay.portal.kernel.model.BaseModel;
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.saml.persistence.model.SamlSpIdpConnection;
 
 import java.util.function.Function;

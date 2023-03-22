@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.upload.UploadServletRequest;
 
 import java.io.IOException;
 import java.io.Serializable;
