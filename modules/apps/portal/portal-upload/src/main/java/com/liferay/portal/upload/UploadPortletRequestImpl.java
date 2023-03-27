@@ -36,10 +36,13 @@ import javax.portlet.PortletRequest;
 
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Harry Mark
  */
+@Component(service = UploadPortletRequest.class)
 public class UploadPortletRequestImpl
 	extends HttpServletRequestWrapper implements UploadPortletRequest {
 
