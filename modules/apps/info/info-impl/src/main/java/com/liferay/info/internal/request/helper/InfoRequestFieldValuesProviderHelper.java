@@ -69,14 +69,17 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Rubén Pulido
  */
-@Component
 public class InfoRequestFieldValuesProviderHelper {
 
 	public InfoRequestFieldValuesProviderHelper(
-		InfoItemServiceRegistry infoItemServiceRegistry) {
+		InfoItemServiceRegistry infoItemServiceRegistry, UploadPortal uploadPortal) {
 
 		_infoItemServiceRegistry = infoItemServiceRegistry;
+
+		_uploadPortal = uploadPortal;
 	}
+
+	private final UploadPortal _uploadPortal;
 
 	public List<InfoFieldValue<Object>> getInfoFieldValues(
 			HttpServletRequest httpServletRequest)
@@ -312,6 +315,4 @@ public class InfoRequestFieldValuesProviderHelper {
 		InfoRequestFieldValuesProviderHelper.class);
 
 	private final InfoItemServiceRegistry _infoItemServiceRegistry;
-	@Reference
-	private UploadPortal _uploadPortal;
 }

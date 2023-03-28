@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -46,8 +47,8 @@ import com.liferay.portal.kernel.zip.ZipWriter;
 import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.upload.UploadPortletRequestImpl;
-import com.liferay.portal.upload.UploadServletRequestImpl;
+import com.liferay.portal.upload.UploadPortletRequestFactory;
+import com.liferay.portal.upload.UploadServletRequestFactory;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -120,8 +121,8 @@ public class ImportFragmentEntriesStrutsActionTest {
 			bytes, "file");
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
-				new UploadServletRequestImpl(
+			_uploadPortletRequestFactory.create(
+				_uploadServletRequestFactory.create(
 					httpServletRequest, fileParameters,
 					HashMapBuilder.put(
 						"groupId",
@@ -301,4 +302,9 @@ public class ImportFragmentEntriesStrutsActionTest {
 	@Inject
 	private UserLocalService _userLocalService;
 
+	@Inject
+	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 }

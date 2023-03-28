@@ -274,7 +274,7 @@ public class AddInfoItemStrutsAction implements StrutsAction {
 	@Modified
 	protected void activate() {
 		_infoRequestFieldValuesProviderHelper =
-			new InfoRequestFieldValuesProviderHelper(_infoItemServiceRegistry);
+			new InfoRequestFieldValuesProviderHelper(_infoItemServiceRegistry, _uploadPortal);
 	}
 
 	private String _getValue(InfoFieldValue<?> infoFieldValue) {
