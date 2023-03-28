@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.workflow.kaleo.forms.constants.KaleoFormsPortletKeys;
 import com.liferay.portal.workflow.kaleo.forms.model.KaleoProcess;
 
@@ -27,6 +28,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Rafael Praxedes
@@ -60,7 +62,7 @@ public class StartWorkflowInstanceMVCActionCommand
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DDLRecord.class.getName(),
-			portal.getUploadPortletRequest(actionRequest));
+			_uploadPortal.getUploadPortletRequest(actionRequest));
 
 		checkKaleoProcessPermission(serviceContext, ActionKeys.SUBMIT);
 
@@ -71,5 +73,8 @@ public class StartWorkflowInstanceMVCActionCommand
 			serviceContext.getUserId(), KaleoProcess.class.getName(),
 			ddlRecord.getRecordId(), ddlRecord, serviceContext);
 	}
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

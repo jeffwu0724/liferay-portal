@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.upload.UploadFileEntryHandler;
 import com.liferay.upload.UploadHandler;
 import com.liferay.upload.UploadResponseHandler;
@@ -114,10 +115,13 @@ public class DefaultUploadHandler implements UploadHandler {
 			throw new PortalException(throwable);
 		}
 
-		return _portal.getUploadPortletRequest(portletRequest);
+		return _uploadPortal.getUploadPortletRequest(portletRequest);
 	}
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.upload.UniqueFileNameProvider;
 
 import java.io.IOException;
@@ -148,7 +149,7 @@ public class ImportCSVMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		if (uploadPortletRequest.getSize(_PARAMETER_NAME) == 0) {
 			throw new CommerceOrderImporterTypeException();
@@ -265,5 +266,8 @@ public class ImportCSVMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private UniqueFileNameProvider _uniqueFileNameProvider;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

@@ -130,7 +130,7 @@ public class EditMessageAttachmentsMVCActionCommand
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -200,5 +200,8 @@ public class EditMessageAttachmentsMVCActionCommand
 
 	@Reference
 	private UploadHandler _uploadHandler;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

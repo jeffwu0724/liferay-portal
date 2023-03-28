@@ -135,7 +135,7 @@ public class PortalImplTest {
 	@Test
 	public void testGetUploadPortletRequestWithInvalidHttpServletRequest() {
 		try {
-			_portal.getUploadPortletRequest(new MockPortletRequest());
+			_uploadPortal.getUploadPortletRequest(new MockPortletRequest());
 
 			Assert.fail();
 		}
@@ -237,5 +237,8 @@ public class PortalImplTest {
 
 	@Inject
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

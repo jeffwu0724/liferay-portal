@@ -59,7 +59,7 @@ public class ImportTranslationsMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		_importTranslations(
 			actionRequest, uploadPortletRequest.getFile("file"),
@@ -126,5 +126,8 @@ public class ImportTranslationsMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

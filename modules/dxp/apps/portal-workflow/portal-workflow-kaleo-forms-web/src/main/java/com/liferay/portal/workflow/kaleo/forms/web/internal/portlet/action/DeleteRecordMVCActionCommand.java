@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.workflow.kaleo.forms.constants.KaleoFormsPortletKeys;
 import com.liferay.portal.workflow.kaleo.forms.model.KaleoProcess;
 
@@ -77,7 +78,7 @@ public class DeleteRecordMVCActionCommand
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DDLRecord.class.getName(),
-			portal.getUploadPortletRequest(actionRequest));
+			_uploadPortal.getUploadPortletRequest(actionRequest));
 
 		checkKaleoProcessPermission(serviceContext, ActionKeys.DELETE);
 
@@ -138,6 +139,9 @@ public class DeleteRecordMVCActionCommand
 	private static final TransactionConfig _transactionConfig =
 		TransactionConfig.Factory.create(
 			Propagation.REQUIRES_NEW, new Class<?>[] {Exception.class});
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 	@Reference
 	private WorkflowInstanceLinkLocalService _workflowInstanceLinkLocalService;

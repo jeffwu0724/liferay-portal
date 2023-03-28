@@ -18,6 +18,7 @@ import com.liferay.dynamic.data.lists.model.DDLRecord;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.workflow.kaleo.forms.constants.KaleoFormsActionKeys;
 import com.liferay.portal.workflow.kaleo.forms.constants.KaleoFormsPortletKeys;
 
@@ -25,6 +26,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Rafael Praxedes
@@ -58,12 +60,15 @@ public class UpdateRecordMVCActionCommand
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DDLRecord.class.getName(),
-			portal.getUploadPortletRequest(actionRequest));
+			_uploadPortal.getUploadPortletRequest(actionRequest));
 
 		checkKaleoProcessPermission(
 			serviceContext, KaleoFormsActionKeys.COMPLETE_FORM);
 
 		updateDDLRecord(serviceContext);
 	}
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

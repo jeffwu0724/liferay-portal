@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.kernel.util.ProgressTrackerThreadLocal;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.wiki.constants.WikiPortletKeys;
 import com.liferay.wiki.exception.NoSuchNodeException;
 import com.liferay.wiki.service.WikiNodeService;
@@ -78,7 +79,7 @@ public class ImportPagesMVCActionCommand extends BaseMVCActionCommand {
 
 	private void _importPages(ActionRequest actionRequest) throws Exception {
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		String importProgressId = ParamUtil.getString(
 			uploadPortletRequest, "importProgressId");
@@ -125,6 +126,9 @@ public class ImportPagesMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 	@Reference
 	private WikiNodeService _wikiNodeService;
