@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.upload.UploadPortletRequestImpl;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
@@ -95,7 +96,7 @@ public class ImportListTypeDefinitionMVCActionCommand
 			_portal.getLiferayPortletRequest(actionRequest);
 
 		return new UploadPortletRequestImpl(
-			_portal.getUploadServletRequest(
+			_uploadPortal.getUploadServletRequest(
 				liferayPortletRequest.getHttpServletRequest()),
 			liferayPortletRequest,
 			_portal.getPortletNamespace(
@@ -152,5 +153,8 @@ public class ImportListTypeDefinitionMVCActionCommand
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

@@ -42,6 +42,7 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portletmvc4spring.test.mock.web.portlet.MockPortletRequest;
 
@@ -54,6 +55,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.osgi.service.component.annotations.Reference;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -162,7 +165,7 @@ public class PortalImplTest {
 					"fileParameterName", _file.getBytes(inputStream));
 
 			UploadServletRequest uploadServletRequest =
-				_portal.getUploadServletRequest(
+				_uploadPortal.getUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest());
 
 			Assert.assertTrue(

@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.io.File;
 
@@ -57,7 +58,7 @@ public class ImportFragmentEntriesStrutsAction implements StrutsAction {
 		throws Exception {
 
 		UploadServletRequest uploadServletRequest =
-			_portal.getUploadServletRequest(httpServletRequest);
+			_uploadPortal.getUploadServletRequest(httpServletRequest);
 
 		long groupId = ParamUtil.getLong(uploadServletRequest, "groupId");
 
@@ -159,5 +160,8 @@ public class ImportFragmentEntriesStrutsAction implements StrutsAction {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

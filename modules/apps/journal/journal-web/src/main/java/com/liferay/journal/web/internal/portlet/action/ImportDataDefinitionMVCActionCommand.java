@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.upload.UploadPortletRequestImpl;
 
 import java.util.HashSet;
@@ -141,7 +142,7 @@ public class ImportDataDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			_portal.getLiferayPortletRequest(actionRequest);
 
 		return new UploadPortletRequestImpl(
-			_portal.getUploadServletRequest(
+			_uploadPortal.getUploadServletRequest(
 				liferayPortletRequest.getHttpServletRequest()),
 			liferayPortletRequest,
 			_portal.getPortletNamespace(
@@ -288,5 +289,8 @@ public class ImportDataDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

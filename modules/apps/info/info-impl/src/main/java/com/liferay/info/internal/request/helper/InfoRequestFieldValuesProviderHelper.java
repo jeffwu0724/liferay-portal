@@ -46,6 +46,9 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +69,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Rubén Pulido
  */
+@Component
 public class InfoRequestFieldValuesProviderHelper {
 
 	public InfoRequestFieldValuesProviderHelper(
@@ -81,7 +85,7 @@ public class InfoRequestFieldValuesProviderHelper {
 		List<InfoFieldValue<Object>> infoFieldValues = new ArrayList<>();
 
 		UploadServletRequest uploadServletRequest =
-			PortalUtil.getUploadServletRequest(httpServletRequest);
+			_uploadPortal.getUploadServletRequest(httpServletRequest);
 
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)uploadServletRequest.getAttribute(
@@ -308,5 +312,6 @@ public class InfoRequestFieldValuesProviderHelper {
 		InfoRequestFieldValuesProviderHelper.class);
 
 	private final InfoItemServiceRegistry _infoItemServiceRegistry;
-
+	@Reference
+	private UploadPortal _uploadPortal;
 }

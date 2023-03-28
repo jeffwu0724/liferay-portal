@@ -29,11 +29,13 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Jürgen Kappler
@@ -138,10 +140,11 @@ public class RenderFragmentEntryDisplayContext {
 
 	private UploadRequest _getUploadRequest() {
 		if (_liferayPortletRequest != null) {
-			return PortalUtil.getUploadPortletRequest(_liferayPortletRequest);
+			return _uploadPortal.getUploadPortletRequest(
+				_liferayPortletRequest);
 		}
 
-		return PortalUtil.getUploadServletRequest(_httpServletRequest);
+		return _uploadPortal.getUploadServletRequest(_httpServletRequest);
 	}
 
 	private String _readParameter(
@@ -163,5 +166,8 @@ public class RenderFragmentEntryDisplayContext {
 		_fragmentCollectionContributorRegistry;
 	private final HttpServletRequest _httpServletRequest;
 	private final LiferayPortletRequest _liferayPortletRequest;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }
