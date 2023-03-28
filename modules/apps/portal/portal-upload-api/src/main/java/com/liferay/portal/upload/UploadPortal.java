@@ -17,11 +17,18 @@ package com.liferay.portal.upload;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 
+import javax.portlet.PortletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Eduardo Lundgren
  * @author Marco Leo
  */
+@ProviderType
 public interface UploadPortal {
 
 	public UploadPortletRequest getUploadPortletRequest(
