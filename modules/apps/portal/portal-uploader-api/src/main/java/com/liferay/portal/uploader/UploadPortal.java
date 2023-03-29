@@ -12,21 +12,33 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.uploader;
 
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
+
+import javax.portlet.PortletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author Jiefeng Wu
- */
-public class UploadServletRequestFactoryImpl
-	implements UploadServletRequestFactory {
+import org.osgi.annotation.versioning.ProviderType;
 
-	@Override
-	public UploadServletRequest create(HttpServletRequest httpServletRequest) {
-		return new UploadServletRequestImpl(httpServletRequest);
-	}
+/**
+ * @author Brian Wing Shun Chan
+ * @author Eduardo Lundgren
+ * @author Marco Leo
+ */
+@ProviderType
+public interface UploadPortal {
+
+	public UploadPortletRequest getUploadPortletRequest(
+		PortletRequest portletRequest);
+
+	public UploadServletRequest getUploadServletRequest(
+		HttpServletRequest httpServletRequest);
+
+	public UploadServletRequest getUploadServletRequest(
+		HttpServletRequest httpServletRequest, int fileSizeThreshold,
+		String location, long maxRequestSize, long maxFileSize);
 
 }

@@ -12,22 +12,17 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.uploader;
 
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
-import org.osgi.annotation.versioning.ProviderType;
 
-import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Jiefeng Wu
  */
-@ProviderType
-public interface UploadPortletRequestFactory {
+public interface UploadServletRequestFactory {
 
-	public UploadPortletRequest create(
-		UploadServletRequest uploadServletRequest,
-		PortletRequest portletRequest, String namespace);
+	public UploadServletRequest create(HttpServletRequest httpServletRequest);
 
 }

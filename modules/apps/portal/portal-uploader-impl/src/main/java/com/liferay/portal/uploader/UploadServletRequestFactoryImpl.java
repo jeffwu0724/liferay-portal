@@ -12,26 +12,21 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.uploader;
 
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 
-import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Jiefeng Wu
  */
-public class UploadPortletRequestFactoryImpl
-	implements UploadPortletRequestFactory {
+public class UploadServletRequestFactoryImpl
+	implements UploadServletRequestFactory {
 
 	@Override
-	public UploadPortletRequest create(
-		UploadServletRequest uploadServletRequest,
-		PortletRequest portletRequest, String namespace) {
-
-		return new UploadPortletRequestImpl(
-			uploadServletRequest, portletRequest, namespace);
+	public UploadServletRequest create(HttpServletRequest httpServletRequest) {
+		return new UploadServletRequestImpl(httpServletRequest);
 	}
 
 }
