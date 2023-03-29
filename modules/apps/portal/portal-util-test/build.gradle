@@ -12,5 +12,4 @@ dependencies {
 	testIntegrationCompile project(":apps:portal:portal-upload-api")
 	testIntegrationCompile project(":apps:static:portal-osgi-web:portal-osgi-web-portlet-container-test-util")
 	testIntegrationCompile project(":test:arquillian-extension-junit-bridge")
-	testIntegrationCompile project(":apps:portal:portal-upload-api")
 }
