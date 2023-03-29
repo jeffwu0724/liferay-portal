@@ -26,8 +26,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
-import com.liferay.portal.upload.LiferayInputStream;
-import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.uploader.LiferayInputStream;
+import com.liferay.portal.uploader.UploadPortal;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 

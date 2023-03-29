@@ -38,7 +38,7 @@ import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.uploader.UploadPortal;
 
 import java.util.HashMap;
 import java.util.Locale;

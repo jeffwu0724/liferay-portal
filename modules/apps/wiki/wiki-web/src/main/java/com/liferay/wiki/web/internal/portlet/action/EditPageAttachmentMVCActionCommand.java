@@ -60,7 +60,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.uploader.UploadPortal;
 import com.liferay.upload.UploadHandler;
 import com.liferay.upload.UploadResponseHandler;
 import com.liferay.wiki.constants.WikiConstants;

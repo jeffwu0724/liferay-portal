@@ -30,7 +30,7 @@ import com.liferay.portal.reports.engine.console.exception.DefinitionFileExcepti
 import com.liferay.portal.reports.engine.console.model.Definition;
 import com.liferay.portal.reports.engine.console.service.DefinitionService;
 import com.liferay.portal.reports.engine.console.util.ReportsEngineConsoleUtil;
-import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.uploader.UploadPortal;
 
 import java.io.InputStream;
 

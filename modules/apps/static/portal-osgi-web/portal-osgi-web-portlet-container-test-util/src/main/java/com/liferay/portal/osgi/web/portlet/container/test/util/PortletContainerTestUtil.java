@@ -34,7 +34,7 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplayFactory;
-import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.uploader.LiferayServletRequest;
 
 import java.io.File;
 import java.io.FileInputStream;

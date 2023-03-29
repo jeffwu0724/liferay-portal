@@ -16,7 +16,7 @@ package com.liferay.portal.upload.internal.upgrade.registry;
 
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
-import com.liferay.portal.upload.internal.upgrade.v1_0_0.UploadServletRequestConfigurationUpgradeProcess;
+import com.liferay.portal.uploader.internal.upgrade.v1_0_0.UploadServletRequestConfigurationUpgradeProcess;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

@@ -29,7 +29,7 @@ import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.upload.UploadServletRequestImpl;
+import com.liferay.portal.uploader.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalImpl;
 
 import java.io.File;

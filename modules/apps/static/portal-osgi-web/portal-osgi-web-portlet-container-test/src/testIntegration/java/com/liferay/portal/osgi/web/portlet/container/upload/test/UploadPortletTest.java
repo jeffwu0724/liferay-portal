@@ -37,7 +37,7 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.theme.ThemeDisplayFactory;
-import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.uploader.LiferayServletRequest;
 import com.liferay.upload.UniqueFileNameProvider;
 
 import java.io.IOException;

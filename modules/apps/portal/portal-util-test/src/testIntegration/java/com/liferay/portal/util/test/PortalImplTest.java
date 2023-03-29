@@ -41,9 +41,9 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadPortal;
-import com.liferay.portal.upload.UploadServletRequestFactory;
+import com.liferay.portal.uploader.LiferayServletRequest;
+import com.liferay.portal.uploader.UploadPortal;
+import com.liferay.portal.uploader.UploadServletRequestFactory;
 import com.liferay.portletmvc4spring.test.mock.web.portlet.MockPortletRequest;
 
 import java.io.InputStream;

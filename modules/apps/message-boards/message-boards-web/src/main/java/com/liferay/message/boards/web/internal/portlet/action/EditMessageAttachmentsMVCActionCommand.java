@@ -37,7 +37,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.upload.UploadHandler;
 import com.liferay.upload.UploadResponseHandler;
-import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.uploader.UploadPortal;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;

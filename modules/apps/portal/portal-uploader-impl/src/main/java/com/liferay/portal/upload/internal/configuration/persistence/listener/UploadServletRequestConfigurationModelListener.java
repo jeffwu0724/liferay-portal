@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.upload.internal.configuration.UploadServletRequestConfiguration;
+import com.liferay.portal.uploader.internal.configuration.UploadServletRequestConfiguration;
 
 import java.io.File;
 
