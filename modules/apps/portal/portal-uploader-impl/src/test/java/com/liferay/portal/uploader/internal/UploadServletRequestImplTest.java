@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.upload.internal;
+package com.liferay.portal.uploader.internal;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;

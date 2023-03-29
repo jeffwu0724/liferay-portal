@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.upload.internal.upgrade.registry;
+package com.liferay.portal.uploader.internal.upgrade.registry;
 
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.upload.internal.upgrade.v1_0_0;
+package com.liferay.portal.uploader.internal.upgrade.v1_0_0;
 
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
