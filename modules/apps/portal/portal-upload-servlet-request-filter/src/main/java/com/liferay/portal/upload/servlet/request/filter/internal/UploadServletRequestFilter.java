@@ -28,15 +28,14 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 import com.liferay.portal.upload.LiferayInputStream;
 import com.liferay.portal.upload.UploadPortal;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Preston Crary
