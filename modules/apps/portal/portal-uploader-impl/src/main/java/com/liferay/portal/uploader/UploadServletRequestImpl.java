@@ -50,6 +50,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
+import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.ServletFileUpload;
 import org.osgi.service.component.annotations.Component;
 
 /**

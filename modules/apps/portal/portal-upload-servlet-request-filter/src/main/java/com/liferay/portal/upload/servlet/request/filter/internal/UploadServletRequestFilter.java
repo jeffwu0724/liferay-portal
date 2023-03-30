@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.uploader.servlet.request.filter.internal;
+package com.liferay.portal.upload.servlet.request.filter.internal;
 
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.InvokerPortlet;
