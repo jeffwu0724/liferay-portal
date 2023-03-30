@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.uploader;
+package com.liferay.portal.upload;
 
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.util.File;
