@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.uploader.internal;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.io.ByteArrayFileInputStream;
@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.ServletFileUpload;
 
 import java.io.File;
 import java.io.IOException;

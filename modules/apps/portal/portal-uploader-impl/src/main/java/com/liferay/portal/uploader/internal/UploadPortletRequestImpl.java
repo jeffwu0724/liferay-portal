@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.uploader.internal;
 
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
