@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.uploader;
+package com.liferay.portal.upload;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;

@@ -16,7 +16,7 @@ package com.liferay.portal.uploader.internal;
 
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadException;
-import com.liferay.portal.uploader.ServletFileUpload;
+import com.liferay.portal.upload.ServletFileUpload;
 
 import java.io.File;
 

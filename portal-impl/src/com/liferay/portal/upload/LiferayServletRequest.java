@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.uploader;
+package com.liferay.portal.upload;
 
 import java.io.IOException;
 
