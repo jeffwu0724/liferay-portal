@@ -171,7 +171,7 @@
 		<Logger level="INFO" name="com.liferay.portal.upgrade.v6_2_0.BaseUpgradePortletPreferences" />
 		<Logger level="INFO" name="com.liferay.portal.upgrade.v6_2_0.UpgradePortletPreferences" />
 		<Logger level="INFO" name="com.liferay.portal.upgrade.v7_0_0.UpgradePortletSettings" />
-		<Logger level="WARN" name="com.liferay.portal.upload.UploadServletRequestImpl" />
+		<Logger level="WARN" name="com.liferay.portal.uploader.UploadServletRequestImpl" />
 		<Logger level="ERROR" name="com.liferay.portal.util" />
 		<Logger level="ERROR" name="com.liferay.portal.util.EntityResolver" />
 		<Logger level="WARN" name="com.liferay.portal.util.FileImpl" />

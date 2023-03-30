@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ServerDetector;
-
 import com.liferay.portal.uploader.UploaderPortal;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.LiferayPortletUtil;

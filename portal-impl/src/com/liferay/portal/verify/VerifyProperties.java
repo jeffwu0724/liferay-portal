@@ -417,7 +417,7 @@ public class VerifyProperties {
 		},
 		{
 			"com.liferay.util.servlet.UploadServletRequest.temp.dir",
-			"com.liferay.portal.upload.UploadServletRequestImpl.temp.dir"
+			"com.liferay.portal.uploader.UploadServletRequestImpl.temp.dir"
 		},
 		{
 			"com.liferay.util.servlet.fileupload.LiferayFileItem.threshold." +
@@ -1711,7 +1711,7 @@ public class VerifyProperties {
 		"com.liferay.portal.servlet.filters.sso.opensso.OpenSSOFilter",
 		"com.liferay.portal.servlet.filters.validhtml.ValidHtmlFilter",
 		"com.liferay.portal.upload.UploadServletRequestImpl.max.size",
-		"com.liferay.portal.upload.UploadServletRequestImpl.temp.dir",
+		"com.liferay.portal.uploader.UploadServletRequestImpl.temp.dir",
 		"commons.pool.enabled", "company.security.send.password",
 		"company.settings.form.configuration",
 		"company.settings.form.identification",

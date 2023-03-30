@@ -29,6 +29,6 @@ public class LegacyUploadServletRequestPropsKeys {
 		"com.liferay.portal.upload.UploadServletRequestImpl.max.size";
 
 	public static final String UPLOAD_SERVLET_REQUEST_IMPL_TEMP_DIR =
-		"com.liferay.portal.upload.UploadServletRequestImpl.temp.dir";
+		"com.liferay.portal.uploader.UploadServletRequestImpl.temp.dir";
 
 }
