@@ -2589,16 +2589,9 @@ public abstract class Base${schemaName}ResourceTestCase {
 	</#list>
 
 	protected java.lang.reflect.Field[] getDeclaredFields(Class clazz) throws Exception {
-		return TransformUtil.transform(
+		return ArrayUtil.filter(
 			ReflectionUtil.getDeclaredFields(clazz),
-			field -> {
-				if (field.isSynthetic()) {
-					return null;
-				}
-
-				return field;
-			},
-			java.lang.reflect.Field.class);
+			field -> !field.isSynthetic());
 	}
 
 	protected java.util.Collection<EntityField> getEntityFields() throws Exception {
@@ -2620,18 +2613,34 @@ public abstract class Base${schemaName}ResourceTestCase {
 	}
 
 	protected List<EntityField> getEntityFields(EntityField.Type type) throws Exception {
-		return TransformUtil.transform(
-			getEntityFields(),
-			entityField -> {
-				if (!Objects.equals(entityField.getType(), type) ||
-					ArrayUtil.contains(
-					   getIgnoredEntityFieldNames(), entityField.getName())) {
+		<#if freeMarkerTool.isVersionCompatible(configYAML, 2)>
+			return TransformUtil.transform(
+				getEntityFields(),
+				entityField -> {
+					if (!Objects.equals(entityField.getType(), type) ||
+						ArrayUtil.contains(
+						   getIgnoredEntityFieldNames(), entityField.getName())) {
 
-					return null;
+						return null;
+					}
+
+					return entityField;
+				});
+		<#else>
+			List<EntityField> entityFields = new ArrayList<>();
+
+			for (EntityField entityField : getEntityFields()){
+				if(Objects.equals(entityField.getType(), type) &&
+					!ArrayUtil.contains(
+						getIgnoredEntityFieldNames(), entityField.getName())){
+
+					entityFields.add(entityField);
 				}
+			}
 
-				return entityField;
-			});
+			return entityFields;
+		</#if>
+
 	}
 
 	protected String getFilterString(EntityField entityField, String operator, ${schemaClientJavaType} ${schemaVarName}) {
