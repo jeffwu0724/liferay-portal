@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Portal;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +38,7 @@ import java.nio.file.Files;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import com.liferay.portal.uploader.UploaderPortal;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -91,12 +91,15 @@ public class SubmitBatchPlannerPlanMVCResourceCommand
 				batchPlannerPlan.getBatchPlannerPlanId()));
 	}
 
+	@Reference
+	private UploaderPortal _uploadPortal;
+
 	private void _submitImportBatchPlannerPlan(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(resourceRequest);
+			_uploadPortal.getUploadPortletRequest(resourceRequest);
 
 		File importFile = _toBatchPlannerFile(
 			uploadPortletRequest.getFileName("importFile"),
@@ -153,8 +156,5 @@ public class SubmitBatchPlannerPlanMVCResourceCommand
 
 	@Reference
 	private com.liferay.portal.kernel.util.File _file;
-
-	@Reference
-	private Portal _portal;
 
 }
