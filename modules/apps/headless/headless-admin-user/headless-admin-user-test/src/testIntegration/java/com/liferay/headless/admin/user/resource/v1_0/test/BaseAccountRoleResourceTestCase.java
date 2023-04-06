@@ -1821,16 +1821,9 @@ public abstract class BaseAccountRoleResourceTestCase {
 	protected java.lang.reflect.Field[] getDeclaredFields(Class clazz)
 		throws Exception {
 
-		return TransformUtil.transform(
+		return ArrayUtil.filter(
 			ReflectionUtil.getDeclaredFields(clazz),
-			field -> {
-				if (field.isSynthetic()) {
-					return null;
-				}
-
-				return field;
-			},
-			java.lang.reflect.Field.class);
+			field -> !field.isSynthetic());
 	}
 
 	protected java.util.Collection<EntityField> getEntityFields()
