@@ -104,7 +104,7 @@ public class AddInfoItemStrutsAction implements StrutsAction {
 		try {
 			infoFieldValues =
 				_infoRequestFieldValuesProviderHelper.getInfoFieldValues(
-					httpServletRequest);
+					httpServletRequest, _uploaderPortal);
 		}
 		catch (InfoFormException infoFormException) {
 			if (_log.isDebugEnabled()) {

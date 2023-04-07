@@ -24,16 +24,20 @@ import com.liferay.fragment.service.FragmentCollectionLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryLinkLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryLocalServiceUtil;
 import com.liferay.fragment.web.internal.constants.FragmentWebKeys;
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.uploader.UploaderPortal;
 
 import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Jürgen Kappler
@@ -107,6 +111,10 @@ public class RenderFragmentEntryDisplayContext {
 		return defaultFragmentRendererContext;
 	}
 
+	protected static UploaderPortal getUploderPortal() {
+		return _serviceTracker.getService();
+	}
+
 	private FragmentEntry _getFragmentEntry() {
 		long fragmentCollectionId = ParamUtil.getLong(
 			_httpServletRequest, "fragmentCollectionId");
@@ -138,10 +146,11 @@ public class RenderFragmentEntryDisplayContext {
 
 	private UploadRequest _getUploadRequest() {
 		if (_liferayPortletRequest != null) {
-			return PortalUtil.getUploadPortletRequest(_liferayPortletRequest);
+			return getUploderPortal().getUploadPortletRequest(
+				_liferayPortletRequest);
 		}
 
-		return PortalUtil.getUploadServletRequest(_httpServletRequest);
+		return getUploderPortal().getUploadServletRequest(_httpServletRequest);
 	}
 
 	private String _readParameter(
@@ -158,6 +167,11 @@ public class RenderFragmentEntryDisplayContext {
 		return BeanParamUtil.getString(
 			fragmentEntry, _httpServletRequest, parameterName);
 	}
+
+	private static final ServiceTracker<UploaderPortal, UploaderPortal>
+		_serviceTracker = ServiceTrackerFactory.open(
+			FrameworkUtil.getBundle(RenderFragmentEntryDisplayContext.class),
+			UploaderPortal.class);
 
 	private final FragmentCollectionContributorRegistry
 		_fragmentCollectionContributorRegistry;
