@@ -37,10 +37,13 @@ import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.uploader.UploaderPortal;
 import com.liferay.upload.UniqueFileNameProvider;
-
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -62,7 +65,7 @@ public class TestUploadHandler {
 		PortletRequest portletRequest, PortletResponse portletResponse) {
 
 		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(portletRequest);
+			getUploderPortal().getUploadPortletRequest(portletRequest);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
@@ -118,7 +121,7 @@ public class TestUploadHandler {
 		throws PortalException {
 
 		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(portletRequest);
+			getUploderPortal().getUploadPortletRequest(portletRequest);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -242,5 +245,14 @@ public class TestUploadHandler {
 
 	private final TestUploadPortlet _testUploadPortlet;
 	private final UniqueFileNameProvider _uniqueFileNameProvider;
+	protected static UploaderPortal getUploderPortal() {
+		return _serviceTracker.getService();
+	}
+
+	private static final ServiceTracker<UploaderPortal, UploaderPortal>
+		_serviceTracker = ServiceTrackerFactory.open(
+		FrameworkUtil.getBundle(TestUploadHandler.class),
+		UploaderPortal.class);
+
 
 }
