@@ -42,7 +42,7 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestImpl;
+
 import com.liferay.portal.uploader.UploaderPortal;
 import com.liferay.portletmvc4spring.test.mock.web.portlet.MockPortletRequest;
 
@@ -166,8 +166,11 @@ public class PortalImplTest {
 				_uploaderPortal.getUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest());
 
+			Class<?> clazz2 = Class.forName(
+				"com.liferay.portal.upload.UploadServletRequestImpl");
+
 			Assert.assertTrue(
-				uploadServletRequest instanceof UploadServletRequestImpl);
+				clazz2.isInstance(uploadServletRequest));
 		}
 	}
 
