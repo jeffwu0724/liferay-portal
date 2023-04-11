@@ -166,11 +166,14 @@ public class PortalImplTest {
 				_uploaderPortal.getUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest());
 
-			Class<?> clazz2 = Class.forName(
-				"com.liferay.portal.upload.UploadServletRequestImpl");
+//			System.out.println(uploadServletRequest.getClass().getName());
+//
+//			Class<?> clazz2 = Class.forName(
+//				"com.liferay.portal.uploader.internal.UploadServletRequestImpl");
+			String className = uploadServletRequest.getClass().getName();
 
-			Assert.assertTrue(
-				clazz2.isInstance(uploadServletRequest));
+			Assert.assertEquals(
+				className, "com.liferay.portal.uploader.internal.UploadServletRequestImpl");
 		}
 	}
 
