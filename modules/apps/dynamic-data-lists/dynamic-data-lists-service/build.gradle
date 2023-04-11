@@ -42,7 +42,3 @@ dependencies {
 	compileOnly project(":core:petra:petra-sql-dsl-api")
 	compileOnly project(":core:petra:petra-string")
 }
-
-liferayOSGi {
-	expandCompileInclude = true
-}
