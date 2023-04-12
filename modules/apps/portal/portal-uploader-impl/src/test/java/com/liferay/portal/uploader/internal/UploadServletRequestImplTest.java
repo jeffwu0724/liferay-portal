@@ -12,22 +12,21 @@
  * details.
  */
 
-package com.liferay.portal.upload.internal;
+package com.liferay.portal.uploader.internal;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.util.ProxyFactory;
-
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.tools.ToolDependencies;
-
+import com.liferay.portal.uploader.UploadServletRequestFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -119,7 +118,6 @@ public class UploadServletRequestImplTest {
 	}
 
 	private final List<FileItem> _fileItems = new ArrayList<>();
-
 
 
 }
