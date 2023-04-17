@@ -45,4 +45,6 @@ Import-Package:\
 	!graphql.schema.*,\
 	\
 	*
--includeresource: @graphql-java-annotations-[0-9.]*.jar!/graphql/annotations/annotationTypes/*
+-includeresource:\
+	@graphql-java-annotations-[0-9.]*.jar!/graphql/annotations/annotationTypes/*,\
+	@snakeyaml-[0-9.]*.jar!/org/yaml/snakeyaml/*.class
