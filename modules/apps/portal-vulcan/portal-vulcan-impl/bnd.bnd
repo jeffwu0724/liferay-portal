@@ -22,4 +22,6 @@ Import-Package:\
 	\
 	!org.jsoup.*,\
 	\
+	!org.yaml.snakeyaml.*,\
+	\
 	*
