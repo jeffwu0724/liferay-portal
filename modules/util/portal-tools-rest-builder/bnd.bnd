@@ -7,7 +7,6 @@ Import-Package:\
 	\
 	*
 Main-Class: com.liferay.portal.tools.rest.builder.RESTBuilder
--fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning
 -includeresource:\
 	@com.liferay.petra.io-*.jar!/com/liferay/petra/io/unsync/UnsyncStringReader.class,\
 	@com.liferay.petra.lang-*.jar!/com/liferay/petra/lang/CentralizedThreadLocal.class,\
@@ -36,5 +35,4 @@ Main-Class: com.liferay.portal.tools.rest.builder.RESTBuilder
 	@com.liferay.portal.tools.java.parser-*.jar!/com/liferay/portal/tools/java/parser/*.class,\
 	@com.liferay.portal.tools.java.parser-*.jar!/com/liferay/portal/tools/java/parser/util/JavaParserUtil.class,\
 	@javax.ws.rs-api-[0-9.]*.jar!/javax/ws/rs/core/Response.class,\
-	@javax.ws.rs-api-[0-9.]*.jar!/javax/ws/rs/core/Response$Status$Family.class,\
-	@snakeyaml-[0-9.]*.jar!/org/yaml/snakeyaml/*.class
+	@javax.ws.rs-api-[0-9.]*.jar!/javax/ws/rs/core/Response$Status$Family.class
