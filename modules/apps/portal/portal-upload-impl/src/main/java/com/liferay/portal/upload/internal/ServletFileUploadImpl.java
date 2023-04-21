@@ -18,7 +18,6 @@ import com.liferay.document.library.kernel.util.DLValidatorUtil;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadException;
-import com.liferay.portal.upload.ServletFileUpload;
 
 import java.io.File;
 
