@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Pei-Jung Lan
  */
 @Component(
-	property = "model.class.name=com.liferay.portal.upload.internal.configuration.UploadServletRequestConfiguration",
+	property = "model.class.name=com.liferay.portal.uploader.internal.configuration.UploadServletRequestConfiguration",
 	service = ConfigurationModelListener.class
 )
 public class UploadServletRequestConfigurationModelListener
