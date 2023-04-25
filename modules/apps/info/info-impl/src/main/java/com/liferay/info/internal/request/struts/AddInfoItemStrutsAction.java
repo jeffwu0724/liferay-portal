@@ -243,7 +243,8 @@ public class AddInfoItemStrutsAction implements StrutsAction {
 						RelationshipInfoFieldType.INSTANCE) {
 
 					UploadServletRequest uploadServletRequest =
-						_portal.getUploadServletRequest(httpServletRequest);
+						_uploadPortal.getUploadServletRequest(
+							httpServletRequest);
 
 					String labelParameterName = infoField.getName() + "-label";
 
@@ -543,5 +544,8 @@ public class AddInfoItemStrutsAction implements StrutsAction {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }
