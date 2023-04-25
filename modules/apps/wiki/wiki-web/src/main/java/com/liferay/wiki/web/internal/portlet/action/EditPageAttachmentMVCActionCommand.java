@@ -60,6 +60,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.upload.UploadHandler;
 import com.liferay.upload.UploadResponseHandler;
 import com.liferay.wiki.constants.WikiConstants;
@@ -205,7 +206,7 @@ public class EditPageAttachmentMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -424,6 +425,9 @@ public class EditPageAttachmentMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private UploadHandler _uploadHandler;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 	@Reference(target = "(upload.response.handler=multiple)")
 	private UploadResponseHandler _uploadResponseHandler;
