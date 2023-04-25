@@ -46,6 +46,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,13 +76,13 @@ public class InfoRequestFieldValuesProviderHelper {
 	}
 
 	public List<InfoFieldValue<Object>> getInfoFieldValues(
-			HttpServletRequest httpServletRequest)
+			HttpServletRequest httpServletRequest, UploadPortal uploadPortal)
 		throws InfoFormFileUploadException {
 
 		List<InfoFieldValue<Object>> infoFieldValues = new ArrayList<>();
 
 		UploadServletRequest uploadServletRequest =
-			PortalUtil.getUploadServletRequest(httpServletRequest);
+			uploadPortal.getUploadServletRequest(httpServletRequest);
 
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)uploadServletRequest.getAttribute(

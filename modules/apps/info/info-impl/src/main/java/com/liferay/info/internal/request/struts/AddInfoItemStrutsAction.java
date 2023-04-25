@@ -65,6 +65,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.text.SimpleDateFormat;
 
@@ -103,7 +104,7 @@ public class AddInfoItemStrutsAction implements StrutsAction {
 		try {
 			infoFieldValues =
 				_infoRequestFieldValuesProviderHelper.getInfoFieldValues(
-					httpServletRequest);
+					httpServletRequest, _uploadPortal);
 		}
 		catch (InfoFormException infoFormException) {
 			if (_log.isDebugEnabled()) {
