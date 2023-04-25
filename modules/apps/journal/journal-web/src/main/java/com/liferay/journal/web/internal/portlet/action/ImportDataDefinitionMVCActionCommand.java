@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class ImportDataDefinitionMVCActionCommand extends BaseMVCActionCommand {
 				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 			UploadPortletRequest uploadPortletRequest =
-				_portal.getUploadPortletRequest(
+				_uploadPortal.getUploadPortletRequest(
 					_portal.getLiferayPortletRequest(actionRequest));
 
 			DataDefinition dataDefinition = DataDefinition.toDTO(
@@ -273,5 +274,8 @@ public class ImportDataDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }
