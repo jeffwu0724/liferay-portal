@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
 import javax.portlet.ActionRequest;
@@ -100,7 +101,7 @@ public class ImportListTypeDefinitionMVCActionCommand
 		).build();
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		String listTypeDefinitionJSON = FileUtil.read(
 			uploadPortletRequest.getFile("listTypeDefinitionJSON"));
@@ -136,5 +137,8 @@ public class ImportListTypeDefinitionMVCActionCommand
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

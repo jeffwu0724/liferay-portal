@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.upload.UploadResponseHandler;
 
 import java.io.IOException;
@@ -73,7 +74,7 @@ public class AddTempAttachmentMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		_checkExceededSizeLimit(actionRequest);
 
@@ -152,6 +153,9 @@ public class AddTempAttachmentMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 	@Reference
 	private UploadResponseHandler _uploadResponseHandler;
