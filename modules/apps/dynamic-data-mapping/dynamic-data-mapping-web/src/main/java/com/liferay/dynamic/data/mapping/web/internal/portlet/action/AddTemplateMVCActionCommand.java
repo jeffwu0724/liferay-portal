@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.io.File;
 
@@ -91,11 +92,14 @@ public class AddTemplateMVCActionCommand extends BaseDDMMVCActionCommand {
 	@Reference
 	protected Portal portal;
 
+	@Reference
+	protected UploadPortal uploadPortal;
+
 	private DDMTemplate _addTemplate(ActionRequest actionRequest)
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			portal.getUploadPortletRequest(actionRequest);
+			uploadPortal.getUploadPortletRequest(actionRequest);
 
 		long groupId = ParamUtil.getLong(uploadPortletRequest, "groupId");
 		long classNameId = ParamUtil.getLong(

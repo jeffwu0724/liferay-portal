@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.style.book.constants.StyleBookPortletKeys;
 import com.liferay.style.book.model.StyleBookEntry;
 import com.liferay.style.book.zip.processor.StyleBookEntryZipProcessor;
@@ -84,7 +85,7 @@ public class ImportStyleBookEntriesMVCActionCommand
 			WebKeys.THEME_DISPLAY);
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		File file = uploadPortletRequest.getFile("file");
 
@@ -200,5 +201,8 @@ public class ImportStyleBookEntriesMVCActionCommand
 
 	@Reference
 	private StyleBookEntryZipProcessor _styleBookEntryZipProcessor;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }

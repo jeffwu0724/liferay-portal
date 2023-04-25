@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.util.Localization;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.io.File;
 
@@ -74,7 +75,7 @@ public class AddDDMTemplateMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			_portal.getUploadPortletRequest(actionRequest);
+			_uploadPortal.getUploadPortletRequest(actionRequest);
 
 		long groupId = ParamUtil.getLong(uploadPortletRequest, "groupId");
 		long classPK = ParamUtil.getLong(uploadPortletRequest, "classPK");
@@ -189,5 +190,8 @@ public class AddDDMTemplateMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private UploadPortal _uploadPortal;
 
 }
