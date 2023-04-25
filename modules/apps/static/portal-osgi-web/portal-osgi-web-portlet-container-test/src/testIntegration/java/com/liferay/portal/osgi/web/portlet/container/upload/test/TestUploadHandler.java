@@ -18,6 +18,7 @@ import com.liferay.document.library.kernel.antivirus.AntivirusScannerException;
 import com.liferay.document.library.kernel.exception.FileNameException;
 import com.liferay.document.library.kernel.exception.FileSizeException;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.editor.constants.EditorConstants;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -35,8 +36,8 @@ import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.upload.UniqueFileNameProvider;
 
 import java.io.IOException;
@@ -44,6 +45,9 @@ import java.io.InputStream;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Manuel de la Peña
@@ -62,7 +66,7 @@ public class TestUploadHandler {
 		PortletRequest portletRequest, PortletResponse portletResponse) {
 
 		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(portletRequest);
+			getUploderPortal().getUploadPortletRequest(portletRequest);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
@@ -114,11 +118,15 @@ public class TestUploadHandler {
 		}
 	}
 
+	protected static UploadPortal getUploderPortal() {
+		return _serviceTracker.getService();
+	}
+
 	private JSONObject _getImageJSONObject(PortletRequest portletRequest)
 		throws PortalException {
 
 		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(portletRequest);
+			getUploderPortal().getUploadPortletRequest(portletRequest);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -239,6 +247,11 @@ public class TestUploadHandler {
 
 		return true;
 	}
+
+	private static final ServiceTracker<UploadPortal, UploadPortal>
+		_serviceTracker = ServiceTrackerFactory.open(
+			FrameworkUtil.getBundle(TestUploadHandler.class),
+			UploadPortal.class);
 
 	private final TestUploadPortlet _testUploadPortlet;
 	private final UniqueFileNameProvider _uniqueFileNameProvider;
