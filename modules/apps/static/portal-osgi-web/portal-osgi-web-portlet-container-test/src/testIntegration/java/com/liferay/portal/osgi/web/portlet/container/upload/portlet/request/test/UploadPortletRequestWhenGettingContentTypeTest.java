@@ -19,10 +19,9 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadPortletRequestImpl;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,8 +64,8 @@ public class UploadPortletRequestWhenGettingContentTypeTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
-				new UploadServletRequestImpl(
+			_uploadPortletRequestFactory.create(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, new HashMap<String, List<String>>()),
 				null, _portletNamespace);
@@ -99,8 +98,8 @@ public class UploadPortletRequestWhenGettingContentTypeTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
-				new UploadServletRequestImpl(
+			_uploadPortletRequestFactory.create(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					new HashMap<String, FileItem[]>(),
 					new HashMap<String, List<String>>()),
@@ -113,5 +112,11 @@ public class UploadPortletRequestWhenGettingContentTypeTest {
 		"Enterprise. Open Source. For Life.".getBytes();
 
 	private static String _portletNamespace;
+
+	@Inject
+	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }

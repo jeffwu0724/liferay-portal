@@ -18,9 +18,9 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 
 import java.io.File;
 
@@ -66,18 +66,18 @@ public class UploadServletRequestWhenGettingFilesTest {
 			PortletContainerTestUtil.getMultipartRequest(
 				_fileNameParameter, _BYTES);
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				fileParameters, new HashMap<String, List<String>>());
 
 		Map<String, FileItem[]> map =
-			uploadServletRequestImpl.getMultipartParameterMap();
+			uploadServletRequest.getMultipartParameterMap();
 
 		Assert.assertEquals(map.toString(), 10, map.size());
 
 		for (Map.Entry<String, FileItem[]> entry : map.entrySet()) {
-			File[] files = uploadServletRequestImpl.getFiles(entry.getKey());
+			File[] files = uploadServletRequest.getFiles(entry.getKey());
 
 			FileItem[] fileItems = entry.getValue();
 
@@ -102,13 +102,13 @@ public class UploadServletRequestWhenGettingFilesTest {
 			PortletContainerTestUtil.getMultipartRequest(
 				_fileNameParameter, _BYTES);
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				new HashMap<String, FileItem[]>(),
 				new HashMap<String, List<String>>());
 
-		Assert.assertNull(uploadServletRequestImpl.getFiles("irrelevantName"));
+		Assert.assertNull(uploadServletRequest.getFiles("irrelevantName"));
 	}
 
 	@Test
@@ -122,17 +122,20 @@ public class UploadServletRequestWhenGettingFilesTest {
 			PortletContainerTestUtil.getMultipartRequest(
 				_fileNameParameter, _BYTES);
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				fileParameters, new HashMap<String, List<String>>());
 
-		Assert.assertNull(uploadServletRequestImpl.getFiles("nonexistentFile"));
+		Assert.assertNull(uploadServletRequest.getFiles("nonexistentFile"));
 	}
 
 	private static final byte[] _BYTES =
 		"Enterprise. Open Source. For Life.".getBytes();
 
 	private static String _fileNameParameter;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }

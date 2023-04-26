@@ -19,9 +19,9 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -62,7 +62,7 @@ public class UploadServletRequestWhenCreatingFromMainConstructorTest {
 		HttpServletRequest mockHttpServletRequest =
 			(HttpServletRequest)liferayServletRequest.getRequest();
 
-		new UploadServletRequestImpl(mockHttpServletRequest);
+		_uploadServletRequestFactory.create(mockHttpServletRequest);
 
 		HttpSession mockHttpSession = mockHttpServletRequest.getSession();
 
@@ -79,18 +79,18 @@ public class UploadServletRequestWhenCreatingFromMainConstructorTest {
 		HttpServletRequest mockHttpServletRequest =
 			(HttpServletRequest)liferayServletRequest.getRequest();
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(mockHttpServletRequest);
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(mockHttpServletRequest);
 
 		Map<String, FileItem[]> multipartParameterMap =
-			uploadServletRequestImpl.getMultipartParameterMap();
+			uploadServletRequest.getMultipartParameterMap();
 
 		Assert.assertNotNull(multipartParameterMap);
 		Assert.assertTrue(
 			multipartParameterMap.toString(), multipartParameterMap.isEmpty());
 
 		Map<String, List<String>> regularParameterMap =
-			uploadServletRequestImpl.getRegularParameterMap();
+			uploadServletRequest.getRegularParameterMap();
 
 		Assert.assertNotNull(regularParameterMap);
 		Assert.assertTrue(
@@ -101,5 +101,8 @@ public class UploadServletRequestWhenCreatingFromMainConstructorTest {
 		"Enterprise. Open Source. For Life.".getBytes();
 
 	private static String _fileNameParameter;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }

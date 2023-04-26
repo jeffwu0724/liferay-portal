@@ -18,9 +18,9 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -76,13 +76,13 @@ public class UploadServletRequestWhenGettingParameterNamesTest {
 
 		mockHttpServletRequest.addParameter(parameter, parameter);
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				fileParameters, regularParameters);
 
 		Enumeration<String> enumeration =
-			uploadServletRequestImpl.getParameterNames();
+			uploadServletRequest.getParameterNames();
 
 		List<String> parameterNamesList = Collections.list(enumeration);
 
@@ -109,5 +109,8 @@ public class UploadServletRequestWhenGettingParameterNamesTest {
 		"Enterprise. Open Source. For Life.".getBytes();
 
 	private static String _fileNameParameter;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }
