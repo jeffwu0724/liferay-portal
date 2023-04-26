@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
-import com.liferay.portal.upload.LiferayInputStream;
+import com.liferay.portal.kernel.upload.LiferayInputStream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.LiferayServletRequest;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.MapUtil;
@@ -37,7 +38,6 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.theme.ThemeDisplayFactory;
-import com.liferay.portal.upload.LiferayServletRequest;
 import com.liferay.upload.UniqueFileNameProvider;
 
 import java.io.IOException;
