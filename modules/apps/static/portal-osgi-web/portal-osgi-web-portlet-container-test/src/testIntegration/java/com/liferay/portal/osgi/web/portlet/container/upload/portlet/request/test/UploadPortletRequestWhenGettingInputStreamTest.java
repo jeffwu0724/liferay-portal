@@ -18,13 +18,12 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.servlet.ServletInputStreamAdapter;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.kernel.upload.LiferayInputStream;
 import com.liferay.portal.kernel.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadPortletRequestImpl;
-import com.liferay.portal.upload.UploadServletRequestImpl;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
+import com.liferay.portal.test.rule.Inject;
+import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,8 +62,8 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
-				new UploadServletRequestImpl(
+			_uploadPortletRequestFactory.create(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
 
@@ -73,8 +72,8 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 		Assert.assertFalse(servletInputStream instanceof LiferayInputStream);
 
-		uploadPortletRequest = new UploadPortletRequestImpl(
-			new UploadServletRequestImpl(
+		uploadPortletRequest = _uploadPortletRequestFactory.create(
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				new HashMap<String, FileItem[]>(),
 				new HashMap<String, List<String>>()),
@@ -92,8 +91,8 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
-				new UploadServletRequestImpl(
+			_uploadPortletRequestFactory.create(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
 
@@ -108,5 +107,11 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 		"Enterprise. Open Source. For Life.".getBytes();
 
 	private static String _portletNamespace;
+
+	@Inject
+	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }
