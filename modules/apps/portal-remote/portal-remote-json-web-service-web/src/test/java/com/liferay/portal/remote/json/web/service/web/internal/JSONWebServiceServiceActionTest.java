@@ -14,6 +14,7 @@
 
 package com.liferay.portal.remote.json.web.service.web.internal;
 
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.memory.DeleteFileFinalizeAction;
 import com.liferay.petra.memory.FinalizeManager;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
@@ -23,16 +24,19 @@ import com.liferay.portal.kernel.test.FinalizeManagerUtil;
 import com.liferay.portal.kernel.test.GCUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalImpl;
 
 import java.io.File;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -150,20 +154,37 @@ public class JSONWebServiceServiceActionTest
 				"fileName", new FileItem[] {_createFileItem("aaa")}
 			).build();
 
-		HttpServletRequest httpServletRequest = new UploadServletRequestImpl(
-			createHttpRequest("/foo/add-file"), fileParams, null) {
+		MockHttpServletRequest mockHttpServletRequest = createHttpRequest(
+			"/foo/add-file");
 
-			@Override
-			public String getFileName(String name) {
-				return "test";
-			}
+		HttpServletRequest httpServletRequest =
+			(HttpServletRequest)ProxyUtil.newProxyInstance(
+				UploadServletRequest.class.getClassLoader(),
+				new Class<?>[] {UploadServletRequest.class},
+				new InvocationHandler() {
 
-			@Override
-			public Map<String, FileItem[]> getMultipartParameterMap() {
-				return fileParams;
-			}
+					@Override
+					public Object invoke(
+						Object proxy, Method method, Object[] args) {
 
-		};
+						String methodName = method.getName();
+
+						if (methodName.equals("getFileName")) {
+							return "test";
+						}
+
+						if (methodName.equals("getMultipartParameterMap")) {
+							return fileParams;
+						}
+
+						return ReflectionTestUtil.invoke(
+							mockHttpServletRequest, methodName,
+							TransformUtil.transform(
+								args, arg -> arg.getClass(), Class.class),
+							args);
+					}
+
+				});
 
 		JSONWebServiceAction jsonWebServiceAction = lookupJSONWebServiceAction(
 			httpServletRequest);
@@ -175,15 +196,41 @@ public class JSONWebServiceServiceActionTest
 	public void testMultipartRequestFilesUpload() throws Exception {
 		registerActionClass(FooService.class);
 
-		HttpServletRequest httpServletRequest = new UploadServletRequestImpl(
-			createHttpRequest("/foo/upload-files"),
+		Map<String, FileItem[]> fileParams =
 			HashMapBuilder.<String, FileItem[]>put(
 				"firstFile", new FileItem[] {_createFileItem("aaa")}
 			).put(
 				"otherFiles",
 				new FileItem[] {_createFileItem("bbb"), _createFileItem("ccc")}
-			).build(),
-			null);
+			).build();
+
+		MockHttpServletRequest mockHttpServletRequest = createHttpRequest(
+			"/foo/upload-files");
+
+		HttpServletRequest httpServletRequest =
+			(HttpServletRequest)ProxyUtil.newProxyInstance(
+				UploadServletRequest.class.getClassLoader(),
+				new Class<?>[] {UploadServletRequest.class},
+				new InvocationHandler() {
+
+					@Override
+					public Object invoke(
+						Object proxy, Method method, Object[] args) {
+
+						String methodName = method.getName();
+
+						if (methodName.equals("getMultipartParameterMap")) {
+							return fileParams;
+						}
+
+						return ReflectionTestUtil.invoke(
+							mockHttpServletRequest, methodName,
+							TransformUtil.transform(
+								args, arg -> arg.getClass(), Class.class),
+							args);
+					}
+
+				});
 
 		JSONWebServiceAction jsonWebServiceAction = lookupJSONWebServiceAction(
 			httpServletRequest);
