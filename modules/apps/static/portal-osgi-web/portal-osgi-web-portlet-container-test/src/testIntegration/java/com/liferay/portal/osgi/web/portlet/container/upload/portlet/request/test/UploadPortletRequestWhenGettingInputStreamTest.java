@@ -24,8 +24,8 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayInputStream;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadPortletRequestFactory;
-import com.liferay.portal.upload.UploadServletRequestFactory;
+import com.liferay.portal.uploader.UploadPortletRequestFactory;
+import com.liferay.portal.uploader.UploadServletRequestFactory;
 
 import java.util.HashMap;
 import java.util.List;

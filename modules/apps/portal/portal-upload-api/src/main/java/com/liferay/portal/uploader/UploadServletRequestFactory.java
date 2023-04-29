@@ -12,12 +12,15 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.uploader;
 
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 
-import javax.portlet.PortletRequest;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -25,10 +28,17 @@ import org.osgi.annotation.versioning.ProviderType;
  * @author Jiefeng Wu
  */
 @ProviderType
-public interface UploadPortletRequestFactory {
+public interface UploadServletRequestFactory {
 
-	public UploadPortletRequest create(
-		UploadServletRequest uploadServletRequest,
-		PortletRequest portletRequest, String namespace);
+	public UploadServletRequest create(HttpServletRequest httpServletRequest);
+
+	public UploadServletRequest create(
+		HttpServletRequest httpServletRequest, int fileSizeThreshold,
+		String location);
+
+	public UploadServletRequest create(
+		HttpServletRequest httpServletRequest,
+		Map<String, FileItem[]> fileParameters,
+		Map<String, List<String>> regularParameters);
 
 }

@@ -22,7 +22,7 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestFactory;
+import com.liferay.portal.uploader.UploadServletRequestFactory;
 
 import java.io.File;
 

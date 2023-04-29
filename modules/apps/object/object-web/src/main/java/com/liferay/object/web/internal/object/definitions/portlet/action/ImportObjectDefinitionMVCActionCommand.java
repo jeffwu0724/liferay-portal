@@ -37,7 +37,7 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.upload.UploadPortletRequestFactory;
+import com.liferay.portal.uploader.UploadPortletRequestFactory;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
