@@ -874,6 +874,15 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
+	public UploadPortletRequest createUploadPortletRequest(
+		UploadServletRequest uploadServletRequest,
+		PortletRequest portletRequest, String namespace) {
+
+		return new UploadPortletRequestImpl(
+			uploadServletRequest, portletRequest, namespace);
+	}
+
+	@Override
 	public String escapeRedirect(String url) {
 		if (Validator.isNull(url)) {
 			return url;

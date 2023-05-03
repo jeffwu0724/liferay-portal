@@ -269,6 +269,14 @@ public class PortalUtil {
 		_portal.copyRequestParameters(actionRequest, actionResponse);
 	}
 
+	public static UploadPortletRequest createUploadPortletRequest(
+		UploadServletRequest uploadServletRequest,
+		PortletRequest portletRequest, String namespace) {
+
+		return _portal.createUploadPortletRequest(
+			uploadServletRequest, portletRequest, namespace);
+	}
+
 	/**
 	 * Escapes the URL for use in a redirect and checks that security settings
 	 * allow the URL is allowed for redirects.

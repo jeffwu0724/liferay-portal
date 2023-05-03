@@ -242,6 +242,10 @@ public interface Portal {
 	public void copyRequestParameters(
 		ActionRequest actionRequest, ActionResponse actionResponse);
 
+	public UploadPortletRequest createUploadPortletRequest(
+		UploadServletRequest uploadServletRequest,
+		PortletRequest portletRequest, String namespace);
+
 	/**
 	 * Escapes the URL for use in a redirect and checks that security settings
 	 * allow the URL is allowed for redirects.
