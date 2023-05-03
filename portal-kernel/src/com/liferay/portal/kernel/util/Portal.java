@@ -31,8 +31,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -1041,16 +1039,6 @@ public interface Portal {
 
 	public String getUniqueElementId(
 		PortletRequest request, String namespace, String id);
-
-	public UploadPortletRequest getUploadPortletRequest(
-		PortletRequest portletRequest);
-
-	public UploadServletRequest getUploadServletRequest(
-		HttpServletRequest httpServletRequest);
-
-	public UploadServletRequest getUploadServletRequest(
-		HttpServletRequest httpServletRequest, int fileSizeThreshold,
-		String location);
 
 	public Date getUptime();
 
