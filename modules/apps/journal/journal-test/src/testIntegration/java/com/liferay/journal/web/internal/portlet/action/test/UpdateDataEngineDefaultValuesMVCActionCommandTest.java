@@ -33,8 +33,8 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
+import com.liferay.portal.upload.factory.UploadServletRequestFactory;
 import com.liferay.portletmvc4spring.test.mock.web.portlet.MockActionRequest;
 
 import java.util.Calendar;
@@ -104,7 +104,7 @@ public class UpdateDataEngineDefaultValuesMVCActionCommandTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				new UploadServletRequestImpl(
+				_uploadServletRequestFactory.create(
 					new MockHttpServletRequest(), new HashMap<>(),
 					HashMapBuilder.put(
 						ActionRequest.ACTION_NAME,
@@ -199,5 +199,8 @@ public class UpdateDataEngineDefaultValuesMVCActionCommandTest {
 
 	@Inject
 	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }

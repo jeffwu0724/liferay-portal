@@ -22,8 +22,8 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
+import com.liferay.portal.upload.factory.UploadServletRequestFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +67,7 @@ public class UploadPortletRequestWhenCleaningUpTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				new UploadServletRequestImpl(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, new HashMap<String, List<String>>()),
 				null, _portletNamespace);
@@ -89,5 +89,8 @@ public class UploadPortletRequestWhenCleaningUpTest {
 
 	@Inject
 	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }

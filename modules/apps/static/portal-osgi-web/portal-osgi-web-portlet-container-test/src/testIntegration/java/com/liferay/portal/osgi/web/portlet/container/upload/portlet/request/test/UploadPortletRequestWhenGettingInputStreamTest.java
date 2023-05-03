@@ -24,8 +24,8 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayInputStream;
 import com.liferay.portal.upload.LiferayServletRequest;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
+import com.liferay.portal.upload.factory.UploadServletRequestFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +65,7 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				new UploadServletRequestImpl(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
 
@@ -75,7 +75,7 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 		Assert.assertFalse(servletInputStream instanceof LiferayInputStream);
 
 		uploadPortletRequest = _uploadPortletRequestFactory.create(
-			new UploadServletRequestImpl(
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				new HashMap<String, FileItem[]>(),
 				new HashMap<String, List<String>>()),
@@ -94,7 +94,7 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				new UploadServletRequestImpl(
+				_uploadServletRequestFactory.create(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
 
@@ -112,5 +112,8 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 	@Inject
 	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }

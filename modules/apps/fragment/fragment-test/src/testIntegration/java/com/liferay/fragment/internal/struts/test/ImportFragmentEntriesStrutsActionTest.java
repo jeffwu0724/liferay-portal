@@ -46,8 +46,8 @@ import com.liferay.portal.kernel.zip.ZipWriter;
 import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
+import com.liferay.portal.upload.factory.UploadServletRequestFactory;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -121,7 +121,7 @@ public class ImportFragmentEntriesStrutsActionTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				new UploadServletRequestImpl(
+				_uploadServletRequestFactory.create(
 					httpServletRequest, fileParameters,
 					HashMapBuilder.put(
 						"groupId",
@@ -298,6 +298,9 @@ public class ImportFragmentEntriesStrutsActionTest {
 
 	@Inject
 	private UploadPortletRequestFactory _uploadPortletRequestFactory;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 	private User _user;
 

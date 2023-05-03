@@ -17,10 +17,13 @@ package com.liferay.portal.osgi.web.portlet.container.upload.servlet.request.tes
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
 import com.liferay.portal.upload.UploadServletRequestImpl;
+import com.liferay.portal.upload.factory.UploadServletRequestFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,19 +66,18 @@ public class UploadServletRequestWhenGettingFileNameTest {
 			PortletContainerTestUtil.getMultipartRequest(
 				_fileNameParameter, _BYTES);
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				fileParameters, new HashMap<String, List<String>>());
 
 		Map<String, FileItem[]> map =
-			uploadServletRequestImpl.getMultipartParameterMap();
+			uploadServletRequest.getMultipartParameterMap();
 
 		Assert.assertEquals(map.toString(), 1, map.size());
 
 		for (Map.Entry<String, FileItem[]> entry : map.entrySet()) {
-			String fileName = uploadServletRequestImpl.getFileName(
-				entry.getKey());
+			String fileName = uploadServletRequest.getFileName(entry.getKey());
 
 			FileItem[] fileItems = entry.getValue();
 
@@ -91,14 +93,13 @@ public class UploadServletRequestWhenGettingFileNameTest {
 			PortletContainerTestUtil.getMultipartRequest(
 				_fileNameParameter, _BYTES);
 
-		UploadServletRequestImpl uploadServletRequestImpl =
-			new UploadServletRequestImpl(
+		UploadServletRequest uploadServletRequest =
+			_uploadServletRequestFactory.create(
 				(HttpServletRequest)liferayServletRequest.getRequest(),
 				new HashMap<String, FileItem[]>(),
 				new HashMap<String, List<String>>());
 
-		Assert.assertNull(
-			uploadServletRequestImpl.getFileName("irrelevantName"));
+		Assert.assertNull(uploadServletRequest.getFileName("irrelevantName"));
 	}
 
 	@Test
@@ -125,5 +126,8 @@ public class UploadServletRequestWhenGettingFileNameTest {
 		"Enterprise. Open Source. For Life.".getBytes();
 
 	private static String _fileNameParameter;
+
+	@Inject
+	private UploadServletRequestFactory _uploadServletRequestFactory;
 
 }
