@@ -63,10 +63,10 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.upload.UploadResponseHandler;
 
 import java.io.IOException;
@@ -128,7 +128,7 @@ public class EditFileEntryImageEditorMVCActionCommand
 
 			_updateFileEntry(
 				actionRequest, actionResponse,
-				_portal.getUploadPortletRequest(actionRequest));
+				_uploadPortal.getUploadPortletRequest(actionRequest));
 
 			String portletResource = ParamUtil.getString(
 				actionRequest, "portletResource");
@@ -406,6 +406,6 @@ public class EditFileEntryImageEditorMVCActionCommand
 	private UploadResponseHandler _multipleUploadResponseHandler;
 
 	@Reference
-	private Portal _portal;
+	private UploadPortal _uploadPortal;
 
 }
