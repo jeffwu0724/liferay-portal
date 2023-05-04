@@ -12,13 +12,14 @@
  * details.
  */
 
-package com.liferay.portal.upload;
+package com.liferay.portal.upload.internal;
 
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.upload.LiferayInputStream;
 
 import java.io.InputStream;
 
