@@ -16,6 +16,7 @@ package com.liferay.portal.remote.json.web.service.web.internal;
 
 import com.liferay.petra.memory.DeleteFileFinalizeAction;
 import com.liferay.petra.memory.FinalizeManager;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
 import com.liferay.portal.kernel.servlet.HttpMethods;
@@ -23,13 +24,14 @@ import com.liferay.portal.kernel.test.FinalizeManagerUtil;
 import com.liferay.portal.kernel.test.GCUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalImpl;
 
 import java.io.File;
@@ -37,10 +39,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -50,8 +52,11 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import org.mockito.Mockito;
+
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockServletContext;
 
 /**
  * @author Igor Spasic
@@ -145,28 +150,15 @@ public class JSONWebServiceServiceActionTest
 	public void testMultipartRequest() throws Exception {
 		registerActionClass(FooService.class);
 
-		Map<String, FileItem[]> fileParams =
-			HashMapBuilder.<String, FileItem[]>put(
-				"fileName", new FileItem[] {_createFileItem("aaa")}
-			).build();
-
-		HttpServletRequest httpServletRequest = new UploadServletRequestImpl(
-			createHttpRequest("/foo/add-file"), fileParams, null) {
-
-			@Override
-			public String getFileName(String name) {
-				return "test";
-			}
-
-			@Override
-			public Map<String, FileItem[]> getMultipartParameterMap() {
-				return fileParams;
-			}
-
-		};
+		UploadServletRequest mockHttpServletRequest =
+			_createMockHttpServletRequest(
+				"/foo/add-file",
+				HashMapBuilder.<String, FileItem[]>put(
+					"fileName", new FileItem[] {_createFileItem("aaa")}
+				).build());
 
 		JSONWebServiceAction jsonWebServiceAction = lookupJSONWebServiceAction(
-			httpServletRequest);
+			mockHttpServletRequest);
 
 		Assert.assertNotNull(jsonWebServiceAction);
 	}
@@ -175,18 +167,20 @@ public class JSONWebServiceServiceActionTest
 	public void testMultipartRequestFilesUpload() throws Exception {
 		registerActionClass(FooService.class);
 
-		HttpServletRequest httpServletRequest = new UploadServletRequestImpl(
-			createHttpRequest("/foo/upload-files"),
-			HashMapBuilder.<String, FileItem[]>put(
-				"firstFile", new FileItem[] {_createFileItem("aaa")}
-			).put(
-				"otherFiles",
-				new FileItem[] {_createFileItem("bbb"), _createFileItem("ccc")}
-			).build(),
-			null);
+		UploadServletRequest mockHttpServletRequest =
+			_createMockHttpServletRequest(
+				"/foo/upload-files",
+				HashMapBuilder.<String, FileItem[]>put(
+					"firstFile", new FileItem[] {_createFileItem("aaa")}
+				).put(
+					"otherFiles",
+					new FileItem[] {
+						_createFileItem("bbb"), _createFileItem("ccc")
+					}
+				).build());
 
 		JSONWebServiceAction jsonWebServiceAction = lookupJSONWebServiceAction(
-			httpServletRequest);
+			mockHttpServletRequest);
 
 		Assert.assertNotNull(jsonWebServiceAction);
 
@@ -344,6 +338,66 @@ public class JSONWebServiceServiceActionTest
 
 			},
 			null);
+	}
+
+	private UploadServletRequest _createMockHttpServletRequest(
+			String path, Map<String, FileItem[]> fileParams)
+		throws Exception {
+
+		UploadServletRequest mockHttpServletRequest = Mockito.mock(
+			UploadServletRequest.class);
+
+		Mockito.when(
+			mockHttpServletRequest.getAttribute(WebKeys.ORIGINAL_PATH_INFO)
+		).thenReturn(
+			path
+		);
+
+		Mockito.when(
+			mockHttpServletRequest.getMethod()
+		).thenReturn(
+			"GET"
+		);
+
+		Mockito.when(
+			mockHttpServletRequest.getParameterNames()
+		).thenReturn(
+			Collections.enumeration(Arrays.asList("fileName"))
+		);
+
+		Mockito.when(
+			mockHttpServletRequest.getAttributeNames()
+		).thenReturn(
+			Collections.enumeration(Arrays.asList(WebKeys.ORIGINAL_PATH_INFO))
+		);
+
+		Mockito.when(
+			mockHttpServletRequest.getServletContext()
+		).thenReturn(
+			new MockServletContext() {
+				{
+					setContextPath(StringPool.BLANK);
+					setServletContextName(StringPool.BLANK);
+				}
+			}
+		);
+		Mockito.when(
+			mockHttpServletRequest.getParameterValues(Mockito.anyString())
+		).thenReturn(
+			new String[] {"Jupiter", "173"}
+		);
+		Mockito.when(
+			mockHttpServletRequest.getMultipartParameterMap()
+		).thenReturn(
+			fileParams
+		);
+		Mockito.when(
+			mockHttpServletRequest.getFileName(Mockito.anyString())
+		).thenReturn(
+			"test"
+		);
+
+		return mockHttpServletRequest;
 	}
 
 	private static JSONWebServiceServiceAction _jsonWebServiceServiceAction;
