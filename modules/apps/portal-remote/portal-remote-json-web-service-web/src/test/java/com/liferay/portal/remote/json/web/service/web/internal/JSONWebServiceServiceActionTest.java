@@ -23,13 +23,17 @@ import com.liferay.portal.kernel.test.FinalizeManagerUtil;
 import com.liferay.portal.kernel.test.GCUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.kernel.upload.configuration.UploadServletRequestConfigurationProviderUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.upload.ServletFileUpload;
 import com.liferay.portal.upload.UploadServletRequestImpl;
+
 import com.liferay.portal.util.PortalImpl;
 
 import java.io.File;
@@ -37,7 +41,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +57,8 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -175,18 +184,52 @@ public class JSONWebServiceServiceActionTest
 	public void testMultipartRequestFilesUpload() throws Exception {
 		registerActionClass(FooService.class);
 
-		HttpServletRequest httpServletRequest = new UploadServletRequestImpl(
-			createHttpRequest("/foo/upload-files"),
-			HashMapBuilder.<String, FileItem[]>put(
-				"firstFile", new FileItem[] {_createFileItem("aaa")}
-			).put(
-				"otherFiles",
-				new FileItem[] {_createFileItem("bbb"), _createFileItem("ccc")}
-			).build(),
-			null);
+//		HttpServletRequest httpServletRequest = new UploadServletRequestImpl(
+//			createHttpRequest("/foo/upload-files"),
+//			HashMapBuilder.<String, FileItem[]>put(
+//				"firstFile", new FileItem[] {_createFileItem("aaa")}
+//			).put(
+//				"otherFiles",
+//				new FileItem[] {_createFileItem("bbb"), _createFileItem("ccc")}
+//			).build(),
+//			null);
+
+		MockedStatic<UploadServletRequestConfigurationProviderUtil>
+			_uploadServletRequestConfigurationProviderUtilMockedStatic = Mockito.mockStatic(
+			UploadServletRequestConfigurationProviderUtil.class);
+
+		_uploadServletRequestConfigurationProviderUtilMockedStatic.when(UploadServletRequestConfigurationProviderUtil::getMaxSize).thenReturn(0L);
+		_uploadServletRequestConfigurationProviderUtilMockedStatic.when(UploadServletRequestConfigurationProviderUtil::getTempDir).thenReturn("java.io.tmpdir");
+		
+//		MockedStatic<ServletFileUpload>
+//			_servletFileUploadMockedStatic = Mockito.mockStatic(
+//			ServletFileUpload.class);
+
+//		List<FileItem> mockFileItems = new ArrayList<>();
+//
+//		FileItem mockFileItem1 = Mockito.mock(FileItem.class);
+//		FileItem mockFileItem2 = Mockito.mock(FileItem.class);
+//		mockFileItems.add(mockFileItem1);
+//		mockFileItems.add(mockFileItem2);
+
+		ServletFileUpload _servletFileUpload = Mockito.mock(ServletFileUpload.class);
+		Mockito.when(_servletFileUpload.parseRequest(
+			Mockito.any(HttpServletRequest.class),
+			Mockito.anyString(),
+			Mockito.anyInt()
+		)).thenReturn(null);
+
+		UploadServletRequest uploadServletRequest = PortalUtil.getUploadServletRequest(createHttpRequest("/foo/upload-files"));
+		ReflectionTestUtil.setFieldValue(uploadServletRequest, "_fileParameters", HashMapBuilder.<String, FileItem[]>put(
+			"firstFile", new FileItem[] {_createFileItem("aaa")}
+		).put(
+			"otherFiles",
+			new FileItem[] {_createFileItem("bbb"), _createFileItem("ccc")}
+		).build());
+		ReflectionTestUtil.setFieldValue(uploadServletRequest, "_regularParameters", null);
 
 		JSONWebServiceAction jsonWebServiceAction = lookupJSONWebServiceAction(
-			httpServletRequest);
+			uploadServletRequest);
 
 		Assert.assertNotNull(jsonWebServiceAction);
 
