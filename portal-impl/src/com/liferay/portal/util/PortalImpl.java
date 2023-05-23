@@ -533,6 +533,15 @@ public class PortalImpl implements Portal {
 				PropsValues.VIRTUAL_HOSTS_VALID_HOSTS, StringPool.STAR)) {
 
 			_validPortalDomainCheckDisabled = true;
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					StringBundler.concat(
+						"Please modify the default value of '",
+						PropsKeys.VIRTUAL_HOSTS_VALID_HOSTS,
+						"' in portal.properties to be 'localhost, 127.0.0.1, ",
+						"[::1], or [0:0:0:0:0:0:0:1]'"));
+			}
 		}
 		else {
 			_validPortalDomainCheckDisabled = false;
