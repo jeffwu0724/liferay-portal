@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.LayoutTypePortletFactoryUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -37,6 +38,7 @@ import com.liferay.portal.model.impl.PortletAppImpl;
 import com.liferay.portal.model.impl.PortletImpl;
 import com.liferay.portal.model.impl.UserImpl;
 import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.theme.ThemeDisplayFactory;
@@ -49,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -734,6 +737,36 @@ public class PortalImplUnitTest {
 			"/web/group",
 			_portalImpl.updateRedirect(
 				"/web/group/layout", "/group/layout", "/group"));
+	}
+
+	@Test
+	public void testValidHostsWarningLog() throws PortletException {
+		String host = PropsUtil.get(PropsKeys.VIRTUAL_HOSTS_VALID_HOSTS);
+
+		PropsUtil.set(PropsKeys.VIRTUAL_HOSTS_VALID_HOSTS, "*");
+
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				PortalImpl.class.getName(), Level.WARNING)) {
+
+			new PortalImpl();
+
+			List<LogEntry> logEntries = logCapture.getLogEntries();
+
+			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
+
+			LogEntry logEntry = logEntries.get(0);
+
+			Assert.assertEquals(
+				StringBundler.concat(
+					"Please modify the default value of '",
+					PropsKeys.VIRTUAL_HOSTS_VALID_HOSTS,
+					"' in portal.properties to be 'localhost, 127.0.0.1, ",
+					"[::1], or [0:0:0:0:0:0:0:1]'"),
+				logEntry.getMessage());
+		}
+		finally {
+			PropsUtil.set(PropsKeys.VIRTUAL_HOSTS_VALID_HOSTS, host);
+		}
 	}
 
 	protected HttpServletRequest getWrappedRequest(
