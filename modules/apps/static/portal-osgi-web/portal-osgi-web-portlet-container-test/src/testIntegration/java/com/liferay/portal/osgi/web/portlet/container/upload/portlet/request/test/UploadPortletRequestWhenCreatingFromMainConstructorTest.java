@@ -23,6 +23,7 @@ import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerT
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.upload.test.util.UploadTestUtil;
 
 import java.util.List;
@@ -65,8 +66,8 @@ public class UploadPortletRequestWhenCreatingFromMainConstructorTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			UploadTestUtil.createUploadPortletRequest(
-				_portal.getUploadServletRequest(mockHttpServletRequest), null,
-				_portletNamespace);
+				_uploadPortal.getUploadServletRequest(mockHttpServletRequest),
+				null, _portletNamespace);
 
 		Map<String, FileItem[]> multipartParameterMap =
 			uploadPortletRequest.getMultipartParameterMap();
@@ -90,5 +91,8 @@ public class UploadPortletRequestWhenCreatingFromMainConstructorTest {
 
 	@Inject
 	private Portal _portal;
+
+	@Inject
+	private UploadPortal _uploadPortal;
 
 }
