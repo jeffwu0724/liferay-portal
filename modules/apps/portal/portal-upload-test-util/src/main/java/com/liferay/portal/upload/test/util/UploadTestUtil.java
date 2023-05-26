@@ -14,10 +14,11 @@
 
 package com.liferay.portal.upload.test.util;
 
+import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.upload.UploadPortal;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class UploadTestUtil {
 		Map<String, List<String>> regularParameters) {
 
 		UploadServletRequest uploadServletRequest =
-			PortalUtil.getUploadServletRequest(httpServletRequest);
+			_uploadPortal.getUploadServletRequest(httpServletRequest);
 
 		ReflectionTestUtil.setFieldValue(
 			uploadServletRequest, "_fileParameters", fileParameters);
@@ -44,5 +45,10 @@ public class UploadTestUtil {
 
 		return uploadServletRequest;
 	}
+
+	private static final UploadPortal _uploadPortal =
+		UploadTestUtil._uploadPortalSnapshot.get();
+	private static final Snapshot<UploadPortal> _uploadPortalSnapshot =
+		new Snapshot<>(UploadTestUtil.class, UploadPortal.class);
 
 }
