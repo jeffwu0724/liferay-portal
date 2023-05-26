@@ -25,6 +25,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayInputStream;
 import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.upload.test.util.UploadTestUtil;
 
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class UploadServletRequestWhenGettingInputStreamTest {
 				_fileNameParameter, _BYTES);
 
 		UploadServletRequest uploadServletRequest =
-			_portal.getUploadServletRequest(
+			_uploadPortal.getUploadServletRequest(
 				(HttpServletRequest)liferayServletRequest.getRequest());
 
 		ServletInputStream servletInputStream =
@@ -89,7 +90,7 @@ public class UploadServletRequestWhenGettingInputStreamTest {
 				_fileNameParameter, _BYTES);
 
 		UploadServletRequest uploadServletRequest =
-			_portal.getUploadServletRequest(
+			_uploadPortal.getUploadServletRequest(
 				(HttpServletRequest)liferayServletRequest.getRequest());
 
 		ServletInputStream servletInputStream =
@@ -106,5 +107,8 @@ public class UploadServletRequestWhenGettingInputStreamTest {
 
 	@Inject
 	private Portal _portal;
+
+	@Inject
+	private UploadPortal _uploadPortal;
 
 }
