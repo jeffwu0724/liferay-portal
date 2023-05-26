@@ -25,6 +25,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.LiferayInputStream;
 import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.UploadPortal;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
 import com.liferay.portal.upload.test.util.UploadTestUtil;
 
@@ -66,7 +67,7 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				_portal.getUploadServletRequest(
+				_uploadPortal.getUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
 
@@ -95,7 +96,7 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 		UploadPortletRequest uploadPortletRequest =
 			_uploadPortletRequestFactory.create(
-				_portal.getUploadServletRequest(
+				_uploadPortal.getUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
 
@@ -113,6 +114,9 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 
 	@Inject
 	private Portal _portal;
+
+	@Inject
+	private UploadPortal _uploadPortal;
 
 	@Inject
 	private UploadPortletRequestFactory _uploadPortletRequestFactory;
