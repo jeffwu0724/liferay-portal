@@ -35,8 +35,10 @@ public class UploadTestUtil {
 		Map<String, FileItem[]> fileParameters,
 		Map<String, List<String>> regularParameters) {
 
+		UploadPortal uploadPortal = _uploadPortalSnapshot.get();
+
 		UploadServletRequest uploadServletRequest =
-			_uploadPortal.getUploadServletRequest(httpServletRequest);
+			uploadPortal.getUploadServletRequest(httpServletRequest);
 
 		ReflectionTestUtil.setFieldValue(
 			uploadServletRequest, "_fileParameters", fileParameters);
@@ -46,8 +48,6 @@ public class UploadTestUtil {
 		return uploadServletRequest;
 	}
 
-	private static final UploadPortal _uploadPortal =
-		UploadTestUtil._uploadPortalSnapshot.get();
 	private static final Snapshot<UploadPortal> _uploadPortalSnapshot =
 		new Snapshot<>(UploadTestUtil.class, UploadPortal.class);
 
