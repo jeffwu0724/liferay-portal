@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.upload;
+package com.liferay.portal.upload;
 
 /**
  * @author Brian Wing Shun Chan
