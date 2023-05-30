@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.kernel.upload;
+package com.liferay.portal.upload;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
