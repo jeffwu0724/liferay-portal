@@ -16,14 +16,14 @@ package com.liferay.portal.osgi.web.portlet.container.upload.portlet.request.tes
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.portal.upload.LiferayServletRequest;
 import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.UploadPortletRequest;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
 
 import java.util.List;

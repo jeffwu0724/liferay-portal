@@ -14,7 +14,7 @@
 
 package com.liferay.saml.opensaml.integration.processor;
 
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.saml.persistence.model.SamlSpIdpConnection;
 
 /**

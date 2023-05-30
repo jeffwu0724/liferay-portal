@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactoryUtil;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -28,6 +27,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 import com.liferay.portal.upload.LiferayInputStream;
 import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.UploadServletRequest;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

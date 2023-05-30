@@ -70,6 +70,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadException;
 import com.liferay.staging.StagingGroupHelper;
 import com.liferay.translation.security.permission.TranslationPermission;
 import com.liferay.translation.url.provider.TranslationURLProvider;

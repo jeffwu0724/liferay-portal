@@ -16,9 +16,9 @@ package com.liferay.portal.upload.test.util;
 
 import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.UploadServletRequest;
 
 import java.util.List;
 import java.util.Map;

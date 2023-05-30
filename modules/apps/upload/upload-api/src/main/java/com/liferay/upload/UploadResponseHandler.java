@@ -17,7 +17,7 @@ package com.liferay.upload;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadPortletRequest;
 
 import javax.portlet.PortletRequest;
 

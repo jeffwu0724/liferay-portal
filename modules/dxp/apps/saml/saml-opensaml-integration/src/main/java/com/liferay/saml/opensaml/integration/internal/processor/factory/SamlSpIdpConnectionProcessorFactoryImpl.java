@@ -18,7 +18,7 @@ import com.liferay.petra.function.UnsafeBiConsumer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModel;
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.saml.opensaml.integration.field.expression.handler.SamlSpIdpConnectionFieldExpressionHandler;
 import com.liferay.saml.opensaml.integration.field.expression.handler.registry.SamlSpIdpConnectionFieldExpressionHandlerRegistry;
 import com.liferay.saml.opensaml.integration.internal.processor.BaseProcessorImpl;

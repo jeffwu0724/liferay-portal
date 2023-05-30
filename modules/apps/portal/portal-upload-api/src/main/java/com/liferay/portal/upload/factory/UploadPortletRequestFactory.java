@@ -14,8 +14,8 @@
 
 package com.liferay.portal.upload.factory;
 
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadServletRequest;
 
 import javax.portlet.PortletRequest;
 

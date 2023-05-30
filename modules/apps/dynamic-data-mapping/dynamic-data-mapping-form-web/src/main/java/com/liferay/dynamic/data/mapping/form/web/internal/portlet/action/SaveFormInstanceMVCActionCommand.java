@@ -24,10 +24,10 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseTransactionalMVCActionC
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.upload.LiferayFileItemException;
-import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.LiferayFileItemException;
+import com.liferay.portal.upload.UploadException;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
