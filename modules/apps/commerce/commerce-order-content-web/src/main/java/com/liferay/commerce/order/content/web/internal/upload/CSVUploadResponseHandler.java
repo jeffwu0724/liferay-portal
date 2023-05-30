@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadPortletRequest;
 import com.liferay.upload.UploadResponseHandler;
 
 import javax.portlet.PortletRequest;

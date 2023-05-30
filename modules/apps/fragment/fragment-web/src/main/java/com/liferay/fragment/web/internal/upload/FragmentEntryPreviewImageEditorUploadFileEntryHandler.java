@@ -20,8 +20,8 @@ import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortletRequest;
 import com.liferay.upload.BaseImageEditorUploadFileEntryHandler;
 import com.liferay.upload.UniqueFileNameProvider;
 
