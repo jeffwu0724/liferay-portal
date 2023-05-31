@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
+import com.liferay.portal.upload.UploadPortletRequest;
 import com.liferay.upload.UploadResponseHandler;
 
 import javax.portlet.PortletRequest;
@@ -63,7 +64,7 @@ public class ImageJournalUploadResponseHandler
 
 	@Override
 	public JSONObject onSuccess(
-			UploadPortletRequest uploadPortletRequest, FileEntry fileEntry)
+		UploadPortletRequest uploadPortletRequest, FileEntry fileEntry)
 		throws PortalException {
 
 		JSONObject jsonObject = _itemSelectorUploadResponseHandler.onSuccess(

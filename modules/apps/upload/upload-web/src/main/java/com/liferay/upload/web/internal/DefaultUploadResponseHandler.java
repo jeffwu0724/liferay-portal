@@ -32,6 +32,8 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadRequestSizeException;
 import com.liferay.upload.UploadResponseHandler;
 
 import java.util.Map;
@@ -118,7 +120,7 @@ public class DefaultUploadResponseHandler implements UploadResponseHandler {
 
 	@Override
 	public JSONObject onSuccess(
-			UploadPortletRequest uploadPortletRequest, FileEntry fileEntry)
+		UploadPortletRequest uploadPortletRequest, FileEntry fileEntry)
 		throws PortalException {
 
 		return JSONUtil.put(
