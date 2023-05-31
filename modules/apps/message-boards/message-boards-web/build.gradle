@@ -13,6 +13,7 @@ dependencies {
 	compileOnly project(":apps:asset:asset-display-page-api")
 	compileOnly project(":apps:asset:asset-taglib")
 	compileOnly project(":apps:captcha:captcha-api")
+	compileOnly project(":apps:captcha:captcha-api")
 	compileOnly project(":apps:captcha:captcha-taglib")
 	compileOnly project(":apps:change-tracking:change-tracking-spi")
 	compileOnly project(":apps:document-library:document-library-api")
