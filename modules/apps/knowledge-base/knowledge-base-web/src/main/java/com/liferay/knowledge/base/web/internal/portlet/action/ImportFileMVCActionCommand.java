@@ -34,6 +34,8 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.upload.LiferayFileItemException;
+import com.liferay.portal.upload.UploadException;
 import com.liferay.portal.upload.UploadPortal;
 
 import java.io.InputStream;
@@ -42,6 +44,8 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 
+import com.liferay.portal.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadRequestSizeException;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
