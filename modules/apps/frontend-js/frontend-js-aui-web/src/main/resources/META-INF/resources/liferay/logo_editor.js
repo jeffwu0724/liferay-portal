@@ -26,9 +26,7 @@ AUI.add(
 
 				maxFileSize: {
 					validator: Lang.isNumber,
-					value:
-						Liferay.PropsValues
-							.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE,
+					value: UploadServletRequestConfigurationProviderUtil.getMaxSize(),
 				},
 
 				preserveRatio: {

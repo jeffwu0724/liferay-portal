@@ -33,8 +33,7 @@ function SingleFileUploader({
 	closeCaption,
 	editImageURL,
 	itemSelectedEventName,
-	maxFileSize: initialMaxFileSizeString = Liferay.PropsValues
-		.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE,
+	maxFileSize: initialMaxFileSizeString = UploadServletRequestConfigurationProviderUtil.getMaxSize(),
 	mimeTypeRestriction,
 	uploadItemReturnType,
 	uploadItemURL,

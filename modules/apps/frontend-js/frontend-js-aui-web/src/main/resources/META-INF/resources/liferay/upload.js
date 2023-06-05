@@ -203,9 +203,7 @@ AUI.add(
 
 				maxFileSize: {
 					setter: Lang.toInt,
-					value:
-						Liferay.PropsValues
-							.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE,
+					value: UploadServletRequestConfigurationProviderUtil.getMaxSize(),
 				},
 
 				metadataContainer: {
@@ -465,9 +463,7 @@ AUI.add(
 					const strings = instance.get(STRINGS);
 
 					const maxFileSize = instance.get('maxFileSize');
-					const maxUploadRequestSize =
-						Liferay.PropsValues
-							.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE;
+					const maxUploadRequestSize = UploadServletRequestConfigurationProviderUtil.getMaxSize();
 
 					return data.filter((item) => {
 						const id = item.get('id') || A.guid();
@@ -1490,8 +1486,7 @@ AUI.add(
 						);
 
 						const maxUploadRequestSize = Liferay.Util.formatStorage(
-							Liferay.PropsValues
-								.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE
+							UploadServletRequestConfigurationProviderUtil.getMaxSize()
 						);
 
 						instance._invalidFileSizeText = Lang.sub(

@@ -199,9 +199,7 @@ AUI.add(
 					validator(val) {
 						return isNumber(val) && val > 0;
 					},
-					value:
-						Liferay.PropsValues
-							.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE,
+					value: UploadServletRequestConfigurationProviderUtil.getMaxSize(),
 				},
 
 				redirect: {

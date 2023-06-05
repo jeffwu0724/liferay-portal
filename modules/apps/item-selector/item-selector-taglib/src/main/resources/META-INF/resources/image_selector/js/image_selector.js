@@ -82,9 +82,7 @@ AUI.add(
 
 				maxFileSize: {
 					setter: Lang.toInt,
-					value:
-						Liferay.PropsValues
-							.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE,
+					value: UploadServletRequestConfigurationProviderUtil.getMaxSize(),
 				},
 
 				paramName: {
@@ -529,9 +527,7 @@ AUI.add(
 						errorType ===
 						STATUS_CODE.SC_UPLOAD_REQUEST_SIZE_EXCEPTION
 					) {
-						const maxUploadRequestSize =
-							Liferay.PropsValues
-								.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE;
+						const maxUploadRequestSize = UploadServletRequestConfigurationProviderUtil.getMaxSize();
 
 						message = Lang.sub(
 							Liferay.Language.get(

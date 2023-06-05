@@ -430,8 +430,7 @@ const Main = ({
 	};
 
 	const isExceededUploadRequestSizeLimit = (fileSize) => {
-		const uploadRequestSizeLimit =
-			Liferay.PropsValues.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE;
+		const uploadRequestSizeLimit = UploadServletRequestConfigurationProviderUtil.getMaxSize();
 
 		if (fileSize <= uploadRequestSizeLimit) {
 			return false;
