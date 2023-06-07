@@ -144,12 +144,7 @@ public class UpdateTemplateEntryMVCActionCommand
 		LiferayPortletRequest liferayPortletRequest =
 			_portal.getLiferayPortletRequest(actionRequest);
 
-		return _uploadPortletRequestFactory.create(
-			_portal.getUploadServletRequest(
-				liferayPortletRequest.getHttpServletRequest()),
-			liferayPortletRequest,
-			_portal.getPortletNamespace(
-				liferayPortletRequest.getPortletName()));
+		return _portal.getUploadPortletRequest(liferayPortletRequest);
 	}
 
 	@Reference

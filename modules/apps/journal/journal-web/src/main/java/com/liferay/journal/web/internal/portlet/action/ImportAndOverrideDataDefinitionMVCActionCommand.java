@@ -103,12 +103,7 @@ public class ImportAndOverrideDataDefinitionMVCActionCommand
 		LiferayPortletRequest liferayPortletRequest =
 			_portal.getLiferayPortletRequest(actionRequest);
 
-		return _uploadPortletRequestFactory.create(
-			_portal.getUploadServletRequest(
-				liferayPortletRequest.getHttpServletRequest()),
-			liferayPortletRequest,
-			_portal.getPortletNamespace(
-				liferayPortletRequest.getPortletName()));
+		return _portal.getUploadPortletRequest(liferayPortletRequest);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
