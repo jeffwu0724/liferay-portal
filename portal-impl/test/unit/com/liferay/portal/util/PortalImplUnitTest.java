@@ -140,38 +140,18 @@ public class PortalImplUnitTest {
 	}
 
 	@Test
-	public void testGetForwardedHostWithCustomXForwardedHostEnabled()
+	public void testGetForwardedHostWithCustomXForwardedHostEnabledAndNotValidHost()
 		throws Exception {
 
-		boolean webServerForwardedHostEnabled =
-			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
-		String webServerForwardedHostHeader =
-			PropsValues.WEB_SERVER_FORWARDED_HOST_HEADER;
+		_testGetForwardedHostWithoutValidHost("X-Forwarded-Custom-Host");
+	}
 
-		try {
-			setPropsValuesValue("WEB_SERVER_FORWARDED_HOST_ENABLED", true);
-			setPropsValuesValue(
-				"WEB_SERVER_FORWARDED_HOST_HEADER", "X-Forwarded-Custom-Host");
+	@Test
+	public void testGetForwardedHostWithCustomXForwardedHostEnabledAndValidHost()
+		throws Exception {
 
-			MockHttpServletRequest mockHttpServletRequest =
-				new MockHttpServletRequest();
-
-			mockHttpServletRequest.addHeader(
-				"X-Forwarded-Custom-Host", "forwardedServer");
-			mockHttpServletRequest.setServerName("serverName");
-
-			Assert.assertEquals(
-				"forwardedServer",
-				_portalImpl.getForwardedHost(mockHttpServletRequest));
-		}
-		finally {
-			setPropsValuesValue(
-				"WEB_SERVER_FORWARDED_HOST_ENABLED",
-				webServerForwardedHostEnabled);
-			setPropsValuesValue(
-				"WEB_SERVER_FORWARDED_HOST_HEADER",
-				webServerForwardedHostHeader);
-		}
+		_testGetForwardedHostWithValidHost(
+			"X-Forwarded-Custom-Host", "forwardedServer");
 	}
 
 	@Test
@@ -203,31 +183,18 @@ public class PortalImplUnitTest {
 	}
 
 	@Test
-	public void testGetForwardedHostWithXForwardedHostEnabled()
+	public void testGetForwardedHostWithXForwardedHostEnabledAndNotValidHost()
 		throws Exception {
 
-		boolean webServerForwardedHostEnabled =
-			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
+		_testGetForwardedHostWithoutValidHost("X-Forwarded-Host");
+	}
 
-		try {
-			setPropsValuesValue("WEB_SERVER_FORWARDED_HOST_ENABLED", true);
+	@Test
+	public void testGetForwardedHostWithXForwardedHostEnabledAndValidHost()
+		throws Exception {
 
-			MockHttpServletRequest mockHttpServletRequest =
-				new MockHttpServletRequest();
-
-			mockHttpServletRequest.addHeader(
-				"X-Forwarded-Host", "forwardedServer");
-			mockHttpServletRequest.setServerName("serverName");
-
-			Assert.assertEquals(
-				"forwardedServer",
-				_portalImpl.getForwardedHost(mockHttpServletRequest));
-		}
-		finally {
-			setPropsValuesValue(
-				"WEB_SERVER_FORWARDED_HOST_ENABLED",
-				webServerForwardedHostEnabled);
-		}
+		_testGetForwardedHostWithValidHost(
+			"X-Forwarded-Host", "forwardedServer");
 	}
 
 	@Test
@@ -870,6 +837,82 @@ public class PortalImplUnitTest {
 		return ActionResponseFactory.create(
 			_createActionRequest(portletMode), new DummyHttpServletResponse(),
 			new UserImpl(), new LayoutImpl());
+	}
+
+	private void _testGetForwardedHostWithoutValidHost(
+		String forwaredHostHeader) {
+
+		boolean webServerForwardedHostEnabled =
+			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
+
+		String webServerForwardedHostHeader =
+			PropsValues.WEB_SERVER_FORWARDED_HOST_HEADER;
+
+		try {
+			setPropsValuesValue("WEB_SERVER_FORWARDED_HOST_ENABLED", true);
+			setPropsValuesValue(
+				"WEB_SERVER_FORWARDED_HOST_HEADER", forwaredHostHeader);
+
+			MockHttpServletRequest mockHttpServletRequest =
+				new MockHttpServletRequest();
+
+			mockHttpServletRequest.addHeader(
+				forwaredHostHeader, "forwardedServer");
+			mockHttpServletRequest.setServerName("serverName");
+		}
+		catch (Exception exception) {
+			Assert.assertTrue(exception instanceof NullPointerException);
+		}
+		finally {
+			setPropsValuesValue(
+				"WEB_SERVER_FORWARDED_HOST_ENABLED",
+				webServerForwardedHostEnabled);
+			setPropsValuesValue(
+				"WEB_SERVER_FORWARDED_HOST_HEADER",
+				webServerForwardedHostHeader);
+		}
+	}
+
+	private void _testGetForwardedHostWithValidHost(
+		String forwaredHostHeader, String forwaredServer) {
+
+		boolean webServerForwardedHostEnabled =
+			PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED;
+
+		String webServerForwardedHostHeader =
+			PropsValues.WEB_SERVER_FORWARDED_HOST_HEADER;
+
+		String[] virtualHostsValidHosts = PropsValues.VIRTUAL_HOSTS_VALID_HOSTS;
+
+		try {
+			setPropsValuesValue("WEB_SERVER_FORWARDED_HOST_ENABLED", true);
+			setPropsValuesValue(
+				"WEB_SERVER_FORWARDED_HOST_HEADER", forwaredHostHeader);
+
+			setPropsValuesValue(
+				"VIRTUAL_HOSTS_VALID_HOSTS", new String[] {forwaredServer});
+
+			MockHttpServletRequest mockHttpServletRequest =
+				new MockHttpServletRequest();
+
+			mockHttpServletRequest.addHeader(
+				forwaredHostHeader, "forwardedServer");
+			mockHttpServletRequest.setServerName("serverName");
+
+			Assert.assertEquals(
+				"forwardedServer",
+				_portalImpl.getForwardedHost(mockHttpServletRequest));
+		}
+		finally {
+			setPropsValuesValue(
+				"WEB_SERVER_FORWARDED_HOST_ENABLED",
+				webServerForwardedHostEnabled);
+			setPropsValuesValue(
+				"WEB_SERVER_FORWARDED_HOST_HEADER",
+				webServerForwardedHostHeader);
+			setPropsValuesValue(
+				"VIRTUAL_HOSTS_VALID_HOSTS", virtualHostsValidHosts);
+		}
 	}
 
 	private final PortalImpl _portalImpl = new PortalImpl();
