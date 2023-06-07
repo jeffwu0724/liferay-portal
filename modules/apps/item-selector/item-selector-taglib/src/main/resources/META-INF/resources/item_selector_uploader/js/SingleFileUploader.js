@@ -33,7 +33,7 @@ function SingleFileUploader({
 	closeCaption,
 	editImageURL,
 	itemSelectedEventName,
-	maxFileSize: initialMaxFileSizeString = UploadServletRequestConfigurationProviderUtil.getMaxSize(),
+	maxFileSize: initialMaxFileSizeString = '<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>',
 	mimeTypeRestriction,
 	uploadItemReturnType,
 	uploadItemURL,

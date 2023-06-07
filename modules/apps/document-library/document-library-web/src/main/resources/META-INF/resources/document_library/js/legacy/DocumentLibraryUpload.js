@@ -199,7 +199,8 @@ AUI.add(
 					validator(val) {
 						return isNumber(val) && val > 0;
 					},
-					value: UploadServletRequestConfigurationProviderUtil.getMaxSize(),
+					value:
+						'<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>',
 				},
 
 				redirect: {

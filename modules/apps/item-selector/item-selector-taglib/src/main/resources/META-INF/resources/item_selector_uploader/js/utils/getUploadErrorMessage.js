@@ -62,7 +62,8 @@ export default function getUploadErrorMessage(error, maxFileSize) {
 
 				break;
 			case STATUS_CODE.SC_UPLOAD_REQUEST_SIZE_EXCEPTION: {
-				const maxUploadRequestSize = UploadServletRequestConfigurationProviderUtil.getMaxSize();
+				const maxUploadRequestSize =
+					'<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>';
 
 				message = sub(
 					Liferay.Language.get(

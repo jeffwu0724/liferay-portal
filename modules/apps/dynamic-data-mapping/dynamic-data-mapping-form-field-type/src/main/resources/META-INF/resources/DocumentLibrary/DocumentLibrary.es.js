@@ -430,7 +430,8 @@ const Main = ({
 	};
 
 	const isExceededUploadRequestSizeLimit = (fileSize) => {
-		const uploadRequestSizeLimit = UploadServletRequestConfigurationProviderUtil.getMaxSize();
+		const uploadRequestSizeLimit =
+			'<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>';
 
 		if (fileSize <= uploadRequestSizeLimit) {
 			return false;

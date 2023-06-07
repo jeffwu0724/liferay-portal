@@ -50,7 +50,7 @@ const ImageSelector = ({
 	isDraggable,
 	itemSelectorEventName,
 	itemSelectorURL,
-	maxFileSize = UploadServletRequestConfigurationProviderUtil.getMaxSize(),
+	maxFileSize = '<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>',
 	portletNamespace,
 	paramName,
 	uploadURL,
@@ -116,7 +116,8 @@ const ImageSelector = ({
 			);
 		}
 		else if (errorType === STATUS_CODE.SC_UPLOAD_REQUEST_SIZE_EXCEPTION) {
-			const maxUploadRequestSize = UploadServletRequestConfigurationProviderUtil.getMaxSize();
+			const maxUploadRequestSize =
+				'<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>';
 
 			message = sub(
 				Liferay.Language.get(

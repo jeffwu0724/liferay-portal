@@ -26,7 +26,8 @@ AUI.add(
 
 				maxFileSize: {
 					validator: Lang.isNumber,
-					value: UploadServletRequestConfigurationProviderUtil.getMaxSize(),
+					value:
+						'<%= UploadServletRequestConfigurationProviderUtil.getMaxSize() %>',
 				},
 
 				preserveRatio: {
