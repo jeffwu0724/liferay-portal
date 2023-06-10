@@ -2,3 +2,15 @@ Bundle-Name: Liferay Portal Upload Test Utilities
 Bundle-SymbolicName: com.liferay.portal.upload.test.util
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.portal.upload.test.util
+Import-Package:\
+	!com.sun.jna.*,\
+	\
+	!javax.annotation.meta.*,\
+	\
+	!org.opentest4j.*,\
+	!net.bytebuddy.*,\
+	!org.objenesis.*,\
+	!net.bytebuddy.*,\
+	\
+	*
+-fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning

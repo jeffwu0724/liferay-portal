@@ -69,12 +69,10 @@ public class UploadPortletRequestWhenGettingFilesAsStreamTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
-				UploadTestUtil.createUploadServletRequest(
-					(HttpServletRequest)liferayServletRequest.getRequest(),
-					new HashMap<String, FileItem[]>(),
-					new HashMap<String, List<String>>()),
-				null, _portletNamespace);
+			UploadTestUtil.createUploadPortletRequest(
+				(HttpServletRequest)liferayServletRequest.getRequest(),
+				new HashMap<String, FileItem[]>(),
+				new HashMap<String, List<String>>(), _portletNamespace);
 
 		Assert.assertNull(
 			uploadPortletRequest.getFilesAsStream("irrelevantName"));

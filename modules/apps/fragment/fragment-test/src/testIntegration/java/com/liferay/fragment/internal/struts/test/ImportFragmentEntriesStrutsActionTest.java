@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -49,6 +50,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upload.factory.UploadPortletRequestFactory;
 import com.liferay.portal.upload.test.util.UploadTestUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portletmvc4spring.test.mock.web.portlet.MockPortletRequest;
 
 import java.io.File;
 
@@ -71,6 +73,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.mockito.Mockito;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -119,16 +123,26 @@ public class ImportFragmentEntriesStrutsActionTest {
 		HttpServletRequest httpServletRequest = _getMultipartHttpServletRequest(
 			bytes, "file");
 
+		Mockito.when(
+			PortalUtil.getUploadServletRequest(Mockito.any())
+		).thenReturn(
+			UploadTestUtil.createUploadServletRequest(
+				httpServletRequest, fileParameters,
+				HashMapBuilder.put(
+					"groupId",
+					Collections.singletonList(
+						String.valueOf(_group.getGroupId()))
+				).build())
+		);
+
+		Mockito.when(
+			PortalUtil.getPortletNamespace(Mockito.any())
+		).thenReturn(
+			RandomTestUtil.randomString()
+		);
+
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
-				UploadTestUtil.createUploadServletRequest(
-					httpServletRequest, fileParameters,
-					HashMapBuilder.put(
-						"groupId",
-						Collections.singletonList(
-							String.valueOf(_group.getGroupId()))
-					).build()),
-				null, RandomTestUtil.randomString());
+			PortalUtil.getUploadPortletRequest(new MockPortletRequest());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
