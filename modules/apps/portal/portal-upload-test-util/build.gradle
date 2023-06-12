@@ -1,7 +1,11 @@
 dependencies {
-	compileOnly group: "net.bytebuddy", name: "byte-buddy", version: "1.12.9"
-	compileInclude group: "org.mockito", name: "mockito-core", version: "4.5.1"
-
+//	compileInclude group: "net.bytebuddy", name: "byte-buddy", version: "1.12.9"
+	compileOnly group: "org.mockito", name: "mockito-core", version: "4.5.1"
+//	compileOnly group: 'org.mockito', name: 'mockito-inline', version: '4.5.1'
+//	compileInclude group: "net.bytebuddy", name: "byte-buddy-agent", version: "1.12.9"
+//	compileInclude group: "org.objenesis", name: "objenesis", version: "3.2"
+	compileOnly group: "javax.servlet.jsp", name: "javax.servlet.jsp-api", version: "2.3.1"
+	compileOnly group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.test", version: "default"
@@ -11,8 +15,7 @@ dependencies {
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.http.servlet-api", version: "1.1.2"
 	compileOnly project(":apps:portal:portal-upload-api")
 
-	testIntegrationCompile group: "net.bytebuddy", name: "byte-buddy-agent", version: "1.12.9"
-	testIntegrationCompile group: "org.objenesis", name: "objenesis", version: "3.2"
+
 }
 
 liferay {

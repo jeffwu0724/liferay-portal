@@ -18,6 +18,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -31,9 +32,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.liferay.portletmvc4spring.test.mock.web.portlet.MockPortletRequest;
 import org.apache.commons.io.IOUtils;
 
 import org.junit.Assert;
@@ -68,11 +71,31 @@ public class UploadPortletRequestWhenGettingFilesAsStreamTest {
 			PortletContainerTestUtil.getMultipartRequest(
 				_portletNamespace, _BYTES);
 
-		UploadPortletRequest uploadPortletRequest =
-			UploadTestUtil.createUploadPortletRequest(
-				(HttpServletRequest)liferayServletRequest.getRequest(),
-				new HashMap<String, FileItem[]>(),
-				new HashMap<String, List<String>>(), _portletNamespace);
+		UploadPortletRequest uploadPortletRequest =(UploadPortletRequest) ProxyUtil.newProxyInstance(
+			UploadTestUtil.class.getClassLoader(),
+			new Class<?>[] {UploadPortletRequest.class},
+			(proxy, method, args) -> {
+				if (Objects.equals(
+					method.getName(), "getPortletNamespace")) {
+
+					return _portletNamespace;
+				}
+
+				if (Objects.equals(
+					method.getName(), "getUploadServletRequest")) {
+
+					return UploadTestUtil.createUploadServletRequest(
+						(HttpServletRequest)liferayServletRequest.getRequest(),
+						new HashMap<String, FileItem[]>(),
+						new HashMap<String, List<String>>());
+				}
+
+				return method.invoke(new MockPortletRequest(), args);
+			});
+//			UploadTestUtil.createUploadPortletRequest(
+//				(HttpServletRequest)liferayServletRequest.getRequest(),
+//				new HashMap<String, FileItem[]>(),
+//				new HashMap<String, List<String>>(), _portletNamespace);
 
 		Assert.assertNull(
 			uploadPortletRequest.getFilesAsStream("irrelevantName"));
