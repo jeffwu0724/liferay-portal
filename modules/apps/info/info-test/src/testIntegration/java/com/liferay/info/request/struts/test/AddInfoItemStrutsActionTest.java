@@ -78,7 +78,6 @@ import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.upload.UploadPortletRequestImpl;
 import com.liferay.portal.upload.test.util.UploadTestUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
@@ -98,6 +97,7 @@ import java.text.DecimalFormat;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -470,7 +470,7 @@ public class AddInfoItemStrutsActionTest {
 		MockMultipartHttpServletRequest mockMultipartHttpServletRequest =
 			new MockMultipartHttpServletRequest();
 
-		Map<String, FileItem[]> fileParameters = null;
+		Map<String, FileItem[]> fileParameters = new HashMap<>();
 
 		if (attachmentValue != null) {
 			byte[] bytes = attachmentValue.getBytes(StandardCharsets.UTF_8);
@@ -485,7 +485,7 @@ public class AddInfoItemStrutsActionTest {
 			HttpHeaders.REFERER, "https://example.com/error");
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					mockMultipartHttpServletRequest, fileParameters,
 					HashMapBuilder.put(
