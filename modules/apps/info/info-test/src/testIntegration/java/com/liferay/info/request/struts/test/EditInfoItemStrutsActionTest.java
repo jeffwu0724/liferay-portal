@@ -78,7 +78,6 @@ import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.upload.UploadPortletRequestImpl;
 import com.liferay.portal.upload.test.util.UploadTestUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
@@ -484,7 +483,7 @@ public class EditInfoItemStrutsActionTest {
 			HttpHeaders.REFERER, "https://example.com/error");
 
 		UploadPortletRequest uploadPortletRequest =
-			new UploadPortletRequestImpl(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					mockMultipartHttpServletRequest, fileParameters,
 					HashMapBuilder.put(
