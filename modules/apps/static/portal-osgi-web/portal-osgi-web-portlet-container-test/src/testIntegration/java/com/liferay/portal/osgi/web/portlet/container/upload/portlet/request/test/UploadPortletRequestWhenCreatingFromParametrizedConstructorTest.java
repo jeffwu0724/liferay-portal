@@ -57,7 +57,8 @@ public class UploadPortletRequestWhenCreatingFromParametrizedConstructorTest {
 	}
 
 	@Test
-	public void testShouldNotPopulateParametersWithEmptyParameters() {
+	public void testShouldNotPopulateParametersWithEmptyParameters()
+		throws Exception {
 		Map<String, FileItem[]> fileParameters = Collections.emptyMap();
 
 		LiferayServletRequest liferayServletRequest =
@@ -65,7 +66,7 @@ public class UploadPortletRequestWhenCreatingFromParametrizedConstructorTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, new HashMap<String, List<String>>()),

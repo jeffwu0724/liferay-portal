@@ -17,18 +17,51 @@ package com.liferay.portal.upload.test.util;
 import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.kernel.module.util.BundleUtil;
 import com.liferay.portal.upload.UploadPortal;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.wiring.BundleWiring;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import javax.portlet.PortletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Jiefeng Wu
  */
 public class UploadTestUtil {
+
+	public static UploadPortletRequest createUploadPortletRequest(UploadServletRequest uploadServletRequest,
+		 PortletRequest portletRequest, String namespace)
+		throws Exception {
+		Bundle bundle = FrameworkUtil.getBundle(UploadTestUtil.class);
+
+		Bundle implBundle = BundleUtil.getBundle(bundle.getBundleContext(), "com.liferay.portal.upload.impl");
+
+		BundleWiring bundleWiring = implBundle.adapt(BundleWiring.class);
+
+		ClassLoader classLoader = bundleWiring.getClassLoader();
+
+		Class<?> clazz = classLoader.loadClass("com.liferay.portal.upload.internal.UploadPortletRequestImpl");
+
+		Constructor<?> constructor = clazz.getConstructor(
+			UploadServletRequest.class,
+			PortletRequest.class, String.class);
+
+
+
+		return (UploadPortletRequest) constructor.newInstance(uploadServletRequest,
+			portletRequest,  namespace);
+
+// and try to load that class from the loader and create instance of it
+	}
 
 	public static UploadServletRequest createUploadServletRequest(
 		HttpServletRequest httpServletRequest,
@@ -47,6 +80,8 @@ public class UploadTestUtil {
 
 		return uploadServletRequest;
 	}
+
+
 
 	private static final Snapshot<UploadPortal> _uploadPortalSnapshot =
 		new Snapshot<>(UploadTestUtil.class, UploadPortal.class);

@@ -67,7 +67,7 @@ public class UploadPortletRequestWhenGettingFileNamesTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, new HashMap<String, List<String>>()),
@@ -129,7 +129,7 @@ public class UploadPortletRequestWhenGettingFileNamesTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, new HashMap<String, List<String>>()),

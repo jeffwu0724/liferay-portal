@@ -79,7 +79,7 @@ public class UploadPortletRequestWhenGettingParameterValuesTest {
 		mockHttpServletRequest.addParameter(parameter, parameter);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, regularParameters),

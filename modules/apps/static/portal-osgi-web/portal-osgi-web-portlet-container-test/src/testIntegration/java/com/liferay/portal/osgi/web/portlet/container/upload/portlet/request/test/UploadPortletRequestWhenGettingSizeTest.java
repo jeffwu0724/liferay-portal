@@ -89,13 +89,14 @@ public class UploadPortletRequestWhenGettingSizeTest {
 	}
 
 	@Test
-	public void testShouldReturnZeroIfFileParametersAreEmpty() {
+	public void testShouldReturnZeroIfFileParametersAreEmpty()
+		throws Exception {
 		LiferayServletRequest liferayServletRequest =
 			PortletContainerTestUtil.getMultipartRequest(
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					new HashMap<String, FileItem[]>(),

@@ -120,7 +120,7 @@ public class ImportFragmentEntriesStrutsActionTest {
 			bytes, "file");
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					httpServletRequest, fileParameters,
 					HashMapBuilder.put(

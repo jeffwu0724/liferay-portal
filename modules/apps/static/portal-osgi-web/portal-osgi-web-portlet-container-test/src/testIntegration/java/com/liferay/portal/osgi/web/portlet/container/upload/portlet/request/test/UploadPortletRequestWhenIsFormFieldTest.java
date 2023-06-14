@@ -66,7 +66,7 @@ public class UploadPortletRequestWhenIsFormFieldTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					fileParameters, new HashMap<String, List<String>>()),
@@ -91,13 +91,14 @@ public class UploadPortletRequestWhenIsFormFieldTest {
 	}
 
 	@Test
-	public void testShouldReturnTrueIfFileParametersAreEmpty() {
+	public void testShouldReturnTrueIfFileParametersAreEmpty()
+		throws Exception {
 		LiferayServletRequest liferayServletRequest =
 			PortletContainerTestUtil.getMultipartRequest(
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest(),
 					new HashMap<String, FileItem[]>(),

@@ -66,7 +66,7 @@ public class UploadPortletRequestWhenGettingInputStreamTest {
 				_portletNamespace, _BYTES);
 
 		UploadPortletRequest uploadPortletRequest =
-			_uploadPortletRequestFactory.create(
+			UploadTestUtil.createUploadPortletRequest(
 				_uploadPortal.getUploadServletRequest(
 					(HttpServletRequest)liferayServletRequest.getRequest()),
 				null, _portletNamespace);
