@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.ServiceProxyFactory;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.upload.LiferayServletRequest;
+import com.liferay.portal.upload.ServletFileUpload;
 
 import java.io.File;
 import java.io.IOException;
