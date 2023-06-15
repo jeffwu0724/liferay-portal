@@ -16,9 +16,9 @@ package com.liferay.portal.upload.internal;
 
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.ClientDataRequestHelper;
-import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.kernel.upload.UploadRequest;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.upload.FileItem;
+import com.liferay.portal.upload.UploadRequest;
 
 import java.io.File;
 import java.io.IOException;

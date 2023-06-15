@@ -14,12 +14,12 @@
 
 package com.liferay.portal.upload.internal;
 
-import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.upload.FileItem;
+import com.liferay.portal.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadServletRequest;
 
 import java.io.File;
 import java.io.IOException;

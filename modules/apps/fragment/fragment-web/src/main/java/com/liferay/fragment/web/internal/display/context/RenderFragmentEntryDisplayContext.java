@@ -27,10 +27,10 @@ import com.liferay.fragment.web.internal.constants.FragmentWebKeys;
 import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
-import com.liferay.portal.kernel.upload.UploadRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.UploadRequest;
 
 import java.io.File;
 

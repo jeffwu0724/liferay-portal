@@ -17,10 +17,10 @@ package com.liferay.portal.upload.test.util;
 import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.module.util.BundleUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.upload.FileItem;
 import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.UploadPortletRequest;
+import com.liferay.portal.upload.UploadServletRequest;
 
 import java.lang.reflect.Constructor;
 
