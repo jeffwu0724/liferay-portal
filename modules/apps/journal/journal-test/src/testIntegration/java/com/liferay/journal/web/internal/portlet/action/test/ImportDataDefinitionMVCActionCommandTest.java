@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.portlet.MockLiferayPortletActionRequest;
 import com.liferay.portal.kernel.test.portlet.MockLiferayPortletActionResponse;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
@@ -35,15 +36,19 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.impl.LayoutImpl;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.test.util.UploadTestUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -75,6 +80,7 @@ public class ImportDataDefinitionMVCActionCommandTest {
 			_createMockLiferayPortletActionRequest(
 				"valid_data_definition.json", "Imported Structure");
 
+		_setUp(mockLiferayPortletActionRequest);
 		_mvcActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
@@ -105,6 +111,7 @@ public class ImportDataDefinitionMVCActionCommandTest {
 			_createMockLiferayPortletActionRequest(
 				"valid_data_definition.json", "Imported Structure");
 
+		_setUp(mockLiferayPortletActionRequest);
 		_mvcActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
@@ -147,6 +154,7 @@ public class ImportDataDefinitionMVCActionCommandTest {
 				"previous_version_valid_data_definition.json",
 				"Imported Structure");
 
+		_setUp(mockLiferayPortletActionRequest);
 		_mvcActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
@@ -178,6 +186,7 @@ public class ImportDataDefinitionMVCActionCommandTest {
 			_createMockLiferayPortletActionRequest(
 				"invalid_data_definition.json", "Imported Structure");
 
+		_setUp(mockLiferayPortletActionRequest);
 		_mvcActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
@@ -191,6 +200,7 @@ public class ImportDataDefinitionMVCActionCommandTest {
 			_createMockLiferayPortletActionRequest(
 				"valid_data_definition.json", null);
 
+		_setUp(mockLiferayPortletActionRequest);
 		_mvcActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
@@ -206,6 +216,7 @@ public class ImportDataDefinitionMVCActionCommandTest {
 			_createMockLiferayPortletActionRequest(
 				"valid_data_definition.json", "Imported Structure");
 
+		_setUp(mockLiferayPortletActionRequest);
 		_mvcActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
@@ -325,6 +336,35 @@ public class ImportDataDefinitionMVCActionCommandTest {
 		return themeDisplay;
 	}
 
+	private void _setUp(
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest) {
+
+		ReflectionTestUtil.setFieldValue(
+			_mvcActionCommand, "_uploadPortal",
+			ProxyUtil.newProxyInstance(
+				ImportDataDefinitionMVCActionCommandTest.class.getClassLoader(),
+				new Class<?>[] {UploadPortal.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(
+							method.getName(), "getUploadPortletRequest")) {
+
+						return UploadTestUtil.createUploadPortletRequest(
+							_uploadPortal.getUploadServletRequest(
+								_portal.getLiferayPortletRequest(
+									mockLiferayPortletActionRequest
+								).getHttpServletRequest()),
+							_portal.getLiferayPortletRequest(
+								mockLiferayPortletActionRequest),
+							_portal.getPortletNamespace(
+								_portal.getLiferayPortletRequest(
+									mockLiferayPortletActionRequest
+								).getPortletName()));
+					}
+
+					return method.invoke(_uploadPortal, args);
+				}));
+	}
+
 	@Inject
 	private DataDefinitionResource.Factory _dataDefinitionResourceFactory;
 
@@ -336,5 +376,8 @@ public class ImportDataDefinitionMVCActionCommandTest {
 
 	@Inject
 	private Portal _portal;
+
+	@Inject
+	private UploadPortal _uploadPortal;
 
 }

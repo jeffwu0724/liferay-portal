@@ -41,11 +41,14 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
+import com.liferay.portal.upload.UploadPortal;
+import com.liferay.portal.upload.test.util.UploadTestUtil;
 import com.liferay.template.model.TemplateEntry;
 import com.liferay.template.service.TemplateEntryLocalService;
 import com.liferay.template.test.util.TemplateTestUtil;
@@ -53,6 +56,7 @@ import com.liferay.template.test.util.TemplateTestUtil;
 import java.nio.charset.StandardCharsets;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -124,6 +128,8 @@ public class UpdateTemplateEntryMVCActionCommandTest {
 		mockLiferayPortletActionRequest.addParameter(
 			"templateEntryId",
 			String.valueOf(_templateEntry.getTemplateEntryId()));
+
+		_setUp(mockLiferayPortletActionRequest);
 
 		ReflectionTestUtil.invoke(
 			_mvcActionCommand, "doTransactionalCommand",
@@ -218,6 +224,35 @@ public class UpdateTemplateEntryMVCActionCommandTest {
 		return themeDisplay;
 	}
 
+	private void _setUp(
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest) {
+
+		ReflectionTestUtil.setFieldValue(
+			_mvcActionCommand, "_uploadPortal",
+			ProxyUtil.newProxyInstance(
+				UpdateTemplateEntryMVCActionCommandTest.class.getClassLoader(),
+				new Class<?>[] {UploadPortal.class},
+				(proxy, method, args) -> {
+					if (Objects.equals(
+							method.getName(), "getUploadPortletRequest")) {
+
+						return UploadTestUtil.createUploadPortletRequest(
+							_uploadPortal.getUploadServletRequest(
+								_portal.getLiferayPortletRequest(
+									mockLiferayPortletActionRequest
+								).getHttpServletRequest()),
+							_portal.getLiferayPortletRequest(
+								mockLiferayPortletActionRequest),
+							_portal.getPortletNamespace(
+								_portal.getLiferayPortletRequest(
+									mockLiferayPortletActionRequest
+								).getPortletName()));
+					}
+
+					return method.invoke(_uploadPortal, args);
+				}));
+	}
+
 	private Company _company;
 
 	@Inject
@@ -248,5 +283,8 @@ public class UpdateTemplateEntryMVCActionCommandTest {
 
 	@Inject
 	private TemplateEntryLocalService _templateEntryLocalService;
+
+	@Inject
+	private UploadPortal _uploadPortal;
 
 }
