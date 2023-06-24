@@ -12,15 +12,22 @@
  * details.
  */
 
-package com.liferay.portal.osgi.web.portlet.container.upload.servlet.request.test;
+package com.liferay.portal.upload.internal.servlet.request;
 
-import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.memory.DeleteFileFinalizeAction;
+import com.liferay.petra.memory.FinalizeManager;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.upload.FileItem;
-import com.liferay.portal.osgi.web.portlet.container.test.util.PortletContainerTestUtil;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.upload.LiferayServletRequest;
 import com.liferay.portal.upload.UploadServletRequestImpl;
+
+import java.io.File;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,19 +40,18 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.runner.RunWith;
+
+import org.mockito.Mockito;
 
 /**
  * @author Manuel de la Peña
  */
-@RunWith(Arquillian.class)
 public class UploadServletRequestWhenCleaningUpTest {
 
 	@ClassRule
 	@Rule
-	public static final TestRule aggregateTestRule =
-		new LiferayIntegrationTestRule();
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	public void setUp() throws Exception {
@@ -55,16 +61,17 @@ public class UploadServletRequestWhenCleaningUpTest {
 	@Test
 	public void testShouldNotRemoveMultipartParameters() throws Exception {
 		Map<String, FileItem[]> fileParameters =
-			PortletContainerTestUtil.getFileParameters(1, _BYTES);
+			HashMapBuilder.<String, FileItem[]>put(
+				"fileParameter1", new FileItem[] {_createFileItem(_BYTES)}
+			).build();
 
-		LiferayServletRequest liferayServletRequest =
-			PortletContainerTestUtil.getMultipartRequest(
-				_fileNameParameter, _BYTES);
+		LiferayServletRequest liferayServletRequest = Mockito.mock(
+			LiferayServletRequest.class);
 
 		UploadServletRequestImpl uploadServletRequestImpl =
 			new UploadServletRequestImpl(
-				(HttpServletRequest)liferayServletRequest.getRequest(),
-				fileParameters, new HashMap<String, List<String>>());
+				(HttpServletRequest)liferayServletRequest, fileParameters,
+				new HashMap<String, List<String>>());
 
 		uploadServletRequestImpl.cleanUp();
 
@@ -74,6 +81,29 @@ public class UploadServletRequestWhenCleaningUpTest {
 		Assert.assertNotNull(multipartParameterMap);
 		Assert.assertEquals(
 			multipartParameterMap.toString(), 1, multipartParameterMap.size());
+	}
+
+	private FileItem _createFileItem(byte[] content) throws Exception {
+		Path tempFilePath = Files.createTempFile(null, null);
+
+		Files.write(tempFilePath, content);
+
+		File tempFile = tempFilePath.toFile();
+
+		FinalizeManager.register(
+			tempFile, new DeleteFileFinalizeAction(tempFile.getAbsolutePath()),
+			FinalizeManager.PHANTOM_REFERENCE_FACTORY);
+
+		return ProxyUtil.newDelegateProxyInstance(
+			FileItem.class.getClassLoader(), FileItem.class,
+			new Object() {
+
+				public void delete() {
+					tempFile.delete();
+				}
+
+			},
+			null);
 	}
 
 	private static final byte[] _BYTES =
