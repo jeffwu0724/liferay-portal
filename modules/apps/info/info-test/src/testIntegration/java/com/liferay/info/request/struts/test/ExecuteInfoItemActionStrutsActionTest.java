@@ -66,6 +66,7 @@ import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import java.io.Serializable;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -223,10 +224,13 @@ public class ExecuteInfoItemActionStrutsActionTest {
 		MockMultipartHttpServletRequest mockMultipartHttpServletRequest =
 			new MockMultipartHttpServletRequest();
 
+		mockMultipartHttpServletRequest.setContentType(
+			"multipart/form-data;boundary=" + System.currentTimeMillis());
+
 		UploadPortletRequest uploadPortletRequest =
 			UploadTestUtil.createUploadPortletRequest(
 				UploadTestUtil.createUploadServletRequest(
-					mockMultipartHttpServletRequest, null,
+					mockMultipartHttpServletRequest, new HashMap<>(),
 					HashMapBuilder.put(
 						"classNameId", Collections.singletonList(_classNameId)
 					).put(

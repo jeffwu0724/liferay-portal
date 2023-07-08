@@ -97,6 +97,7 @@ import java.text.DecimalFormat;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -468,7 +469,10 @@ public class EditInfoItemStrutsActionTest {
 		MockMultipartHttpServletRequest mockMultipartHttpServletRequest =
 			new MockMultipartHttpServletRequest();
 
-		Map<String, FileItem[]> fileParameters = null;
+		mockMultipartHttpServletRequest.setContentType(
+			"multipart/form-data;boundary=" + System.currentTimeMillis());
+
+		Map<String, FileItem[]> fileParameters = new HashMap<>();
 
 		if (attachmentValue != null) {
 			byte[] bytes = attachmentValue.getBytes(StandardCharsets.UTF_8);
