@@ -1277,7 +1277,7 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>lib/portal/log4j-1.2-api.jar</file-name>
+				<file-name>lib/portal/log4j-bridge-api.jar</file-name>
 				<version>2.17.1</version>
 				<project-name>Log4j 1.x Compatibility API</project-name>
 				<project-url>http://logging.apache.org/log4j</project-url>

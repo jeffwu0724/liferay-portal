@@ -259,8 +259,8 @@ Provide-Capability:\
 	@../../../lib/portal/jodd-json.jar,\
 	@../../../lib/portal/jodd-util.jar,\
 	@../../../lib/portal/json-java.jar,\
-	@../../../lib/portal/log4j-1.2-api.jar,\
 	@../../../lib/portal/log4j-api.jar,\
+	@../../../lib/portal/log4j-bridge-api.jar,\
 	@../../../lib/portal/log4j-core.jar,\
 	@../../../lib/portal/persistence.jar,\
 	@../../../lib/portal/portlet.jar,\
