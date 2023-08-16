@@ -1,0 +1,10 @@
+diff --git a/org/apache/poi/openxml4j/util/ZipSecureFile.java b/org/apache/poi/openxml4j/util/ZipSecureFile.java
+index 8c0bb3289925..fa5452eac8aa 100644
+--- a/org/apache/poi/openxml4j/util/ZipSecureFile.java
++++ b/org/apache/poi/openxml4j/util/ZipSecureFile.java
+@@ -167,3 +167,4 @@ public class ZipSecureFile extends ZipFile {
+         return fileName;
+     }
+ }
++/* @generated */
+\ No newline at end of file
