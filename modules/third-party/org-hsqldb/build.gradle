@@ -44,12 +44,8 @@ patch {
 	originalLibModuleName = "hsqldb"
 }
 
-processResources {
+classes {
 	doLast {
-		duplicatesStrategy = "exclude"
-
-		from(sourceSets.main.output) {
-			exclude "module-info.class"
-		}
+		delete new File(sourceSets.main.java.outputDir, "module-info.class")
 	}
 }
