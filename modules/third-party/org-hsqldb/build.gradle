@@ -1,73 +1,77 @@
-import com.liferay.gradle.plugins.patcher.PatchTask
+import com.liferay.gradle.util.FileUtil
+import com.liferay.gradle.util.OSDetector
 
-apply plugin: "com.liferay.patcher"
+import groovy.io.FileType
 
-task jarManifest
-task jarPatched(type: Zip)
-task patch(type: PatchTask)
+task deleteSrcDirectory(type: Delete)
+task downloadSrc(type: Exec)
+task unzip(type: Copy)
 
-classes {
-	doLast {
-		delete new File(sourceSets.main.java.outputDir, "module-info.class")
-	}
-}
+String hsqldbVersion = "2.7.1"
+String srcUrl = "https://repo1.maven.org/maven2/org/hsqldb/hsqldb/${hsqldbVersion}/hsqldb-${hsqldbVersion}-sources.jar"
+String tempDir ="build/tmp/zip"
 
 compileJava {
 	options.compilerArgs.add("-g:lines,source,vars")
+	dependsOn downloadSrc
+	dependsOn unzip
+	finalizedBy deleteSrcDirectory
 }
 
-dependencies {
-	api group: "org.hsqldb", name: "hsqldb", version: "2.7.1"
+deleteSrcDirectory {
+	delete file('src/main/java')
+	delete file('src/main/resources')
 }
 
-jar {
-	setActions([])
+downloadSrc {
+	File srcTmpDir = new File(temporaryDir, "src")
 
-	dependsOn jarPatched
-	finalizedBy jarManifest
-}
+	if (OSDetector.windows) {
+		executable "cmd.exe"
 
-jarManifest {
-	doLast {
-		ant.jar(destfile: jar.archivePath, update: true)
+		args "/c"
 	}
+	else {
+		executable "/bin/sh"
+
+		args "-c"
+	}
+
+	args "wget '${srcUrl}' -P '${tempDir}'"
+
 }
 
-jarPatched {
-	archiveName = jar.archiveName
-	destinationDir = jar.destinationDir
+unzip {
+	from zipTree(file("${tempDir}/hsqldb-${hsqldbVersion}-sources.jar"))
+	into file("${tempDir}/src")
 
-	from copyPatchOriginalLibClasses
-}
+	File srcTmpDir = new File("${tempDir}/src/org")
 
-patch {
+	doLast {
+
+		srcTmpDir.eachFileRecurse(FileType.FILES) {
+			String dirName = "resources"
+
+			if (it.toPath().toString().contains("cmdline") ) {
+				return
+
+			}
+
+			if (it.name.endsWith(".java")) {
+				dirName = "java"
+			}
+
+			File dir = file("src/main/" + dirName)
+
+			File destFile = new File(dir, FileUtil.relativize(it, srcTmpDir))
+
+			destFile.parentFile.mkdirs()
+
+			it.renameTo(destFile)
+		}
+
+	}
 	ext {
 		autoClean = false
 	}
-
-	fileNames "org/hsqldb/*.java"
-	fileNames "org/hsqldb/auth/*.java"
-	fileNames "org/hsqldb/dbinfo/*.java"
-	fileNames "org/hsqldb/error/*.java"
-	fileNames "org/hsqldb/index/*.java"
-	fileNames "org/hsqldb/jdbc/*.java"
-	fileNames "org/hsqldb/jdbc/pool/*.java"
-	fileNames "org/hsqldb/lib/*.java"
-	fileNames "org/hsqldb/lib/java/*.java"
-	fileNames "org/hsqldb/lib/tar/*.java"
-	fileNames "org/hsqldb/lib/rb/*.java"
-	fileNames "org/hsqldb/map/*.java"
-	fileNames "org/hsqldb/navigator/*.java"
-	fileNames "org/hsqldb/persist/*.java"
-	fileNames "org/hsqldb/resources/*.java"
-	fileNames "org/hsqldb/result/*.java"
-	fileNames "org/hsqldb/rights/*.java"
-	fileNames "org/hsqldb/rowio/*.java"
-	fileNames "org/hsqldb/scriptio/*.java"
-	fileNames "org/hsqldb/trigger/*.java"
-	fileNames "org/hsqldb/types/*.java"
-	fileNames "org/hsqldb/util/*.java"
-	fileNames "org/hsqldb/server/*.java"
-
-	originalLibModuleName = "hsqldb"
 }
