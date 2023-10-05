@@ -5,7 +5,7 @@
 
 package com.liferay.portal.dao.orm.common;
 
-import com.liferay.portal.kernel.dao.orm.PortalCustomSQL;
+import com.liferay.util.dao.orm.CustomSQLUtil;
 
 /**
  * @author Brian Wing Shun Chan
@@ -13,17 +13,7 @@ import com.liferay.portal.kernel.dao.orm.PortalCustomSQL;
 public class PortalCustomSQLUtil {
 
 	public static String get(String id) {
-		return _portalCustomSQL.get(id);
+		return CustomSQLUtil.get(id);
 	}
-
-	public static PortalCustomSQL getPortalCustomSQL() {
-		return _portalCustomSQL;
-	}
-
-	public void setPortalCustomSQL(PortalCustomSQL portalCustomSQL) {
-		_portalCustomSQL = portalCustomSQL;
-	}
-
-	private static PortalCustomSQL _portalCustomSQL;
 
 }
