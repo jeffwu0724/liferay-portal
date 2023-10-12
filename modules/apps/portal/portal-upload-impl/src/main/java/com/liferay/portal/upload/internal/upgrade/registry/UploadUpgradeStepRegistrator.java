@@ -6,7 +6,9 @@
 package com.liferay.portal.upload.internal.upgrade.registry;
 
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
+import com.liferay.portal.kernel.service.ReleaseLocalService;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
+import com.liferay.portal.upgrade.release.ReleaseRenamingUpgradeStep;
 import com.liferay.portal.upload.internal.upgrade.v1_0_0.UploadServletRequestConfigurationUpgradeProcess;
 
 import org.osgi.service.component.annotations.Component;
@@ -20,6 +22,10 @@ public class UploadUpgradeStepRegistrator implements UpgradeStepRegistrator {
 
 	@Override
 	public void register(Registry registry) {
+		registry.registerReleaseCreationUpgradeSteps(
+			new ReleaseRenamingUpgradeStep(
+				"com.liferay.portal.upload.impl", "com.liferay.portal.upload",
+				_releaseLocalService));
 		registry.registerInitialization();
 
 		registry.register(
@@ -31,5 +37,8 @@ public class UploadUpgradeStepRegistrator implements UpgradeStepRegistrator {
 	@Reference
 	private PrefsPropsToConfigurationUpgradeHelper
 		_prefsPropsToConfigurationUpgradeHelper;
+
+	@Reference
+	private ReleaseLocalService _releaseLocalService;
 
 }
