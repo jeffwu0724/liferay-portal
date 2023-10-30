@@ -56,7 +56,7 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.kernel.util.ServiceProxyFactory;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
@@ -712,14 +712,14 @@ public class PortletImpl extends PortletBaseImpl {
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
 		if (portletBag == null) {
-			return _controlPanelEntry;
+			return ProxyFactory.newDummyInstance(ControlPanelEntry.class);
 		}
 
 		List<ControlPanelEntry> controlPanelEntryInstances =
 			portletBag.getControlPanelEntryInstances();
 
 		if (controlPanelEntryInstances.isEmpty()) {
-			return _controlPanelEntry;
+			return ProxyFactory.newDummyInstance(ControlPanelEntry.class);
 		}
 
 		return controlPanelEntryInstances.get(0);
@@ -4222,13 +4222,6 @@ public class PortletImpl extends PortletBaseImpl {
 	 * Log instance for this class.
 	 */
 	private static final Log _log = LogFactoryUtil.getLog(PortletImpl.class);
-
-	private static volatile ControlPanelEntry _controlPanelEntry =
-		ServiceProxyFactory.newServiceTrackedInstance(
-			ControlPanelEntry.class, PortletImpl.class, "_controlPanelEntry",
-			"(&(!(javax.portlet.name=*))(objectClass=" +
-				ControlPanelEntry.class.getName() + "))",
-			false);
 
 	/**
 	 * Map of the ready states of all portlets keyed by their root portlet ID.
