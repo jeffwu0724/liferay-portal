@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author Jorge Ferrer
  */
-public abstract class BaseControlPanelEntry implements ControlPanelEntry {
+public class BaseControlPanelEntry implements ControlPanelEntry {
 
 	@Override
 	public boolean hasAccessPermission(
