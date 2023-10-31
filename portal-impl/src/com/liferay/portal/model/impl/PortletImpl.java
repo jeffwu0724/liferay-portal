@@ -23,11 +23,11 @@ import com.liferay.portal.kernel.model.PortletFilter;
 import com.liferay.portal.kernel.model.PortletInfo;
 import com.liferay.portal.kernel.model.PublicRenderParameter;
 import com.liferay.portal.kernel.model.portlet.PortletDependency;
-import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationHandler;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.pop.MessageListener;
+import com.liferay.portal.kernel.portlet.BaseControlPanelEntry;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.ControlPanelEntry;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
@@ -711,17 +711,15 @@ public class PortletImpl extends PortletBaseImpl {
 	public ControlPanelEntry getControlPanelEntryInstance() {
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
-		ControlPanelEntry controlPanelEntry = _controlPanelEntrySnapshot.get();
-
 		if (portletBag == null) {
-			return controlPanelEntry;
+			return _controlPanelEntry;
 		}
 
 		List<ControlPanelEntry> controlPanelEntryInstances =
 			portletBag.getControlPanelEntryInstances();
 
 		if (controlPanelEntryInstances.isEmpty()) {
-			return controlPanelEntry;
+			return _controlPanelEntry;
 		}
 
 		return controlPanelEntryInstances.get(0);
@@ -4225,12 +4223,8 @@ public class PortletImpl extends PortletBaseImpl {
 	 */
 	private static final Log _log = LogFactoryUtil.getLog(PortletImpl.class);
 
-	private static final Snapshot<ControlPanelEntry>
-		_controlPanelEntrySnapshot = new Snapshot<>(
-			PortletImpl.class, ControlPanelEntry.class,
-			"(&(!(javax.portlet.name=*))(objectClass=" +
-				ControlPanelEntry.class.getName() + "))",
-			true);
+	private static final ControlPanelEntry _controlPanelEntry =
+		new DefaultControlPanelEntry();
 
 	/**
 	 * Map of the ready states of all portlets keyed by their root portlet ID.
@@ -4856,6 +4850,10 @@ public class PortletImpl extends PortletBaseImpl {
 	 * The name of the XML-RPC method class of the portlet.
 	 */
 	private String _xmlRpcMethodClass;
+
+	private static class DefaultControlPanelEntry
+		extends BaseControlPanelEntry {
+	}
 
 	private static class Readiness {
 
