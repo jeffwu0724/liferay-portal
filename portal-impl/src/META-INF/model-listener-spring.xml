@@ -9,7 +9,6 @@
 >
 	<bean class="com.liferay.portal.security.permission.GroupModelListener" id="com.liferay.portal.security.permission.GroupModelListener" />
 	<bean class="com.liferay.portal.security.permission.ResourcePermissionModelListener" id="com.liferay.portal.security.permission.ResourcePermissionModelListener" />
-	<bean class="com.liferay.portal.security.permission.TeamModelListener" id="com.liferay.portal.security.permission.TeamModelListener" />
 	<bean class="com.liferay.portal.security.permission.UserGroupRoleModelListener" id="com.liferay.portal.security.permission.UserGroupRoleModelListener" />
 	<bean class="com.liferay.portal.service.impl.LayoutSetPrototypeLayoutModelListener" id="com.liferay.portal.service.impl.LayoutSetPrototypeLayoutModelListener" />
 	<bean class="com.liferay.portal.service.impl.LayoutSetPrototypeLayoutSetModelListener" id="com.liferay.portal.service.impl.LayoutSetPrototypeLayoutSetModelListener" />
