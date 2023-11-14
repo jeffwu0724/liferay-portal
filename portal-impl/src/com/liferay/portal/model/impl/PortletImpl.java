@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationHandler;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.pop.MessageListener;
+import com.liferay.portal.kernel.portlet.BaseControlPanelEntry;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
 import com.liferay.portal.kernel.portlet.ControlPanelEntry;
 import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
@@ -712,6 +713,19 @@ public class PortletImpl extends PortletBaseImpl {
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
 		ControlPanelEntry controlPanelEntry = _controlPanelEntrySnapshot.get();
+
+		if (controlPanelEntry == null) {
+			BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+			ControlPanelEntry defaultControlPanelEntry =
+				new BaseControlPanelEntry() {
+				};
+
+			bundleContext.registerService(
+				ControlPanelEntry.class, defaultControlPanelEntry, null);
+
+			controlPanelEntry = defaultControlPanelEntry;
+		}
 
 		if (portletBag == null) {
 			return controlPanelEntry;
