@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.portal.service.impl;
+package com.liferay.layout.set.prototype.internal.model.listener;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetPrototype;
+import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.kernel.service.persistence.LayoutSetPrototypeUtil;
 import com.liferay.portal.kernel.service.persistence.LayoutSetUtil;
@@ -19,9 +20,12 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.sites.kernel.util.Sites;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Raymond Augé
  */
+@Component(service = ModelListener.class)
 public class LayoutSetPrototypeLayoutSetModelListener
 	extends BaseModelListener<LayoutSet> {
 
