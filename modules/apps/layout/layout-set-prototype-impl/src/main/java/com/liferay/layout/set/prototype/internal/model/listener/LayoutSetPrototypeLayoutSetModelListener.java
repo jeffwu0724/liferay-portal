@@ -13,7 +13,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetPrototype;
 import com.liferay.portal.kernel.model.ModelListener;
-import com.liferay.portal.kernel.service.LayoutSetPrototypeLocalServiceUtil;
+import com.liferay.portal.kernel.service.LayoutSetPrototypeLocalService;
 import com.liferay.portal.kernel.service.persistence.LayoutSetPrototypeUtil;
 import com.liferay.portal.kernel.service.persistence.LayoutSetUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.sites.kernel.util.Sites;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Raymond Augé
@@ -59,7 +60,7 @@ public class LayoutSetPrototypeLayoutSetModelListener
 
 		try {
 			LayoutSetPrototype layoutSetPrototype =
-				LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototype(
+				_layoutSetPrototypeLocalService.getLayoutSetPrototype(
 					group.getClassPK());
 
 			layoutSetPrototype.setModifiedDate(layoutSet.getModifiedDate());
@@ -101,5 +102,8 @@ public class LayoutSetPrototypeLayoutSetModelListener
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		LayoutSetPrototypeLayoutSetModelListener.class);
+
+	@Reference
+	private LayoutSetPrototypeLocalService _layoutSetPrototypeLocalService;
 
 }
