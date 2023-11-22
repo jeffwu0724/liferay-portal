@@ -1,28 +1,10 @@
-import com.liferay.gradle.util.FileUtil
-import com.liferay.gradle.util.OSDetector
+import com.liferay.gradle.plugins.patcher.PatchTask
 
-import groovy.io.FileType
+apply plugin: "com.liferay.patcher"
 
-task deleteSrcDirectory(type: Delete)
-task downloadSrc(type: Exec)
 task jarManifest
 task jarPatched(type: Zip)
-task modifyJavaFileForJavaEight
-task unzip(type: Copy)
-
-String openSearchRestClientVersion = "2.7.0"
-String srcUrl = "https://repo1.maven.org/maven2/org/opensearch/client/opensearch-rest-client/${openSearchRestClientVersion}/opensearch-rest-client-${openSearchRestClientVersion}-sources.jar"
-String tempDir ="build/tmp/zip"
-
-compileJava {
-	dependsOn downloadSrc
-	dependsOn unzip
-	dependsOn modifyJavaFileForJavaEight
-}
-
-deleteSrcDirectory {
-	delete file('src')
-}
+task patch(type: PatchTask)
 
 dependencies {
 	api group: "commons-codec", name: "commons-codec", version: "1.15"
@@ -35,37 +17,23 @@ dependencies {
 	compileOnly group: "org.opensearch.client", name: "opensearch-rest-client", transitive: false, version: "2.7.0"
 }
 
-downloadSrc {
-	File srcTmpDir = new File(temporaryDir, "src")
+jar {
+	setActions([])
 
-	if (OSDetector.windows) {
-		executable "cmd.exe"
-
-		args "/c"
-	}
-	else {
-		executable "/bin/sh"
-
-		args "-c"
-	}
-
-	args "wget '${srcUrl}' -P '${tempDir}'"
+	dependsOn jarPatched
+	finalizedBy jarManifest
 }
 
-jar {
-	dependsOn downloadSrc
-	dependsOn unzip
-	dependsOn modifyJavaFileForJavaEight
-	dependsOn compileJava
-	dependsOn jarPatched
-	finalizedBy deleteSrcDirectory
-	setActions([])
+jarManifest {
+	doLast {
+		ant.jar(destfile: jar.archivePath, update: true)
+	}
 }
 
 jarPatched {
 	archiveName = jar.archiveName
 	destinationDir = jar.destinationDir
-	duplicatesStrategy = 'exclude'
+	duplicatesStrategy = "exclude"
 
 	exclude "module-info.class"
 
@@ -76,49 +44,9 @@ jarPatched {
 	}
 }
 
-modifyJavaFileForJavaEight {
-	dependsOn unzip
-	doLast {
-		def file = file('src/main/java/opensearch/client/RestClient.java')
-
-		def content = file.text
-
-		content = content.replace('import java.io.Closeable;',
-				'import java.io.Closeable;\n' +
-				'import java.io.DataInputStream;')
-		content = content.replace('size = is.readAllBytes().length;', 'is.reset();\n' +
-				'byte[] bytes = new byte[is.available()];\n' +
-			  	'DataInputStream dataInputStream = new DataInputStream(is);\n' +
-			  	'dataInputStream.readFully(bytes);\n' +
-			  	'size = is.available();')
-
-		file.text = content
-	}
-}
-
-unzip {
-	dependsOn downloadSrc
-	from zipTree(file("${tempDir}/opensearch-rest-client-${openSearchRestClientVersion}-sources.jar"))
-	into file("${tempDir}/src")
-
-	File srcTmpDir = new File("${tempDir}/src/org")
-
-	doLast {
-		srcTmpDir.eachFileRecurse(FileType.FILES) {
-			if (it.toPath().toString().contains("cmdline") ) {
-				return
-			}
-
-			if (it.name.endsWith(".java")) {
-				File destFile = new File(file("src/main/java"), FileUtil.relativize(it, srcTmpDir))
-
-				destFile.parentFile.mkdirs()
-
-				it.renameTo(destFile)
-			}
-		}
-	}
+patch {
 	ext {
 		autoClean = false
 	}
+
 }
