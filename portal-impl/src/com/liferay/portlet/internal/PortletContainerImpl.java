@@ -521,38 +521,37 @@ public class PortletContainerImpl implements PortletContainer {
 			String redirectLocation =
 				liferayActionResponse.getRedirectLocation();
 
-			if (Validator.isNotNull(redirectLocation)) {
-				return new ActionResult(
-					events, PortalUtil.escapeRedirect(redirectLocation));
-			}
+			if (Validator.isNull(redirectLocation)) {
+				if (portlet.isActionURLRedirect()) {
+					PortletURL portletURL = null;
 
-			if (!portlet.isActionURLRedirect()) {
-				return new ActionResult(events, null);
-			}
+					if (portletApp.getSpecMajorVersion() < 3) {
+						portletURL = PortletURLFactoryUtil.create(
+							liferayActionRequest, portlet, layout,
+							PortletRequest.RENDER_PHASE);
 
-			PortletURL portletURL = null;
+						Map<String, String[]> renderParameters =
+							liferayActionResponse.getRenderParameterMap();
 
-			if (portletApp.getSpecMajorVersion() < 3) {
-				portletURL = PortletURLFactoryUtil.create(
-					liferayActionRequest, portlet, layout,
-					PortletRequest.RENDER_PHASE);
+						for (Map.Entry<String, String[]> entry :
+								renderParameters.entrySet()) {
 
-				Map<String, String[]> renderParameters =
-					liferayActionResponse.getRenderParameterMap();
+							portletURL.setParameter(
+								entry.getKey(), entry.getValue());
+						}
+					}
+					else {
+						portletURL = PortletURLFactoryUtil.create(
+							liferayActionRequest, portlet, layout.getPlid(),
+							PortletRequest.RENDER_PHASE, MimeResponse.Copy.ALL);
+					}
 
-				for (Map.Entry<String, String[]> entry :
-						renderParameters.entrySet()) {
-
-					portletURL.setParameter(entry.getKey(), entry.getValue());
+					redirectLocation = portletURL.toString();
 				}
 			}
 			else {
-				portletURL = PortletURLFactoryUtil.create(
-					liferayActionRequest, portlet, layout.getPlid(),
-					PortletRequest.RENDER_PHASE, MimeResponse.Copy.ALL);
+				redirectLocation = PortalUtil.escapeRedirect(redirectLocation);
 			}
-
-			redirectLocation = portletURL.toString();
 
 			return new ActionResult(events, redirectLocation);
 		}
