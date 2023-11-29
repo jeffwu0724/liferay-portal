@@ -522,32 +522,34 @@ public class PortletContainerImpl implements PortletContainer {
 				liferayActionResponse.getRedirectLocation();
 
 			if (Validator.isNull(redirectLocation)) {
-				if (portlet.isActionURLRedirect()) {
-					PortletURL portletURL = null;
-
-					if (portletApp.getSpecMajorVersion() < 3) {
-						portletURL = PortletURLFactoryUtil.create(
-							liferayActionRequest, portlet, layout,
-							PortletRequest.RENDER_PHASE);
-
-						Map<String, String[]> renderParameters =
-							liferayActionResponse.getRenderParameterMap();
-
-						for (Map.Entry<String, String[]> entry :
-								renderParameters.entrySet()) {
-
-							portletURL.setParameter(
-								entry.getKey(), entry.getValue());
-						}
-					}
-					else {
-						portletURL = PortletURLFactoryUtil.create(
-							liferayActionRequest, portlet, layout.getPlid(),
-							PortletRequest.RENDER_PHASE, MimeResponse.Copy.ALL);
-					}
-
-					redirectLocation = portletURL.toString();
+				if (!portlet.isActionURLRedirect()) {
+					return new ActionResult(events, null);
 				}
+
+				PortletURL portletURL = null;
+
+				if (portletApp.getSpecMajorVersion() < 3) {
+					portletURL = PortletURLFactoryUtil.create(
+						liferayActionRequest, portlet, layout,
+						PortletRequest.RENDER_PHASE);
+
+					Map<String, String[]> renderParameters =
+						liferayActionResponse.getRenderParameterMap();
+
+					for (Map.Entry<String, String[]> entry :
+							renderParameters.entrySet()) {
+
+						portletURL.setParameter(
+							entry.getKey(), entry.getValue());
+					}
+				}
+				else {
+					portletURL = PortletURLFactoryUtil.create(
+						liferayActionRequest, portlet, layout.getPlid(),
+						PortletRequest.RENDER_PHASE, MimeResponse.Copy.ALL);
+				}
+
+				redirectLocation = portletURL.toString();
 			}
 			else {
 				redirectLocation = PortalUtil.escapeRedirect(redirectLocation);
