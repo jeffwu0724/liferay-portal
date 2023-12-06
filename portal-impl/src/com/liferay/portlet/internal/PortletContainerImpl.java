@@ -522,8 +522,12 @@ public class PortletContainerImpl implements PortletContainer {
 				liferayActionResponse.getRedirectLocation();
 
 			if (Validator.isNotNull(redirectLocation)) {
-				return new ActionResult(
-					events, PortalUtil.escapeRedirect(redirectLocation));
+				if (!liferayActionResponse.isAuthExternalSite()) {
+					redirectLocation = PortalUtil.escapeRedirect(
+						redirectLocation);
+				}
+
+				return new ActionResult(events, redirectLocation);
 			}
 
 			if (!portlet.isActionURLRedirect()) {
