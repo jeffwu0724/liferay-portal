@@ -30,6 +30,10 @@ public class ActionResponseImpl
 		return PortletRequest.ACTION_PHASE;
 	}
 
+	public boolean isAuthExternalSite() {
+		return _autoExternalSite;
+	}
+
 	@Override
 	public void sendRedirect(String location) throws IOException {
 		if ((location == null) ||
@@ -51,5 +55,11 @@ public class ActionResponseImpl
 	public void sendRedirect(String location, String renderUrlParamName)
 		throws IOException {
 	}
+
+	public void setAuthExternalSite(boolean autoExternalSite) {
+		_autoExternalSite = autoExternalSite;
+	}
+
+	private boolean _autoExternalSite = AUTH_EXTERNAL_SITE;
 
 }

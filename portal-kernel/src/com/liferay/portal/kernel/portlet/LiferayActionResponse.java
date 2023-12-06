@@ -15,4 +15,11 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface LiferayActionResponse
 	extends ActionResponse, LiferayStateAwareResponse {
+
+	public static final boolean AUTH_EXTERNAL_SITE = false;
+
+	public boolean isAuthExternalSite();
+
+	public void setAuthExternalSite(boolean authExternalSite);
+
 }
