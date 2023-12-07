@@ -1,0 +1,23 @@
+Bundle-Name: Liferay Shared Dependencies Geronimo
+Bundle-SymbolicName: com.liferay.shared.dependencies.geronimo
+Bundle-Version: 1.0.0
+Require-Capability:\
+	osgi.contract;\
+		filter:="(&(osgi.contract=JavaJSONP)(version=1.1.0))";\
+		osgi.contract=JavaJSONP,\
+	osgi.ee;\
+		filter:="(&(osgi.ee=JavaSE)(version=1.8))",\
+	osgi.extender;\
+		filter:="(osgi.extender=osgi.serviceloader.processor)",\
+	osgi.serviceloader;\
+		cardinality:=multiple;\
+		filter:="(osgi.serviceloader=javax.json.bind.spi.JsonbProvider)",\
+	osgi.serviceloader;\
+		cardinality:=multiple;\
+		filter:="(osgi.serviceloader=javax.ws.rs.client.ClientBuilder)",\
+	osgi.serviceloader;\
+		cardinality:=multiple;\
+		filter:="(osgi.serviceloader=javax.ws.rs.ext.RuntimeDelegate)",\
+	osgi.serviceloader;\
+		cardinality:=multiple;\
+		filter:="(osgi.serviceloader=javax.ws.rs.sse.SseEventSource.Builder)"
