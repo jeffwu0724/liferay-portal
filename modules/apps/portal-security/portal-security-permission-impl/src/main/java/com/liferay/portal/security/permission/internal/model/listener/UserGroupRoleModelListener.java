@@ -1,0 +1,61 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+package com.liferay.portal.security.permission.internal.model.listener;
+
+import com.liferay.portal.kernel.model.BaseModelListener;
+import com.liferay.portal.kernel.model.ModelListener;
+import com.liferay.portal.kernel.model.UserGroupRole;
+import com.liferay.portal.model.impl.UserGroupRoleModelImpl;
+import com.liferay.portal.security.permission.PermissionCacheUtil;
+
+import org.osgi.service.component.annotations.Component;
+
+/**
+ * @author Preston Crary
+ */
+@Component(service = ModelListener.class)
+public class UserGroupRoleModelListener
+	extends BaseModelListener<UserGroupRole> {
+
+	@Override
+	public void onAfterCreate(UserGroupRole userGroupRole) {
+		_clearCache(userGroupRole);
+	}
+
+	@Override
+	public void onAfterRemove(UserGroupRole userGroupRole) {
+		_clearCache(userGroupRole);
+	}
+
+	@Override
+	public void onAfterUpdate(
+		UserGroupRole originalUserGroupRole, UserGroupRole userGroupRole) {
+
+		_clearCache(userGroupRole);
+	}
+
+	@Override
+	public void onBeforeUpdate(
+		UserGroupRole originalUserGroupRole, UserGroupRole userGroupRole) {
+
+		UserGroupRoleModelImpl userGroupRoleModelImpl =
+			(UserGroupRoleModelImpl)userGroupRole;
+
+		long originalUserId = userGroupRoleModelImpl.getColumnOriginalValue(
+			"userId");
+
+		if (originalUserId != userGroupRoleModelImpl.getUserId()) {
+			PermissionCacheUtil.clearCache(originalUserId);
+		}
+	}
+
+	private void _clearCache(UserGroupRole userGroupRole) {
+		if (userGroupRole != null) {
+			PermissionCacheUtil.clearCache(userGroupRole.getUserId());
+		}
+	}
+
+}

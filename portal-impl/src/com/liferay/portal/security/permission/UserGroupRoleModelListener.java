@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
-import com.liferay.portal.model.impl.UserGroupRoleModelImpl;
 
 /**
  * @author Preston Crary
@@ -22,13 +21,11 @@ public class UserGroupRoleModelListener
 
 	@Override
 	public void onAfterCreate(UserGroupRole userGroupRole) {
-		_clearCache(userGroupRole);
 		_reindexUser(userGroupRole.getUserId());
 	}
 
 	@Override
 	public void onAfterRemove(UserGroupRole userGroupRole) {
-		_clearCache(userGroupRole);
 		_reindexUser(userGroupRole.getUserId());
 	}
 
@@ -36,29 +33,7 @@ public class UserGroupRoleModelListener
 	public void onAfterUpdate(
 		UserGroupRole originalUserGroupRole, UserGroupRole userGroupRole) {
 
-		_clearCache(userGroupRole);
 		_reindexUser(userGroupRole.getUserId());
-	}
-
-	@Override
-	public void onBeforeUpdate(
-		UserGroupRole originalUserGroupRole, UserGroupRole userGroupRole) {
-
-		UserGroupRoleModelImpl userGroupRoleModelImpl =
-			(UserGroupRoleModelImpl)userGroupRole;
-
-		long originalUserId = userGroupRoleModelImpl.getColumnOriginalValue(
-			"userId");
-
-		if (originalUserId != userGroupRoleModelImpl.getUserId()) {
-			PermissionCacheUtil.clearCache(originalUserId);
-		}
-	}
-
-	private void _clearCache(UserGroupRole userGroupRole) {
-		if (userGroupRole != null) {
-			PermissionCacheUtil.clearCache(userGroupRole.getUserId());
-		}
 	}
 
 	private void _reindexUser(long userId) {
