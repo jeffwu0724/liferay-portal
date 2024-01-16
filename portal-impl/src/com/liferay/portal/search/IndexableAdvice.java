@@ -45,6 +45,10 @@ public class IndexableAdvice extends ChainableMethodAdvice {
 
 		Class<?> returnType = method.getReturnType();
 
+		if (indexable.indexableTarget() != null) {
+			returnType = indexable.indexableTarget();
+		}
+
 		if (!BaseModel.class.isAssignableFrom(returnType)) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(method + " does not have a valid return type");

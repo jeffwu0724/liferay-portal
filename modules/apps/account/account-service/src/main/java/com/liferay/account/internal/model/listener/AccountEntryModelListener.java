@@ -87,7 +87,9 @@ public class AccountEntryModelListener extends BaseModelListener<AccountEntry> {
 		}
 	}
 
-	@Indexable(type = IndexableType.REINDEX)
+	@Indexable(
+		indexableTarget = AccountEntry.class, type = IndexableType.REINDEX
+	)
 	@Override
 	public void onAfterUpdate(
 		AccountEntry originalAccountEntry, AccountEntry accountEntry) {

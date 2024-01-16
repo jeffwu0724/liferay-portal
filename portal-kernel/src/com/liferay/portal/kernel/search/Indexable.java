@@ -19,6 +19,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Indexable {
 
+	public Class<?> indexableTarget() default Object.class;
+
 	public IndexableType type();
 
 }

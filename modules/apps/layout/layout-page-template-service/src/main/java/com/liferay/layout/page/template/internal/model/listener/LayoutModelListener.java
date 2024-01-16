@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = ModelListener.class)
 public class LayoutModelListener extends BaseModelListener<Layout> {
 
-	@Indexable(type = IndexableType.REINDEX)
+	@Indexable(indexableTarget = Layout.class, type = IndexableType.REINDEX)
 	@Override
 	public void onAfterCreate(Layout layout) throws ModelListenerException {
 		if (!layout.isTypeContent() && !layout.isTypeAssetDisplay()) {
@@ -91,7 +91,7 @@ public class LayoutModelListener extends BaseModelListener<Layout> {
 			() -> _copyStructure(layoutPageTemplateEntry, layout));
 	}
 
-	@Indexable(type = IndexableType.REINDEX)
+	@Indexable(indexableTarget = Layout.class, type = IndexableType.REINDEX)
 	@Override
 	public void onAfterUpdate(Layout originalLayout, Layout layout)
 		throws ModelListenerException {
