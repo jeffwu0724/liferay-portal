@@ -22,9 +22,10 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.ModelListener;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
@@ -48,6 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = ModelListener.class)
 public class LayoutModelListener extends BaseModelListener<Layout> {
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public void onAfterCreate(Layout layout) throws ModelListenerException {
 		if (!layout.isTypeContent() && !layout.isTypeAssetDisplay()) {
@@ -75,8 +77,6 @@ public class LayoutModelListener extends BaseModelListener<Layout> {
 			return;
 		}
 
-		_reindexLayout(layout);
-
 		LayoutPageTemplateEntry layoutPageTemplateEntry =
 			_getLayoutPageTemplateEntry(layout);
 
@@ -91,15 +91,10 @@ public class LayoutModelListener extends BaseModelListener<Layout> {
 			() -> _copyStructure(layoutPageTemplateEntry, layout));
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public void onAfterUpdate(Layout originalLayout, Layout layout)
 		throws ModelListenerException {
-
-		if (!layout.isTypeContent()) {
-			return;
-		}
-
-		_reindexLayout(layout);
 	}
 
 	@Override
@@ -255,27 +250,6 @@ public class LayoutModelListener extends BaseModelListener<Layout> {
 
 		return _layoutPageTemplateEntryLocalService.
 			fetchLayoutPageTemplateEntry(layout.getClassPK());
-	}
-
-	private void _reindexLayout(Layout layout) {
-		Indexer<Layout> indexer = IndexerRegistryUtil.getIndexer(Layout.class);
-
-		if ((indexer == null) || !layout.isApproved() || layout.isSystem()) {
-			return;
-		}
-
-		try {
-			indexer.reindex(layout);
-		}
-		catch (SearchException searchException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Unable to reindex layout " + layout.getPlid(),
-					searchException);
-			}
-
-			throw new ModelListenerException(searchException);
-		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

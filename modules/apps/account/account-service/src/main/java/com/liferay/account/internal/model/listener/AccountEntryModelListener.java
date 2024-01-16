@@ -17,9 +17,8 @@ import com.liferay.account.service.AccountRoleLocalService;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.ModelListener;
-import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 
 import java.util.List;
 
@@ -88,23 +87,10 @@ public class AccountEntryModelListener extends BaseModelListener<AccountEntry> {
 		}
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public void onAfterUpdate(
 		AccountEntry originalAccountEntry, AccountEntry accountEntry) {
-
-		_reindexAccountEntry(accountEntry);
-	}
-
-	private void _reindexAccountEntry(AccountEntry accountEntry) {
-		try {
-			Indexer<AccountEntry> indexer =
-				IndexerRegistryUtil.nullSafeGetIndexer(AccountEntry.class);
-
-			indexer.reindex(accountEntry);
-		}
-		catch (SearchException searchException) {
-			throw new ModelListenerException(searchException);
-		}
 	}
 
 	@Reference
