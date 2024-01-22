@@ -1,6 +1,6 @@
 dependencies {
-	compileInclude group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-base", version: "2.11.4"
-	compileInclude group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-json-provider", version: "2.11.4"
+	compileOnly group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-base", version: "2.11.4"
+	compileOnly group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-json-provider", version: "2.11.4"
 	compileInclude group: "com.github.albfernandez", name: "juniversalchardet", version: "2.4.0"
 	compileInclude group: "com.github.scribejava", name: "scribejava-core", version: "6.6.3"
 	compileInclude group: "com.univocity", name: "univocity-parsers", version: "2.9.1"
