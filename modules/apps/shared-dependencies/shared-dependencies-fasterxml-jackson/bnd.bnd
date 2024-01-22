@@ -1,0 +1,5 @@
+Bundle-Name: Liferay Shared Dependencies Fasterxml Jackson
+Bundle-SymbolicName: com.liferay.shared.dependencies.fasterxml.jackson
+Bundle-Version: 1.0.0
+-exportcontents: com.fasterxml.jackson.*
+-fixupmessages: Classes found in the wrong directory: ...;is:=ignore
