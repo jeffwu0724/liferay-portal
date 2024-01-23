@@ -10,9 +10,6 @@ Import-Package:\
 	\
 	!com.conversantmedia.util.concurrent.*,\
 	\
-	!com.fasterxml.aalto.*,\
-	!com.fasterxml.jackson.dataformat.*,\
-	\
 	!com.github.luben.zstd.*,\
 	!com.github.mustachejava.*,\
 	\
