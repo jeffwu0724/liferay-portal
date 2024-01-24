@@ -12,6 +12,7 @@ Import-Package:\
 	!org.apache.commons.vfs2.*,\
 	!org.apache.tapestry5.json.*,\
 	!org.apache.xml.resolver.*,\
+	!org.apache.commons.collections.*,\
 	\
 	*
 Web-ContextPath: /dynamic-data-mapping-data-provider-impl
