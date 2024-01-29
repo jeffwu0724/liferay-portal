@@ -1,0 +1,5 @@
+Bundle-Name: Liferay Shared Dependencies SnakeYaml
+Bundle-SymbolicName: com.liferay.shared.dependencies.snakeyaml
+Bundle-Version: 1.0.0
+-exportcontents: org.yaml.snakeyaml.*
+-fixupmessages: Classes found in the wrong directory: ...;is:=ignore
