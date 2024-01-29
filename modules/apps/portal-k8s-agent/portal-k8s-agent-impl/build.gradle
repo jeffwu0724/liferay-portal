@@ -29,7 +29,6 @@ dependencies {
 	compileInclude group: "io.fabric8", name: "kubernetes-model-storageclass", version: "5.12.2"
 	compileInclude group: "io.fabric8", name: "zjsonpatch", version: "0.3.0"
 	compileInclude group: "org.jetbrains.kotlin", name: "kotlin-stdlib", version: "1.8.0"
-	compileInclude group: "org.yaml", name: "snakeyaml", version: "2.0"
 
 	compileOnly group: "com.fasterxml.jackson.core", name: "jackson-annotations", version: "2.16.1"
 	compileOnly group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.16.1"
@@ -41,6 +40,7 @@ dependencies {
 	compileOnly group: "org.osgi", name: "org.osgi.service.component", version: "1.4.0"
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.4.0"
 	compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
+	compileOnly group: "org.yaml", name: "snakeyaml", version: "2.0"
 	compileOnly project(":apps:portal-k8s-agent:portal-k8s-agent-api")
 	compileOnly project(":apps:static:osgi:osgi-util")
 	compileOnly project(":apps:static:portal-configuration:portal-configuration-metatype-api")
