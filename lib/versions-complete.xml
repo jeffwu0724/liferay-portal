@@ -632,8 +632,8 @@
 			</library>
 			<library>
 				<file-name>com.liferay.diff.impl.jar!org.outerj.daisy.diff.jar</file-name>
-				<version>1.2.0-atlassian-hosted.LIFERAY-PATCHED-3</version>
-				<project-name>org.outerj.daisy.diff</project-name>
+				<version>1.2.0-atlassian-hosted.LIFERAY-PATCHED-4</version>
+				<project-name>com.liferay:org.outerj.daisy.diff</project-name>
 				<licenses>
 					<license>
 						<license-name>LGPL 2.1</license-name>
