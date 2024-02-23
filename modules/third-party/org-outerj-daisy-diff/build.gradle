@@ -1,9 +1,21 @@
 import com.liferay.gradle.plugins.patcher.PatchTask
+import com.liferay.gradle.util.FileUtil
 
 apply plugin: "com.liferay.patcher"
 
 task patch(type: PatchTask)
+task downloadSrc(type: Copy)
 
+downloadSrc {
+	from FileUtil.get(project, "https://packages.atlassian.com/3rdparty/org/outerj/daisy/daisydiff/1.2.0-atlassian-hosted/daisydiff-1.2.0-atlassian-hosted-sources.jar")
+	into new File("$buildDir")
+}
+
+repositories {
+	maven {
+		url "https://repository.liferay.com/nexus/content/repositories/third-party"
+	}
+}
 dependencies {
 	api group: "com.liferay", name: "org.outerj.daisy.daisydiff", version: "1.2"
 
@@ -12,6 +24,8 @@ dependencies {
 }
 
 patch {
+	dependsOn downloadSrc
+
 	ext {
 		autoClean = false
 	}
@@ -19,12 +33,6 @@ patch {
 	fileNames "org/outerj/daisy/diff/helper/CleanBrokenAttributeQNamesHandler.java"
 	fileNames "org/outerj/daisy/diff/helper/NekoHtmlParser.java"
 
-	originalLibModuleName = "daisydiff"
-	originalLibSrcBaseUrl = "https://packages.atlassian.com/3rdparty/org/outerj/daisy/"
-}
-
-repositories {
-	maven {
-		url "https://repository-cdn.liferay.com/nexus/content/repositories/third-party"
-	}
+	originalLibModuleName = "org.outerj.daisy.daisydiff"
+	originalLibSrcFile = "$buildDir/daisydiff-1.2.0-atlassian-hosted-sources.jar"
 }
