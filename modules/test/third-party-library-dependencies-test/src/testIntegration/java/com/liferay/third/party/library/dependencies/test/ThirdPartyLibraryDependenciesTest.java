@@ -12,6 +12,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +64,19 @@ public class ThirdPartyLibraryDependenciesTest {
 			for (String exportPackageFromManifest :
 					_getExportPackagesFromManifest(curBundle)) {
 
-				Assert.assertTrue(
-					curBundle.getSymbolicName() +
-						" contains unused export-package: " +
-							exportPackageFromManifest,
-					inUseExportPackage.contains(exportPackageFromManifest));
+				if (!inUseExportPackage.contains(exportPackageFromManifest)) {
+					_updatedExportComponent.put(
+						curBundle.getSymbolicName(), inUseExportPackage);
+
+					break;
+				}
 			}
 		}
+
+		Assert.assertTrue(
+			"These bundles has unused export-package, please update: " +
+				_updatedExportComponent,
+			_updatedExportComponent.isEmpty());
 	}
 
 	private List<String> _getExportPackagesFromManifest(Bundle bundle) {
@@ -110,5 +117,8 @@ public class ThirdPartyLibraryDependenciesTest {
 
 		return inUseExportPackages;
 	}
+
+	private final Map<String, Set<String>> _updatedExportComponent =
+		new HashMap<>();
 
 }
