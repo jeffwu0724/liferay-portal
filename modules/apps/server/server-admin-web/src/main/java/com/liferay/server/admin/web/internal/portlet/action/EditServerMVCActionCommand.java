@@ -5,6 +5,7 @@
 
 package com.liferay.server.admin.web.internal.portlet.action;
 
+import com.liferay.captcha.util.CaptchaUtil;
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
 import com.liferay.document.library.kernel.document.conversion.DocumentConversion;
 import com.liferay.document.library.kernel.model.DLProcessorConstants;
@@ -253,6 +254,7 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			_gc();
 		}
 		else if (cmd.equals("runScript")) {
+			CaptchaUtil.check(actionRequest);
 			_runScript(actionRequest, actionResponse);
 		}
 		else if (cmd.equals("shutdown")) {
