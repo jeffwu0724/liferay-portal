@@ -1274,6 +1274,9 @@ public class PropsValues {
 	public static final String MAIL_SESSION_MAIL_TRANSPORT_PROTOCOL =
 		PropsUtil.get(PropsKeys.MAIL_SESSION_MAIL_TRANSPORT_PROTOCOL);
 
+	public static final String[] MAX_CHALLENGES_BLACKLISTED_PORLETNAMES =
+		PropsUtil.getArray(PropsKeys.MAX_CHALLENGES_BLACKLISTED_PORLETNAMES);
+
 	public static final boolean MEMBERSHIP_POLICY_AUTO_VERIFY =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.MEMBERSHIP_POLICY_AUTO_VERIFY));

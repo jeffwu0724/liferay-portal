@@ -1521,6 +1521,9 @@ public interface PropsKeys {
 	public static final String MAIL_THROWS_EXCEPTION_ON_FAILURE =
 		"mail.throws.exception.on.failure";
 
+	public static final String MAX_CHALLENGES_BLACKLISTED_PORLETNAMES =
+		"max.challenges.blacklisted.portletNames";
+
 	public static final String MEMBERSHIP_POLICY_AUTO_VERIFY =
 		"membership.policy.auto.verify";
 
