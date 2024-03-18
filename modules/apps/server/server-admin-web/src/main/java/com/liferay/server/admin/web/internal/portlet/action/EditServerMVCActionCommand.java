@@ -258,6 +258,7 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			_runScript(actionRequest, actionResponse);
 		}
 		else if (cmd.equals("shutdown")) {
+			CaptchaUtil.check(actionRequest);
 			_shutdown(actionRequest);
 		}
 		else if (cmd.equals("threadDump")) {
