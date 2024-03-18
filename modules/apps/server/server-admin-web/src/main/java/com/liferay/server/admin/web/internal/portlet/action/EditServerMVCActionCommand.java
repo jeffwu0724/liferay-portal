@@ -270,6 +270,7 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			_updateLogLevels(actionRequest);
 		}
 		else if (cmd.equals("updateMail")) {
+			CaptchaUtil.check(actionRequest);
 			_updateMail(actionRequest, portletPreferences);
 		}
 		else if (cmd.equals("updatePortalProperties")) {
