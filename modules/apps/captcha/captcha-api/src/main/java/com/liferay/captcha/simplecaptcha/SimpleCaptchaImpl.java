@@ -13,8 +13,10 @@ import com.liferay.portal.kernel.captcha.CaptchaTextException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Release;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.security.RandomUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -91,6 +94,20 @@ public class SimpleCaptchaImpl implements Captcha {
 
 	@Override
 	public boolean isEnabled(HttpServletRequest httpServletRequest) {
+		LiferayPortletConfig liferayPortletConfig =
+			(LiferayPortletConfig)httpServletRequest.getAttribute(
+				JavaConstants.JAVAX_PORTLET_CONFIG);
+
+		if (liferayPortletConfig != null) {
+			String portletName = liferayPortletConfig.getPortletName();
+
+			for (String name : _maxChallengesBlacklistedPortletNames) {
+				if (Objects.equals(name, portletName)) {
+					return true;
+				}
+			}
+		}
+
 		if (isExceededMaxChallenges(httpServletRequest)) {
 			return false;
 		}
