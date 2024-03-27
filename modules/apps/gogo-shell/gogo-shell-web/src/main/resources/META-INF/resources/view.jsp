@@ -11,6 +11,10 @@
 String commandOutput = (String)SessionMessages.get(renderRequest, "commandOutput");
 %>
 
+<liferay-ui:error exception="<%= CaptchaConfigurationException.class %>" message="a-captcha-error-occurred-please-contact-an-administrator" />
+<liferay-ui:error exception="<%= CaptchaException.class %>" message="captcha-verification-failed" />
+<liferay-ui:error exception="<%= CaptchaTextException.class %>" message="text-verification-failed" />
+
 <portlet:actionURL name="executeCommand" var="executeCommandURL" />
 
 <clay:container-fluid>
@@ -38,6 +42,8 @@ String commandOutput = (String)SessionMessages.get(renderRequest, "commandOutput
 				</aui:fieldset>
 			</div>
 		</div>
+
+		<liferay-captcha:captcha />
 
 		<aui:button-row>
 			<aui:button primary="<%= true %>" type="submit" value="execute" />
