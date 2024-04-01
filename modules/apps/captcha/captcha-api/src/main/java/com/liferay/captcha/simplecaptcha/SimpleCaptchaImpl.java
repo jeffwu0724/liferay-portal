@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.security.RandomUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
@@ -89,11 +90,30 @@ public class SimpleCaptchaImpl implements Captcha {
 
 	@Override
 	public boolean isEnabled(HttpServletRequest httpServletRequest) {
+		_curMaxChallenges = _captchaConfiguration.maxChallenges();
+
+		HttpSession httpSession = _getHttpSession(httpServletRequest);
+
+		String key = _CAPTCHA_MAX_CHALLENGES;
+
+		String portletId = portal.getPortletId(httpServletRequest);
+
+		if (Validator.isNotNull(portletId)) {
+			key = portal.getPortletNamespace(portletId) + key;
+		}
+
+		if (Validator.isNotNull(httpSession.getAttribute(key))) {
+			_curMaxChallenges = GetterUtil.getInteger(
+				httpSession.getAttribute(
+					key
+				).toString());
+		}
+
 		if (isExceededMaxChallenges(httpServletRequest)) {
 			return false;
 		}
 
-		if (_captchaConfiguration.maxChallenges() >= 0) {
+		if (_curMaxChallenges >= 0) {
 			return true;
 		}
 
@@ -280,7 +300,7 @@ public class SimpleCaptchaImpl implements Captcha {
 	}
 
 	protected void incrementCounter(HttpServletRequest httpServletRequest) {
-		if ((_captchaConfiguration.maxChallenges() > 0) &&
+		if ((_curMaxChallenges > 0) &&
 			Validator.isNotNull(httpServletRequest.getRemoteUser())) {
 
 			HttpSession httpSession = _getHttpSession(httpServletRequest);
@@ -384,7 +404,7 @@ public class SimpleCaptchaImpl implements Captcha {
 	protected boolean isExceededMaxChallenges(
 		HttpServletRequest httpServletRequest) {
 
-		if (_captchaConfiguration.maxChallenges() > 0) {
+		if (_curMaxChallenges > 0) {
 			HttpSession httpSession = _getHttpSession(httpServletRequest);
 
 			Integer count = (Integer)httpSession.getAttribute(
@@ -397,9 +417,7 @@ public class SimpleCaptchaImpl implements Captcha {
 	}
 
 	protected boolean isExceededMaxChallenges(Integer count) {
-		if ((count != null) &&
-			(count >= _captchaConfiguration.maxChallenges())) {
-
+		if ((count != null) && (count >= _curMaxChallenges)) {
 			return true;
 		}
 
@@ -520,6 +538,7 @@ public class SimpleCaptchaImpl implements Captcha {
 
 	private BackgroundProducer[] _backgroundProducers;
 	private volatile CaptchaConfiguration _captchaConfiguration;
+	private int _curMaxChallenges;
 	private GimpyRenderer[] _gimpyRenderers;
 	private final Map<String, Object> _instances = new ConcurrentHashMap<>();
 	private NoiseProducer[] _noiseProducers;
