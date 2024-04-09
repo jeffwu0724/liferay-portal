@@ -65,7 +65,7 @@ public class ThirdPartyLibraryDependenciesTest {
 					_getExportPackagesFromManifest(curBundle)) {
 
 				if (!inUseExportPackage.contains(exportPackageFromManifest)) {
-					_updatedExportComponent.put(
+					_updatedExportComponents.put(
 						curBundle.getSymbolicName(), inUseExportPackage);
 
 					break;
@@ -74,9 +74,9 @@ public class ThirdPartyLibraryDependenciesTest {
 		}
 
 		Assert.assertTrue(
-			"These bundles has unused export-package, please update: " +
-				_updatedExportComponent,
-			_updatedExportComponent.isEmpty());
+			"These bundles has unused export-package, please update: \n" +
+				_print(_updatedExportComponents),
+			_updatedExportComponents.isEmpty());
 	}
 
 	private List<String> _getExportPackagesFromManifest(Bundle bundle) {
@@ -118,7 +118,35 @@ public class ThirdPartyLibraryDependenciesTest {
 		return inUseExportPackages;
 	}
 
-	private final Map<String, Set<String>> _updatedExportComponent =
+	private String _print(Map<String, Set<String>> map) {
+		StringBuilder sb = new StringBuilder();
+
+		for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
+			sb.append(
+				entry.getKey()
+			).append(
+				StringPool.COLON
+			).append(
+				StringPool.NEW_LINE
+			);
+
+			for (String value : entry.getValue()) {
+				sb.append(
+					value
+				).append(
+					",\\"
+				).append(
+					StringPool.NEW_LINE
+				);
+			}
+
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
+
+	private final Map<String, Set<String>> _updatedExportComponents =
 		new HashMap<>();
 
 }
