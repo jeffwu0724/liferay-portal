@@ -124,6 +124,7 @@ else {
 }
 %>
 
+
 <%!
 private static final String[] _ALL_PRIORITIES = {String.valueOf(Level.OFF), String.valueOf(Level.FATAL), String.valueOf(Level.ERROR), String.valueOf(Level.WARN), String.valueOf(Level.INFO), String.valueOf(Level.DEBUG), String.valueOf(Level.TRACE), String.valueOf(Level.ALL)};
 %>
