@@ -11889,6 +11889,8 @@ ${update.properties}</echo>
 		<get-database-property property.name="database.username" />
 		<get-database-property property.name="database.version" />
 
+		<property name="turn.off.captcha" value="true" />
+
 		<echo append="true" file="portal-impl/src/portal-ext.properties">
 
 liferay.home=${liferay.home}

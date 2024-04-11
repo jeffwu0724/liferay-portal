@@ -35,12 +35,14 @@ page import="com.liferay.portal.kernel.util.Validator" %>
 <portlet:defineObjects />
 
 <%
-PortletRequest portletRequest = (PortletRequest)request.getAttribute(JavaConstants.JAVAX_PORTLET_REQUEST);
+if (!GetterUtil.getBoolean(PropsUtil.get(PropsUtil.get("turn.off.captcha")))){
+	PortletRequest portletRequest = (PortletRequest)request.getAttribute(JavaConstants.JAVAX_PORTLET_REQUEST);
 
-if (portletRequest != null) {
-	CaptchaUtil.setMaxChallenges(portletRequest, 0);
-}
-else {
-	CaptchaUtil.setMaxChallenges(request, 0);
+	if (portletRequest != null) {
+		CaptchaUtil.setMaxChallenges(portletRequest, 0);
+	}
+	else {
+		CaptchaUtil.setMaxChallenges(request, 0);
+	}
 }
 %>

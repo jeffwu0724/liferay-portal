@@ -114,13 +114,16 @@ VideoConverter videoConverter = (VideoConverter)request.getAttribute(VideoConver
 <%@ include file="/init-ext.jsp" %>
 
 <%
-PortletRequest portletRequest = (PortletRequest)request.getAttribute(JavaConstants.JAVAX_PORTLET_REQUEST);
+if (!GetterUtil.getBoolean(PropsUtil.get(PropsUtil.get("turn.off.captcha")))){
 
-if (portletRequest != null) {
-	CaptchaUtil.setMaxChallenges(portletRequest, 0);
-}
-else {
-	CaptchaUtil.setMaxChallenges(request, 0);
+	PortletRequest portletRequest = (PortletRequest)request.getAttribute(JavaConstants.JAVAX_PORTLET_REQUEST);
+
+	if (portletRequest != null) {
+		CaptchaUtil.setMaxChallenges(portletRequest, 0);
+	}
+	else {
+		CaptchaUtil.setMaxChallenges(request, 0);
+	}
 }
 %>
 
