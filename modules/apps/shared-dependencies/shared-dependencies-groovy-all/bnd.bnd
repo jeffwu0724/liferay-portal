@@ -30,6 +30,7 @@ Import-Package:\
 	org.codehaus.groovy.control.customizers,\
 	org.codehaus.groovy.reflection,\
 	org.codehaus.groovy.runtime,\
+	org.codehaus.groovy.runtime.callsite,\
 	org.codehaus.groovy.runtime.metaclass,\
 	org.codehaus.groovy.runtime.typehandling,\
 	org.codehaus.groovy.syntax,\
