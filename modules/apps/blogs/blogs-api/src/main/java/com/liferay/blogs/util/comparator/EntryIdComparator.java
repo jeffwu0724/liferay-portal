@@ -21,10 +21,6 @@ public class EntryIdComparator extends OrderByComparator<BlogsEntry> {
 
 	public static final String[] ORDER_BY_FIELDS = {"entryId"};
 
-	public EntryIdComparator() {
-		this(false);
-	}
-
 	public EntryIdComparator(boolean ascending) {
 		_ascending = ascending;
 	}

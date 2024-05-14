@@ -21,10 +21,6 @@ public class AssetListEntryTitleComparator
 
 	public static final String[] ORDER_BY_FIELDS = {"title"};
 
-	public AssetListEntryTitleComparator() {
-		this(false);
-	}
-
 	public AssetListEntryTitleComparator(boolean ascending) {
 		_ascending = ascending;
 	}
