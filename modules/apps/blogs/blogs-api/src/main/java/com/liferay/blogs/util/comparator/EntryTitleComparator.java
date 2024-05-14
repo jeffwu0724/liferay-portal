@@ -19,10 +19,6 @@ public class EntryTitleComparator extends OrderByComparator<BlogsEntry> {
 
 	public static final String[] ORDER_BY_FIELDS = {"title"};
 
-	public EntryTitleComparator() {
-		this(false);
-	}
-
 	public EntryTitleComparator(boolean ascending) {
 		_ascending = ascending;
 	}

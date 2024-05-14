@@ -21,10 +21,6 @@ public class AssetListEntryCreateDateComparator
 
 	public static final String[] ORDER_BY_FIELDS = {"createDate"};
 
-	public AssetListEntryCreateDateComparator() {
-		this(false);
-	}
-
 	public AssetListEntryCreateDateComparator(boolean ascending) {
 		_ascending = ascending;
 	}
