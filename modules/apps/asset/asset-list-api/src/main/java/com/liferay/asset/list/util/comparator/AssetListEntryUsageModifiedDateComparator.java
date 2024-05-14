@@ -23,10 +23,6 @@ public class AssetListEntryUsageModifiedDateComparator
 
 	public static final String[] ORDER_BY_FIELDS = {"modifiedDate"};
 
-	public AssetListEntryUsageModifiedDateComparator() {
-		this(true);
-	}
-
 	public AssetListEntryUsageModifiedDateComparator(boolean ascending) {
 		_ascending = ascending;
 	}
