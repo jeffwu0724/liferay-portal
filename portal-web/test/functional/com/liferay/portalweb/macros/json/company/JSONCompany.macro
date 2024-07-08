@@ -119,12 +119,15 @@ definition {
 	}
 
 	@summary = "Default summary"
-	macro getCompanyIdNoSelenium(token = null) {
+	macro getCompanyIdNoSelenium(token = null, portalURL = null) {
 		if (!(isSet(portalInstanceName))) {
 			var portalInstanceName = JSONCompany.getPortalInstanceNameNoSelenium();
 		}
 
-		if (!(isSet(portalURL))) {
+		if (isSet(portalURL)) {
+			var portalURL = ${specificURL};
+		}
+		else {
 			var portalURL = JSONCompany.getDefaultPortalURL();
 		}
 
