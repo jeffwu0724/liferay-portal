@@ -124,7 +124,7 @@ definition {
 			var portalInstanceName = JSONCompany.getPortalInstanceNameNoSelenium();
 		}
 
-		if (!(isSet(portalURL))) {
+		if (!(isSet(portalURL)) || !(contains(${portalURL}, "localhost"))) {
 			var portalURL = JSONCompany.getDefaultPortalURL();
 		}
 
