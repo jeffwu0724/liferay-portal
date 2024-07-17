@@ -196,6 +196,10 @@ definition {
 
 		var portalInstanceName = JSONUserSetter.setPortalInstanceName(portalURL = ${portalURL});
 
+		echo("jsonuser!!!!!!!!!!!!!!!!!!userEmailAddress: ${userEmailAddress}");
+
+		echo("jsonuser!!!!!!!!!!!!!!!!!!portalURL: ${portalURL}");
+
 		var userId = JSONUserSetter.setUserId(
 			creatorEmailAddress = ${creatorEmailAddress},
 			creatorPassword = ${creatorPassword},

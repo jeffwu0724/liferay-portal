@@ -201,6 +201,8 @@ definition {
 			var customDefaultUserEmail = "test@liferay.com";
 		}
 
+		echo("jsonutil2!!!!!!!!!!!!!!!!!!customDefaultUserEmail: ${customDefaultUserEmail}");
+
 		return ${customDefaultUserEmail};
 	}
 

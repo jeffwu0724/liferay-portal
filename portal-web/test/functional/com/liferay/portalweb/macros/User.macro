@@ -2016,6 +2016,8 @@ definition {
 		var password = JSONUtil2.getDefaultUserFirstPassword(customDefaultUserFirstPassword = ${password});
 		var userEmailAddress = JSONUtil2.getDefaultUserEmail(customDefaultUserEmail = ${userEmailAddress});
 
+		echo("user!!!!!!!!!!!!!!!!!!userEmailAddress: ${userEmailAddress}");
+
 		if (${appServerType} == "weblogic") {
 
 			// Pausing 2 seconds due to LPS-159595
@@ -2034,6 +2036,8 @@ definition {
 
 		UserBar.signOut();
 
+		echo("user!!!!!!!!!!!!!!!!!!virtualHostsURL: ${virtualHostsURL}");
+
 		if (isSet(virtualHostsURL)) {
 			var portalURL = ${virtualHostsURL};
 		}
@@ -2046,6 +2050,9 @@ definition {
 		if (${isLXC} != "true") {
 
 			// Workaround for LXC not supporting JSON call currently
+
+			echo("user2!!!!!!!!!!!!!!!!!!userEmailAddress: ${userEmailAddress}");
+			echo("user2!!!!!!!!!!!!!!!!!!portalURL: ${portalURL}");
 
 			JSONUser.agreeToTermsAndAnswerReminderQuery(
 				password = ${password},
@@ -2072,6 +2079,7 @@ definition {
 			takeScreenshot();
 
 			echo("URL login failed, falling back to UI login.");
+			echo("user3!!!!!!!!!!!!!!!!!!userEmailAddress: ${userEmailAddress}");
 
 			User.firstLoginUI(
 				idpName = ${idpName},

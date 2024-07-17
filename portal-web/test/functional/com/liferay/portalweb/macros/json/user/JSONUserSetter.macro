@@ -101,6 +101,10 @@ definition {
 	macro setUserId(creatorPassword = null, portalInstanceName = null, userEmailAddress = null, specificURL = null, creatorEmailAddress = null) {
 		Variables.assertDefined(parameterList = ${userEmailAddress});
 
+		echo("jsonusersetter!!!!!!!!!!!!!!!!!!userEmailAddress: ${userEmailAddress}");
+
+		echo("jsonusersetter!!!!!!!!!!!!!!!!!!specificURL: ${specificURL}");
+
 		var userId = JSONUserAPI._getUserIdByEmailAddress(
 			creatorEmailAddress = ${creatorEmailAddress},
 			creatorPassword = ${creatorPassword},
