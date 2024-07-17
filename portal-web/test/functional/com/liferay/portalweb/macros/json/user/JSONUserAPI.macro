@@ -243,6 +243,8 @@ definition {
 			creatorPassword = ${creatorPassword},
 			portalInstanceName = ${portalInstanceName});
 
+		echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!specificURL: '${specificURL}'");
+
 		if (isSet(specificURL)) {
 			var portalURL = ${specificURL};
 		}
@@ -262,6 +264,13 @@ definition {
 		if (!(isSet(creatorPassword))) {
 			var creatorPassword = JSONUtil2.getSuperAdminUserPassword();
 		}
+
+		echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!userEmailAddress: '${userEmailAddress}'");
+		echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!portalURL: '${portalURL}'");
+		echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!companyId: '${companyId}'");
+		echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!userEmailAddress: '${userEmailAddress}'");
+		echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!creatorEmailAddress: '${creatorEmailAddress}'");
+        echo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!creatorPassword: '${creatorPassword}'");
 
 		var curl = '''
 			${portalURL}/api/jsonws/user/get-user-by-email-address/company-id/${companyId}/email-address/${userEmailAddress} \
