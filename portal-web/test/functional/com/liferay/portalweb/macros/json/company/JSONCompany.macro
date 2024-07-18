@@ -219,6 +219,8 @@ definition {
 			var portalURL = PropsUtil.get("portal.url");
 		}
 
+		echo("jsoncompany!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!portalURL: ${portalURL}");
+
 		return ${portalURL};
 	}
 

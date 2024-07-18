@@ -48,7 +48,7 @@ definition {
 		Page.assertNodePortPG(nodePort = 9080);
 
 		User.logoutPG(
-			nodePort = 9080,
+			specificURL = "http://localhost:9080",
 			password = PropsUtil.get("default.admin.password"),
 			userEmailAddress = "test@liferay.com");
 

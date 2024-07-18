@@ -348,6 +348,8 @@ definition {
 	macro openSpecificURL(domain = null, url = null) {
 		Open(value1 = ${url});
 
+		echo("navigator!!!!!!!!!!!!!!!!!!!!!!!!!url: ${url})");
+
 		Alert.confirmSecurity(domain = ${domain});
 	}
 
