@@ -2488,7 +2488,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.osgi.web.servlet.jsp.compiler.jar!javax.servlet.jsp.jar</file-name>
-				<version>2.3.3-b02.LIFERAY-PATCHED-9</version>
+				<version>2.3.3-b02.LIFERAY-PATCHED-10</version>
 				<project-name>JSP implementation</project-name>
 				<project-url>http://glassfish.org</project-url>
 				<licenses>
@@ -2500,7 +2500,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.osgi.web.wab.extender.jar!javax.servlet.jsp.jar</file-name>
-				<version>2.3.3-b02.LIFERAY-PATCHED-9</version>
+				<version>2.3.3-b02.LIFERAY-PATCHED-10</version>
 				<project-name>JSP implementation</project-name>
 				<project-url>http://glassfish.org</project-url>
 				<licenses>
