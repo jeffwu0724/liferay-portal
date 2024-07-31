@@ -104,7 +104,7 @@ definition {
 		}
 
 		if (!(isSet(creatorEmailAddress))) {
-			if (isSet(specificURL)) {
+			if (isSet(specificURL) && contains(${userEmailAddress}, "test")) {
 				var creatorEmailAddress = ${userEmailAddress};
 			}
 			else {
@@ -246,7 +246,7 @@ definition {
 		}
 
 		if (!(isSet(creatorEmailAddress))) {
-			if (isSet(specificURL)) {
+			if (isSet(specificURL) && contains(${userEmailAddress}, "test")) {
 				var creatorEmailAddress = ${userEmailAddress};
 			}
 			else {
