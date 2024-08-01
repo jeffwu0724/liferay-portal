@@ -2199,6 +2199,8 @@ definition {
 		UserBar.gotoDropdown();
 	}
 
+	
+
 	@summary = "Default summary"
 	macro loginByScreenNamePG(password = null, virtualHostsURL = null, userScreenName = null, newPassword = null) {
 		JSONUser.agreeToTermsAndAnswerReminderQueryByScreenName(
