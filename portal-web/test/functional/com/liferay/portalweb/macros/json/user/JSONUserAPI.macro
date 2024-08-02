@@ -104,7 +104,7 @@ definition {
 		}
 
 		if (!(isSet(creatorEmailAddress))) {
-			var creatorEmailAddress = "test@liferay.com";
+			var creatorEmailAddress = JSONUtil2.getSuperAdminUserEmail();
 		}
 
 		if (!(isSet(creatorPassword))) {
