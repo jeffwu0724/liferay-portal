@@ -96,10 +96,7 @@ definition {
 
 		DMDocument.viewTagInfo(tagName = "carton");
 
-		User.logoutPG(
-			nodePort = 9080,
-			password = PropsUtil.get("default.admin.password"),
-			userEmailAddress = "test@liferay.com");
+		User.logoutPG();
 
 		User.loginPG(
 			password = PropsUtil.get("default.admin.password"),
@@ -148,10 +145,7 @@ definition {
 
 		DMDocument.viewTagInfo(tagName = "jersey");
 
-		User.logoutPG(
-			nodePort = 9080,
-			password = PropsUtil.get("default.admin.password"),
-			userEmailAddress = "test@liferay.com");
+		User.logoutPG();
 
 		User.loginPG(
 			password = PropsUtil.get("default.admin.password"),
