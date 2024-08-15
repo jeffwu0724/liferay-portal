@@ -5,14 +5,13 @@
 	<version>
 		<libraries>
 			<library>
-				<file-name>com.liferay.adaptive.media.image.impl.jar!metadata-extractor.jar</file-name>
-				<version>2.19.0</version>
-				<project-name>metadata-extractor</project-name>
-				<project-url>https://drewnoakes.com/code/exif/</project-url>
+				<file-name>com.liferay.adaptive.media.image.impl.jar!com.drew.metadata.jar</file-name>
+				<version>2.19.0.LIFERAY-PATCHED-1</version>
+				<project-name>com.drew.metadata</project-name>
 				<licenses>
 					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-name>LGPL 2.1</license-name>
+						<license-url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -3770,6 +3769,17 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>com.liferay.portal.tika.jar!com.drew.metadata.jar</file-name>
+				<version>2.19.0.LIFERAY-PATCHED-1</version>
+				<project-name>com.drew.metadata</project-name>
+				<licenses>
+					<license>
+						<license-name>LGPL 2.1</license-name>
+						<license-url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>com.liferay.portal.tika.jar!commons-exec.jar</file-name>
 				<version>1.3</version>
 				<project-name>Apache Commons Exec</project-name>
@@ -3850,18 +3860,6 @@
 					<license>
 						<license-name>Mozilla Public License 1.1 (MPL 1.1)</license-name>
 						<license-url>http://www.mozilla.org/MPL/MPL-1.1.html</license-url>
-					</license>
-				</licenses>
-			</library>
-			<library>
-				<file-name>com.liferay.portal.tika.jar!metadata-extractor.jar</file-name>
-				<version>2.19.0</version>
-				<project-name>metadata-extractor</project-name>
-				<project-url>https://drewnoakes.com/code/exif/</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -5363,18 +5361,6 @@
 					<license>
 						<license-name>Apache License 2.0</license-name>
 						<license-url>http://www.apache.org/licenses/LICENSE-2.0.html</license-url>
-					</license>
-				</licenses>
-			</library>
-			<library>
-				<file-name>com.liferay.shared.dependencies.woodstox.core.jar!woodstox-core.jar</file-name>
-				<version>6.4.0</version>
-				<project-name>Woodstox</project-name>
-				<project-url>https://github.com/FasterXML/woodstox</project-url>
-				<licenses>
-					<license>
-						<license-name>The Apache Software License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -7113,6 +7099,18 @@
 				</licenses>
 			</library>
 			<library>
+				<file-name>lib/portal/stax2-api.jar</file-name>
+				<version>4.2.1</version>
+				<project-name>Stax2 API</project-name>
+				<project-url>http://github.com/FasterXML/stax2-api</project-url>
+				<licenses>
+					<license>
+						<license-name>The BSD License</license-name>
+						<license-url>http://www.opensource.org/licenses/bsd-license.php</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
 				<file-name>lib/portal/transaction.jar</file-name>
 				<version>1.3</version>
 				<project-name>Project GlassFish Java Transaction API</project-name>
@@ -7124,7 +7122,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/wstx.jar</file-name>
-				<version>3.2.8</version>
+				<version>6.4.0</version>
 				<project-name>Woodstox</project-name>
 				<project-url>http://woodstox.codehaus.org</project-url>
 				<licenses>
