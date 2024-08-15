@@ -5,6 +5,8 @@
 
 package com.liferay.portal.security.xml;
 
+import com.ctc.wstx.api.WstxInputProperties;
+
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -123,6 +125,10 @@ public class SecureXMLFactoryProviderImplTest {
 			public void run(String xml) throws Exception {
 				XMLInputFactory xmlInputFactory =
 					_secureXMLFactoryProviderImpl.newXMLInputFactory();
+
+				xmlInputFactory.setProperty(
+					WstxInputProperties.P_MAX_ENTITY_COUNT,
+					Integer.valueOf(Integer.MAX_VALUE));
 
 				XMLEventReader xmlEventReader =
 					xmlInputFactory.createXMLEventReader(new StringReader(xml));
