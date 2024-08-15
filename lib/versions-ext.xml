@@ -1529,7 +1529,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/wstx.jar</file-name>
-				<version>3.2.8</version>
+				<version>6.4.0</version>
 				<project-name>Woodstox</project-name>
 				<project-url>http://woodstox.codehaus.org</project-url>
 				<licenses>
