@@ -131,6 +131,7 @@
 /portal/spring-tx.jar
 /portal/spring-web.jar
 /portal/stax-ex.jar
+/portal/stax2-api.jar
 /portal/transaction.jar
 /portal/wstx.jar
 /portal/xercesImpl.jar
