@@ -17,6 +17,7 @@ Import-Package:\
 	\
 	!com.github.kklisura.*,\
 	\
+	!org.apache.commons.beanutils.*,\
 	!com.graphbuilder.curve.*,\
 	!com.graphbuilder.geom.*,\
 	\

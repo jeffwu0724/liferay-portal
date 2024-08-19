@@ -3,12 +3,12 @@ Bundle-SymbolicName: com.liferay.shared.dependencies.apache.commons
 Bundle-Version: 4.0.13
 Import-Package:\
 	!com.github.luben.zstd,\
+	!org.apache.commons.beanutils.*,\
 	\
 	!org.brotli.dec,\
 	\
 	*
 -exportcontents:\
-	org.apache.commons.beanutils.*,\
 	org.apache.commons.codec.*,\
 	org.apache.commons.collections4.*,\
 	org.apache.commons.compress.*,\
