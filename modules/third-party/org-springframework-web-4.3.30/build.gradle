@@ -44,6 +44,10 @@ jarPatched {
 	mustRunAfter processResources
 }
 
+jarSources {
+	mustRunAfter patch
+}
+
 patch {
 	ext {
 		autoClean = false
