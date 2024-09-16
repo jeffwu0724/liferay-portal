@@ -152,6 +152,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -509,6 +510,8 @@ public class ObjectDefinitionLocalServiceImpl
 		if (!objectDefinition.isUnmodifiableSystemObject()) {
 			_deleteObjectDefinitionPLOEntries(objectDefinition);
 
+			AtomicInteger count = new AtomicInteger();
+
 			ActionableDynamicQuery actionableDynamicQuery =
 				new DefaultActionableDynamicQuery() {
 
@@ -530,6 +533,12 @@ public class ObjectDefinitionLocalServiceImpl
 						portalSession.flush();
 
 						portalSession.clear();
+
+						int page = count.incrementAndGet();
+
+						if ((page % 10) == 0) {
+							_log.error("Page " + page);
+						}
 					}
 
 				};
