@@ -2141,6 +2141,7 @@ public class DefaultObjectEntryManagerImplTest
 					objectDefinition, objectEntry.getObjectEntryId());
 			});
 	}
+	
 
 	@Test
 	public void testGetObjectEntries() throws Exception {
