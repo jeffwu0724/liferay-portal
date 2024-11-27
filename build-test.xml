@@ -1144,18 +1144,14 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 
 			<var name="java.jdk.home" unset="true" />
 
-			<if>
-				<isset property="local.java.jdk.home" />
-				<then>
-					<property name="java.jdk.home" value="${local.java.jdk.home}" />
-				</then>
-				<else>
+
 					<if>
 						<and>
 							<equals arg1="@{type}" arg2="none" />
 							<equals arg1="@{version}" arg2="none" />
 						</and>
 						<then>
+							<echo>1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</echo>
 							<propertycopy from="java.jdk.default.runtime" property="java.jdk.home" silent="true" />
 						</then>
 						<elseif>
@@ -1164,6 +1160,7 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 								<equals arg1="@{type}" arg2="stable" />
 							</or>
 							<then>
+								<echo>2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</echo>
 								<propertycopy from="java.jdk[@{version}]" property="java.jdk.home.property.name" silent="true" />
 
 								<propertycopy from="${java.jdk.home.property.name}" property="java.jdk.home" silent="true" />
@@ -1172,6 +1169,7 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 						<elseif>
 							<equals arg1="@{version}" arg2="none" />
 							<then>
+								<echo>3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</echo>
 								<propertycopy from="portal.upstream.branch.default.runtime.jdk" property="java.jdk.home" silent="true" />
 
 								<if>
@@ -1185,6 +1183,7 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 							</then>
 						</elseif>
 						<else>
+							<echo>4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</echo>
 							<propertycopy from="java.jdk.home[@{version}][@{architecture}][@{type}]" property="java.jdk.home" silent="true" />
 						</else>
 					</if>
@@ -1208,8 +1207,6 @@ jdbc.default.connectionProperties=oracle.jdbc.ReadTimeout=0;oracle.net.CONNECT_T
 							<property name="java.jdk.home" value="${java.home}" />
 						</then>
 					</if>
-				</else>
-			</if>
 
 			<echo>## Using ${java.jdk.home} as JAVA_HOME.</echo>
 		</sequential>
@@ -2252,29 +2249,25 @@ war.path=${app.server.portal.dir}/</echo>
 				<entry key="sdk.dir" value="${sdk.dir}" />
 			</propertyfile>
 
-			<if>
-				<isset property="env.JENKINS_HOME" />
-				<then>
-					<local name="poshi.java.jdk.opts" />
 
-					<get-java-jdk-home version="8" />
+			<echo>set Jenkins_home!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</echo>
+			<local name="poshi.java.jdk.opts" />
 
-					<get-poshi-java-jdk-opts />
+			<echo>${java.jdk.version}!!!!!!!!!!!!!!!!!!</echo>
 
-					<gradle-execute dir="@{build.gradle.dir}" failonerror="@{failonerror}" setupbinariescache="false" stacktrace="false" task="@{task}">
-						<arg value="--build-file=@{build.gradle.file}" />
-						<arg value="-Ptmp.maven.repository.dir=../.m2-tmp" />
-						<env key="ANT_OPTS" value="${poshi.java.jdk.opts}" />
-						<env key="JAVA_HOME" path="${java.jdk.home}" />
-					</gradle-execute>
-				</then>
-				<else>
-					<gradle-execute dir="@{build.gradle.dir}" failonerror="@{failonerror}" setupbinariescache="false" stacktrace="false" task="@{task}">
-						<arg value="--build-file=@{build.gradle.file}" />
-						<arg value="-Ptmp.maven.repository.dir=../.m2-tmp" />
-					</gradle-execute>
-				</else>
-			</if>
+			<get-java-jdk-home version="8" />
+
+
+
+			<get-poshi-java-jdk-opts />
+
+			<gradle-execute dir="@{build.gradle.dir}" failonerror="@{failonerror}" setupbinariescache="false" stacktrace="false" task="@{task}">
+				<arg value="--build-file=@{build.gradle.file}" />
+				<arg value="-Ptmp.maven.repository.dir=../.m2-tmp" />
+				<env key="ANT_OPTS" value="${poshi.java.jdk.opts}" />
+				<env key="JAVA_HOME" path="${java.jdk.home}" />
+			</gradle-execute>
+
 		</sequential>
 	</macrodef>
 
