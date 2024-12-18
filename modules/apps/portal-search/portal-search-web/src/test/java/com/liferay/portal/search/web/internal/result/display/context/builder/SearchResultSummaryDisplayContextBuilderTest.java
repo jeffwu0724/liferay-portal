@@ -125,7 +125,7 @@ public class SearchResultSummaryDisplayContextBuilderTest {
 
 		document.addKeyword(Field.CREATE_DATE, "20180425171442");
 
-		_assertCreationDate("Apr 25, 18 5:14 PM", document);
+		_assertCreationDate("Apr 25, 18, 5:14 PM", document);
 
 		_assertCreationDate(LocaleUtil.BRAZIL, "25/04/2018 17:14", document);
 		_assertCreationDate(LocaleUtil.CHINA, "2018-4-25 下午5:14", document);
