@@ -157,6 +157,7 @@ svn://svn.liferay.com/repos/public/alloy/trunk/sandbox/taglibs.
 			fork="true"
 			inputstring="${modules.lib.versions.files},${project.dir}/lib/versions.xml,${project.dir}/lib/versions-ext.xml"
 			newenvironment="true"
+			jvmargs="--add-opens java.base/java.lang.invoke=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED"
 		>
 			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<arg value="${project.dir}/lib/versions.xsl" />
