@@ -5085,6 +5085,10 @@ information. Make sure to commit in all format-javadoc results.
 		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="5.7" test.portal.log.assert="true" />
 	</target>
 
+	<target name="functional-smoke-tomcat90-mysql57_stable-jdk17_zulu">
+		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="5.7" test.portal.log.assert="true" />
+	</target>
+
 	<target name="functional-smoke-tomcat90-mysql80">
 		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.0" test.portal.log.assert="true" />
 	</target>
@@ -7353,6 +7357,10 @@ information. Make sure to commit in all format-javadoc results.
 	</target>
 
 	<target name="modules-integration-mysql57_stable">
+		<run-modules-integration-test database.type="mysql" database.version="5.7" />
+	</target>
+
+	<target name="modules-integration-mysql57_stable-jdk17_zulu">
 		<run-modules-integration-test database.type="mysql" database.version="5.7" />
 	</target>
 
@@ -9958,6 +9966,10 @@ junit.jvm.override.version=21</echo>
 
 	<target name="unit_stable">
 		<antcall target="unit" />
+	</target>
+
+	<target name="unit_stable-jdk17_zulu">
+		<antcall target="unit-jdk17_zulu" />
 	</target>
 
 	<target name="workspaces-compile">
