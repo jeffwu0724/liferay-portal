@@ -31,12 +31,15 @@ import java.lang.reflect.InvocationHandler;
 import java.sql.Blob;
 import java.sql.Types;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -2120,6 +2123,9 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 				attributeGetterFunctions.entrySet()) {
 
 			String attributeName = entry.getKey();
+			if(_blacklistAttributeNames.contains(attributeName)){
+				continue;
+			}
 			Function<User, Object> attributeGetterFunction = entry.getValue();
 
 			sb.append("\"");
@@ -2406,5 +2412,10 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	private long _columnBitmask;
 	private User _escapedModel;
+	private Set<String> _blacklistAttributeNames = new HashSet<>(
+		Arrays.asList("password", "passwordEncrypted", "passwordReset",
+			"reminderQueryQuestion", "reminderQueryAnswer", "loginDate",
+			"loginIP",
+			"lastLoginDate", "lastLoginIP", "lastFailedLoginDate"));
 
 }
