@@ -1,5 +1,6 @@
 configurations {
 	compileIncludePlatform {
+		exclude group: "io.netty"
 		exclude group: "jakarta.xml.bind"
 	}
 }
