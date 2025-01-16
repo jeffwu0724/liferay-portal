@@ -20,6 +20,8 @@ Import-Package:\
 	!io.micrometer.context.*,\
 	!io.micrometer.core.instrument.*,\
 	\
+	!io.netty.channel.epoll,\
+	!io.netty.channel.unix,\
 	!io.netty.handler.codec.haproxy,\
 	!io.netty.incubator.channel.uring,\
 	\
