@@ -3,6 +3,8 @@ configurations {
 		exclude group: "commons-codec"
 		exclude group: "commons-logging"
 		exclude group: "io.netty"
+		exclude group: "io.projectreactor"
+		exclude group: "io.projectreactor.netty"
 	}
 }
 
