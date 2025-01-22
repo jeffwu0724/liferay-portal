@@ -52,7 +52,7 @@ dependencies {
 	compileOnly  group: 'io.netty', name: 'netty-transport-native-unix-common', version: '4.1.110.Final'
 	compileInclude group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.3'
 	compileInclude group: 'com.nimbusds', name: 'oauth2-oidc-sdk', version: '11.9.1'
-	compileInclude group: 'org.reactivestreams', name: 'reactive-streams', version: '1.0.4'
+	compileOnly group: 'org.reactivestreams', name: 'reactive-streams', version: '1.0.4'
 	compileOnly group: 'io.projectreactor', name: 'reactor-core', version: '3.4.38'
 	compileOnly group: 'io.projectreactor.netty', name: 'reactor-netty-http', version: '1.0.45'
 	compileOnly 	group: 'io.projectreactor.netty', name: 'reactor-netty-core', version: '1.0.45'

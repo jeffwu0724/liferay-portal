@@ -33,4 +33,5 @@ dependencies {
 	compileInclude group: 'io.projectreactor', name: 'reactor-core', version: '3.4.38'
 	compileInclude group: 'io.projectreactor.netty', name: 'reactor-netty-http', version: '1.0.45'
 	compileInclude 	group: 'io.projectreactor.netty', name: 'reactor-netty-core', version: '1.0.45'
+	compileInclude group: 'org.reactivestreams', name: 'reactive-streams', version: '1.0.4'
 }
