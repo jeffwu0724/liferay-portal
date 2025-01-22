@@ -30,7 +30,5 @@ dependencies {
 	compileInclude group: 'io.netty', name: 'netty-transport-native-epoll', version: '4.1.110.Final'
 	compileInclude 	group: 'io.netty', name: 'netty-transport-native-kqueue', version: '4.1.110.Final'
 	compileInclude group: 'io.netty', name: 'netty-transport-native-unix-common', version: '4.1.110.Final'
-	compileInclude group: 'io.projectreactor', name: 'reactor-core', version: '3.4.38'
-	compileInclude group: 'io.projectreactor.netty', name: 'reactor-netty-http', version: '1.0.45'
-	compileInclude 	group: 'io.projectreactor.netty', name: 'reactor-netty-core', version: '1.0.45'
+
 }
