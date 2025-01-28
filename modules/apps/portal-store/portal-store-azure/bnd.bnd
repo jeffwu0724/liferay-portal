@@ -67,3 +67,9 @@ Import-Package:\
 	\
 	*
 -fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
+Require-Capability:\
+	osgi.extender;\
+		filter:="(osgi.extender=osgi.serviceloader.processor)",\
+	osgi.serviceloader;\
+		cardinality:=multiple;\
+        filter:="(osgi.serviceloader=javax.xml.stream.XMLInputFactory)"
