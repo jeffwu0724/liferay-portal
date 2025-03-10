@@ -1,0 +1,6 @@
+git add "*bnd.bnd"
+git add "*packageinfo"
+git add "*package.json"
+git add "*.markdown"
+git add "*.md"
+git commit -m "Semantic versioning"
