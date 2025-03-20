@@ -3103,83 +3103,19 @@ ${poshi.runner.testsuite.testcase.name}</echo>
 
 							<antcall inheritAll="false" target="prepare-system-ext-properties" />
 
-							<echo>==== Before ====</echo>
-							<echo>==== Current Directory ====</echo>
-							<exec executable="ls">
-								<arg value="." />
-							</exec>
-							<echo>==== Current Directory (bundles) ====</echo>
-							<exec executable="ls">
-								<arg value="bundles" />
-							</exec>
-							<echo>==== Current Directory (bundles/tools) ====</echo>
-							<exec executable="ls">
-								<arg value="bundles/tools" />
-							</exec>
-							<echo>==== Parent Directory ====</echo>
-							<exec executable="ls">
-								<arg value=".." />
-							</exec>
-							<echo>==== Parent Directory (bundles) ====</echo>
-							<exec executable="ls">
-								<arg value="../bundles" />
-							</exec>
-							<echo>==== Parent Directory (bundles/tools) ====</echo>
-							<exec executable="ls">
-								<arg value="../bundles/tools" />
-							</exec>
-
 							<move
 								file="bundles"
 								tofile="bun dles"
 							/>
 
-							<echo>==== After ====</echo>
-							<echo>==== Current Directory ====</echo>
-							<exec executable="ls">
-								<arg value="." />
-							</exec>
-							<echo>==== Current Directory (bundles) ====</echo>
-							<exec executable="ls">
-								<arg value="bundles" />
-							</exec>
-							<echo>==== Current Directory (bundles/tools) ====</echo>
-							<exec executable="ls">
-								<arg value="bundles/tools" />
-							</exec>
-							<echo>==== Current Directory (bun dles) ====</echo>
-							<exec executable="ls">
-								<arg value="bun dles" />
-							</exec>
-							<echo>==== Current Directory (bun dles/tools) ====</echo>
-							<exec executable="ls">
-								<arg value="bun dles/tools" />
-							</exec>
-							<echo>==== Parent Directory ====</echo>
-							<exec executable="ls">
-								<arg value=".." />
-							</exec>
-							<echo>==== Parent Directory (bundles) ====</echo>
-							<exec executable="ls">
-								<arg value="../bundles" />
-							</exec>
-							<echo>==== Parent Directory (bundles/tools) ====</echo>
-							<exec executable="ls">
-								<arg value="../bundles/tools" />
-							</exec>
-							<echo>==== Parent Directory (bun dles) ====</echo>
-							<exec executable="ls">
-								<arg value="../bun dles" />
-							</exec>
-							<echo>==== Parent Directory (bun dles/tools) ====</echo>
-							<exec executable="ls">
-								<arg value="../bun dles/tools" />
-							</exec>
-
+							<echo>!!!!!!!!!!!!!!!!!!!!!!!!!!app.server.${env.HOSTNAME}.properties</echo>
+							<echo>!!!!!!!!!!!!!!!!!!!!!!!!!!${project.dir}/bun dles</echo>
 							<propertyfile file="app.server.${env.HOSTNAME}.properties">
 								<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
 							</propertyfile>
 
+							<echo>???????????????????????????build.${env.HOSTNAME}.properties</echo>
+							<echo>???????????????????????????${project.dir}/bun dles</echo>
 							<propertyfile file="build.${env.HOSTNAME}.properties">
 								<entry key="liferay.home" value="${project.dir}/bun dles" />
 							</propertyfile>

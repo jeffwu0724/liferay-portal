@@ -13883,10 +13883,19 @@ captcha.enforce.disabled=true</echo>
 	</target>
 
 	<target name="prepare-system-ext-properties">
+		<echo>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ${app.server.classes.portal.dir}/system-ext.properties</echo>
 		<echo file="${app.server.classes.portal.dir}/system-ext.properties">jdbc.data.source.anti.time.drift=true
 log.sanitizer.enabled=false</echo>
 
+		<loadfile property="system.ext.properties.content"
+				  srcFile="${app.server.classes.portal.dir}/system-ext.properties" />
+		<echo>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</echo>
+		<echo message="Contents of system-ext.properties: ${line.separator}${system.ext.properties.content}" />
+		<echo>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</echo>
+
 		<get-testcase-property property.name="custom.system.properties" />
+		<echo>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ${custom.system.properties}</echo>
+		<echo>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ${app.server.classes.portal.dir}/system-ext.properties</echo>
 
 		<if>
 			<isset property="custom.system.properties" />
