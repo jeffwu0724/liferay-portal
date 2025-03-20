@@ -3103,14 +3103,14 @@ ${poshi.runner.testsuite.testcase.name}</echo>
 
 							<antcall if:set="env.JENKINS_HOME" inheritAll="false" target="prepare-portal-ext-properties">
 								<param name="database.type" value="@{database.type}" />
-								<param name="liferay.home" value="${project.dir}/bun dles" />
+								<param name="liferay.home" value="${project.dir}/bunadles" />
 							</antcall>
 
 							<antcall inheritAll="false" target="prepare-system-ext-properties" />
 
 							<move
 								file="bundles"
-								tofile="bun dles"
+								tofile="bunadles"
 							/>
 
 							<echo>==== app.server.${env.HOST}.properties ====</echo>
@@ -3147,11 +3147,11 @@ ${poshi.runner.testsuite.testcase.name}</echo>
 							</exec>
 
 							<propertyfile file="app.server.${env.HOSTNAME}.properties">
-								<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+								<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 							</propertyfile>
 
 							<propertyfile file="build.${env.HOSTNAME}.properties">
-								<entry key="liferay.home" value="${project.dir}/bun dles" />
+								<entry key="liferay.home" value="${project.dir}/bunadles" />
 							</propertyfile>
 
 							<trycatch>
@@ -8642,22 +8642,22 @@ ${output.content}</echo>
 
 											<antcall if:set="env.JENKINS_HOME" inheritAll="false" target="prepare-portal-ext-properties">
 												<param name="database.type" value="@{database.type}" />
-												<param name="liferay.home" value="${project.dir}/bun dles" />
+												<param name="liferay.home" value="${project.dir}/bunadles" />
 											</antcall>
 
 											<antcall inheritAll="false" target="prepare-system-ext-properties" />
 
 											<move
 												file="bundles"
-												tofile="bun dles"
+												tofile="bunadles"
 											/>
 
 											<propertyfile file="app.server.${env.HOSTNAME}.properties">
-												<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+												<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 											</propertyfile>
 
 											<propertyfile file="build.${env.HOSTNAME}.properties">
-												<entry key="liferay.home" value="${project.dir}/bun dles" />
+												<entry key="liferay.home" value="${project.dir}/bunadles" />
 											</propertyfile>
 
 											<antcall inheritAll="false" target="start-app-server">
@@ -8724,22 +8724,22 @@ ${output.content}</echo>
 
 											<antcall if:set="env.JENKINS_HOME" inheritAll="false" target="prepare-portal-ext-properties">
 												<param name="database.type" value="@{database.type}" />
-												<param name="liferay.home" value="${project.dir}/bun dles" />
+												<param name="liferay.home" value="${project.dir}/bunadles" />
 											</antcall>
 
 											<antcall inheritAll="false" target="prepare-system-ext-properties" />
 
 											<move
 												file="bundles"
-												tofile="bun dles"
+												tofile="bunadles"
 											/>
 
 											<propertyfile file="app.server.${env.HOSTNAME}.properties">
-												<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+												<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 											</propertyfile>
 
 											<propertyfile file="build.${env.HOSTNAME}.properties">
-												<entry key="liferay.home" value="${project.dir}/bun dles" />
+												<entry key="liferay.home" value="${project.dir}/bunadles" />
 											</propertyfile>
 
 											<antcall inheritAll="false" target="start-app-server">
@@ -8844,16 +8844,16 @@ ${output.content}</echo>
 								/>
 
 								<propertyfile file="app.server.${env.HOSTNAME}.properties">
-									<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+									<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<propertyfile file="build.${env.HOSTNAME}.properties">
-									<entry key="liferay.home" value="${project.dir}/bun dles" />
+									<entry key="liferay.home" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<move
 									file="bundles"
-									tofile="bun dles"
+									tofile="bunadles"
 								/>
 							</sequential>
 						</then>
@@ -8868,18 +8868,18 @@ ${output.content}</echo>
 							<then>
 								<sequential>
 									<propertyfile file="app.server.${env.HOSTNAME}.properties">
-										<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+										<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<propertyfile file="build.${env.HOSTNAME}.properties">
-										<entry key="liferay.home" value="${project.dir}/bun dles" />
+										<entry key="liferay.home" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<prepare-test-environment />
 
 									<move
 										file="bundles"
-										tofile="bun dles"
+										tofile="bunadles"
 									/>
 								</sequential>
 							</then>
@@ -8966,16 +8966,16 @@ ${output.content}</echo>
 								/>
 
 								<propertyfile file="app.server.${env.HOSTNAME}.properties">
-									<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+									<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<propertyfile file="build.${env.HOSTNAME}.properties">
-									<entry key="liferay.home" value="${project.dir}/bun dles" />
+									<entry key="liferay.home" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<move
 									file="bundles"
-									tofile="bun dles"
+									tofile="bunadles"
 								/>
 							</sequential>
 						</then>
@@ -8990,18 +8990,18 @@ ${output.content}</echo>
 							<then>
 								<sequential>
 									<propertyfile file="app.server.${env.HOSTNAME}.properties">
-										<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+										<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<propertyfile file="build.${env.HOSTNAME}.properties">
-										<entry key="liferay.home" value="${project.dir}/bun dles" />
+										<entry key="liferay.home" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<prepare-test-environment />
 
 									<move
 										file="bundles"
-										tofile="bun dles"
+										tofile="bunadles"
 									/>
 								</sequential>
 							</then>
@@ -9088,16 +9088,16 @@ ${output.content}</echo>
 								/>
 
 								<propertyfile file="app.server.${env.HOSTNAME}.properties">
-									<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+									<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<propertyfile file="build.${env.HOSTNAME}.properties">
-									<entry key="liferay.home" value="${project.dir}/bun dles" />
+									<entry key="liferay.home" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<move
 									file="bundles"
-									tofile="bun dles"
+									tofile="bunadles"
 								/>
 							</sequential>
 						</then>
@@ -9112,18 +9112,18 @@ ${output.content}</echo>
 							<then>
 								<sequential>
 									<propertyfile file="app.server.${env.HOSTNAME}.properties">
-										<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+										<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<propertyfile file="build.${env.HOSTNAME}.properties">
-										<entry key="liferay.home" value="${project.dir}/bun dles" />
+										<entry key="liferay.home" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<prepare-test-environment />
 
 									<move
 										file="bundles"
-										tofile="bun dles"
+										tofile="bunadles"
 									/>
 								</sequential>
 							</then>
@@ -9210,16 +9210,16 @@ ${output.content}</echo>
 								/>
 
 								<propertyfile file="app.server.${env.HOSTNAME}.properties">
-									<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+									<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<propertyfile file="build.${env.HOSTNAME}.properties">
-									<entry key="liferay.home" value="${project.dir}/bun dles" />
+									<entry key="liferay.home" value="${project.dir}/bunadles" />
 								</propertyfile>
 
 								<move
 									file="bundles"
-									tofile="bun dles"
+									tofile="bunadles"
 								/>
 							</sequential>
 						</then>
@@ -9234,18 +9234,18 @@ ${output.content}</echo>
 							<then>
 								<sequential>
 									<propertyfile file="app.server.${env.HOSTNAME}.properties">
-										<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+										<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<propertyfile file="build.${env.HOSTNAME}.properties">
-										<entry key="liferay.home" value="${project.dir}/bun dles" />
+										<entry key="liferay.home" value="${project.dir}/bunadles" />
 									</propertyfile>
 
 									<prepare-test-environment />
 
 									<move
 										file="bundles"
-										tofile="bun dles"
+										tofile="bunadles"
 									/>
 								</sequential>
 							</then>
