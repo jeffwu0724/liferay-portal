@@ -3103,56 +3103,45 @@ ${poshi.runner.testsuite.testcase.name}</echo>
 
 							<antcall if:set="env.JENKINS_HOME" inheritAll="false" target="prepare-portal-ext-properties">
 								<param name="database.type" value="@{database.type}" />
-								<param name="liferay.home" value="${project.dir}/bun dles" />
+								<param name="liferay.home" value="${project.dir}/bunadles" />
 							</antcall>
 
 							<antcall inheritAll="false" target="prepare-system-ext-properties" />
 
 							<move
 								file="bundles"
-								tofile="bun dles"
+								tofile="bunadles"
 							/>
 
-							<echo>==== app.server.${env.HOST}.properties ====</echo>
-							<exec executable="cat">
-								<arg value="app.server.${env.HOST}.properties" />
-							</exec>
+							<echo>==== before ====</echo>
 							<echo>==== app.server.${env.HOSTNAME}.properties ====</echo>
 							<exec executable="cat">
 								<arg value="app.server.${env.HOSTNAME}.properties" />
 							</exec>
-							<echo>==== app.server.${env.COMPUTERNAME}.properties ====</echo>
-							<exec executable="cat">
-								<arg value="app.server.${env.COMPUTERNAME}.properties" />
-							</exec>
-							<echo>==== app.server.${user.name}.properties ====</echo>
-							<exec executable="cat">
-								<arg value="app.server.${user.name}.properties" />
-							</exec>
-							<echo>==== build.${env.HOST}.properties ====</echo>
-							<exec executable="cat">
-								<arg value="build.${env.HOST}.properties" />
-							</exec>
+
 							<echo>==== build.${env.HOSTNAME}.properties ====</echo>
 							<exec executable="cat">
 								<arg value="build.${env.HOSTNAME}.properties" />
 							</exec>
-							<echo>==== build.${env.COMPUTERNAME}.properties ====</echo>
-							<exec executable="cat">
-								<arg value="build.${env.COMPUTERNAME}.properties" />
-							</exec>
-							<echo>==== build.${user.name}.properties ====</echo>
-							<exec executable="cat">
-								<arg value="build.${user.name}.properties" />
-							</exec>
 
 							<propertyfile file="app.server.${env.HOSTNAME}.properties">
-								<entry key="app.server.parent.dir" value="${project.dir}/bun dles" />
+								<entry key="app.server.parent.dir" value="${project.dir}/bunadles" />
 							</propertyfile>
 
 							<propertyfile file="build.${env.HOSTNAME}.properties">
-								<entry key="liferay.home" value="${project.dir}/bun dles" />
+								<entry key="liferay.home" value="${project.dir}/bunadles" />
 							</propertyfile>
+
+							<echo>==== after ====</echo>
+							<echo>==== app.server.${env.HOSTNAME}.properties ====</echo>
+							<exec executable="cat">
+								<arg value="app.server.${env.HOSTNAME}.properties" />
+							</exec>
+
+							<echo>==== build.${env.HOSTNAME}.properties ====</echo>
+							<exec executable="cat">
+								<arg value="build.${env.HOSTNAME}.properties" />
+							</exec>
 
 							<trycatch>
 								<try>
