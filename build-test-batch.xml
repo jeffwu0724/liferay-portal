@@ -3123,6 +3123,12 @@ ${poshi.runner.testsuite.testcase.name}</echo>
 								<entry key="liferay.home" value="${project.dir}/bun dles" />
 							</propertyfile>
 
+							<replace
+								file="${app.server.dir}/bin/setenv.sh"
+								token="-javaagent:${CATALINA_HOME}/../tools/portal-tools-jakarta-ee-transformer/com.liferay.portal.tools.jakarta.ee.transformer.jar"
+								value="&quot;-javaagent:${CATALINA_HOME}/../tools/portal-tools-jakarta-ee-transformer/com.liferay.portal.tools.jakarta.ee.transformer.jar&quot;"
+							/>
+
 							<trycatch>
 								<try>
 									<antcall inheritall="false" target="start-app-server-preserve-liferay-home" />
