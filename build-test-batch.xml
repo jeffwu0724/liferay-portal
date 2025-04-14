@@ -8383,7 +8383,7 @@ ${output.content}</echo>
 				<ant antfile="build-test.xml" target="prepare-release-bundle" />
 
 				<execute>
-					tar --create --format=${app.server.tar.gz.format} --file=liferay-portal-bundle-tomcat.tar.gz --gzip bundles/
+					tar --create --format=${app.server.tar.gz.format} --file=liferay-portal-bundle-tomcat.tar.gz --gzip bundles
 				</execute>
 
 				<prepare-test-environment />
@@ -8429,7 +8429,7 @@ ${output.content}</echo>
 				<ant antfile="build-test.xml" target="prepare-release-bundle" />
 
 				<execute>
-					tar --create --format=${app.server.tar.gz.format} --file=liferay-portal-bundle-tomcat.tar.gz --gzip bundles/
+					tar --create --format=${app.server.tar.gz.format} --file=liferay-portal-bundle-tomcat.tar.gz --gzip bundles
 				</execute>
 
 				<prepare-test-environment />
