@@ -3465,13 +3465,13 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.tika.jar!poi-scratchpad.jar</file-name>
-				<version>5.2.2</version>
+				<version>5.4.1</version>
 				<project-name>Apache POI</project-name>
 				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -5550,37 +5550,37 @@
 			</library>
 			<library>
 				<file-name>com.liferay.shared.dependencies.poi.jar!poi-ooxml-lite.jar</file-name>
-				<version>5.2.2</version>
+				<version>5.4.1</version>
 				<project-name>Apache POI</project-name>
 				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
 			<library>
 				<file-name>com.liferay.shared.dependencies.poi.jar!poi-ooxml.jar</file-name>
-				<version>5.2.2</version>
+				<version>5.4.1</version>
 				<project-name>Apache POI - API based on OPC and OOXML schemas</project-name>
 				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
 			<library>
 				<file-name>com.liferay.shared.dependencies.poi.jar!poi.jar</file-name>
-				<version>5.2.2</version>
+				<version>5.4.1</version>
 				<project-name>Apache POI - Common</project-name>
 				<project-url>https://poi.apache.org/</project-url>
 				<licenses>
 					<license>
 						<license-name>Apache License, Version 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
