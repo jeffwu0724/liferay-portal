@@ -11999,6 +11999,8 @@ ${update.properties}</echo>
 
 		<Logger level="ERROR" name="org.apache.http.client.protocol.ResponseProcessCookies" />
 
+		<Logger level="ERROR" name="com.liferay.portal.search.elasticsearch7.internal.ElasticsearchSearchEngine" />
+
 		${log4j.logggers.root}
 	</Loggers>
 </Configuration>]]></echo>
