@@ -35,6 +35,8 @@ public class UpgradeStepRegistryTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
+	
+
 	@Test
 	public void testCreateUpgradeInfos() {
 		UpgradeStepRegistry upgradeStepRegistry = _createUpgradeStepRegistry(
