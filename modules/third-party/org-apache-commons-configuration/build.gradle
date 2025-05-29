@@ -3,27 +3,34 @@ import com.liferay.gradle.plugins.patcher.PatchTask
 apply plugin: "com.liferay.patcher"
 
 task deployJar(type: Copy)
+task jarManifest
+task jarPatched(type: Zip)
 task patch(type: PatchTask)
 
 dependencies {
-	compileOnly group: "org.apache.commons", name: "commons-configuration2", version: "2.12.0"
+	compileOnly group: "org.apache.commons", name: "commons-configuration2", transitive: false, version: "2.12.0"
 }
 
-deploy {
-	finalizedBy deployJar
+jar {
+	dependsOn jarPatched
+	finalizedBy jarManifest
+	setActions([])
 }
 
-deployJar {
-	ext {
-		autoClean = false
+jarPatched {
+	archiveFileName = jar.archiveFileName
+	destinationDirectory = jar.destinationDirectory
+	duplicatesStrategy = "exclude"
+	exclude "module-info.class"
+	from sourceSets.main.output
+
+	from {
+		zipTree(configurations.compileOnly.singleFile)
 	}
 
-	from jar
-	into "../../../lib/portal"
-
-	rename {
-		"commons-configuration.jar"
-	}
+	mustRunAfter compileJava
+	mustRunAfter generatePomFileForMavenPublication
+	mustRunAfter processResources
 }
 
 jarSources {
