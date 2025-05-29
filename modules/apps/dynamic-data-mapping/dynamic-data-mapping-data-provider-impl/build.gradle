@@ -4,7 +4,7 @@ dependencies {
 	compileInclude group: "com.netflix.archaius", name: "archaius-core", version: "0.4.1"
 	compileInclude group: "com.netflix.hystrix", name: "hystrix-core", version: "1.5.18"
 	compileInclude group: "io.reactivex", name: "rxjava", version: "1.2.0"
-	compileOnly group: "com.liferay", name: "org.apache.commons.configuration", version: "1.10.LIFERAY-PATCHED-2"
+	compileOnly group: "com.liferay", name: "org.apache.commons.configuration", version: "2.12.0.LIFERAY-PATCHED-1"
 	compileOnly group: "com.liferay", name: "org.osgi.service.http.whiteboard", version: "1.1.1.JAKARTA-LIFERAY-PATCHED-1"
 	compileOnly group: "com.liferay.jakarta.portlet", name: "com.liferay.jakarta.portlet-api", version: "4.0.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
