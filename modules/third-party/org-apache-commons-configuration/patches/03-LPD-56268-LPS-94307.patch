@@ -1,0 +1,42 @@
+diff --git a/org/apache/commons/configuration2/PropertiesConfiguration.java b/org/apache/commons/configuration2/PropertiesConfiguration.java
+index 6c5941079446f..9ecc2be132816 100644
+--- a/org/apache/commons/configuration2/PropertiesConfiguration.java
++++ b/org/apache/commons/configuration2/PropertiesConfiguration.java
+@@ -488,25 +488,17 @@ public class PropertiesConfiguration extends BaseConfiguration implements FileBa
+          * @return an array with the property's key, value, and separator
+          */
+         static String[] doParseProperty(final String line, final boolean trimValue) {
+-            final Matcher matcher = PROPERTY_PATTERN.matcher(line);
++            int index = line.indexOf('=');
+ 
+-            final String[] result = {"", "", ""};
+-
+-            if (matcher.matches()) {
+-                result[0] = matcher.group(IDX_KEY).trim();
+-
+-                String value = matcher.group(IDX_VALUE);
+-                if (trimValue) {
+-                    value = value.trim();
+-                }
+-                result[1] = value;
+-
+-                result[2] = matcher.group(IDX_SEPARATOR);
++            if (index == -1) {
++                return _emptyResult;
+             }
+ 
+-            return result;
++            return new String[] {line.substring(0, index).trim(), line.substring(index + 1), "="};
+         }
+ 
++        private static final String[] _emptyResult = {"", "", ""};
++
+         /** Stores the comment lines for the currently processed property. */
+         private final List<String> commentLines;
+ 
+@@ -1572,3 +1564,4 @@ public class PropertiesConfiguration extends BaseConfiguration implements FileBa
+     }
+ 
+ }
++/* @generated */
+\ No newline at end of file
