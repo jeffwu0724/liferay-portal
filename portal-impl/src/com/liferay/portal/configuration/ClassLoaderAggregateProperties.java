@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.configuration.AbstractFileConfiguration;
 import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.ConfigurationUtils;
@@ -41,6 +40,8 @@ import org.apache.commons.configuration2.builder.fluent.FileBasedBuilderParamete
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.DefaultFileSystem;
+import org.apache.commons.configuration2.io.FileBased;
+import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.io.FileSystem;
 
 /**
@@ -292,14 +293,17 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 
 			super.addConfiguration(newConfiguration);
 
-			if (newConfiguration instanceof AbstractFileConfiguration) {
-				AbstractFileConfiguration abstractFileConfiguration =
-					(AbstractFileConfiguration)newConfiguration;
+			if (newConfiguration instanceof FileBased) {
+				FileBased fileBasedConfiguration = (FileBased)newConfiguration;
 
-				URL abstractFileConfigurationURL =
-					abstractFileConfiguration.getURL();
+				FileHandler fileHandler = new FileHandler(
+					fileBasedConfiguration);
 
-				_loadedSources.add(abstractFileConfigurationURL.toString());
+				URL fileBasedConfigurationURL = fileHandler.getURL();
+
+				if (fileBasedConfigurationURL != null) {
+					_loadedSources.add(fileBasedConfigurationURL.toString());
+				}
 			}
 			else {
 				_loadedSources.add(sourceName);
