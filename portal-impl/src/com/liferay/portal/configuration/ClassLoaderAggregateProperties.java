@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.configuration.AbstractFileConfiguration;
-import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.ConfigurationUtils;
@@ -186,15 +185,26 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 		}
 
 		try {
-			FileConfiguration newFileConfiguration =
-				new PropertiesConfiguration(url) {
+			Parameters parameters = new Parameters();
 
-					@Override
-					public String getEncoding() {
-						return StringPool.UTF8;
-					}
+			FileBasedBuilderParameters fileBasedBuilderParameters =
+				parameters.fileBased(
+				).setURL(
+					url
+				).setEncoding(
+					"UTF-8"
+				);
 
-				};
+			FileBasedConfigurationBuilder<PropertiesConfiguration>
+				fileBasedConfigurationBuilder =
+					new FileBasedConfigurationBuilder<>(
+						PropertiesConfiguration.class
+					).configure(
+						fileBasedBuilderParameters
+					);
+
+			PropertiesConfiguration newFileConfiguration =
+				fileBasedConfigurationBuilder.getConfiguration();
 
 			_addIncludedPropertiesSources(
 				newFileConfiguration, loadedCompositeConfiguration,
