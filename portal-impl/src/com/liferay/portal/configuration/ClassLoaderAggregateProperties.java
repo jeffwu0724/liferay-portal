@@ -30,7 +30,6 @@ import java.util.Properties;
 
 import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.ConfigurationUtils;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.PropertiesConfigurationLayout;
 import org.apache.commons.configuration2.SubsetConfiguration;
@@ -42,6 +41,8 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.DefaultFileSystem;
 import org.apache.commons.configuration2.io.FileBased;
 import org.apache.commons.configuration2.io.FileHandler;
+import org.apache.commons.configuration2.io.FileLocator;
+import org.apache.commons.configuration2.io.FileLocatorUtils;
 import org.apache.commons.configuration2.io.FileSystem;
 
 /**
@@ -179,7 +180,14 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 		String fileName, CompositeConfiguration loadedCompositeConfiguration,
 		List<String> includeAndOverrides) {
 
-		URL url = ConfigurationUtils.locate(_fileSystem, null, fileName);
+		FileLocator locator = FileLocatorUtils.fileLocator(
+		).fileName(
+			fileName
+		).fileSystem(
+			_fileSystem
+		).create();
+
+		URL url = FileLocatorUtils.locate(locator);
 
 		if (url == null) {
 			return null;
@@ -204,14 +212,14 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 						fileBasedBuilderParameters
 					);
 
-			PropertiesConfiguration newFileConfiguration =
+			PropertiesConfiguration propertiesConfiguration =
 				fileBasedConfigurationBuilder.getConfiguration();
 
 			_addIncludedPropertiesSources(
-				newFileConfiguration, loadedCompositeConfiguration,
+				propertiesConfiguration, loadedCompositeConfiguration,
 				includeAndOverrides);
 
-			return newFileConfiguration;
+			return propertiesConfiguration;
 		}
 		catch (ConfigurationException configurationException) {
 			if (_log.isDebugEnabled()) {
