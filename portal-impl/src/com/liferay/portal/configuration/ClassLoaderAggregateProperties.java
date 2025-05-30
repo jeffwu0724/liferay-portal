@@ -37,6 +37,9 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.PropertiesConfigurationLayout;
 import org.apache.commons.configuration2.SubsetConfiguration;
 import org.apache.commons.configuration2.SystemConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.FileBasedBuilderParameters;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.DefaultFileSystem;
 import org.apache.commons.configuration2.io.FileSystem;
@@ -312,15 +315,26 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 		List<String> includeAndOverrides) {
 
 		try {
+			Parameters parameters = new Parameters();
+
+			FileBasedBuilderParameters fileBasedBuilderParameters =
+				parameters.fileBased(
+				).setURL(
+					url
+				).setEncoding(
+					"UTF-8"
+				);
+
+			FileBasedConfigurationBuilder<PropertiesConfiguration>
+				fileBasedConfigurationBuilder =
+					new FileBasedConfigurationBuilder<>(
+						PropertiesConfiguration.class
+					).configure(
+						fileBasedBuilderParameters
+					);
+
 			PropertiesConfiguration propertiesConfiguration =
-				new PropertiesConfiguration(url) {
-
-					@Override
-					public String getEncoding() {
-						return StringPool.UTF8;
-					}
-
-				};
+				fileBasedConfigurationBuilder.getConfiguration();
 
 			PropertiesConfigurationLayout propertiesConfigurationLayout =
 				propertiesConfiguration.getLayout();
