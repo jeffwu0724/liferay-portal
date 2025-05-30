@@ -79,7 +79,7 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 	}
 
 	@Override
-	public Object getProperty(String key) {
+	public Object getPropertyInternal(String key) {
 		Object value = null;
 
 		if (value == null) {
