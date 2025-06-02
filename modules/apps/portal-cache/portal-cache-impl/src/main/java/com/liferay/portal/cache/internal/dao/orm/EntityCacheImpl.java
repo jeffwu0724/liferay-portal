@@ -94,6 +94,22 @@ public class EntityCacheImpl
 	}
 
 	@Override
+	public <T extends CacheModel<?>> T fetchCacheModel(
+		Class<?> clazz, Serializable primaryKey) {
+
+		PortalCache<Serializable, Serializable> portalCache = getPortalCache(
+			clazz);
+
+		Object result = portalCache.get(primaryKey);
+
+		if (result instanceof CacheModel) {
+			return (T)result;
+		}
+
+		return null;
+	}
+
+	@Override
 	public Serializable getLocalCacheResult(
 		Class<?> clazz, Serializable primaryKey) {
 
