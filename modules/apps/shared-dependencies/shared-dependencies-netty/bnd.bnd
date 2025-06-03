@@ -14,5 +14,36 @@ Import-Package:\
 	!net.jcip.annotations.*,\
 	\
 	*
--exportcontents: io.netty.*
+-exportcontents:\
+	io.netty.bootstrap,\
+	io.netty.buffer,\
+	io.netty.channel,\
+	io.netty.channel.epoll,\
+	io.netty.channel.group,\
+	io.netty.channel.kqueue,\
+	io.netty.channel.nio,\
+	io.netty.channel.socket,\
+	io.netty.channel.socket.nio,\
+	io.netty.channel.unix,\
+	io.netty.handler.codec,\
+	io.netty.handler.codec.base64,\
+	io.netty.handler.codec.compression,\
+	io.netty.handler.codec.http,\
+	io.netty.handler.codec.http.cookie,\
+	io.netty.handler.codec.http.multipart,\
+	io.netty.handler.codec.http.websocketx,\
+	io.netty.handler.codec.http.websocketx.extensions.compression,\
+	io.netty.handler.codec.http2,\
+	io.netty.handler.flush,\
+	io.netty.handler.logging,\
+	io.netty.handler.proxy,\
+	io.netty.handler.ssl,\
+	io.netty.handler.stream,\
+	io.netty.handler.timeout,\
+	io.netty.resolver,\
+	io.netty.resolver.dns,\
+	io.netty.util,\
+	io.netty.util.collection,\
+	io.netty.util.concurrent,\
+	io.netty.util.internal
 -fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning

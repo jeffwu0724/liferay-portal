@@ -1,4 +1,15 @@
 Bundle-Name: Liferay Shared Dependencies Google API Client Google APIs
 Bundle-SymbolicName: com.liferay.shared.dependencies.google.api.client.googleapis
 Bundle-Version: 1.0.2
--exportcontents: com.google.api.client.googleapis.*
+-exportcontents:\
+	com.google.api.client.googleapis,\
+	com.google.api.client.googleapis.auth.oauth2,\
+	com.google.api.client.googleapis.batch,\
+	com.google.api.client.googleapis.batch.json,\
+	com.google.api.client.googleapis.javanet,\
+	com.google.api.client.googleapis.json,\
+	com.google.api.client.googleapis.media,\
+	com.google.api.client.googleapis.notifications,\
+	com.google.api.client.googleapis.notifications.json,\
+	com.google.api.client.googleapis.services,\
+	com.google.api.client.googleapis.services.json

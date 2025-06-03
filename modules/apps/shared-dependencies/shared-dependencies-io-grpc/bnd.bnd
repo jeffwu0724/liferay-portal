@@ -39,6 +39,9 @@ Import-Package:\
 	\
 	*
 -exportcontents:\
-	grpc.*;version='1.70.0',\
-	\
-	io.grpc.*;version='1.70.0'
+	io.grpc;version='1.70.0',\
+	io.grpc.alts;version='1.70.0',\
+	io.grpc.auth;version='1.70.0',\
+	io.grpc.opentelemetry;version='1.70.0',\
+	io.grpc.protobuf;version='1.70.0',\
+	io.grpc.stub;version='1.70.0'

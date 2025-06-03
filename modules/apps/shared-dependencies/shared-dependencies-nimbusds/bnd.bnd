@@ -17,5 +17,27 @@ Import-Package:\
 	!org.opensaml.*,\
 	\
 	*
--exportcontents: com.nimbusds.*
+-exportcontents:\
+	com.nimbusds.common.contenttype,\
+	com.nimbusds.jose,\
+	com.nimbusds.jose.crypto,\
+	com.nimbusds.jose.proc,\
+	com.nimbusds.jose.util,\
+	com.nimbusds.jwt,\
+	com.nimbusds.langtag,\
+	com.nimbusds.oauth2.sdk,\
+	com.nimbusds.oauth2.sdk.as,\
+	com.nimbusds.oauth2.sdk.auth,\
+	com.nimbusds.oauth2.sdk.client,\
+	com.nimbusds.oauth2.sdk.http,\
+	com.nimbusds.oauth2.sdk.id,\
+	com.nimbusds.oauth2.sdk.pkce,\
+	com.nimbusds.oauth2.sdk.token,\
+	com.nimbusds.oauth2.sdk.util,\
+	com.nimbusds.openid.connect.sdk,\
+	com.nimbusds.openid.connect.sdk.claims,\
+	com.nimbusds.openid.connect.sdk.op,\
+	com.nimbusds.openid.connect.sdk.rp,\
+	com.nimbusds.openid.connect.sdk.token,\
+	com.nimbusds.openid.connect.sdk.validators
 -fixupmessages: "^Classes found in the wrong directory: \\\\{META-INF/versions/9/";is:=warning

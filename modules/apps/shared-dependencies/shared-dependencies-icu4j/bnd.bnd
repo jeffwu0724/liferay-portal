@@ -1,4 +1,7 @@
 Bundle-Name: Liferay Shared Dependencies ICU4J
 Bundle-SymbolicName: com.liferay.shared.dependencies.icu4j
 Bundle-Version: 1.0.2
--exportcontents: com.ibm.icu.*
+-exportcontents:\
+	com.ibm.icu.lang,\
+	com.ibm.icu.text,\
+	com.ibm.icu.util
