@@ -6,7 +6,6 @@ Import-Package:\
 	\
 	*
 -exportcontents:\
-	com.google.api.core.*,\
-	com.google.api.pathtemplate.*,\
-	com.google.api.resourcenames.*,\
-	com.google.auto.value.*
+	com.google.api.core,\
+	com.google.api.pathtemplate,\
+	com.google.api.resourcenames

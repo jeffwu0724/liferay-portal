@@ -5,4 +5,9 @@ Import-Package:\
 	!javax.annotation.*,\
 	\
 	*
--exportcontents: io.opencensus.*
+-exportcontents:\
+	io.opencensus.common,\
+	io.opencensus.contrib.http.util,\
+	io.opencensus.trace,\
+	io.opencensus.trace.export,\
+	io.opencensus.trace.propagation
