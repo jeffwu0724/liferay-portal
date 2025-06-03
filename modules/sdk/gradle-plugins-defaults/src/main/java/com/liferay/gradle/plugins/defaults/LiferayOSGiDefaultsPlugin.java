@@ -2297,7 +2297,7 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 						name.equals("commons-configuration")) {
 
 						target =
-							"commons-configuration:commons-configuration:1.10";
+							"commons-configuration:commons-configuration:2.12.0";
 					}
 					else if (group.equals("xerces") && name.equals("xerces")) {
 						target = "xerces:xercesImpl:2.12.1";

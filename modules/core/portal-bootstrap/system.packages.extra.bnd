@@ -306,7 +306,10 @@ Provide-Capability:\
 	@../../../lib/development/tomcat-util-scan.jar,\
 	@../../../lib/development/tomcat-util.jar,\
 	@../../../lib/portal/commons-configuration.jar,\
+	@../../../lib/portal/commons-text.jar,\
+	@../../../lib/portal/commons-beanutils.jar,\
 	@../../../lib/portal/commons-lang.jar,\
+	@../../../lib/portal/commons-lang3.jar,\
 	@../../../lib/portal/commons-logging.jar,\
 	@../../../lib/portal/dom4j.jar,\
 	@../../../lib/portal/hibernate-core.jar,\

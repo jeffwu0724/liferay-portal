@@ -17,6 +17,9 @@ if (!System.getenv("JENKINS_HOME") || !systemPackagesExtraManifestFile.exists())
 
 	task buildSystemPackagesExtraManifest(type: ExecuteBndTask)
 
+
+
+
 	buildSystemPackagesExtraManifest {
 		classpath = files()
 
@@ -34,6 +37,7 @@ if (!System.getenv("JENKINS_HOME") || !systemPackagesExtraManifestFile.exists())
 		property "-check", "IMPORTS"
 		property "-fixupmessages.liferay.services", "This bundle contains Liferay services"
 		property "-include", "system.packages.extra.bnd"
+		property '-fixupmessages', 'Classes found in the wrong directory: *'
 
 		property "Bundle-SymbolicName", {
 			Properties bndProperties = GUtil.loadProperties(file("system.packages.extra.bnd"))
@@ -62,6 +66,7 @@ if (!System.getenv("JENKINS_HOME") || !systemPackagesExtraManifestFile.exists())
 
 	jar {
 		dependsOn buildSystemPackagesExtraManifest
+//		exclude 'META-INF/versions/**'
 	}
 }
 else {

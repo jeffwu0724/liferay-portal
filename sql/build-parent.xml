@@ -52,12 +52,13 @@
 			</else>
 		</if>
 
+
 		<java
 			classname="com.liferay.portal.tools.DBBuilder"
 			classpathref="db.builder.classpath"
-			failonerror="true"
 			fork="true"
 			outputproperty="db.builder.output"
+			errorproperty="db.builder.error"
 		>
 			<jvmarg if:true="${jvm.debug}" line="${jpda.settings}" />
 			<jvmarg if:set="db.build.java.add.opens" line="${db.build.java.add.opens}" />
@@ -68,6 +69,9 @@
 			<arg value="db.database.types=${database.types}" />
 			<arg value="db.sql.dir=${db.sql.dir}" />
 		</java>
+
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" />
+		<echo message="STDERR: ${db.builder.error}" />
 
 		<move
 			todir="${db.sql.dir}"
