@@ -104,7 +104,7 @@ public class ClassLoaderAggregateProperties extends CompositeConfiguration {
 		}
 
 		if (value == null) {
-			value = super.getProperty(key);
+			value = super.getPropertyInternal(key);
 		}
 
 		if (value == null) {
