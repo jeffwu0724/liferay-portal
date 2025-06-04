@@ -71,6 +71,7 @@ public class WorkflowTaskResourceTest extends BaseWorkflowTaskResourceTestCase {
 			PermissionCheckerFactoryUtil.create(
 				UserLocalServiceUtil.getUser(TestPropsValues.getUserId())));
 	}
+	
 
 	@Before
 	@Override
