@@ -2,5 +2,6 @@ Bundle-Name: Liferay Server Admin Web
 Bundle-SymbolicName: com.liferay.server.admin.web
 Bundle-Version: 5.0.96
 DynamicImport-Package: *
+Import-Package: org.codehaus.groovy.runtime.callsite
 Web-ContextPath: /server-admin-web
 -dsannotations-options: inherit
