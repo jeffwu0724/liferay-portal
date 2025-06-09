@@ -9,6 +9,9 @@ import com.liferay.petra.concurrent.DCLSingleton;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
+import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ReleaseConstants;
@@ -396,12 +399,25 @@ public class PortalUpgradeProcess extends UpgradeProcess {
 
 		return _currentPortalReleaseDTODCLSingleton.getSingleton(
 			() -> {
+				String caseSensitiveDetection = "testString = ?";
+
+				DB db = DBManagerUtil.getDB();
+
+				DBType dbType = db.getDBType();
+
+				if ((dbType == DBType.ORACLE) || (dbType == DBType.SQLSERVER)) {
+					caseSensitiveDetection = StringBundler.concat(
+						"select count(*) from Release_ where releaseId = ",
+						ReleaseConstants.DEFAULT_ID, " and testString = ?");
+				}
+
 				try (PreparedStatement preparedStatement =
 						connection.prepareStatement(
 							StringBundler.concat(
 								"select schemaVersion, buildNumber, ",
-								"buildDate, state_, testString, testString = ",
-								"? as caseSensitive from Release_ where ",
+								"buildDate, state_, testString, (",
+								caseSensitiveDetection,
+								") as caseSensitive from Release_ where ",
 								"releaseId = ", ReleaseConstants.DEFAULT_ID))) {
 
 					preparedStatement.setString(
