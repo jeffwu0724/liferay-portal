@@ -8,6 +8,7 @@ package com.liferay.third.party.library.dependencies.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.ArrayList;
@@ -63,6 +64,10 @@ public class ThirdPartyLibraryDependenciesTest {
 
 			for (String exportPackageFromManifest :
 					_getExportPackagesFromManifest(curBundle)) {
+
+				if (_whitelist.contains(exportPackageFromManifest)) {
+					continue;
+				}
 
 				if (!inUseExportPackage.contains(exportPackageFromManifest)) {
 					_updatedExportComponents.put(
@@ -149,6 +154,15 @@ public class ThirdPartyLibraryDependenciesTest {
 
 		return sb.toString();
 	}
+
+	private static final Set<String> _whitelist = SetUtil.fromArray(
+		"io.netty.util.internal.shaded.org.jctools.counters",
+		"io.netty.util.internal.shaded.org.jctools.maps",
+		"io.netty.util.internal.shaded.org.jctools.queues",
+		"io.netty.util.internal.shaded.org.jctools.queues.atomic",
+		"io.netty.util.internal.shaded.org.jctools.queues.atomic.unpadded",
+		"io.netty.util.internal.shaded.org.jctools.queues.unpadded",
+		"io.netty.util.internal.shaded.org.jctools.util");
 
 	private final Map<String, Set<String>> _updatedExportComponents =
 		new HashMap<>();
