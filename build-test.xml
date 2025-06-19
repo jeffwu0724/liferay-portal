@@ -2725,7 +2725,6 @@ httpLoggingEnabled=&quot;false&quot;</echo>
 	<macrodef name="prepare-captcha-configuration">
 		<sequential>
 			<echo file="${liferay.home}/osgi/configs/com.liferay.captcha.configuration.CaptchaConfiguration.config">createAccountCaptchaEnabled=&quot;false&quot;
-maxChallenges=&quot;-1&quot;
 sendPasswordCaptchaEnabled=&quot;false&quot;</echo>
 		</sequential>
 	</macrodef>
@@ -12904,7 +12903,9 @@ feature.flag.LPD-11342=true</echo>
 		<echo append="true" file="portal-impl/src/portal-ext.properties">
 analytics.cloud.domain.allowed=*
 
-captcha.enforce.disabled=true</echo>
+captcha.enforce.disabled=true
+configuration.override.com.liferay.captcha.configuration.CaptchaConfiguration_maxChallenges=I"-1"
+		</echo>
 
 		<apply-portal-ext-properties />
 	</target>
