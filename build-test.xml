@@ -12309,7 +12309,10 @@ com.liferay.portal.servlet.filters.strip.StripFilter=true
 web.server.http.port=8080
 admin.email.from.address=test@liferay.com
 announcements.email.to.address=noreply@liferay.com
-login.secure.forgot.password=false</echo>
+login.secure.forgot.password=false
+captcha.enforce.disabled=true
+configuration.override.com.liferay.captcha.configuration.CaptchaConfiguration_maxChallenges=I"-1"
+		</echo>
 
 		<if>
 			<equals arg1="${database.type}" arg2="oracle" />
@@ -12902,9 +12905,6 @@ feature.flag.LPD-11342=true</echo>
 
 		<echo append="true" file="portal-impl/src/portal-ext.properties">
 analytics.cloud.domain.allowed=*
-
-captcha.enforce.disabled=true
-configuration.override.com.liferay.captcha.configuration.CaptchaConfiguration_maxChallenges=I"-1"
 		</echo>
 
 		<apply-portal-ext-properties />
