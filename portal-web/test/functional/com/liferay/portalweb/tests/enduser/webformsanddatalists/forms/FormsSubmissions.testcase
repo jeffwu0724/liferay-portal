@@ -1134,6 +1134,7 @@ definition {
 	@priority = 5
 	test CanRequireCAPTCHA {
 		property captcha.enabled = "true";
+		property custom.properties = "configuration.override.com.liferay.captcha.configuration.CaptchaConfiguration_maxChallenges=I\"1\"";
 		property portal.acceptance = "true";
 		property test.liferay.virtual.instance = "false";
 		property test.run.type = "single";
