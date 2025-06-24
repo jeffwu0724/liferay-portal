@@ -33,8 +33,8 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Logger;
@@ -219,8 +219,8 @@ public class Log4jConfigUtilTest {
 
 	@Test
 	public void testConfigureLog4JWithException() {
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				Log4jConfigUtil.class.getName(), Level.SEVERE)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				Log4jConfigUtil.class.getName(), LoggerTestUtil.ERROR)) {
 
 			Log4jConfigUtil.configureLog4J(null);
 
@@ -561,7 +561,7 @@ public class Log4jConfigUtilTest {
 
 		byteArrayOutputStream.reset();
 
-		logger.log(org.apache.logging.log4j.Level.INFO, logMessage);
+		logger.log(Level.INFO, logMessage);
 
 		String actualLogMessage = byteArrayOutputStream.toString();
 
