@@ -48,7 +48,6 @@ import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -245,8 +244,9 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 		MethodHandler methodHandler = new MethodHandler(
 			_TEST_METHOD, timeString);
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				ClusterMasterExecutorImpl.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				ClusterMasterExecutorImpl.class.getName(),
+				LoggerTestUtil.WARN)) {
 
 			NoticeableFuture<String> noticeableFuture =
 				clusterMasterExecutorImpl.executeOnMaster(methodHandler);
@@ -267,8 +267,9 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 		// Test 2, execute without exception when log is disabled
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				ClusterMasterExecutorImpl.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				ClusterMasterExecutorImpl.class.getName(),
+				LoggerTestUtil.OFF)) {
 
 			NoticeableFuture<String> noticeableFuture =
 				clusterMasterExecutorImpl.executeOnMaster(methodHandler);
@@ -282,8 +283,9 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 		// Test 3, execute with exception
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				ClusterMasterExecutorImpl.class.getName(), Level.WARNING)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				ClusterMasterExecutorImpl.class.getName(),
+				LoggerTestUtil.WARN)) {
 
 			try {
 				clusterMasterExecutorImpl.executeOnMaster(null);
@@ -432,9 +434,9 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 				@Override
 				public void run() {
 					try (LogCapture logCapture =
-							LoggerTestUtil.configureJDKLogger(
+							LoggerTestUtil.configureLog4JLogger(
 								ClusterMasterExecutorImpl.class.getName(),
-								Level.INFO)) {
+								LoggerTestUtil.INFO)) {
 
 						Assert.assertEquals(
 							_TEST_CLUSTER_NODE_ID,
@@ -492,9 +494,9 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 				@Override
 				public void run() {
 					try (LogCapture logCapture =
-							LoggerTestUtil.configureJDKLogger(
+							LoggerTestUtil.configureLog4JLogger(
 								ClusterMasterExecutorImpl.class.getName(),
-								Level.OFF)) {
+								LoggerTestUtil.OFF)) {
 
 						Assert.assertEquals(
 							_TEST_CLUSTER_NODE_ID,

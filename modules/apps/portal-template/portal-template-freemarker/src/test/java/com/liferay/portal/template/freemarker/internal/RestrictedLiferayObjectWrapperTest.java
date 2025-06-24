@@ -47,7 +47,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 import org.hamcrest.CoreMatchers;
 
@@ -80,8 +79,9 @@ public class RestrictedLiferayObjectWrapperTest
 
 	@Test
 	public void testConstructor() {
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				RestrictedLiferayObjectWrapper.class.getName(), Level.INFO)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				RestrictedLiferayObjectWrapper.class.getName(),
+				LoggerTestUtil.INFO)) {
 
 			Assert.assertEquals(
 				Collections.singletonList("com.liferay.package.name"),
@@ -102,8 +102,9 @@ public class RestrictedLiferayObjectWrapperTest
 				logEntry.getMessage());
 		}
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				RestrictedLiferayObjectWrapper.class.getName(), Level.OFF)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				RestrictedLiferayObjectWrapper.class.getName(),
+				LoggerTestUtil.OFF)) {
 
 			Assert.assertEquals(
 				Collections.singletonList("com.liferay.package.name"),
@@ -263,8 +264,9 @@ public class RestrictedLiferayObjectWrapperTest
 
 	@Test
 	public void testRestrictedMethodNamesIncorrectSyntax() {
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				RestrictedLiferayObjectWrapper.class.getName(), Level.INFO)) {
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				RestrictedLiferayObjectWrapper.class.getName(),
+				LoggerTestUtil.INFO)) {
 
 			String methodName =
 				TestLiferayMethodObject.class.getName() + ".getName";
@@ -432,8 +434,8 @@ public class RestrictedLiferayObjectWrapperTest
 			StringModel.class.cast(
 				objectWrapper.wrap(new TestBaseModel(123L))));
 
-		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
-				CompanyThreadLocal.class.getName(), Level.OFF);
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				CompanyThreadLocal.class.getName(), LoggerTestUtil.OFF);
 			SafeCloseable safeCloseable =
 				CompanyThreadLocal.setCompanyIdWithSafeCloseable(
 					Long.valueOf(1))) {
