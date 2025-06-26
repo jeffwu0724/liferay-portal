@@ -10,7 +10,6 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
@@ -46,8 +45,6 @@ public class UriInfoUtilTest {
 		PortalUtil portalUtil = new PortalUtil();
 
 		portalUtil.setPortal(_portal);
-
-		PropsUtil.setProps(_props);
 
 		Mockito.when(
 			_uriInfo.getBaseUriBuilder()
@@ -170,15 +167,10 @@ public class UriInfoUtilTest {
 	}
 
 	private void _setProtocol(String protocol) {
-		Mockito.when(
-			_props.get(PropsKeys.WEB_SERVER_PROTOCOL)
-		).thenReturn(
-			protocol
-		);
+		PropsUtil.set(PropsKeys.WEB_SERVER_PROTOCOL, protocol);
 	}
 
 	private final Portal _portal = Mockito.mock(Portal.class);
-	private final Props _props = Mockito.mock(Props.class);
 	private final UriBuilder _uriBuilder = Mockito.spy(
 		new UriBuilderImpl(
 		).path(
