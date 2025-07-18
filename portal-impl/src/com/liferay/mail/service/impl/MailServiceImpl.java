@@ -10,6 +10,7 @@ import com.liferay.mail.kernel.auth.token.provider.MailAuthTokenProviderRegistry
 import com.liferay.mail.kernel.model.Account;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.kernel.service.MailSettingConfigurationProviderUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.cluster.Clusterable;
@@ -112,22 +113,31 @@ public class MailServiceImpl implements IdentifiableOSGiService, MailService {
 			return session;
 		}
 
-		String advancedPropertiesString = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_ADVANCED_PROPERTIES);
-		String pop3Host = function.apply(PropsKeys.MAIL_SESSION_MAIL_POP3_HOST);
-		String pop3Password = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_POP3_PASSWORD);
+		String advancedPropertiesString =
+			MailSettingConfigurationProviderUtil.
+				getAdditionalJavaMailProperties(companyId);
+		String pop3Host =
+			MailSettingConfigurationProviderUtil.getIncomingPOPServer(
+				companyId);
+
+		String pop3Password =
+			MailSettingConfigurationProviderUtil.getPOPPassword(companyId);
 		int pop3Port = GetterUtil.getInteger(
-			function.apply(PropsKeys.MAIL_SESSION_MAIL_POP3_PORT));
-		String pop3User = function.apply(PropsKeys.MAIL_SESSION_MAIL_POP3_USER);
-		String smtpHost = function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_HOST);
-		String smtpPassword = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_SMTP_PASSWORD);
+			MailSettingConfigurationProviderUtil.getIncomingPOPPort(companyId));
+		String pop3User = MailSettingConfigurationProviderUtil.getPOPUserName(
+			companyId);
+		String smtpHost =
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPServer(
+				companyId);
+		String smtpPassword =
+			MailSettingConfigurationProviderUtil.getSMTPPassword(companyId);
 		int smtpPort = GetterUtil.getInteger(
-			function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_PORT));
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPPort(
+				companyId));
 		boolean smtpStartTLSEnable = GetterUtil.getBoolean(
-			function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_STARTTLS_ENABLE));
-		String smtpUser = function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_USER);
+			MailSettingConfigurationProviderUtil.getEnableStartTLS(companyId));
+		String smtpUser = MailSettingConfigurationProviderUtil.getSMTPUserName(
+			companyId);
 		String storeProtocol = function.apply(
 			PropsKeys.MAIL_SESSION_MAIL_STORE_PROTOCOL);
 		String transportProtocol = function.apply(
