@@ -410,21 +410,21 @@ public class EditServerMVCActionCommandTest {
 
 	@Test
 	public void testUpdateMail() {
-		jakarta.portlet.PortletPreferences jxPortletPreferences =
+		jakarta.portlet.PortletPreferences portletPreferences =
 			PrefsPropsUtil.getPreferences(CompanyConstants.SYSTEM);
 
 		try {
 			_testUpdateMailPortletPreferences(
 				RandomTestUtil::randomBoolean, RandomTestUtil::randomInt,
-				RandomTestUtil::randomString, jxPortletPreferences);
+				RandomTestUtil::randomString, portletPreferences);
 
 			_testUpdateMailPortletPreferences(
 				() -> Boolean.FALSE, () -> 0, () -> StringPool.BLANK,
-				jxPortletPreferences);
+				portletPreferences);
 		}
 		finally {
 			PortalPreferencesWrapper portalPreferencesWrapper =
-				(PortalPreferencesWrapper)jxPortletPreferences;
+				(PortalPreferencesWrapper)portletPreferences;
 
 			PortalPreferencesImpl portalPreferencesImpl =
 				portalPreferencesWrapper.getPortalPreferencesImpl();
@@ -558,7 +558,7 @@ public class EditServerMVCActionCommandTest {
 	private void _testUpdateMailPortletPreferences(
 		BooleanSupplier booleanSupplier, IntSupplier intSupplier,
 		Supplier<String> stringSupplier,
-		jakarta.portlet.PortletPreferences jxPortletPreferences) {
+		jakarta.portlet.PortletPreferences portletPreferences) {
 
 		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
 			new MockLiferayPortletActionRequest();
@@ -602,61 +602,61 @@ public class EditServerMVCActionCommandTest {
 			new Class<?>[] {
 				ActionRequest.class, jakarta.portlet.PortletPreferences.class
 			},
-			mockLiferayPortletActionRequest, jxPortletPreferences);
+			mockLiferayPortletActionRequest, portletPreferences);
 
 		Assert.assertEquals(
 			parameters.get("advancedProperties"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_ADVANCED_PROPERTIES, null));
 		Assert.assertEquals(
 			parameters.get("pop3Host"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_POP3_HOST, null));
 		Assert.assertEquals(
 			parameters.get("pop3Password"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_POP3_PASSWORD, null));
 		Assert.assertEquals(
 			parameters.get("pop3Port"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_POP3_PORT, null));
 		Assert.assertEquals(
 			Boolean.valueOf(parameters.get("pop3Secure")) ?
 				Account.PROTOCOL_POPS : Account.PROTOCOL_POP,
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_STORE_PROTOCOL, null));
 		Assert.assertEquals(
 			parameters.get("pop3User"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_POP3_USER, null));
 		Assert.assertEquals(
 			parameters.get("popServerNotificationsEnabled"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED, null));
 		Assert.assertEquals(
 			parameters.get("smtpHost"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_SMTP_HOST, null));
 		Assert.assertEquals(
 			parameters.get("smtpPassword"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_SMTP_PASSWORD, null));
 		Assert.assertEquals(
 			parameters.get("smtpPort"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_SMTP_PORT, null));
 		Assert.assertEquals(
 			Boolean.valueOf(parameters.get("smtpSecure")) ?
 				Account.PROTOCOL_SMTPS : Account.PROTOCOL_SMTP,
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_TRANSPORT_PROTOCOL, null));
 		Assert.assertEquals(
 			parameters.get("smtpStartTLSEnable"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_SMTP_STARTTLS_ENABLE, null));
 		Assert.assertEquals(
 			parameters.get("smtpUser"),
-			jxPortletPreferences.getValue(
+			portletPreferences.getValue(
 				PropsKeys.MAIL_SESSION_MAIL_SMTP_USER, null));
 	}
 
