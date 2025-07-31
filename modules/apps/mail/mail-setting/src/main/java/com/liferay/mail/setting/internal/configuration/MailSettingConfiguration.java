@@ -35,10 +35,13 @@ public interface MailSettingConfiguration {
 	@Meta.AD(name = "use-a-secure-network-connection", required = false)
 	public boolean useASecureNetworkConnectionForPOP();
 
-	@Meta.AD(name = "user-name", required = false)
+	@Meta.AD(deflt = "", name = "user-name", required = false)
 	public String popUserName();
 
-	@Meta.AD(name = "password", required = false, type = Meta.Type.Password)
+	@Meta.AD(
+		deflt = "", name = "password", required = false,
+		type = Meta.Type.Password
+	)
 	public String popPassword();
 
 	@Meta.AD(
@@ -55,13 +58,17 @@ public interface MailSettingConfiguration {
 	@Meta.AD(deflt = "true", name = "enable-starttls", required = false)
 	public boolean enableStartTLS();
 
-	@Meta.AD(name = "user-name", required = false)
+	@Meta.AD(deflt = "", name = "user-name", required = false)
 	public String smtpUserName();
 
-	@Meta.AD(name = "password", required = false, type = Meta.Type.Password)
+	@Meta.AD(
+		deflt = "", name = "password", required = false,
+		type = Meta.Type.Password
+	)
 	public String smtpPassword();
 
 	@Meta.AD(
+		deflt = "",
 		name = "manually-specify-additional-javamail-properties-to-override-the-above-configuration",
 		required = false
 	)
