@@ -5,6 +5,7 @@
 
 package com.liferay.message.boards.web.internal.util;
 
+import com.liferay.mail.kernel.service.MailSettingConfigurationProviderUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.theme.PortletDisplay;
@@ -59,10 +60,9 @@ public class MBMailUtil {
 		).put(
 			"[$MAILING_LIST_ADDRESS$]",
 			() -> {
-				if (!PrefsPropsUtil.getBoolean(
-						themeDisplay.getCompanyId(),
-						PropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED,
-						PropsValues.POP_SERVER_NOTIFICATIONS_ENABLED)) {
+				if (!MailSettingConfigurationProviderUtil.getEnablePOPServerNotifications()) {
+
+
 
 					return null;
 				}
@@ -169,10 +169,7 @@ public class MBMailUtil {
 		).put(
 			"[$MAILING_LIST_ADDRESS$]",
 			() -> {
-				if (!PrefsPropsUtil.getBoolean(
-						themeDisplay.getCompanyId(),
-						PropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED,
-						PropsValues.POP_SERVER_NOTIFICATIONS_ENABLED)) {
+				if (!MailSettingConfigurationProviderUtil.getEnablePOPServerNotifications()) {
 
 					return null;
 				}

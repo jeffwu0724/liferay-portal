@@ -7,6 +7,7 @@ package com.liferay.portal.pop.notifications.internal.scheduler;
 
 import com.liferay.mail.kernel.model.Account;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.kernel.service.MailSettingConfigurationProviderUtil;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.petra.function.UnsafeRunnable;
@@ -58,9 +59,7 @@ public class POPNotificationsSchedulerJobConfiguration
 	public UnsafeRunnable<Exception> getJobExecutorUnsafeRunnable() {
 		return () -> _companyLocalService.forEachCompanyId(
 			companyId -> {
-				if (!PrefsPropsUtil.getBoolean(
-						companyId, PropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED,
-						PropsValues.POP_SERVER_NOTIFICATIONS_ENABLED)) {
+				if (!MailSettingConfigurationProviderUtil.getEnablePOPServerNotifications()) {
 
 					return;
 				}
