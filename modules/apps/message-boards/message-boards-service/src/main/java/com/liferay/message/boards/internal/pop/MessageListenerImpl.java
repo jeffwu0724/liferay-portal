@@ -5,6 +5,7 @@
 
 package com.liferay.message.boards.internal.pop;
 
+import com.liferay.mail.kernel.service.MailSettingConfigurationProviderUtil;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
 import com.liferay.message.boards.internal.util.MBMailMessage;
@@ -88,9 +89,7 @@ public class MessageListenerImpl implements MessageListener {
 				_log.debug("Check to see if user " + from + " exists");
 			}
 
-			String pop3User = PrefsPropsUtil.getString(
-				PropsKeys.MAIL_SESSION_MAIL_POP3_USER,
-				PropsValues.MAIL_SESSION_MAIL_POP3_USER);
+			String pop3User = MailSettingConfigurationProviderUtil.getPOPUserName();
 
 			if (StringUtil.equalsIgnoreCase(from, pop3User)) {
 				return false;
