@@ -5,6 +5,7 @@
 
 package com.liferay.message.boards.internal.pop;
 
+import com.liferay.mail.setting.configuration.MailSettingConfiguration;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
 import com.liferay.message.boards.internal.util.MBMailMessage;
@@ -15,6 +16,7 @@ import com.liferay.message.boards.service.MBCategoryLocalService;
 import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.message.boards.service.MBMessageService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -31,8 +33,6 @@ import com.liferay.portal.kernel.util.HtmlParser;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionCheckerUtil;
@@ -88,11 +88,14 @@ public class MessageListenerImpl implements MessageListener {
 				_log.debug("Check to see if user " + from + " exists");
 			}
 
-			String pop3User = PrefsPropsUtil.getString(
-				PropsKeys.MAIL_SESSION_MAIL_POP3_USER,
-				PropsValues.MAIL_SESSION_MAIL_POP3_USER);
+			MailSettingConfiguration mailSettingConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingConfiguration.class,
+					CompanyThreadLocal.getCompanyId());
 
-			if (StringUtil.equalsIgnoreCase(from, pop3User)) {
+			if (StringUtil.equalsIgnoreCase(
+					from, mailSettingConfiguration.popUserName())) {
+
 				return false;
 			}
 
@@ -302,6 +305,9 @@ public class MessageListenerImpl implements MessageListener {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MessageListenerImpl.class);
+
+	@Reference
+	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private HtmlParser _htmlParser;

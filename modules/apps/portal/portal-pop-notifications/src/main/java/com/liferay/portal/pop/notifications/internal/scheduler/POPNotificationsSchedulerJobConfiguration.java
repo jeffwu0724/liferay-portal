@@ -7,25 +7,26 @@ package com.liferay.portal.pop.notifications.internal.scheduler;
 
 import com.liferay.mail.kernel.model.Account;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.setting.configuration.MailSettingConfiguration;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.pop.MessageListener;
 import com.liferay.portal.kernel.pop.MessageListenerException;
 import com.liferay.portal.kernel.scheduler.SchedulerJobConfiguration;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.TriggerConfiguration;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.pop.notifications.internal.MessageListenerWrapper;
-import com.liferay.portal.util.PropsValues;
 
 import jakarta.mail.Address;
 import jakarta.mail.Flags;
@@ -56,17 +57,31 @@ public class POPNotificationsSchedulerJobConfiguration
 
 	@Override
 	public UnsafeRunnable<Exception> getJobExecutorUnsafeRunnable() {
-		return () -> _companyLocalService.forEachCompanyId(
-			companyId -> {
-				if (!PrefsPropsUtil.getBoolean(
-						companyId, PropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED,
-						PropsValues.POP_SERVER_NOTIFICATIONS_ENABLED)) {
+		try {
+			MailSettingConfiguration mailSettingConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingConfiguration.class,
+					CompanyThreadLocal.getCompanyId());
 
-					return;
-				}
+			return () -> _companyLocalService.forEachCompanyId(
+				companyId -> {
+					if (!mailSettingConfiguration.
+							enablePOPServerNotifications()) {
 
-				_popNotifications(companyId);
-			});
+						return;
+					}
+
+					_popNotifications(companyId);
+				});
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(
+				"Unable to get mail setting configuration for company " +
+					CompanyThreadLocal.getCompanyId(),
+				configurationException);
+		}
+
+		return null;
 	}
 
 	@Override
@@ -266,6 +281,9 @@ public class POPNotificationsSchedulerJobConfiguration
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
+
+	@Reference
+	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private MailService _mailService;
