@@ -7,23 +7,19 @@ package com.liferay.portal.util.mail.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.kernel.service.MailSettingConfigurationProvider;
+import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.test.portlet.MockLiferayPortletActionRequest;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.PropsValues;
 
 import jakarta.mail.Session;
-
-import jakarta.portlet.ActionRequest;
-import jakarta.portlet.PortletPreferences;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -43,30 +39,33 @@ public class MailServiceTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testGetSessionWithCompanyId() {
+	public void testGetSessionWithCompanyId() throws Exception {
 		long companyId = RandomTestUtil.randomLong();
+
 		String smtpHost = "test.local";
 
-		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
-			new MockLiferayPortletActionRequest();
+		try (CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper =
+					new CompanyConfigurationTemporarySwapper(
+						companyId,
+						"com.liferay.mail.setting.internal.configuration." +
+							"MailSettingConfiguration",
+						HashMapDictionaryBuilder.<String, Object>put(
+							"outgoingSMTPServer", smtpHost
+						).build())) {
 
-		mockLiferayPortletActionRequest.addParameter("smtpHost", smtpHost);
+			Session session = _mailService.getSession(companyId);
 
-		ReflectionTestUtil.invoke(
-			_mvcActionCommand, "_updateMail",
-			new Class<?>[] {ActionRequest.class, PortletPreferences.class},
-			mockLiferayPortletActionRequest,
-			PrefsPropsUtil.getPreferences(companyId));
+			Assert.assertEquals(
+				smtpHost, session.getProperty("mail.smtp.host"));
 
-		Session session = _mailService.getSession(companyId);
+			session = _mailService.getSession(_portal.getDefaultCompanyId());
 
-		Assert.assertEquals(smtpHost, session.getProperty("mail.smtp.host"));
-
-		session = _mailService.getSession(_portal.getDefaultCompanyId());
-
-		Assert.assertEquals(
-			PropsValues.MAIL_SESSION_MAIL_SMTP_HOST,
-			session.getProperty("mail.smtp.host"));
+			Assert.assertEquals(
+				_mailSettingConfigurationProvider.getOutgoingSMTPServer(
+					_portal.getDefaultCompanyId()),
+				session.getProperty("mail.smtp.host"));
+		}
 	}
 
 	@Inject
@@ -74,6 +73,9 @@ public class MailServiceTest {
 
 	@Inject
 	private MailService _mailService;
+
+	@Inject
+	private MailSettingConfigurationProvider _mailSettingConfigurationProvider;
 
 	@Inject(filter = "mvc.command.name=/server_admin/edit_server")
 	private MVCActionCommand _mvcActionCommand;
