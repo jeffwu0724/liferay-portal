@@ -7,23 +7,21 @@ package com.liferay.portal.util.mail.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.setting.configuration.MailSettingConfiguration;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
+import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.test.portlet.MockLiferayPortletActionRequest;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.PropsValues;
 
 import jakarta.mail.Session;
-
-import jakarta.portlet.ActionRequest;
-import jakarta.portlet.PortletPreferences;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -43,31 +41,43 @@ public class MailServiceTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testGetSessionWithCompanyId() {
+	public void testGetSessionWithCompanyId() throws Exception {
 		long companyId = RandomTestUtil.randomLong();
-		String smtpHost = "test.local";
 
-		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
-			new MockLiferayPortletActionRequest();
+		MailSettingConfiguration mailSettingConfiguration =
+			_configurationProvider.getCompanyConfiguration(
+				MailSettingConfiguration.class, companyId);
 
-		mockLiferayPortletActionRequest.addParameter("smtpHost", smtpHost);
+		String instanceSmtpHost = "test.instance.local";
 
-		ReflectionTestUtil.invoke(
-			_mvcActionCommand, "_updateMail",
-			new Class<?>[] {ActionRequest.class, PortletPreferences.class},
-			mockLiferayPortletActionRequest,
-			PrefsPropsUtil.getPreferences(companyId));
+		PropsUtil.set("mail.session.mail", "true");
 
-		Session session = _mailService.getSession(companyId);
+		try (CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper =
+					new CompanyConfigurationTemporarySwapper(
+						companyId, MailSettingConfiguration.class.getName(),
+						HashMapDictionaryBuilder.<String, Object>put(
+							"outgoingSMTPServer", instanceSmtpHost
+						).build())) {
 
-		Assert.assertEquals(smtpHost, session.getProperty("mail.smtp.host"));
+			Session session = _mailService.getSession(companyId);
 
-		session = _mailService.getSession(_portal.getDefaultCompanyId());
+			Assert.assertEquals(
+				instanceSmtpHost, session.getProperty("mail.smtp.host"));
+		}
+
+		Session session = _mailService.getSession(
+			_portal.getDefaultCompanyId());
 
 		Assert.assertEquals(
-			PropsValues.MAIL_SESSION_MAIL_SMTP_HOST,
+			mailSettingConfiguration.outgoingSMTPServer(),
 			session.getProperty("mail.smtp.host"));
+
+		PropsUtil.set("mail.session.mail", "false");
 	}
+
+	@Inject
+	private static ConfigurationProvider _configurationProvider;
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
