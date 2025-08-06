@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
@@ -42,8 +43,10 @@ public class MailServiceTest {
 	@Test
 	public void testGetSessionWithCompanyId() throws Exception {
 		long companyId = RandomTestUtil.randomLong();
+		String originalValue = PropsUtil.get("mail.session.mail");
 		String systemSmtpHost = "test.system.local";
 		String instanceSmtpHost = "test.instance.local";
+		PropsUtil.set("mail.session.mail", "true");
 
 		try (ConfigurationTemporarySwapper configurationTemporarySwapper =
 				new ConfigurationTemporarySwapper(
@@ -60,6 +63,7 @@ public class MailServiceTest {
 							HashMapDictionaryBuilder.<String, Object>put(
 								"outgoingSMTPServer", instanceSmtpHost
 							).build())) {
+				//MailSettingConfigurationProviderUtil.getOutgoingSMTPServer()
 
 				Session session = _mailService.getSession(companyId);
 
@@ -72,6 +76,8 @@ public class MailServiceTest {
 
 			Assert.assertEquals(
 				systemSmtpHost, session.getProperty("mail.smtp.host"));
+
+			PropsUtil.set("mail.session.mail", "false");
 		}
 	}
 
