@@ -291,6 +291,27 @@ public class MailServiceImpl implements IdentifiableOSGiService, MailService {
 	private Session _createMailSession() {
 		Properties properties = PropsUtil.getProperties("mail.session.", true);
 
+//		mail.session.mail.pop3.host=localhost
+//		mail.session.mail.pop3.password=
+//		mail.session.mail.pop3.port=110
+//		mail.session.mail.pop3.user=
+//		mail.session.mail.smtp.host=localhost
+//		mail.session.mail.smtp.password=
+//		mail.session.mail.smtp.port=25
+//		mail.session.mail.smtp.starttls.enable=true
+
+		properties.put("mail.session.mail.pop3.host", MailSettingConfigurationProviderUtil.getIncomingPOPServer());
+		properties.put("mail.session.mail.pop3.password", MailSettingConfigurationProviderUtil.getPOPPassword());
+		properties.put("mail.session.mail.pop3.port", MailSettingConfigurationProviderUtil.getOutgoingSMTPPort());
+		properties.put("mail.session.mail.pop3.user", MailSettingConfigurationProviderUtil.getPOPUserName());
+
+		properties.put("mail.session.mail.smtp.host", MailSettingConfigurationProviderUtil.getOutgoingSMTPServer());
+		properties.put("mail.session.mail.smtp.password", MailSettingConfigurationProviderUtil.getSMTPPassword());
+		properties.put("mail.session.mail.smtp.port", MailSettingConfigurationProviderUtil.getOutgoingSMTPPort());
+		properties.put("mail.session.mail.smtp.user", MailSettingConfigurationProviderUtil.getSMTPUserName());
+		properties.put("mail.session.mail.smtp.starttls.enable", MailSettingConfigurationProviderUtil.getEnableStartTLS());
+
+
 		String jndiName = properties.getProperty("jndi.name");
 
 		if (Validator.isNotNull(jndiName)) {
