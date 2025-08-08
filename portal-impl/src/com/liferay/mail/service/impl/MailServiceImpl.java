@@ -295,6 +295,41 @@ public class MailServiceImpl implements IdentifiableOSGiService, MailService {
 	private Session _createMailSession() {
 		Properties properties = PropsUtil.getProperties("mail.session.", true);
 
+		long companyId = CompanyThreadLocal.getCompanyId();
+
+		properties.put(
+			"mail.session.mail.pop3.host",
+			MailSettingConfigurationProviderUtil.getIncomingPOPServer(
+				companyId));
+		properties.put(
+			"mail.session.mail.pop3.password",
+			MailSettingConfigurationProviderUtil.getPOPPassword(companyId));
+		properties.put(
+			"mail.session.mail.pop3.port",
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPPort(
+				companyId));
+		properties.put(
+			"mail.session.mail.pop3.user",
+			MailSettingConfigurationProviderUtil.getPOPUserName(companyId));
+
+		properties.put(
+			"mail.session.mail.smtp.host",
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPServer(
+				companyId));
+		properties.put(
+			"mail.session.mail.smtp.password",
+			MailSettingConfigurationProviderUtil.getSMTPPassword(companyId));
+		properties.put(
+			"mail.session.mail.smtp.port",
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPPort(
+				companyId));
+		properties.put(
+			"mail.session.mail.smtp.starttls.enable",
+			MailSettingConfigurationProviderUtil.getEnableStartTLS(companyId));
+		properties.put(
+			"mail.session.mail.smtp.user",
+			MailSettingConfigurationProviderUtil.getSMTPUserName(companyId));
+
 		String jndiName = properties.getProperty("jndi.name");
 
 		if (Validator.isNotNull(jndiName)) {
