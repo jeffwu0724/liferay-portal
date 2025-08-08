@@ -1,3 +1,5 @@
 Bundle-Name: Liferay Mail Setting
 Bundle-SymbolicName: com.liferay.mail.setting
 Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.mail.setting.configuration
