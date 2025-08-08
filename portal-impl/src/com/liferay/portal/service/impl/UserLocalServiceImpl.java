@@ -7063,7 +7063,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				emailAddress, emailAddressValidator);
 		}
 
-		String pop3User = MailSettingConfigurationProviderUtil.getPOPUserName();
+		String pop3User = MailSettingConfigurationProviderUtil.getPOPUserName(
+			companyId);
 
 		if (StringUtil.equalsIgnoreCase(emailAddress, pop3User)) {
 			throw new UserEmailAddressException.MustNotBePOP3User(emailAddress);

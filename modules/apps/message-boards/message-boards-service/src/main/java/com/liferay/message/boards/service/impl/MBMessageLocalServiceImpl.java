@@ -17,7 +17,7 @@ import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
-import com.liferay.mail.kernel.service.MailSettingConfigurationProviderUtil;
+import com.liferay.mail.setting.configuration.MailSettingConfiguration;
 import com.liferay.message.boards.constants.MBCategoryConstants;
 import com.liferay.message.boards.constants.MBConstants;
 import com.liferay.message.boards.constants.MBMessageConstants;
@@ -2580,9 +2580,11 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		String replyToAddress = StringPool.BLANK;
 
-		if (MailSettingConfigurationProviderUtil.
-				getEnablePOPServerNotifications()) {
+		MailSettingConfiguration mailSettingConfiguration =
+			_configurationProvider.getCompanyConfiguration(
+				MailSettingConfiguration.class, company.getCompanyId());
 
+		if (mailSettingConfiguration.enablePOPServerNotifications()) {
 			replyToAddress = MBMailUtil.getReplyToAddress(
 				message.getCategoryId(), message.getMessageId(),
 				company.getMx(), fromAddress);

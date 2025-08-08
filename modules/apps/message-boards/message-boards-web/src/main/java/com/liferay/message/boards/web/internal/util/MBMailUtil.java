@@ -59,7 +59,8 @@ public class MBMailUtil {
 			"[$MAILING_LIST_ADDRESS$]",
 			() -> {
 				if (!MailSettingConfigurationProviderUtil.
-						getEnablePOPServerNotifications()) {
+						getEnablePOPServerNotifications(
+							themeDisplay.getCompanyId())) {
 
 					return null;
 				}
@@ -167,7 +168,8 @@ public class MBMailUtil {
 			"[$MAILING_LIST_ADDRESS$]",
 			() -> {
 				if (!MailSettingConfigurationProviderUtil.
-						getEnablePOPServerNotifications()) {
+						getEnablePOPServerNotifications(
+							themeDisplay.getCompanyId())) {
 
 					return null;
 				}
