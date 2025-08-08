@@ -98,7 +98,7 @@ public class MailServiceImpl implements IdentifiableOSGiService, MailService {
 			return session;
 		}
 
-		session = _createMailSession();
+		session = _createMailSession(companyId);
 
 		Function<String, String> function =
 			(String key) -> PrefsPropsUtil.getString(
@@ -292,8 +292,41 @@ public class MailServiceImpl implements IdentifiableOSGiService, MailService {
 			});
 	}
 
-	private Session _createMailSession() {
+	private Session _createMailSession(long companyId) {
 		Properties properties = PropsUtil.getProperties("mail.session.", true);
+
+		properties.put(
+			"mail.pop3.host",
+			MailSettingConfigurationProviderUtil.getIncomingPOPServer(
+				companyId));
+		properties.put(
+			"mail.pop3.password",
+			MailSettingConfigurationProviderUtil.getPOPPassword(companyId));
+		properties.put(
+			"mail.pop3.port",
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPPort(
+				companyId));
+		properties.put(
+			"mail.pop3.user",
+			MailSettingConfigurationProviderUtil.getPOPUserName(companyId));
+
+		properties.put(
+			"mail.smtp.host",
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPServer(
+				companyId));
+		properties.put(
+			"mail.smtp.password",
+			MailSettingConfigurationProviderUtil.getSMTPPassword(companyId));
+		properties.put(
+			"mail.smtp.port",
+			MailSettingConfigurationProviderUtil.getOutgoingSMTPPort(
+				companyId));
+		properties.put(
+			"mail.smtp.starttls.enable",
+			MailSettingConfigurationProviderUtil.getEnableStartTLS(companyId));
+		properties.put(
+			"mail.smtp.user",
+			MailSettingConfigurationProviderUtil.getSMTPUserName(companyId));
 
 		String jndiName = properties.getProperty("jndi.name");
 
