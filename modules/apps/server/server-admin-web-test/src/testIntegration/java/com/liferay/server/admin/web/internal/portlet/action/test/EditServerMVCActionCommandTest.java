@@ -539,8 +539,7 @@ public class EditServerMVCActionCommandTest {
 		"dlDeletePreviews", "dlGenerateAudioPreviews",
 		"dlGenerateOpenOfficePreviews", "dlGeneratePDFPreviews",
 		"dlGenerateVideoPreviews", "gc", "runScript", "shutdown", "threadDump",
-		"updateExternalServices", "updateLogLevels", "updatePortalProperties",
-		"updatePortalProperties"
+		"updateExternalServices", "updateLogLevels", "updatePortalProperties"
 	};
 
 	@Inject
