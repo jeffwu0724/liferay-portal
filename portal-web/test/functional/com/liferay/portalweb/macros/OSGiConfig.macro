@@ -104,13 +104,13 @@ ${configList}''';
     incomingPOPServer="pop.gmail.com"
     incomingPOPPort="995"
     useASecureNetworkConnectionForPOP=B"true"
-    popUserName=${finalUserName}
-    popPassword=${userPassword}
+    popUserName="${finalUserName}"
+    popPassword="${userPassword}"
     outgoingSMTPServer="smtp.gmail.com"
     outgoingSMTPPort="465"
     useASecureNetworkConnectionForSMTP=B"true"
-    smtpUserName=${finalUserName}
-    smtpPassword=${userPassword}
+    smtpUserName="${finalUserName}"
+    smtpPassword="${userPassword}"
     ''';
 
 		FileUtil.write(${filePath}, ${mailConfig});
