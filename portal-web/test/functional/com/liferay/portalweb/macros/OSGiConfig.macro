@@ -87,6 +87,61 @@ ${configList}''';
 		FileUtil.replaceStringInFile(${filePath}, ${oldValue}, ${newValue});
 	}
 
+	@summary = "Modify a file"
+	macro modifyOSGiConfigInTheConfigFile(needsReply = null, incomingPOPServer = null, userPassword = null, outgoingSMTPServer = null, userName = null, incomingPort = null, outgoingPort = null) {
+		if (${needsReply} == "true") {
+			var userName = "recent:${userName}";
+		}
+
+		if (isSet(incomingPOPServer)) {
+			var incomingPOPServer = ${incomingPOPServer};
+		}
+		else {
+			var incomingPOPServer = "pop.gmail.com";
+		}
+
+		if (isSet(incomingPort)) {
+			var incomingPort = ${incomingPort};
+		}
+		else {
+			var incomingPort = 995;
+		}
+
+		if (isSet(outgoingSMTPServer)) {
+			var outgoingSMTPServer = ${outgoingSMTPServer};
+		}
+		else {
+			var outgoingSMTPServer = "smtp.gmail.com";
+		}
+
+		if (isSet(outgoingPort)) {
+			var outgoingPort = ${outgoingPort};
+		}
+		else {
+			var outgoingPort = 465;
+		}
+
+		var liferayHome = PropsUtil.get("liferay.home.dir.name");
+
+		var filePath = "${liferayHome}/osgi/configs/com.liferay.mail.setting.internal.configuration.MailSettingConfiguration.config";
+
+		var fileContent = FileUtil.read(${filePath});
+		var mailConfig = '''
+    incomingPOPServer="${incomingPOPServer}"
+    incomingPOPPort="${incomingPort}"
+    useASecureNetworkConnectionForPOP=B"true"
+    popUserName="${finalUserName}"
+    popPassword="${userPassword}"
+    outgoingSMTPServer="${outgoingSMTPServer}"
+    outgoingSMTPPort="${outgoingPort}"
+    useASecureNetworkConnectionForSMTP=B"true"
+    smtpUserName="${finalUserName}"
+    smtpPassword="${userPassword}"
+    ''';
+
+		FileUtil.write(${filePath}, ${mailConfig});
+	}
+
 	@summary = "Wait for OSGi Configuration to update in the Database"
 	macro waitForOSGiConfig() {
 
