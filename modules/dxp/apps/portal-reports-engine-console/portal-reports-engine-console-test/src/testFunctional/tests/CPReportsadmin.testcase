@@ -25,8 +25,6 @@ definition {
 			ReportsAdmin.tearDownDefinitions();
 
 			ReportsAdmin.tearDownSources();
-
-			ServerAdministration.tearDownMailServerSettings();
 		}
 	}
 
@@ -564,7 +562,6 @@ definition {
 		PortletEntry.save();
 	}
 
-	@ignore = "true"
 	@priority = 4
 	test ViewEmailNotificationDelivery {
 		property test.assert.javascript.errors = "false";
@@ -574,9 +571,7 @@ definition {
 		var portalURL = PropsUtil.get("portal.url");
 		var siteName = TestCase.getSiteName(siteName = ${siteName});
 
-		ServerAdministration.openServerAdmin();
-
-		ServerAdministration.configureMailServerSettings(
+		OSGiConfig.modifyOSGiConfigInTheConfigFile(
 			userName = PropsUtil.get("email.address.2"),
 			userPassword = PropsUtil.get("email.password.2"));
 
@@ -621,7 +616,6 @@ definition {
 		Navigator.openSpecificURL(url = ${portalURL});
 	}
 
-	@ignore = "true"
 	@priority = 4
 	test ViewEmailRecipientDelivery {
 		property test.assert.javascript.errors = "false";
@@ -630,9 +624,7 @@ definition {
 
 		var portalURL = PropsUtil.get("portal.url");
 
-		ServerAdministration.openServerAdmin();
-
-		ServerAdministration.configureMailServerSettings(
+		OSGiConfig.modifyOSGiConfigInTheConfigFile(
 			userName = PropsUtil.get("email.address.2"),
 			userPassword = PropsUtil.get("email.password.2"));
 

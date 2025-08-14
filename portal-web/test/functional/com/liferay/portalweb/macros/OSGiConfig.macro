@@ -87,6 +87,35 @@ ${configList}''';
 		FileUtil.replaceStringInFile(${filePath}, ${oldValue}, ${newValue});
 	}
 
+	@summary = "Modify a file"
+	macro modifyOSGiConfigInTheConfigFile(userPassword = null, needsReply = null, userName = null) {
+		var finalUserName = ${userName};
+
+		if (${needsReply} == "true") {
+			var userName = "recent:${userName}";
+		}
+
+		var liferayHome = PropsUtil.get("liferay.home.dir.name");
+
+		var filePath = "${liferayHome}/osgi/configs/com.liferay.mail.setting.internal.configuration.MailSettingConfiguration.config";
+
+		var fileContent = FileUtil.read(${filePath});
+		var mailConfig = '''
+    incomingPOPServer="pop.gmail.com"
+    incomingPOPPort="995"
+    useASecureNetworkConnectionForPOP=B"true"
+    popUserName=${finalUserName}
+    popPassword=${userPassword}
+    outgoingSMTPServer="smtp.gmail.com"
+    outgoingSMTPPort="465"
+    useASecureNetworkConnectionForSMTP=B"true"
+    smtpUserName=${finalUserName}
+    smtpPassword=${userPassword}
+    ''';
+
+		FileUtil.write(${filePath}, ${mailConfig});
+	}
+
 	@summary = "Wait for OSGi Configuration to update in the Database"
 	macro waitForOSGiConfig() {
 

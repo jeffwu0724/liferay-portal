@@ -128,7 +128,6 @@ definition {
 	}
 
 	@description = "This is a use case for LPS-51009."
-	@ignore = "true"
 	@priority = 4
 	test ViewReportEmailNewConfiguration {
 		property test.assert.javascript.errors = "false";
@@ -137,9 +136,7 @@ definition {
 
 		var portalURL = PropsUtil.get("portal.url");
 
-		ServerAdministration.openServerAdmin();
-
-		ServerAdministration.configureMailServerSettings(
+		OSGiConfig.modifyOSGiConfigInTheConfigFile(
 			userName = PropsUtil.get("email.address.2"),
 			userPassword = PropsUtil.get("email.password.2"));
 

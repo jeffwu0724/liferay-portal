@@ -33,7 +33,7 @@ definition {
 				configurationName = "Mail Settings",
 				configurationScope = "Virtual Instance Scope");
 
-			ServerAdministration.configureMailServerSettings(
+			OSGiConfig.modifyOSGiConfigInTheConfigFile(
 				userName = PropsUtil.get("email.address.2"),
 				userPassword = PropsUtil.get("email.password.2"));
 		}
@@ -61,7 +61,7 @@ definition {
 				checkboxName = "Enable POP Server Notifications",
 				locator1 = "Checkbox#ANY_CHECKBOX");
 
-			ServerAdministration.configureMailServerSettings(
+			OSGiConfig.modifyOSGiConfigInTheConfigFile(
 				userName = PropsUtil.get("email.address.2"),
 				userPassword = PropsUtil.get("email.password.2"));
 		}
