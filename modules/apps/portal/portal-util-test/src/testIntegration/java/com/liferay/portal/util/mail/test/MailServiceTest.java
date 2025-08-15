@@ -40,6 +40,97 @@ public class MailServiceTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
+	public void testEnablePOPServerNotificationsIsolatedPerCompany()
+		throws Exception {
+
+		long companyId1 = RandomTestUtil.randomLong();
+		long companyId2 = RandomTestUtil.randomLong();
+
+		boolean c1Value = true;
+		boolean c2Value = false;
+		boolean c1Override = false;
+
+		MailSettingCompanyConfiguration mailSettingCompanyConfiguration1;
+		MailSettingCompanyConfiguration mailSettingCompanyConfiguration2;
+
+		try (CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper1 =
+					new CompanyConfigurationTemporarySwapper(
+						companyId1,
+						"com.liferay.mail.setting.configuration." +
+							"MailSettingCompanyConfiguration",
+						HashMapDictionaryBuilder.<String, Object>put(
+							"enablePOPServerNotifications", c1Value
+						).build());
+			CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper2 =
+					new CompanyConfigurationTemporarySwapper(
+						companyId2,
+						"com.liferay.mail.setting.configuration." +
+							"MailSettingCompanyConfiguration",
+						HashMapDictionaryBuilder.<String, Object>put(
+							"enablePOPServerNotifications", c2Value
+						).build())) {
+
+			mailSettingCompanyConfiguration1 =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId1);
+
+			mailSettingCompanyConfiguration2 =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId2);
+
+			Assert.assertEquals(
+				c1Value,
+				mailSettingCompanyConfiguration1.
+					enablePOPServerNotifications());
+
+			Assert.assertEquals(
+				c2Value,
+				mailSettingCompanyConfiguration2.
+					enablePOPServerNotifications());
+
+			try (CompanyConfigurationTemporarySwapper
+					companyConfigurationTemporarySwapper =
+						new CompanyConfigurationTemporarySwapper(
+							companyId1,
+							"com.liferay.mail.setting.configuration." +
+								"MailSettingCompanyConfiguration",
+							HashMapDictionaryBuilder.<String, Object>put(
+								"enablePOPServerNotifications", c1Override
+							).build())) {
+
+				mailSettingCompanyConfiguration1 =
+					_configurationProvider.getCompanyConfiguration(
+						MailSettingCompanyConfiguration.class, companyId1);
+
+				mailSettingCompanyConfiguration2 =
+					_configurationProvider.getCompanyConfiguration(
+						MailSettingCompanyConfiguration.class, companyId2);
+
+				Assert.assertEquals(
+					c1Override,
+					mailSettingCompanyConfiguration1.
+						enablePOPServerNotifications());
+
+				Assert.assertEquals(
+					c2Value,
+					mailSettingCompanyConfiguration2.
+						enablePOPServerNotifications());
+			}
+
+			mailSettingCompanyConfiguration1 =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId1);
+
+			Assert.assertEquals(
+				c1Value,
+				mailSettingCompanyConfiguration1.
+					enablePOPServerNotifications());
+		}
+	}
+
+	@Test
 	public void testGetSessionWithCompanyId() throws Exception {
 		long companyId = RandomTestUtil.randomLong();
 
