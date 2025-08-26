@@ -1520,8 +1520,6 @@ public interface PropsKeys {
 
 	public static final String MAIL_AUDIT_TRAIL = "mail.audit.trail";
 
-	public static final String MAIL_BATCH_SIZE = "mail.batch.size";
-
 	public static final String MAIL_MX_UPDATE = "mail.mx.update";
 
 	public static final String MAIL_SEND_BLACKLIST = "mail.send.blacklist";
