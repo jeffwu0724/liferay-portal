@@ -70,9 +70,8 @@ public class MailMessageListener extends BaseMessageListener {
 		InternetAddress[] bcc = filterInternetAddresses(mailMessage.getBCC());
 
 		MailSettingSystemConfiguration mailSettingSystemConfiguration =
-			ConfigurationProviderUtil.getCompanyConfiguration(
-				MailSettingSystemConfiguration.class,
-				CompanyThreadLocal.getCompanyId());
+			ConfigurationProviderUtil.getSystemConfiguration(
+				MailSettingSystemConfiguration.class);
 
 		InternetAddress[] auditTrail = InternetAddress.parse(
 			mailSettingSystemConfiguration.mailAuditTrail());
@@ -103,7 +102,9 @@ public class MailMessageListener extends BaseMessageListener {
 		if (ArrayUtil.isNotEmpty(to) || ArrayUtil.isNotEmpty(cc) ||
 			ArrayUtil.isNotEmpty(bcc) || ArrayUtil.isNotEmpty(bulkAddresses)) {
 
-			MailEngine.send(_mailService, mailMessage);
+			MailEngine.send(
+				_mailService, mailMessage,
+				mailSettingSystemConfiguration.mailBatchSize());
 		}
 	}
 

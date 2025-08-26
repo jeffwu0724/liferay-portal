@@ -8,7 +8,9 @@ package com.liferay.portal.util.mail.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.setting.configuration.MailSettingSystemConfiguration;
 import com.liferay.petra.reflect.ReflectionUtil;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.module.util.BundleUtil;
 import com.liferay.portal.kernel.test.ReloadURLClassLoader;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -135,7 +137,13 @@ public class MailEngineTest {
 	}
 
 	@Inject
+	private static ConfigurationProvider _configurationProvider;
+
+	@Inject
 	private static MailService _mailService;
+
+	private static MailSettingSystemConfiguration
+		_mailSettingSystemConfiguration;
 
 	private static class TestMailEngine implements Closeable {
 
@@ -151,7 +159,12 @@ public class MailEngineTest {
 
 		public void send(MailMessage mailMessage) throws Throwable {
 			try {
-				_sendMethod.invoke(null, _mailService, mailMessage);
+				_mailSettingSystemConfiguration =
+					_configurationProvider.getSystemConfiguration(
+						MailSettingSystemConfiguration.class);
+				_sendMethod.invoke(
+					null, _mailService, mailMessage,
+					_mailSettingSystemConfiguration.mailBatchSize());
 			}
 			catch (InvocationTargetException invocationTargetException) {
 				throw invocationTargetException.getTargetException();
@@ -214,7 +227,7 @@ public class MailEngineTest {
 
 			_sendMethod = ReflectionUtil.getDeclaredMethod(
 				reloadMailEngineClass, "send", MailService.class,
-				MailMessage.class);
+				MailMessage.class, String.class);
 
 			Field field = ReflectionUtil.getDeclaredField(
 				reloadMailEngineClass, "_lastResetTime");
