@@ -109,7 +109,9 @@ public class MailMessageListener extends BaseMessageListener {
 		if (ArrayUtil.isNotEmpty(to) || ArrayUtil.isNotEmpty(cc) ||
 			ArrayUtil.isNotEmpty(bcc) || ArrayUtil.isNotEmpty(bulkAddresses)) {
 
-			MailEngine.send(_mailService, mailMessage);
+			MailEngine.send(
+				_mailService, mailMessage,
+				mailSettingSystemConfiguration.mailBatchSize());
 		}
 	}
 
