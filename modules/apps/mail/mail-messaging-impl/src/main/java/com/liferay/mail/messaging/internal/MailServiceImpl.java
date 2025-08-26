@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
 
 import jakarta.mail.Authenticator;
 import jakarta.mail.PasswordAuthentication;
@@ -106,8 +105,19 @@ public class MailServiceImpl
 
 		sb.append(StringPool.AT);
 
-		if (Validator.isNotNull(PropsValues.POP_SERVER_SUBDOMAIN)) {
-			sb.append(PropsValues.POP_SERVER_SUBDOMAIN);
+		try {
+			_mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		if (Validator.isNotNull(
+				_mailSettingSystemConfiguration.popServerSubdomain())) {
+
+			sb.append(_mailSettingSystemConfiguration.popServerSubdomain());
 			sb.append(StringPool.PERIOD);
 		}
 
@@ -124,7 +134,16 @@ public class MailServiceImpl
 
 	@Override
 	public String getPOPServerSubdomain() {
-		return PropsValues.POP_SERVER_SUBDOMAIN;
+		try {
+			_mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		return _mailSettingSystemConfiguration.popServerSubdomain();
 	}
 
 	@Override
