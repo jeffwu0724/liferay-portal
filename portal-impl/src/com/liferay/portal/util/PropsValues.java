@@ -1727,9 +1727,6 @@ public class PropsValues {
 	public static String PHONE_NUMBER_FORMAT_USA_REGEXP = GetterUtil.getString(
 		PropsUtil.get(PropsKeys.PHONE_NUMBER_FORMAT_USA_REGEXP));
 
-	public static final String POP_SERVER_SUBDOMAIN = PropsUtil.get(
-		PropsKeys.POP_SERVER_SUBDOMAIN);
-
 	public static final boolean PORTAL_IMPERSONATION_ENABLE =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.PORTAL_IMPERSONATION_ENABLE));
