@@ -1244,9 +1244,6 @@ public class PropsValues {
 	public static final String[] LOGOUT_EVENTS_PRE = PropsUtil.getArray(
 		PropsKeys.LOGOUT_EVENTS_PRE);
 
-	public static final String MAIL_AUDIT_TRAIL = PropsUtil.get(
-		PropsKeys.MAIL_AUDIT_TRAIL);
-
 	public static final boolean MAIL_MX_UPDATE = GetterUtil.getBoolean(
 		PropsUtil.get(PropsKeys.MAIL_MX_UPDATE));
 
