@@ -7,13 +7,16 @@ package com.liferay.mail.messaging.internal;
 
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.settings.configuration.MailSettingSystemConfiguration;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.EmailAddressGenerator;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PortalRunMode;
@@ -66,8 +69,12 @@ public class MailMessageListener extends BaseMessageListener {
 
 		InternetAddress[] bcc = filterInternetAddresses(mailMessage.getBCC());
 
+		MailSettingSystemConfiguration mailSettingSystemConfiguration =
+			ConfigurationProviderUtil.getSystemConfiguration(
+				MailSettingSystemConfiguration.class);
+
 		InternetAddress[] auditTrail = InternetAddress.parse(
-			PropsValues.MAIL_AUDIT_TRAIL);
+			mailSettingSystemConfiguration.mailAuditTrail());
 
 		if (auditTrail.length > 0) {
 			if (ArrayUtil.isNotEmpty(bcc)) {
