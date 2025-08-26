@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -349,9 +350,16 @@ public class MailEngine {
 		return session.getProperty("mail.smtp." + suffix);
 	}
 
-	private static boolean _isThrowsExceptionOnFailure() {
+	private static boolean _isThrowsExceptionOnFailure()
+		throws ConfigurationException {
+
+		MailSettingSystemConfiguration mailSettingSystemConfiguration =
+			ConfigurationProviderUtil.getCompanyConfiguration(
+				MailSettingSystemConfiguration.class,
+				CompanyThreadLocal.getCompanyId());
+
 		return GetterUtil.getBoolean(
-			PropsUtil.get(PropsKeys.MAIL_THROWS_EXCEPTION_ON_FAILURE));
+			mailSettingSystemConfiguration.mailThrowsExceptionOnFailure());
 	}
 
 	private static String _sanitizeCRLF(String text) {
