@@ -162,7 +162,9 @@ public class MailEngineTest {
 
 				_sendMethod.invoke(
 					null, _mailService, mailMessage,
-					mailSettingSystemConfiguration.mailBatchSize());
+					mailSettingSystemConfiguration.mailBatchSize(),
+					mailSettingSystemConfiguration.
+						mailThrowsExceptionOnFailure());
 			}
 			catch (InvocationTargetException invocationTargetException) {
 				throw invocationTargetException.getTargetException();
@@ -225,7 +227,7 @@ public class MailEngineTest {
 
 			_sendMethod = ReflectionUtil.getDeclaredMethod(
 				reloadMailEngineClass, "send", MailService.class,
-				MailMessage.class, String.class);
+				MailMessage.class, String.class, boolean.class);
 
 			Field field = ReflectionUtil.getDeclaredField(
 				reloadMailEngineClass, "_lastResetTime");
