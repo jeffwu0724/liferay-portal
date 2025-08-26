@@ -1247,9 +1247,6 @@ public class PropsValues {
 	public static final boolean MAIL_MX_UPDATE = GetterUtil.getBoolean(
 		PropsUtil.get(PropsKeys.MAIL_MX_UPDATE));
 
-	public static final String[] MAIL_SEND_BLACKLIST = PropsUtil.getArray(
-		PropsKeys.MAIL_SEND_BLACKLIST);
-
 	public static final String MARKETPLACE_CLIENT_ID = PropsUtil.get(
 		PropsKeys.MARKETPLACE_CLIENT_ID);
 
