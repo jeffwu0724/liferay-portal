@@ -1522,9 +1522,6 @@ public interface PropsKeys {
 
 	public static final String MAIL_SEND_BLACKLIST = "mail.send.blacklist";
 
-	public static final String MAIL_THROWS_EXCEPTION_ON_FAILURE =
-		"mail.throws.exception.on.failure";
-
 	public static final String MARKETPLACE_CLIENT_ID = "marketplace.client.id";
 
 	public static final String MARKETPLACE_REDIRECT = "marketplace.redirect";
