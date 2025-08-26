@@ -12339,7 +12339,6 @@ default.admin.password=${test.portal.default.admin.password}
 browser.launcher.url=
 setup.wizard.enabled=false
 initial.system.check.enabled=true
-mail.send.blacklist=
 mail.session.jndi.name=
 memory.scheduler.org.quartz.threadPool.threadCount=1
 persisted.scheduler.org.quartz.threadPool.threadCount=1
@@ -12360,7 +12359,10 @@ maxChallenges="-1"
 sendPasswordCaptchaEnabled="false"]]></echo>
 
 		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration.config"><![CDATA[outgoingSMTPPort="3241"]]></echo>
-		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[mailSessionMail=b"true"]]></echo>
+		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
+mailSessionMail="true"
+mailSendBlacklist=
+]]></echo>
 
 		<if>
 			<equals arg1="${database.type}" arg2="oracle" />
@@ -12653,19 +12655,22 @@ jdbc.test.password=${database.password}</echo>
 			<equals arg1="${ms.exchange.enabled}" arg2="true" />
 
 			<then>
-				<echo append="true" file="portal-impl/src/portal-ext.properties">
-mail.session.mail=true
-mail.session.mail.pop3.host=outlook.office365.com
-mail.session.mail.pop3.port=995
-mail.session.mail.pop3.user=qa-exchange-pop-test@liferay0.onmicrosoft.com
-mail.session.mail.smtp.host=smtp.office365.com
-mail.session.mail.smtp.port=587
-mail.session.mail.smtp.user=qa-exchange-pop-test@liferay0.onmicrosoft.com
-mail.session.mail.store.protocol=pop3s
-
-pop.server.subdomain=
-pop.server.notifications.enabled=true
+				<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration.config"><![CDATA[
+incomingPOPServer=outlook.office365.com
+incomingPOPPort=995
+popUserName=qa-exchange-pop-test@liferay0.onmicrosoft.com
+outgoingSMTPServer=smtp.office365.com
+outgoingSMTPPort=587
+smtpUserName=qa-exchange-pop-test@liferay0.onmicrosoft.com
+storeProtocol=pop3s
+enablePOPServerNotifications=true
+]]>
 				</echo>
+
+				<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
+mailSessionMail=true
+popServerSubdomain=
+]]></echo>
 			</then>
 		</if>
 
@@ -16108,8 +16113,11 @@ jdbc.default.password=${database.mysql.password}</echo>
 				<echo append="true" file="${app.server.classes.portal.dir}/portal-ext.properties">
 
 module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.profile.names}
+				</echo>
 
-mail.send.blacklist=</echo>
+				<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
+mailSendBlacklist=
+]]></echo>
 
 				<delete failonerror="false" file="${app.server.classes.portal.dir}/system-ext.properties" />
 			</then>
