@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -105,8 +104,21 @@ public class MailServiceImpl
 
 		sb.append(StringPool.AT);
 
-		if (Validator.isNotNull(PropsValues.POP_SERVER_SUBDOMAIN)) {
-			sb.append(PropsValues.POP_SERVER_SUBDOMAIN);
+		MailSettingSystemConfiguration mailSettingSystemConfiguration = null;
+
+		try {
+			mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		if (Validator.isNotNull(
+				mailSettingSystemConfiguration.popServerSubdomain())) {
+
+			sb.append(mailSettingSystemConfiguration.popServerSubdomain());
 			sb.append(StringPool.PERIOD);
 		}
 
@@ -123,7 +135,18 @@ public class MailServiceImpl
 
 	@Override
 	public String getPOPServerSubdomain() {
-		return PropsValues.POP_SERVER_SUBDOMAIN;
+		MailSettingSystemConfiguration mailSettingSystemConfiguration = null;
+
+		try {
+			mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		return mailSettingSystemConfiguration.popServerSubdomain();
 	}
 
 	@Override

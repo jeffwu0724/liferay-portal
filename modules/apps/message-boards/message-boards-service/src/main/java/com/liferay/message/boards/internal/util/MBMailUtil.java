@@ -6,6 +6,7 @@
 package com.liferay.message.boards.internal.util;
 
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.settings.configuration.MailSettingSystemConfiguration;
 import com.liferay.message.boards.constants.MBMessageConstants;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.petra.io.StreamUtil;
@@ -14,15 +15,16 @@ import com.liferay.petra.lang.ThreadContextClassLoaderUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -174,16 +176,22 @@ public class MBMailUtil {
 	}
 
 	public static String getReplyToAddress(
-		MailService mailService, long categoryId, long messageId, String mx,
-		String defaultMailingListAddress) {
+			MailService mailService, long categoryId, long messageId, String mx,
+			String defaultMailingListAddress)
+		throws ConfigurationException {
 
 		if (!hasSubdomain(mailService)) {
 			return defaultMailingListAddress;
 		}
 
+		MailSettingSystemConfiguration mailSettingSystemConfiguration =
+			ConfigurationProviderUtil.getSystemConfiguration(
+				MailSettingSystemConfiguration.class);
+
 		return StringBundler.concat(
 			MESSAGE_POP_PORTLET_PREFIX, categoryId, StringPool.PERIOD,
-			messageId, StringPool.AT, PropsValues.POP_SERVER_SUBDOMAIN,
+			messageId, StringPool.AT,
+			mailSettingSystemConfiguration.popServerSubdomain(),
 			StringPool.PERIOD, mx);
 	}
 
@@ -228,8 +236,14 @@ public class MBMailUtil {
 			return false;
 		}
 
+		MailSettingSystemConfiguration mailSettingSystemConfiguration =
+			ConfigurationProviderUtil.getSystemConfiguration(
+				MailSettingSystemConfiguration.class);
+
 		for (String messageId : messageIds) {
-			if (messageId.contains(PropsValues.POP_SERVER_SUBDOMAIN)) {
+			if (messageId.contains(
+					mailSettingSystemConfiguration.popServerSubdomain())) {
+
 				return true;
 			}
 		}
