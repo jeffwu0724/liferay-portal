@@ -12375,7 +12375,7 @@ sendPasswordCaptchaEnabled="false"]]></echo>
 		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration.config"><![CDATA[outgoingSMTPPort="3241"]]></echo>
 		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
 mailSessionMail="true"
-mailSendBlacklist=
+mailSendBlacklist=[]
 ]]></echo>
 
 		<if>
@@ -12687,6 +12687,9 @@ popServerSubdomain=
 ]]></echo>
 			</then>
 		</if>
+		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
+mailSendBlacklist=[]
+]]></echo>
 
 		<if>
 			<and>
@@ -16130,7 +16133,7 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 				</echo>
 
 				<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
-mailSendBlacklist=
+mailSendBlacklist=[]
 ]]></echo>
 
 				<delete failonerror="false" file="${app.server.classes.portal.dir}/system-ext.properties" />
