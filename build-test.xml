@@ -12669,7 +12669,7 @@ jdbc.test.password=${database.password}</echo>
 			<equals arg1="${ms.exchange.enabled}" arg2="true" />
 
 			<then>
-				<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration.config"><![CDATA[
+				<echo append="true" file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration.config"><![CDATA[
 incomingPOPServer=outlook.office365.com
 incomingPOPPort=995
 popUserName=qa-exchange-pop-test@liferay0.onmicrosoft.com
@@ -12681,16 +12681,12 @@ enablePOPServerNotifications=true
 ]]>
 				</echo>
 
-				<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
+				<echo append="true" file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
 mailSessionMail=true
 popServerSubdomain=
 ]]></echo>
 			</then>
 		</if>
-		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingSystemConfiguration.config"><![CDATA[
-mailSendBlacklist=[]
-]]></echo>
-
 		<if>
 			<and>
 				<equals arg1="${gcs.store.enabled}" arg2="true" />
