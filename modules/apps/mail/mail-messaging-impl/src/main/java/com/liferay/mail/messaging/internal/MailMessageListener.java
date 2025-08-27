@@ -16,13 +16,12 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.EmailAddressGenerator;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PortalRunMode;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.security.auth.EmailAddressGeneratorFactory;
-import com.liferay.portal.util.PropsValues;
 
 import jakarta.mail.internet.InternetAddress;
 
@@ -114,7 +113,8 @@ public class MailMessageListener extends BaseMessageListener {
 	}
 
 	protected InternetAddress filterInternetAddress(
-		InternetAddress internetAddress) {
+			InternetAddress internetAddress)
+		throws ConfigurationException {
 
 		if (PortalRunMode.isTestMode()) {
 			return internetAddress;
@@ -129,12 +129,21 @@ public class MailMessageListener extends BaseMessageListener {
 			return null;
 		}
 
-		if (_mailSendBlacklist.contains(emailAddress)) {
+		MailSettingSystemConfiguration mailSettingSystemConfiguration =
+			ConfigurationProviderUtil.getCompanyConfiguration(
+				MailSettingSystemConfiguration.class,
+				CompanyThreadLocal.getCompanyId());
+
+		Set<String> mailSendBlacklist = new HashSet<>(
+			Arrays.asList(mailSettingSystemConfiguration.mailSendBlacklist()));
+
+		if (mailSendBlacklist.contains(emailAddress)) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
 					StringBundler.concat(
 						"Email ", emailAddress, " will be ignored because it ",
-						"is included in ", PropsKeys.MAIL_SEND_BLACKLIST));
+						"is included in ",
+						mailSettingSystemConfiguration.mailSendBlacklist()));
 			}
 
 			return null;
@@ -144,7 +153,8 @@ public class MailMessageListener extends BaseMessageListener {
 	}
 
 	protected InternetAddress[] filterInternetAddresses(
-		InternetAddress[] internetAddresses) {
+			InternetAddress[] internetAddresses)
+		throws ConfigurationException {
 
 		if (internetAddresses == null) {
 			return null;
@@ -167,9 +177,6 @@ public class MailMessageListener extends BaseMessageListener {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MailMessageListener.class);
-
-	private static final Set<String> _mailSendBlacklist = new HashSet<>(
-		Arrays.asList(PropsValues.MAIL_SEND_BLACKLIST));
 
 	@Reference
 	private MailService _mailService;
