@@ -12951,9 +12951,9 @@ include-and-override=${liferay.home}/portal-setup-wizard.properties</echo>
 		<if>
 			<isset property="test.smtp.server.enabled" />
 			<then>
-				<echo append="true" file="portal-impl/src/portal-ext.properties">
-
-mail.session.mail.smtp.port=25000</echo>
+				<echo append="true" file="${liferay.home}/osgi/configs/com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration.config"><![CDATA[
+outgoingSMTPPort="25000"
+]]></echo>
 			</then>
 		</if>
 
