@@ -5,6 +5,7 @@
 
 package com.liferay.mail.setting.internal.upgrade.v1_0_0;
 
+import com.liferay.mail.setting.configuration.MailSettingCompanyConfiguration;
 import com.liferay.mail.setting.internal.constants.LegacyMailSettingPropsKeys;
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -27,7 +28,7 @@ public class MailSettingCompanyConfigurationUpgradeProcess
 	@Override
 	protected void doUpgrade() throws Exception {
 		_prefsPropsToConfigurationUpgradeHelper.mapConfigurations(
-			MailSettingCompanyConfigurationUpgradeProcess.class,
+			MailSettingCompanyConfiguration.class,
 			new KeyValuePair(
 				LegacyMailSettingPropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED,
 				"enablePOPServerNotifications"),

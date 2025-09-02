@@ -6,6 +6,7 @@
 package com.liferay.mail.setting.internal.upgrade.registry;
 
 import com.liferay.mail.setting.internal.upgrade.v1_0_0.MailSettingCompanyConfigurationUpgradeProcess;
+import com.liferay.mail.setting.internal.upgrade.v1_0_0.MailSettingSystemConfigurationUpgradeProcess;
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
@@ -16,7 +17,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jiefeng Wu
  */
 @Component(service = UpgradeStepRegistrator.class)
-public class MailSettingCompanyUpgradeStepRegistrator
+public class MailSettingUpgradeStepRegistrator
 	implements UpgradeStepRegistrator {
 
 	@Override
@@ -26,6 +27,11 @@ public class MailSettingCompanyUpgradeStepRegistrator
 		registry.register(
 			"0.0.1", "1.0.0",
 			new MailSettingCompanyConfigurationUpgradeProcess(
+				_prefsPropsToConfigurationUpgradeHelper));
+
+		registry.register(
+			"0.0.1", "1.0.0",
+			new MailSettingSystemConfigurationUpgradeProcess(
 				_prefsPropsToConfigurationUpgradeHelper));
 	}
 
