@@ -10,9 +10,11 @@ import com.liferay.mail.kernel.auth.token.provider.MailAuthTokenProviderRegistry
 import com.liferay.mail.kernel.model.Account;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.jndi.JNDIUtil;
@@ -21,6 +23,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.CompanyConstants;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
@@ -48,6 +51,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Brian Wing Shun Chan
@@ -157,6 +161,15 @@ public class MailServiceImpl
 				companyId, key,
 				PrefsPropsUtil.getString(key, PropsUtil.get(key)));
 
+		try {
+			_mailSettingCompanyConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
 		if (!GetterUtil.getBoolean(
 				function.apply(PropsKeys.MAIL_SESSION_MAIL))) {
 
@@ -165,26 +178,23 @@ public class MailServiceImpl
 			return session;
 		}
 
-		String advancedPropertiesString = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_ADVANCED_PROPERTIES);
-		String pop3Host = function.apply(PropsKeys.MAIL_SESSION_MAIL_POP3_HOST);
-		String pop3Password = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_POP3_PASSWORD);
+		String advancedPropertiesString =
+			_mailSettingCompanyConfiguration.additionalJavaMailProperties();
+		String pop3Host = _mailSettingCompanyConfiguration.incomingPOPServer();
+		String pop3Password = _mailSettingCompanyConfiguration.popPassword();
 		int pop3Port = GetterUtil.getInteger(
-			function.apply(PropsKeys.MAIL_SESSION_MAIL_POP3_PORT));
-		String pop3User = function.apply(PropsKeys.MAIL_SESSION_MAIL_POP3_USER);
-		String smtpHost = function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_HOST);
-		String smtpPassword = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_SMTP_PASSWORD);
+			_mailSettingCompanyConfiguration.incomingPOPPort());
+		String pop3User = _mailSettingCompanyConfiguration.popUserName();
+		String smtpHost = _mailSettingCompanyConfiguration.outgoingSMTPServer();
+		String smtpPassword = _mailSettingCompanyConfiguration.smtpPassword();
 		int smtpPort = GetterUtil.getInteger(
-			function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_PORT));
+			_mailSettingCompanyConfiguration.outgoingSMTPPort());
 		boolean smtpStartTLSEnable = GetterUtil.getBoolean(
-			function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_STARTTLS_ENABLE));
-		String smtpUser = function.apply(PropsKeys.MAIL_SESSION_MAIL_SMTP_USER);
-		String storeProtocol = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_STORE_PROTOCOL);
-		String transportProtocol = function.apply(
-			PropsKeys.MAIL_SESSION_MAIL_TRANSPORT_PROTOCOL);
+			_mailSettingCompanyConfiguration.enableStartTLS());
+		String smtpUser = _mailSettingCompanyConfiguration.smtpUserName();
+		String storeProtocol = _mailSettingCompanyConfiguration.storeProtocol();
+		String transportProtocol =
+			_mailSettingCompanyConfiguration.transportProtocol();
 
 		Properties properties = session.getProperties();
 
@@ -323,18 +333,32 @@ public class MailServiceImpl
 
 	@Override
 	public boolean isPOPServerNotificationsEnabled(long companyId) {
-		return PrefsPropsUtil.getBoolean(
-			companyId, PropsKeys.POP_SERVER_NOTIFICATIONS_ENABLED,
-			PropsValues.POP_SERVER_NOTIFICATIONS_ENABLED);
+		try {
+			_mailSettingCompanyConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		return _mailSettingCompanyConfiguration.enablePOPServerNotifications();
 	}
 
 	@Override
 	public boolean isPOPServerUser(String emailAddress) {
+		try {
+			_mailSettingCompanyConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class,
+					CompanyThreadLocal.getCompanyId());
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
 		return StringUtil.equalsIgnoreCase(
-			emailAddress,
-			PrefsPropsUtil.getString(
-				PropsKeys.MAIL_SESSION_MAIL_POP3_USER,
-				PropsValues.MAIL_SESSION_MAIL_POP3_USER));
+			emailAddress, _mailSettingCompanyConfiguration.popUserName());
 	}
 
 	@Override
@@ -426,6 +450,10 @@ public class MailServiceImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		MailServiceImpl.class);
 
+	@Reference
+	private ConfigurationProvider _configurationProvider;
+
+	private MailSettingCompanyConfiguration _mailSettingCompanyConfiguration;
 	private final Map<Long, Session> _sessions = new ConcurrentHashMap<>();
 
 }
