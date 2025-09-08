@@ -12372,6 +12372,8 @@ captcha.enforce.disabled=true
 maxChallenges="-1"
 sendPasswordCaptchaEnabled="false"]]></echo>
 
+		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration.config"><![CDATA[outgoingSMTPPort="3241"]]></echo>
+
 		<if>
 			<equals arg1="${database.type}" arg2="oracle" />
 			<then>
