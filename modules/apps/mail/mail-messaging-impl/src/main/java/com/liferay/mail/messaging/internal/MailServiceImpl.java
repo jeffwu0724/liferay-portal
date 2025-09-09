@@ -154,7 +154,7 @@ public class MailServiceImpl
 			return session;
 		}
 
-		session = _createMailSession();
+		session = _createMailSession(companyId);
 
 		Function<String, String> function =
 			(String key) -> PrefsPropsUtil.getString(
@@ -375,8 +375,52 @@ public class MailServiceImpl
 			});
 	}
 
-	private Session _createMailSession() {
+	private Session _createMailSession(long companyId) {
 		Properties properties = PropsUtil.getProperties("mail.session.", true);
+
+		try {
+			_mailSettingCompanyConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		properties.put(
+			"mail.store.protocol",
+			_mailSettingCompanyConfiguration.storeProtocol());
+
+		properties.put(
+			"mail.transport.protocol",
+			_mailSettingCompanyConfiguration.transportProtocol());
+
+		properties.put(
+			"mail.pop3.host",
+			_mailSettingCompanyConfiguration.incomingPOPServer());
+		properties.put(
+			"mail.pop3.password",
+			_mailSettingCompanyConfiguration.popPassword());
+		properties.put(
+			"mail.pop3.port",
+			_mailSettingCompanyConfiguration.incomingPOPPort());
+		properties.put(
+			"mail.pop3.user", _mailSettingCompanyConfiguration.popUserName());
+
+		properties.put(
+			"mail.smtp.host",
+			_mailSettingCompanyConfiguration.outgoingSMTPServer());
+		properties.put(
+			"mail.smtp.password",
+			_mailSettingCompanyConfiguration.smtpPassword());
+		properties.put(
+			"mail.smtp.port",
+			_mailSettingCompanyConfiguration.outgoingSMTPPort());
+		properties.put(
+			"mail.smtp.starttls.enable",
+			_mailSettingCompanyConfiguration.enableStartTLS());
+		properties.put(
+			"mail.smtp.user", _mailSettingCompanyConfiguration.smtpUserName());
 
 		String jndiName = properties.getProperty("jndi.name");
 
