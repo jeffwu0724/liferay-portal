@@ -8,6 +8,7 @@ package com.liferay.portal.configuration.upgrade.internal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
@@ -133,6 +134,91 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 		portletPreferences.store();
 	}
 
+	@Override
+	public void mapConfigurationsWithCompanyId(
+			long companyId, Class<?> configurationClass,
+			KeyValuePair... keyValuePairs)
+		throws Exception {
+
+		Dictionary<String, Object> properties = new HashMapDictionary<>();
+
+		PortletPreferences portletPreferences = _prefsProps.getPreferences(
+			companyId);
+
+		Object defaultConfiguration = ConfigurableUtil.createConfigurable(
+			configurationClass, properties);
+
+		for (KeyValuePair keyValuePair : keyValuePairs) {
+			String valueString = _prefsProps.getString(
+				portletPreferences, keyValuePair.getKey(), null);
+
+			if (Validator.isNull(valueString)) {
+				continue;
+			}
+
+			Method method = configurationClass.getMethod(
+				keyValuePair.getValue());
+
+			Object defaultValueObject = method.invoke(defaultConfiguration);
+
+			Class<?> returnType = method.getReturnType();
+
+			Object value = null;
+
+			if (returnType == boolean.class) {
+				value = GetterUtil.getBoolean(valueString);
+			}
+			else if (returnType == double.class) {
+				value = GetterUtil.getDouble(valueString);
+			}
+			else if (returnType == int.class) {
+				value = GetterUtil.getInteger(valueString);
+			}
+			else if (returnType == float.class) {
+				value = GetterUtil.getFloat(valueString);
+			}
+			else if (returnType == long.class) {
+				value = GetterUtil.getLong(valueString);
+			}
+			else if (returnType == short.class) {
+				value = GetterUtil.getShort(valueString);
+			}
+			else if (returnType == String.class) {
+				value = GetterUtil.getString(valueString);
+			}
+			else if (returnType == String[].class) {
+				value = StringUtil.split(valueString);
+
+				if (!Arrays.equals(
+						(Object[])value, (Object[])defaultValueObject)) {
+
+					_writeProperty(
+						properties, portletPreferences, keyValuePair, value);
+				}
+
+				continue;
+			}
+			else {
+				throw new IllegalArgumentException(
+					"No valid return type found: " + method);
+			}
+
+			if (!Objects.equals(value, defaultValueObject)) {
+				_writeProperty(
+					properties, portletPreferences, keyValuePair, value);
+			}
+		}
+
+		if (properties.isEmpty()) {
+			return;
+		}
+
+		_configurationProvider.saveCompanyConfiguration(
+			companyId, configurationClass.getName(), properties);
+
+		portletPreferences.store();
+	}
+
 	private void _writeProperty(
 		Dictionary<String, Object> properties,
 		PortletPreferences portletPreferences, KeyValuePair keyValuePair,
@@ -152,6 +238,9 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 
 	@Reference
 	private ConfigurationAdmin _configurationAdmin;
+
+	@Reference
+	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private PrefsProps _prefsProps;
