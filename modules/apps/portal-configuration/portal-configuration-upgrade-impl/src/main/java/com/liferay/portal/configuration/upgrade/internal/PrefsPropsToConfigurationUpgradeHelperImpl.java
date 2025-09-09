@@ -8,10 +8,12 @@ package com.liferay.portal.configuration.upgrade.internal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.KeyValuePair;
+import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PrefsProps;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -53,16 +55,59 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 			return;
 		}
 
-		Dictionary<String, Object> properties = new HashMapDictionary<>();
+		PortletPreferences portletPreferences = _prefsProps.getPreferences(
+			PortletKeys.PREFS_OWNER_ID_DEFAULT);
 
-		PortletPreferences portletPreferences = _prefsProps.getPreferences();
+		Dictionary<String, Object> properties = _buildPropertiesFromPreferences(
+			portletPreferences, configurationClass, keyValuePairs);
+
+		if (properties.isEmpty()) {
+			return;
+		}
+
+		Configuration configuration = _configurationAdmin.getConfiguration(
+			configurationClass.getName(), StringPool.QUESTION);
+
+		configuration.update(properties);
+
+		portletPreferences.store();
+	}
+
+	@Override
+	public void mapConfigurationsWithCompanyId(
+			long companyId, Class<?> configurationClass,
+			KeyValuePair... keyValuePairs)
+		throws Exception {
+
+		PortletPreferences portletPreferences = _prefsProps.getPreferences(
+			companyId);
+
+		Dictionary<String, Object> properties = _buildPropertiesFromPreferences(
+			portletPreferences, configurationClass, keyValuePairs);
+
+		if (properties.isEmpty()) {
+			return;
+		}
+
+		_configurationProvider.saveCompanyConfiguration(
+			companyId, configurationClass.getName(), properties);
+
+		portletPreferences.store();
+	}
+
+	private Dictionary<String, Object> _buildPropertiesFromPreferences(
+			PortletPreferences portletPreferences, Class<?> configurationClass,
+			KeyValuePair... keyValuePairs)
+		throws Exception {
+
+		Dictionary<String, Object> properties = new HashMapDictionary<>();
 
 		Object defaultConfiguration = ConfigurableUtil.createConfigurable(
 			configurationClass, properties);
 
 		for (KeyValuePair keyValuePair : keyValuePairs) {
 			String valueString = _prefsProps.getString(
-				keyValuePair.getKey(), null);
+				portletPreferences, keyValuePair.getKey(), null);
 
 			if (Validator.isNull(valueString)) {
 				continue;
@@ -121,16 +166,7 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 			}
 		}
 
-		if (properties.isEmpty()) {
-			return;
-		}
-
-		Configuration configuration = _configurationAdmin.getConfiguration(
-			configurationClass.getName(), StringPool.QUESTION);
-
-		configuration.update(properties);
-
-		portletPreferences.store();
+		return properties;
 	}
 
 	private void _writeProperty(
@@ -152,6 +188,9 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 
 	@Reference
 	private ConfigurationAdmin _configurationAdmin;
+
+	@Reference
+	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private PrefsProps _prefsProps;
