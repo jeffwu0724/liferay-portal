@@ -9,6 +9,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
@@ -18,6 +19,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 import com.liferay.portal.upgrade.test.util.UpgradeTestUtil;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import jakarta.portlet.PortletPreferences;
 
@@ -54,6 +56,8 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 				"com.liferay.mail.settings.configuration." +
 					"MailSettingCompanyConfiguration",
 				StringPool.QUESTION);
+
+		_configurationAdmin.getConfiguration()
 
 		_storedProperties =
 			_storedMailSettingCompanyConfiguration.getProperties();
@@ -102,12 +106,23 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 			_testCompanyIdPortletPreferences, stringValue, intValue,
 			booleanValue);
 
-		_upgradeProcess.upgrade();
-
 		MailSettingCompanyConfiguration mailSettingCompanyConfiguration =
 			_configurationProvider.getCompanyConfiguration(
 				MailSettingCompanyConfiguration.class,
 				TestPropsValues.getCompanyId());
+
+		Assert.assertNull(mailSettingCompanyConfiguration);
+
+		_log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1:"  + mailSettingCompanyConfiguration.enablePOPServerNotifications());
+
+		_upgradeProcess.upgrade();
+
+		mailSettingCompanyConfiguration =
+			_configurationProvider.getCompanyConfiguration(
+				MailSettingCompanyConfiguration.class,
+				TestPropsValues.getCompanyId());
+
+		_log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1:"  + mailSettingCompanyConfiguration.enablePOPServerNotifications());
 
 		_assertConfiguration(
 			stringValue, intValue, mailSettingCompanyConfiguration);
@@ -138,6 +153,8 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 	private void _assertConfiguration(
 		String stringValue, String intValue,
 		MailSettingCompanyConfiguration mailSettingCompanyConfiguration) {
+
+
 
 		Assert.assertTrue(
 			mailSettingCompanyConfiguration.enablePOPServerNotifications());
@@ -220,5 +237,8 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 		filter = "(&(component.name=com.liferay.mail.settings.internal.upgrade.registry.MailSettingUpgradeStepRegistrator))"
 	)
 	private UpgradeStepRegistrator _upgradeStepRegistrator;
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		MailSettingCompanyConfigurationUpgradeProcessTest.class);
 
 }
