@@ -9,6 +9,8 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
@@ -21,7 +23,9 @@ import com.liferay.portal.upgrade.test.util.UpgradeTestUtil;
 
 import jakarta.portlet.PortletPreferences;
 
+import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -98,9 +102,27 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 		String intValue = "222";
 		String booleanValue = "true";
 
+		for (Map.Entry<String, String[]> entry :
+				_testCompanyIdPortletPreferences.getMap(
+				).entrySet()) {
+
+			_log.error(
+				"~~~~~~~~~~~~~~~:" + entry.getKey() + " " +
+					Arrays.toString(entry.getValue()));
+		}
+
 		_populatePreferences(
 			_testCompanyIdPortletPreferences, stringValue, intValue,
 			booleanValue);
+
+		for (Map.Entry<String, String[]> entry :
+				_testCompanyIdPortletPreferences.getMap(
+				).entrySet()) {
+
+			_log.error(
+				"????????????????:" + entry.getKey() + " " +
+					Arrays.toString(entry.getValue()));
+		}
 
 		_upgradeProcess.upgrade();
 
@@ -108,6 +130,10 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 			_configurationProvider.getCompanyConfiguration(
 				MailSettingCompanyConfiguration.class,
 				TestPropsValues.getCompanyId());
+
+		_log.error(
+			"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! enablePOPServerNotifications: " +
+				mailSettingCompanyConfiguration.enablePOPServerNotifications());
 
 		_assertConfiguration(
 			stringValue, intValue, mailSettingCompanyConfiguration);
@@ -160,7 +186,7 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 		Assert.assertEquals(
 			intValue, mailSettingCompanyConfiguration.outgoingSMTPPort());
 
-		Assert.assertTrue(mailSettingCompanyConfiguration.enableStartTLS());
+		Assert.assertFalse(mailSettingCompanyConfiguration.enableStartTLS());
 		Assert.assertEquals(
 			stringValue, mailSettingCompanyConfiguration.smtpUserName());
 		Assert.assertEquals(
@@ -188,7 +214,7 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 			"mail.session.mail.smtp.password", stringValue);
 		portletPreferences.setValue("mail.session.mail.smtp.port", intValue);
 		portletPreferences.setValue(
-			"mail.session.mail.smtp.starttls.enable", booleanValue);
+			"mail.session.mail.smtp.starttls.enable", "false");
 		portletPreferences.setValue("mail.session.mail.smtp.user", stringValue);
 		portletPreferences.setValue(
 			"mail.session.mail.store.protocol", stringValue);
@@ -199,6 +225,9 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 
 		portletPreferences.store();
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		MailSettingCompanyConfigurationUpgradeProcessTest.class);
 
 	@Inject
 	private static ConfigurationAdmin _configurationAdmin;

@@ -10,6 +10,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
+import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.KeyValuePair;
@@ -19,7 +20,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import jakarta.portlet.PortletPreferences;
 import jakarta.portlet.ReadOnlyException;
-
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import java.lang.reflect.Method;
 
 import java.util.Arrays;
@@ -204,6 +205,7 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 			}
 
 			if (!Objects.equals(value, defaultValueObject)) {
+				_log.error(keyValuePair.getValue() + " " + value + " " + defaultValueObject);
 				_writeProperty(
 					properties, portletPreferences, keyValuePair, value);
 			}
@@ -213,6 +215,7 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 			return;
 		}
 
+		_log.error("++++++++++++++++++++++++++++++++++");
 		_configurationProvider.saveCompanyConfiguration(
 			companyId, configurationClass.getName(), properties);
 
@@ -244,5 +247,8 @@ public class PrefsPropsToConfigurationUpgradeHelperImpl
 
 	@Reference
 	private PrefsProps _prefsProps;
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		PrefsPropsToConfigurationUpgradeHelperImpl.class);
 
 }
