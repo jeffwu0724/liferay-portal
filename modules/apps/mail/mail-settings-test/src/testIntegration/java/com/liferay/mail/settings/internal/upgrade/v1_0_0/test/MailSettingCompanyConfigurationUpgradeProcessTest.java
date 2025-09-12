@@ -102,6 +102,8 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 
 		_upgradeProcess.upgrade();
 
+		Thread.sleep(2000);
+
 		MailSettingCompanyConfiguration mailSettingCompanyConfiguration =
 			_configurationProvider.getCompanyConfiguration(
 				MailSettingCompanyConfiguration.class,
@@ -122,6 +124,8 @@ public class MailSettingCompanyConfigurationUpgradeProcessTest {
 			_testSystemIdPortletPreferences, stringValue, intValue);
 
 		_upgradeProcess.upgrade();
+
+		Thread.sleep(2000);
 
 		MailSettingCompanyConfiguration mailSettingCompanyConfiguration =
 			_configurationProvider.getSystemConfiguration(
