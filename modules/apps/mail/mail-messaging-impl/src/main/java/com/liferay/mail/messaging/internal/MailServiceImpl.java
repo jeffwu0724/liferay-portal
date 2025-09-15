@@ -11,6 +11,7 @@ import com.liferay.mail.kernel.model.Account;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
 import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
+import com.liferay.mail.settings.configuration.MailSettingSystemConfiguration;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
@@ -28,7 +29,6 @@ import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiServic
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -45,7 +45,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -156,12 +155,11 @@ public class MailServiceImpl
 
 		session = _createMailSession(companyId);
 
-		Function<String, String> function =
-			(String key) -> PrefsPropsUtil.getString(
-				companyId, key,
-				PrefsPropsUtil.getString(key, PropsUtil.get(key)));
-
 		try {
+			_mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+
 			_mailSettingCompanyConfiguration =
 				_configurationProvider.getCompanyConfiguration(
 					MailSettingCompanyConfiguration.class, companyId);
@@ -171,7 +169,7 @@ public class MailServiceImpl
 		}
 
 		if (!GetterUtil.getBoolean(
-				function.apply(PropsKeys.MAIL_SESSION_MAIL))) {
+				_mailSettingSystemConfiguration.mailSessionMail())) {
 
 			_sessions.put(companyId, session);
 
@@ -382,10 +380,20 @@ public class MailServiceImpl
 			_mailSettingCompanyConfiguration =
 				_configurationProvider.getCompanyConfiguration(
 					MailSettingCompanyConfiguration.class, companyId);
+			_mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
 		}
 		catch (ConfigurationException configurationException) {
 			_log.error(configurationException);
 		}
+
+		properties.put(
+			"mail", _mailSettingSystemConfiguration.mailSessionMail());
+
+		properties.put(
+			"mail.smtp.auth",
+			_mailSettingSystemConfiguration.mailSessionMailSMTPAuth());
 
 		properties.put(
 			"mail.store.protocol",
@@ -498,6 +506,7 @@ public class MailServiceImpl
 	private ConfigurationProvider _configurationProvider;
 
 	private MailSettingCompanyConfiguration _mailSettingCompanyConfiguration;
+	private MailSettingSystemConfiguration _mailSettingSystemConfiguration;
 	private final Map<Long, Session> _sessions = new ConcurrentHashMap<>();
 
 }

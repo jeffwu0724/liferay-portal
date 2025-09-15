@@ -12675,8 +12675,11 @@ enablePOPServerNotifications=b"true"
 ]]>
 				</echo>
 
+				<echo append="true" file="${liferay.home}/osgi/configs/com.liferay.mail.settings.configuration.MailSettingSystemConfiguration.config"><![CDATA[
+mailSessionMail=b"true"
+]]></echo>
+
 				<echo append="true" file="portal-impl/src/portal-ext.properties">
-mail.session.mail=true
 pop.server.subdomain=
 				</echo>
 			</then>
