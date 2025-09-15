@@ -31,6 +31,9 @@ public interface MailSettingSystemConfiguration {
 	)
 	public String[] mailSendBlacklist();
 
+	@Meta.AD(deflt = "", name = "mail-session-jndi-name", required = false)
+	public String mailSessionJndiName();
+
 	@Meta.AD(deflt = "false", name = "mail-session-mail", required = false)
 	public boolean mailSessionMail();
 
