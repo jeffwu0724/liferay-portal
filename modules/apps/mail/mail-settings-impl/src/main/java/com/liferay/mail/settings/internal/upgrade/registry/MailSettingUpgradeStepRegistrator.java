@@ -6,6 +6,7 @@
 package com.liferay.mail.settings.internal.upgrade.registry;
 
 import com.liferay.mail.settings.internal.upgrade.v1_0_0.MailSettingCompanyConfigurationUpgradeProcess;
+import com.liferay.mail.settings.internal.upgrade.v2_0_0.MailSettingSystemConfigurationUpgradeProcess;
 import com.liferay.portal.configuration.upgrade.PrefsPropsToConfigurationUpgradeHelper;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
@@ -26,6 +27,11 @@ public class MailSettingUpgradeStepRegistrator
 		registry.register(
 			"0.0.1", "1.0.0",
 			new MailSettingCompanyConfigurationUpgradeProcess(
+				_prefsPropsToConfigurationUpgradeHelper));
+
+		registry.register(
+			"1.0.0", "2.0.0",
+			new MailSettingSystemConfigurationUpgradeProcess(
 				_prefsPropsToConfigurationUpgradeHelper));
 	}
 
