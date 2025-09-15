@@ -393,7 +393,7 @@ public class MailServiceImpl
 	}
 
 	private Session _createMailSession(long companyId) {
-		Properties properties = PropsUtil.getProperties("mail.session.", true);
+		Properties properties = new Properties();
 
 		try {
 			_mailSettingCompanyConfiguration =
@@ -406,6 +406,9 @@ public class MailServiceImpl
 		catch (ConfigurationException configurationException) {
 			_log.error(configurationException);
 		}
+
+		properties.put(
+			"jndi.name", _mailSettingSystemConfiguration.mailSessionJndiName());
 
 		properties.put(
 			"mail", _mailSettingSystemConfiguration.mailSessionMail());

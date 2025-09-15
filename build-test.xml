@@ -12352,7 +12352,6 @@ default.admin.password=${test.portal.default.admin.password}
 browser.launcher.url=
 setup.wizard.enabled=false
 initial.system.check.enabled=true
-mail.session.jndi.name=
 memory.scheduler.org.quartz.threadPool.threadCount=1
 persisted.scheduler.org.quartz.threadPool.threadCount=1
 virtual.hosts.default.site.name=
