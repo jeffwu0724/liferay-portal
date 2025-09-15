@@ -16,6 +16,9 @@ public class LegacyMailSettingPropsKeys {
 
 	public static final String MAIL_SEND_BLACKLIST = "mail.send.blacklist";
 
+	public static final String MAIL_SESSION_JNDI_NAME =
+		"mail.session.jndi.name";
+
 	public static final String MAIL_SESSION_MAIL = "mail.session.mail";
 
 	public static final String MAIL_SESSION_MAIL_ADVANCED_PROPERTIES =

@@ -125,6 +125,8 @@ public class MailSettingSystemConfigurationUpgradeProcessTest {
 		Assert.assertTrue(
 			stringValue,
 			mailSettingSystemConfiguration.mailThrowsExceptionOnFailure());
+		Assert.assertEquals(
+			stringValue, mailSettingSystemConfiguration.mailSessionJndiName());
 
 		Assert.assertEquals(
 			stringValue, mailSettingSystemConfiguration.popServerSubdomain());
@@ -136,6 +138,7 @@ public class MailSettingSystemConfigurationUpgradeProcessTest {
 		throws Exception {
 
 		portletPreferences.setValue("mail.audit.trail", stringValue);
+		portletPreferences.setValue("mail.session.jndi.name", stringValue);
 		portletPreferences.setValue("mail.batch.size", intValue);
 		portletPreferences.setValue(
 			"mail.send.blacklist",

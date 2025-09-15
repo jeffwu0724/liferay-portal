@@ -46,6 +46,9 @@ public class MailSettingSystemConfigurationUpgradeProcess
 				LegacyMailSettingPropsKeys.MAIL_THROWS_EXCEPTION_ON_FAILURE,
 				"mailThrowsExceptionOnFailure"),
 			new KeyValuePair(
+				LegacyMailSettingPropsKeys.MAIL_SESSION_JNDI_NAME,
+				"mailSessionJndiName"),
+			new KeyValuePair(
 				LegacyMailSettingPropsKeys.POP_SERVER_SUBDOMAIN,
 				"popServerSubdomain"));
 	}
