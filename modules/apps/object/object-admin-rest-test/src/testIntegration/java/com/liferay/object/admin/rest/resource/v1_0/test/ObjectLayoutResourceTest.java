@@ -59,6 +59,7 @@ public class ObjectLayoutResourceTest extends BaseObjectLayoutResourceTestCase {
 				true
 			).build());
 	}
+	
 
 	@After
 	@Override
