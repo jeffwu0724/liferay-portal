@@ -11,11 +11,7 @@ import com.dumbster.smtp.mailstores.RollingMailStore;
 
 import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.petra.function.transform.TransformUtil;
-import com.liferay.petra.lang.SafeCloseable;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.test.util.PrefsPropsTestUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SocketUtil;
@@ -136,10 +132,6 @@ public class MailServiceTestUtil {
 
 		int smtpPort = _getFreePort();
 
-		_safeCloseable = PrefsPropsTestUtil.swapWithSafeCloseable(
-			CompanyThreadLocal.getCompanyId(), PropsKeys.MAIL_SESSION_MAIL,
-			true);
-
 		Object mailService = MailServiceUtil.getService();
 
 		AopInvocationHandler aopInvocationHandler =
@@ -224,8 +216,6 @@ public class MailServiceTestUtil {
 		_smtpServer.stop();
 
 		_smtpServer = null;
-
-		_safeCloseable.close();
 	}
 
 	private static int _getFreePort() throws Exception {
@@ -258,7 +248,6 @@ public class MailServiceTestUtil {
 
 	private static final int _START_PORT = 3241;
 
-	private static SafeCloseable _safeCloseable;
 	private static SmtpServer _smtpServer;
 
 }
