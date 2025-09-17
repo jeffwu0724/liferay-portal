@@ -1526,8 +1526,6 @@ public interface PropsKeys {
 
 	public static final String MAIL_SEND_BLACKLIST = "mail.send.blacklist";
 
-	public static final String MAIL_SESSION_MAIL = "mail.session.mail";
-
 	public static final String MAIL_THROWS_EXCEPTION_ON_FAILURE =
 		"mail.throws.exception.on.failure";
 

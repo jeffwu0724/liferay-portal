@@ -1948,7 +1948,7 @@ public class PreupgradeVerifyProperties extends PreupgradeVerifyProcess {
 		"mail.session.mail.pop3.user", "mail.session.mail.smtp.host",
 		"mail.session.mail.smtp.password", "mail.session.mail.smtp.port",
 		"mail.session.mail.smtp.starttls.enable", "mail.session.mail.smtp.user",
-		"mail.session.mail.store.protocol",
+		"mail.session.mail.store.protocol", "mail.session.mail",
 		"mail.session.mail.transport.protocol",
 		"pop.server.notifications.enabled",
 		"memory.cluster.scheduler.lock.cache.enabled",
