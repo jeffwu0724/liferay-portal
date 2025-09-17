@@ -150,7 +150,27 @@ public class MailServiceImpl
 			return session;
 		}
 
-		session = _createMailSession();
+		Properties properties = PropsUtil.getProperties("mail.session.", true);
+
+		String jndiName = properties.getProperty("jndi.name");
+
+		if (Validator.isNotNull(jndiName)) {
+			try {
+				Properties jndiEnvironmentProperties = PropsUtil.getProperties(
+					PropsKeys.JNDI_ENVIRONMENT, true);
+
+				Context context = new InitialContext(jndiEnvironmentProperties);
+
+				session = (Session)JNDIUtil.lookup(context, jndiName);
+			}
+			catch (Exception exception) {
+				_log.error("Unable to lookup " + jndiName, exception);
+			}
+		}
+
+		if (session == null) {
+			session = Session.getInstance(properties);
+		}
 
 		Function<String, String> function =
 			(String key) -> PrefsPropsUtil.getString(
@@ -349,28 +369,6 @@ public class MailServiceImpl
 
 				return null;
 			});
-	}
-
-	private Session _createMailSession() {
-		Properties properties = PropsUtil.getProperties("mail.session.", true);
-
-		String jndiName = properties.getProperty("jndi.name");
-
-		if (Validator.isNotNull(jndiName)) {
-			try {
-				Properties jndiEnvironmentProperties = PropsUtil.getProperties(
-					PropsKeys.JNDI_ENVIRONMENT, true);
-
-				Context context = new InitialContext(jndiEnvironmentProperties);
-
-				return (Session)JNDIUtil.lookup(context, jndiName);
-			}
-			catch (Exception exception) {
-				_log.error("Unable to lookup " + jndiName, exception);
-			}
-		}
-
-		return Session.getInstance(properties);
 	}
 
 	private void _debug(Properties properties) {
