@@ -11,6 +11,7 @@ import com.liferay.mail.kernel.model.Account;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
 import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
+import com.liferay.mail.settings.configuration.MailSettingSystemConfiguration;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
@@ -175,7 +176,22 @@ public class MailServiceImpl
 			return session;
 		}
 
-		String jndiName = PropsUtil.get("mail.session.jndi.name");
+		MailSettingCompanyConfiguration mailSettingCompanyConfiguration = null;
+		MailSettingSystemConfiguration mailSettingSystemConfiguration = null;
+
+		try {
+			mailSettingSystemConfiguration =
+				_configurationProvider.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+			mailSettingCompanyConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					MailSettingCompanyConfiguration.class, companyId);
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(configurationException);
+		}
+
+		String jndiName = mailSettingSystemConfiguration.mailSessionJndiName();
 
 		if (Validator.isNotNull(jndiName)) {
 			try {
@@ -189,17 +205,6 @@ public class MailServiceImpl
 			catch (Exception exception) {
 				_log.error("Unable to lookup " + jndiName, exception);
 			}
-		}
-
-		MailSettingCompanyConfiguration mailSettingCompanyConfiguration = null;
-
-		try {
-			mailSettingCompanyConfiguration =
-				_configurationProvider.getCompanyConfiguration(
-					MailSettingCompanyConfiguration.class, companyId);
-		}
-		catch (ConfigurationException configurationException) {
-			_log.error(configurationException);
 		}
 
 		String advancedPropertiesString =
