@@ -12629,7 +12629,7 @@ maxChallenges="-1"
 sendPasswordCaptchaEnabled="false"]]></echo>
 
 		<echo file="${liferay.home}/osgi/configs/com.liferay.mail.settings.configuration.MailSettingSystemConfiguration.config"><![CDATA[
-mailSessionJndiName=
+mailSessionJndiName=""
 mailSendBlacklist=[]
 ]]></echo>
 
