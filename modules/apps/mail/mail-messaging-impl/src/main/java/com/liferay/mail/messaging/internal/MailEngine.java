@@ -10,6 +10,7 @@ import com.liferay.mail.kernel.model.FileAttachment;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.model.SMTPAccount;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.settings.configuration.MailSettingSystemConfiguration;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProviderUtil;
@@ -267,8 +268,12 @@ public class MailEngine {
 				}
 			}
 
+			MailSettingSystemConfiguration mailSettingSystemConfiguration =
+				ConfigurationProviderUtil.getSystemConfiguration(
+					MailSettingSystemConfiguration.class);
+
 			int batchSize = GetterUtil.getInteger(
-				PropsUtil.get(PropsKeys.MAIL_BATCH_SIZE), _BATCH_SIZE);
+				mailSettingSystemConfiguration.mailBatchSize(), _BATCH_SIZE);
 
 			_send(session, message, bulkAddresses, batchSize);
 		}
