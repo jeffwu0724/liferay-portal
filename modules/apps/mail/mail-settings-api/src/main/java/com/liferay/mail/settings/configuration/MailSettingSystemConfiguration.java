@@ -59,5 +59,6 @@ public interface MailSettingSystemConfiguration {
 		name = "pop-server-subdomain", required = false
 	)
 	public String popServerSubdomain();
+	
 
 }
