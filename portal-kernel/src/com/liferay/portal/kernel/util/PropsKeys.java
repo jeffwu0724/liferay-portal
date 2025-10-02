@@ -488,6 +488,8 @@ public interface PropsKeys {
 	public static final String COMPANY_LOGIN_PREPOPULATE_DOMAIN =
 		"company.login.prepopulate.domain";
 
+	public static final String COMPANY_MX_UPDATE = "company.mx.update";
+
 	public static final String COMPANY_PREDICTABLE_COMPANY_IDS_ENABLED =
 		"company.predictable.company.ids.enabled";
 
@@ -1526,8 +1528,6 @@ public interface PropsKeys {
 	public static final String LOGOUT_EVENTS_POST = "logout.events.post";
 
 	public static final String LOGOUT_EVENTS_PRE = "logout.events.pre";
-
-	public static final String MAIL_MX_UPDATE = "mail.mx.update";
 
 	public static final String MARKETPLACE_CLIENT_ID = "marketplace.client.id";
 
