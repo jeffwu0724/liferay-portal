@@ -7,20 +7,26 @@ package com.liferay.portal.util.mail.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.mail.kernel.service.MailService;
+import com.liferay.mail.kernel.service.MailServiceUtil;
 import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
 import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.spring.aop.AopInvocationHandler;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import jakarta.mail.Session;
+
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -117,6 +123,20 @@ public class MailServiceTest {
 		long companyId = RandomTestUtil.randomLong();
 		String smtpHost = "test.local";
 
+		Object mailService = MailServiceUtil.getService();
+
+		AopInvocationHandler aopInvocationHandler =
+			ProxyUtil.fetchInvocationHandler(
+				mailService, AopInvocationHandler.class);
+
+		mailService = aopInvocationHandler.getTarget();
+
+		Object originalSessions = ReflectionTestUtil.getFieldValue(
+			mailService, "_sessions");
+
+		ReflectionTestUtil.setFieldValue(
+			mailService, "_sessions", new HashMap<Long, Session>());
+
 		try (CompanyConfigurationTemporarySwapper
 				companyConfigurationTemporarySwapper =
 					new CompanyConfigurationTemporarySwapper(
@@ -142,6 +162,9 @@ public class MailServiceTest {
 			Assert.assertEquals(
 				mailSettingCompanyConfiguration.outgoingSMTPServer(),
 				session.getProperty("mail.smtp.host"));
+
+			ReflectionTestUtil.setFieldValue(
+				mailService, "_sessions", originalSessions);
 		}
 	}
 
