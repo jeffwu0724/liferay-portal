@@ -227,11 +227,12 @@ public class ClusterCacheReplicationTest {
 
 	@Test
 	public void testReplicateByCopy() throws Exception {
+		//replicatePutsViaCopy=true
 		String testCacheName = ClusterCacheReplicationTest.class.getName();
 
 		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences();
 
-		portletPreferences.setValue("replicatePuts", "true");
+		portletPreferences.setValue("replicatePutsViaCopy", "true");
 
 		portletPreferences.store();
 
@@ -319,6 +320,134 @@ public class ClusterCacheReplicationTest {
 					return portalCache.get(testKey);
 				}));
 	}
+
+
+	@Test
+	public void testDoNotReplicatePut() throws Exception {
+
+		//replicatePuts=false
+		String testCacheName = ClusterCacheReplicationTest.class.getName();
+
+		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences();
+
+		portletPreferences.setValue("replicatePuts", "true");
+
+		portletPreferences.store();
+
+		String testKey = "testKey";
+		String testValue1 = "testValue1";
+		String testValue2 = "testValue2";
+		String updateValue = "test.value.update";
+
+		// check 9080 is empty
+
+		Assert.assertNull(
+			_tomcatNode2.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					return portalCache.get(testKey);
+				}));
+
+		// check 8080 is empty, and put into value
+
+		Assert.assertNull(
+			_tomcatNode1.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					String value = portalCache.get(testKey);
+
+					portalCache.put(testKey, testValue1);
+
+					return value;
+				}));
+
+		// check 8080 has the value just added
+
+		Assert.assertEquals(
+			testValue1,
+			_tomcatNode1.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					return portalCache.get(testKey);
+				}));
+
+
+		// check 9080 is still empty, put does not replicate
+
+		Assert.assertNull(
+			_tomcatNode2.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					return portalCache.get(testKey);
+				}));
+
+		// update 9080 to have the new value
+
+		Assert.assertEquals(
+			testValue1,
+			_tomcatNode2.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					portalCache.put(testKey, updateValue);
+
+					return portalCache.get(testKey);
+				}));
+
+		//make sure 8080 still have the old value, put does not replicate
+		Assert.assertEquals(
+			testValue1,
+			_tomcatNode1.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					return portalCache.get(testKey);
+				}));
+
+
+		// remove value from 8080, make sure it is empty now
+
+		Assert.assertNull(
+			_tomcatNode1.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					portalCache.remove(testKey);
+
+					return portalCache.get(testKey);
+				}));
+
+		// make sure 9080 is also empty, but cause remove is still replicate
+
+		Assert.assertNull(
+			_tomcatNode2.syncExecute(
+				() -> {
+					PortalCache<String, String> portalCache =
+						PortalCacheHelperUtil.getPortalCache(
+							PortalCacheManagerNames.MULTI_VM, testCacheName);
+
+					return portalCache.get(testKey);
+				}));
+	}
+
 
 	private static TomcatNode _tomcatNode1;
 	private static TomcatNode _tomcatNode2;
