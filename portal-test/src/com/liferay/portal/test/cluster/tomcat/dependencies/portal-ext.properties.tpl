@@ -9,3 +9,4 @@ module.framework.base.dir=${OSGI_BASE}
 module.framework.configs.dir=${OSGI_CONFIGS}
 module.framework.state.dir=${OSGI_STATE}
 setup.wizard.enabled=false
+ehcache.replicator.properties.test.cache=replicatePuts=false
