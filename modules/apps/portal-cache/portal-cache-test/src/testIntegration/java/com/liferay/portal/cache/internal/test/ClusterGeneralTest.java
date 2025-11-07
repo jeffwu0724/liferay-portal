@@ -169,6 +169,109 @@ public class ClusterGeneralTest {
 	}
 
 	@Test
+	public void testCanUpdateLogLevelsForAllNodesFromSlave() throws Exception {
+
+		// Assert node 1 is master node
+
+		Assert.assertTrue(
+			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		// Assert node 1 is slave node
+
+		Assert.assertFalse(
+			_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		// Set properties to DEBUG in node 2
+
+		_tomcatNode2.syncExecute(
+			() -> {
+				Map<String, String> priorities = Log4JUtil.getPriorities();
+
+				priorities.put(
+					"com.liferay.portal.servlet.filters.autologin." +
+						"AutoLoginFilter",
+					"DEBUG");
+
+				ReflectionTestUtil.invoke(
+					_getEditServerMVCActionCommand(), "_updateLogLevels",
+					new Class<?>[] {Map.class}, priorities);
+
+				return null;
+			});
+
+		// Assert the change in node 2
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode2.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get(
+						"com.liferay.portal.servlet.filters.autologin." +
+							"AutoLoginFilter");
+				}));
+
+		// TODO: need a listener to wait for node 1 get updated
+
+		Thread.sleep(5000);
+
+		// Assert the change node 1
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode1.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get(
+						"com.liferay.portal.servlet.filters.autologin." +
+							"AutoLoginFilter");
+				}));
+
+		// Add new property to node 2
+
+		_tomcatNode2.syncExecute(
+			() -> {
+				Map<String, String> priorities = Log4JUtil.getPriorities();
+
+				priorities.put("com.liferay.new.property", "DEBUG");
+
+				ReflectionTestUtil.invoke(
+					_getEditServerMVCActionCommand(), "_updateLogLevels",
+					new Class<?>[] {Map.class}, priorities);
+
+				return null;
+			});
+
+		// Assert the change in node 2
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode2.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get("com.liferay.new.property");
+				}));
+
+		// TODO: need a listener to wait for node 1 get updated
+
+		Thread.sleep(5000);
+
+		// Assert the change in node 1
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode1.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get("com.liferay.new.property");
+				}));
+	}
+
+	@Test
 	public void testSlaveNodeCanBecomeMasterNode() throws Exception {
 
 		// Assert node 1 is master node
