@@ -8,7 +8,10 @@ package com.liferay.portal.cache.internal.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
+import com.liferay.portal.kernel.log4j.Log4JUtil;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
 import com.liferay.portal.test.cluster.tomcat.TomcatNode;
@@ -16,6 +19,7 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Assert;
@@ -26,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -58,6 +63,109 @@ public class ClusterGeneralTest {
 		_tomcatNode2 = builder2.build();
 
 		_tomcatNode2.start(true);
+	}
+
+	@Test
+	public void testCanUpdateLogLevelsForAllNodesFromMaster() throws Exception {
+
+		// Assert node 1 is master node
+
+		Assert.assertTrue(
+			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		// Assert node 1 is slave node
+
+		Assert.assertFalse(
+			_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		// Set properties to DEBUG in node 1
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				Map<String, String> priorities = Log4JUtil.getPriorities();
+
+				priorities.put(
+					"com.liferay.portal.servlet.filters.autologin." +
+						"AutoLoginFilter",
+					"DEBUG");
+
+				ReflectionTestUtil.invoke(
+					_getEditServerMVCActionCommand(), "_updateLogLevels",
+					new Class<?>[] {Map.class}, priorities);
+
+				return null;
+			});
+
+		// Assert the change in node 1
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode1.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get(
+						"com.liferay.portal.servlet.filters.autologin." +
+							"AutoLoginFilter");
+				}));
+
+		// TODO: need a listener to wait for node 2 get updated
+
+		Thread.sleep(5000);
+
+		// Assert the change in node 2
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode2.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get(
+						"com.liferay.portal.servlet.filters.autologin." +
+							"AutoLoginFilter");
+				}));
+
+		// Add a new property in node 1
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				Map<String, String> priorities = Log4JUtil.getPriorities();
+
+				priorities.put("com.liferay.new.property", "DEBUG");
+
+				ReflectionTestUtil.invoke(
+					_getEditServerMVCActionCommand(), "_updateLogLevels",
+					new Class<?>[] {Map.class}, priorities);
+
+				return null;
+			});
+
+		// Assert the new change in node 1
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode1.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get("com.liferay.new.property");
+				}));
+
+		// TODO: need a listener to wait for node 2 get updated
+
+		Thread.sleep(5000);
+
+		// Assert the new change in node 1
+
+		Assert.assertEquals(
+			"DEBUG",
+			_tomcatNode2.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get("com.liferay.new.property");
+				}));
 	}
 
 	@Test
@@ -154,6 +262,25 @@ public class ClusterGeneralTest {
 
 		Assert.assertFalse(
 			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
+	}
+
+	private static MVCActionCommand _getEditServerMVCActionCommand()
+		throws InvalidSyntaxException {
+
+		BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+		List<ServiceReference<MVCActionCommand>> serviceReferences =
+			new ArrayList<>(
+				bundleContext.getServiceReferences(
+					MVCActionCommand.class,
+					"(mvc.command.name=/server_admin/edit_server)"));
+
+		ServiceReference<MVCActionCommand>
+			editServerMVCActionCommandServiceReference = serviceReferences.get(
+				0);
+
+		return bundleContext.getService(
+			editServerMVCActionCommandServiceReference);
 	}
 
 	private static TomcatNode _tomcatNode1;
