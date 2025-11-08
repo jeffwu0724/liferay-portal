@@ -386,8 +386,6 @@ public class ObjectEntryModelDocumentContributor
 		document.add(
 			new Field("objectEntryContent", objectContentHelper.getContent()));
 
-		objectContentHelper.getLocalizedContentMap();
-
 		document.addKeyword("objectEntryId", objectEntry.getObjectEntryId());
 		document.add(
 			new Field("objectEntryTitle", objectEntry.getTitleValue()));
