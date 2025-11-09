@@ -2770,6 +2770,9 @@ public class ObjectEntryLocalServiceImpl
 			return dslQuery;
 		}
 
+		ObjectDefinition objectDefinition =
+			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
+
 		SortDSLQueryVisitor sortDSLQueryVisitor = new SortDSLQueryVisitor(
 			_objectFieldLocalService,
 			_objectRelationshipLocalServiceSnapshot.get());
@@ -2778,9 +2781,7 @@ public class ObjectEntryLocalServiceImpl
 			dslQuery = sortDSLQueryVisitor.visit(
 				dslQuery,
 				new com.liferay.object.internal.sort.Sort(
-					_objectDefinitionPersistence.findByPrimaryKey(
-						objectDefinitionId),
-					sort));
+					objectDefinition, sort));
 		}
 
 		return dslQuery;
