@@ -1369,7 +1369,10 @@ public class ObjectEntryLocalServiceImpl
 
 		return objectEntryPersistence.dslQuery(
 			_applyOrderBy(
-				dslQuery, objectRelationship.getObjectDefinitionId2(), sorts));
+				dslQuery,
+				_objectDefinitionPersistence.findByPrimaryKey(
+					objectRelationship.getObjectDefinitionId2()),
+				sorts));
 	}
 
 	@Override
@@ -1456,7 +1459,7 @@ public class ObjectEntryLocalServiceImpl
 
 		return TransformUtil.transform(
 			objectEntryPersistence.dslQuery(
-				_applyOrderBy(dslQuery, objectDefinitionId, sorts)),
+				_applyOrderBy(dslQuery, objectDefinition, sorts)),
 			value -> (Long)_getResult(
 				value, objectDefinitionId,
 				dynamicObjectDefinitionTable.getPrimaryKeyColumn()));
@@ -2795,15 +2798,12 @@ public class ObjectEntryLocalServiceImpl
 	}
 
 	private DSLQuery _applyOrderBy(
-			DSLQuery dslQuery, long objectDefinitionId, Sort[] sorts)
+			DSLQuery dslQuery, ObjectDefinition objectDefinition, Sort[] sorts)
 		throws PortalException {
 
 		if (sorts == null) {
 			return dslQuery;
 		}
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
 
 		SortDSLQueryVisitor sortDSLQueryVisitor = new SortDSLQueryVisitor(
 			_objectFieldLocalService,
