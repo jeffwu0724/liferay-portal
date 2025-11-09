@@ -2743,6 +2743,13 @@ public class ObjectEntryLocalServiceImpl
 				continue;
 			}
 
+			long primaryKey = GetterUtil.getLong(
+				values.get(objectField.getName()));
+
+			if (primaryKey == 0) {
+				continue;
+			}
+
 			ObjectRelationship objectRelationship =
 				_objectRelationshipPersistence.fetchByObjectFieldId2(
 					objectField.getObjectFieldId());
@@ -2752,13 +2759,6 @@ public class ObjectEntryLocalServiceImpl
 					objectRelationship.getObjectDefinitionId1());
 
 			if (objectDefinition == null) {
-				continue;
-			}
-
-			long primaryKey = GetterUtil.getLong(
-				values.get(objectField.getName()));
-
-			if (primaryKey == 0) {
 				continue;
 			}
 
