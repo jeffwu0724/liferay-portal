@@ -1442,16 +1442,16 @@ public class ObjectEntryLocalServiceImpl
 			Sort[] sorts)
 		throws PortalException {
 
+		ObjectDefinition objectDefinition =
+			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
+
 		DSLQuery dslQuery = _getObjectEntriesGroupByStep(
 			groupIds,
 			DSLQueryFactoryUtil.select(ObjectEntryTable.INSTANCE.objectEntryId),
-			objectDefinitionId, predicate, preferApproved, search
+			objectDefinition, predicate, preferApproved, search
 		).limit(
 			start, end
 		);
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
 
 		DynamicObjectDefinitionTable dynamicObjectDefinitionTable =
 			DynamicObjectDefinitionTableUtil.getDynamicObjectDefinitionTable(
@@ -1726,7 +1726,9 @@ public class ObjectEntryLocalServiceImpl
 				groupIds,
 				DSLQueryFactoryUtil.countDistinct(
 					ObjectEntryTable.INSTANCE.objectEntryId),
-				objectDefinitionId, predicate, preferApproved, search));
+				_objectDefinitionPersistence.findByPrimaryKey(
+					objectDefinitionId),
+				predicate, preferApproved, search));
 	}
 
 	@Override
@@ -4159,12 +4161,10 @@ public class ObjectEntryLocalServiceImpl
 	}
 
 	private GroupByStep _getObjectEntriesGroupByStep(
-			Long[] groupIds, FromStep fromStep, long objectDefinitionId,
-			Predicate predicate, boolean preferApproved, String search)
+			Long[] groupIds, FromStep fromStep,
+			ObjectDefinition objectDefinition, Predicate predicate,
+			boolean preferApproved, String search)
 		throws PortalException {
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(objectDefinitionId);
 
 		DynamicObjectDefinitionLocalizationTable
 			dynamicObjectDefinitionLocalizationTable =
@@ -4197,7 +4197,7 @@ public class ObjectEntryLocalServiceImpl
 				dynamicObjectDefinitionTable, null)
 		).where(
 			ObjectEntryTable.INSTANCE.objectDefinitionId.eq(
-				objectDefinitionId
+				objectDefinition.getObjectDefinitionId()
 			).and(
 				ObjectEntryTable.INSTANCE.rootObjectEntryId.eq(
 					ObjectEntryTable.INSTANCE.objectEntryId
@@ -4217,7 +4217,9 @@ public class ObjectEntryLocalServiceImpl
 				}
 			).and(
 				Predicate.withParentheses(
-					_fillPredicate(objectDefinitionId, predicate, search))
+					_fillPredicate(
+						objectDefinition.getObjectDefinitionId(), predicate,
+						search))
 			).and(
 				_getHeadObjectEntryPredicate(preferApproved)
 			).and(
