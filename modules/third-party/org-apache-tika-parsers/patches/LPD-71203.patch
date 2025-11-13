@@ -1,0 +1,124 @@
+diff --git a/org/apache/tika/parser/odf/OpenDocumentParser.java b/org/apache/tika/parser/odf/OpenDocumentParser.java
+index c8adbba..0aadfe2 100644
+--- a/org/apache/tika/parser/odf/OpenDocumentParser.java
++++ b/org/apache/tika/parser/odf/OpenDocumentParser.java
+@@ -20,23 +20,19 @@ import static java.nio.charset.StandardCharsets.UTF_8;
+ 
+ import java.io.IOException;
+ import java.io.InputStream;
+-import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Collections;
+ import java.util.Enumeration;
+ import java.util.HashSet;
+-import java.util.List;
+ import java.util.Set;
+ import java.util.zip.ZipEntry;
+ import java.util.zip.ZipFile;
+-import java.util.zip.ZipInputStream;
+ 
+ import org.apache.commons.io.IOUtils;
+ import org.apache.commons.io.input.CloseShieldInputStream;
+ import org.apache.tika.config.Field;
+ import org.apache.tika.exception.EncryptedDocumentException;
+ import org.apache.tika.exception.TikaException;
+-import org.apache.tika.exception.WriteLimitReachedException;
+ import org.apache.tika.extractor.EmbeddedDocumentUtil;
+ import org.apache.tika.io.TikaInputStream;
+ import org.apache.tika.metadata.Metadata;
+@@ -140,19 +136,20 @@ public class OpenDocumentParser extends AbstractParser {
+         // Open the Zip stream
+         // Use a File if we can, and an already open zip is even better
+         ZipFile zipFile = null;
+-        ZipInputStream zipStream = null;
++        TikaInputStream tmpTis = null;
+         if (stream instanceof TikaInputStream) {
+             TikaInputStream tis = (TikaInputStream) stream;
+             Object container = ((TikaInputStream) stream).getOpenContainer();
+             if (container instanceof ZipFile) {
+                 zipFile = (ZipFile) container;
+-            } else if (tis.hasFile()) {
+-                zipFile = new ZipFile(tis.getFile());
+             } else {
+-                zipStream = new ZipInputStream(stream);
++                zipFile = new ZipFile(tis.getFile());
++                tis.setOpenContainer(zipFile);
+             }
+         } else {
+-            zipStream = new ZipInputStream(stream);
++            tmpTis = TikaInputStream.get(stream);
++            tmpTis.setOpenContainer(new ZipFile(tmpTis.getFile()));
++            zipFile = (ZipFile) tmpTis.getOpenContainer();
+         }
+ 
+         // Prepare to handle the content
+@@ -164,19 +161,13 @@ public class OpenDocumentParser extends AbstractParser {
+                 new EndDocumentShieldingContentHandler(xhtml);
+ 
+         try {
+-            if (zipFile != null) {
+-                try {
+-                    handleZipFile(zipFile, metadata, context, handler, embeddedDocumentUtil);
+-                } finally {
+-                    //Do we want to close silently == catch an exception here?
+-                    zipFile.close();
+-                }
+-            } else {
+-                try {
+-                    handleZipStream(zipStream, metadata, context, handler, embeddedDocumentUtil);
+-                } finally {
+-                    //Do we want to close silently == catch an exception here?
+-                    zipStream.close();
++            try {
++                handleZipFile(zipFile, metadata, context, handler, embeddedDocumentUtil);
++            } finally {
++                //Do we want to close silently == catch an exception here?
++                if (tmpTis != null) {
++                    //tmpTis handles closing of the open zip container
++                    tmpTis.close();
+                 }
+             }
+         } catch (SAXException e) {
+@@ -197,36 +188,6 @@ public class OpenDocumentParser extends AbstractParser {
+         this.extractMacros = extractMacros;
+     }
+ 
+-    private void handleZipStream(ZipInputStream zipStream, Metadata metadata,
+-                                 ParseContext context,
+-                                 EndDocumentShieldingContentHandler handler,
+-                                 EmbeddedDocumentUtil embeddedDocumentUtil) throws IOException,
+-            TikaException, SAXException {
+-        ZipEntry entry = zipStream.getNextEntry();
+-		if (entry == null) {
+-			throw new IOException("No entries found in ZipInputStream");
+-		}
+-		List<SAXException> saxExceptions = new ArrayList<>();
+-        do {
+-            try {
+-                handleZipEntry(entry, zipStream, metadata, context, handler, embeddedDocumentUtil);
+-            } catch (SAXException e) {
+-                if (WriteLimitReachedException.isWriteLimitReached(e)) {
+-                    throw e;
+-                } else if (e.getCause() instanceof EncryptedDocumentException) {
+-                    throw (EncryptedDocumentException)e.getCause();
+-                } else {
+-                    saxExceptions.add(e);
+-                }
+-            }
+-            entry = zipStream.getNextEntry();
+-        } while (entry != null);
+-        //throw the first
+-        if (saxExceptions.size() > 0) {
+-            throw saxExceptions.get(0);
+-        }
+-    }
+-
+     private void handleZipFile(ZipFile zipFile, Metadata metadata,
+                                ParseContext context, EndDocumentShieldingContentHandler handler,
+                                EmbeddedDocumentUtil embeddedDocumentUtil)
+@@ -374,3 +335,4 @@ public class OpenDocumentParser extends AbstractParser {
+ 
+ 
+ }
++/* @generated */
+\ No newline at end of file
