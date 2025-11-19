@@ -73,295 +73,12 @@ public class ClusterGeneralTest {
 
 	@Test
 	public void testCanUpdateLogLevelsForAllNodesFromMaster() throws Exception {
-		String defaultValue = null;
-
-		try {
-
-			// Assert node 1 is master node
-
-			Assert.assertTrue(
-				_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
-
-			// Assert node 2 is slave node
-
-			Assert.assertFalse(
-				_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
-
-			// Get the default value of the property
-
-			defaultValue = _tomcatNode1.syncExecute(
-				() -> {
-					Map<String, String> priorities = Log4JUtil.getPriorities();
-
-					return priorities.get(
-						"com.liferay.portal.servlet.filters.autologin." +
-							"AutoLoginFilter");
-				});
-
-			// Assert the default value of node 1
-
-			Assert.assertEquals("ERROR", defaultValue);
-
-			// Assert the default value of node 2
-
-			Assert.assertEquals(
-				"ERROR",
-				_tomcatNode2.syncExecute(
-					() -> {
-						Map<String, String> priorities =
-							Log4JUtil.getPriorities();
-
-						return priorities.get(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter");
-					}));
-
-			// Set up listener at node 2
-
-			_tomcatNode2.syncExecute(
-				() -> {
-					Map<String, String> priorities = Log4JUtil.getPriorities();
-
-					LoggerContext loggerContext = LoggerContext.getContext();
-
-					// CountDown priorities.size() times because slave node
-					// will update all its properties, even though
-					// only one change in master node
-
-					loggerContext.addPropertyChangeListener(
-						new TestPropertyChangeListener(priorities.size()));
-
-					return null;
-				});
-
-			// Update properties in node 1
-
-			_tomcatNode1.syncExecute(
-				() -> {
-					ReflectionTestUtil.invoke(
-						_getEditServerMVCActionCommand(), "_updateLogLevels",
-						new Class<?>[] {Map.class},
-						HashMapBuilder.put(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter",
-							"DEBUG"
-						).build());
-
-					return null;
-				});
-
-			// Assert the change in node 1
-
-			Assert.assertEquals(
-				"DEBUG",
-				_tomcatNode1.syncExecute(
-					() -> {
-						Map<String, String> priorities =
-							Log4JUtil.getPriorities();
-
-						return priorities.get(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter");
-					}));
-
-			// Assert the change in node 2
-
-			Assert.assertEquals(
-				"DEBUG",
-				_tomcatNode2.syncExecute(
-					() -> {
-						_getTestPropertyChangeListenerCountDownLatch().await();
-
-						Map<String, String> priorities =
-							Log4JUtil.getPriorities();
-
-						return priorities.get(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter");
-					}));
-		}
-		finally {
-
-			// Restore setting
-
-			_tomcatNode2.syncExecute(
-				() -> {
-					LoggerContext loggerContext = LoggerContext.getContext();
-
-					loggerContext.removePropertyChangeListener(
-						_getTestPropertyChangeListener());
-
-					return null;
-				});
-
-			Map<String, String> restoreMap = HashMapBuilder.put(
-				"com.liferay.portal.servlet.filters.autologin.AutoLoginFilter",
-				defaultValue
-			).build();
-
-			_tomcatNode1.syncExecute(
-				() -> {
-					ReflectionTestUtil.invoke(
-						_getEditServerMVCActionCommand(), "_updateLogLevels",
-						new Class<?>[] {Map.class}, restoreMap);
-
-					return null;
-				});
-
-			_tomcatNode2.syncExecute(
-				() -> {
-					ReflectionTestUtil.invoke(
-						_getEditServerMVCActionCommand(), "_updateLogLevels",
-						new Class<?>[] {Map.class}, restoreMap);
-
-					return null;
-				});
-		}
+		_updateLogLevelsForAllNodes(_tomcatNode1, _tomcatNode2, true);
 	}
 
 	@Test
 	public void testCanUpdateLogLevelsForAllNodesFromSlave() throws Exception {
-		String defaultValue = null;
-
-		try {
-
-			// Assert node 1 is master node
-
-			Assert.assertTrue(
-				_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
-
-			// Assert node 2 is slave node
-
-			Assert.assertFalse(
-				_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
-
-			// Get the default value of the property
-
-			defaultValue = _tomcatNode2.syncExecute(
-				() -> {
-					Map<String, String> priorities = Log4JUtil.getPriorities();
-
-					return priorities.get(
-						"com.liferay.portal.servlet.filters.autologin." +
-							"AutoLoginFilter");
-				});
-
-			// Assert the default value of node 2
-
-			Assert.assertEquals("ERROR", defaultValue);
-
-			// Assert the default value of node 1
-
-			Assert.assertEquals(
-				"ERROR",
-				_tomcatNode1.syncExecute(
-					() -> {
-						Map<String, String> priorities =
-							Log4JUtil.getPriorities();
-
-						return priorities.get(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter");
-					}));
-
-			// Set up listener at node 1 with countDown once
-
-			_tomcatNode1.syncExecute(
-				() -> {
-					LoggerContext loggerContext = LoggerContext.getContext();
-
-					// CountDown only once because when slave node update,
-					// master node will only update the change
-
-					loggerContext.addPropertyChangeListener(
-						new TestPropertyChangeListener(1));
-
-					return null;
-				});
-
-			// Update properties in node 2
-
-			_tomcatNode2.syncExecute(
-				() -> {
-					ReflectionTestUtil.invoke(
-						_getEditServerMVCActionCommand(), "_updateLogLevels",
-						new Class<?>[] {Map.class},
-						HashMapBuilder.put(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter",
-							"DEBUG"
-						).build());
-
-					return null;
-				});
-
-			// Assert the change in node 2
-
-			Assert.assertEquals(
-				"DEBUG",
-				_tomcatNode2.syncExecute(
-					() -> {
-						Map<String, String> priorities =
-							Log4JUtil.getPriorities();
-
-						return priorities.get(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter");
-					}));
-
-			// Assert the change in node 1
-
-			Assert.assertEquals(
-				"DEBUG",
-				_tomcatNode1.syncExecute(
-					() -> {
-						_getTestPropertyChangeListenerCountDownLatch().await();
-
-						Map<String, String> priorities =
-							Log4JUtil.getPriorities();
-
-						return priorities.get(
-							"com.liferay.portal.servlet.filters.autologin." +
-								"AutoLoginFilter");
-					}));
-		}
-		finally {
-
-			// Restore Setting
-
-			_tomcatNode1.syncExecute(
-				() -> {
-					LoggerContext loggerContext = LoggerContext.getContext();
-
-					loggerContext.removePropertyChangeListener(
-						_getTestPropertyChangeListener());
-
-					return null;
-				});
-
-			Map<String, String> restoreMap = HashMapBuilder.put(
-				"com.liferay.portal.servlet.filters.autologin.AutoLoginFilter",
-				defaultValue
-			).build();
-
-			_tomcatNode1.syncExecute(
-				() -> {
-					ReflectionTestUtil.invoke(
-						_getEditServerMVCActionCommand(), "_updateLogLevels",
-						new Class<?>[] {Map.class}, restoreMap);
-
-					return null;
-				});
-
-			_tomcatNode2.syncExecute(
-				() -> {
-					ReflectionTestUtil.invoke(
-						_getEditServerMVCActionCommand(), "_updateLogLevels",
-						new Class<?>[] {Map.class}, restoreMap);
-
-					return null;
-				});
-		}
+		_updateLogLevelsForAllNodes(_tomcatNode2, _tomcatNode1, false);
 	}
 
 	@Test
@@ -481,6 +198,176 @@ public class ClusterGeneralTest {
 			propertyChangeListeners.get(0);
 
 		return testPropertyChangeListener.getCountDownLatch();
+	}
+
+	private void _updateLogLevelsForAllNodes(
+			TomcatNode updateTomcatNode, TomcatNode listenTomcatNode,
+			boolean updateTomcatNodeIsMasterNode)
+		throws Exception {
+
+		String defaultValue = null;
+
+		try {
+
+			// Assert updateTomcatNode is master node
+			// when updateTomcatNodeIsMasterNode is true
+
+			Assert.assertEquals(
+				updateTomcatNodeIsMasterNode,
+				updateTomcatNode.syncExecute(
+					ClusterMasterExecutorUtil::isMaster));
+
+			// Assert listenTomcatNode is master node
+			// when updateTomcatNodeIsMasterNode is false
+
+			Assert.assertEquals(
+				!updateTomcatNodeIsMasterNode,
+				listenTomcatNode.syncExecute(
+					ClusterMasterExecutorUtil::isMaster));
+
+			// Get the default value of the property
+
+			defaultValue = updateTomcatNode.syncExecute(
+				() -> {
+					Map<String, String> priorities = Log4JUtil.getPriorities();
+
+					return priorities.get(
+						"com.liferay.portal.servlet.filters.autologin." +
+							"AutoLoginFilter");
+				});
+
+			// Assert the default value of updateTomcatNode
+
+			Assert.assertEquals("ERROR", defaultValue);
+
+			// Assert the default value of listenTomcatNode
+
+			Assert.assertEquals(
+				"ERROR",
+				listenTomcatNode.syncExecute(
+					() -> {
+						Map<String, String> priorities =
+							Log4JUtil.getPriorities();
+
+						return priorities.get(
+							"com.liferay.portal.servlet.filters.autologin." +
+								"AutoLoginFilter");
+					}));
+
+			// Register listener for listenTomcatNode
+
+			listenTomcatNode.syncExecute(
+				() -> {
+					LoggerContext loggerContext = LoggerContext.getContext();
+
+					int size;
+
+					if (updateTomcatNodeIsMasterNode) {
+
+						// CountDown Log4JUtil.getPriorities().size() times
+						// because when master node update,
+						// all the properties in slave node need to update
+
+						size = Log4JUtil.getPriorities(
+						).size();
+					}
+					else {
+
+						// CountDown only once because when slave node update,
+						// only one property need to update in master node
+
+						size = 1;
+					}
+
+					loggerContext.addPropertyChangeListener(
+						new TestPropertyChangeListener(size));
+
+					return null;
+				});
+
+			// Update properties in updateTomcatNode
+
+			updateTomcatNode.syncExecute(
+				() -> {
+					ReflectionTestUtil.invoke(
+						_getEditServerMVCActionCommand(), "_updateLogLevels",
+						new Class<?>[] {Map.class},
+						HashMapBuilder.put(
+							"com.liferay.portal.servlet.filters.autologin." +
+								"AutoLoginFilter",
+							"DEBUG"
+						).build());
+
+					return null;
+				});
+
+			// Assert the change in updateTomcatNode
+
+			Assert.assertEquals(
+				"DEBUG",
+				updateTomcatNode.syncExecute(
+					() -> Log4JUtil.getPriorities(
+					).get(
+						"com.liferay.portal.servlet.filters.autologin." +
+							"AutoLoginFilter"
+					)));
+
+			// Assert the change in listenTomcatNode
+
+			Assert.assertEquals(
+				"DEBUG",
+				listenTomcatNode.syncExecute(
+					() -> {
+						_getTestPropertyChangeListenerCountDownLatch().await();
+
+						return Log4JUtil.getPriorities(
+						).get(
+							"com.liferay.portal.servlet.filters.autologin." +
+								"AutoLoginFilter"
+						);
+					}));
+		}
+		finally {
+
+			// Remove the listener in listenTomcatNode
+
+			listenTomcatNode.syncExecute(
+				() -> {
+					LoggerContext loggerContext = LoggerContext.getContext();
+
+					loggerContext.removePropertyChangeListener(
+						_getTestPropertyChangeListener());
+
+					return null;
+				});
+
+			Map<String, String> restoreMap = HashMapBuilder.put(
+				"com.liferay.portal.servlet.filters.autologin.AutoLoginFilter",
+				defaultValue
+			).build();
+
+			// Restore the property for updateTomcatNode
+
+			updateTomcatNode.syncExecute(
+				() -> {
+					ReflectionTestUtil.invoke(
+						_getEditServerMVCActionCommand(), "_updateLogLevels",
+						new Class<?>[] {Map.class}, restoreMap);
+
+					return null;
+				});
+
+			// Restore the property for listenTomcatNode
+
+			listenTomcatNode.syncExecute(
+				() -> {
+					ReflectionTestUtil.invoke(
+						_getEditServerMVCActionCommand(), "_updateLogLevels",
+						new Class<?>[] {Map.class}, restoreMap);
+
+					return null;
+				});
+		}
 	}
 
 	private static TomcatNode _tomcatNode1;
