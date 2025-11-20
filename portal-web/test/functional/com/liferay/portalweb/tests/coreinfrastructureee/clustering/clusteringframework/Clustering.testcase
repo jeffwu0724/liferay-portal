@@ -1277,5 +1277,6 @@ definition {
 			password = PropsUtil.get("default.admin.password"),
 			userEmailAddress = "test@liferay.com");
 	}
+	
 
 }
