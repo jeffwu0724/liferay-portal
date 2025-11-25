@@ -7,6 +7,7 @@ package com.liferay.portal.cache.internal.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.process.local.LocalProcessLauncher;
+import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
@@ -86,6 +87,76 @@ public class ClusterGeneralTest implements Serializable {
 	}
 
 	@Test
+	public void testShutdownAndStartupNodes() throws Exception {
+		String tomcatNodeOneClusterNodeId = _tomcatNode1.syncExecute(
+			() -> _getClusterNodeIdByTomcatNode());
+
+		String tomcatNodeTwoClusterNodeId = _tomcatNode2.syncExecute(
+			() -> _getClusterNodeIdByTomcatNode());
+
+		// Assert node 1 has a valid cluster node id
+
+		Assert.assertNotNull(tomcatNodeOneClusterNodeId);
+
+		// Assert node 2 has a valid cluster node id
+
+		Assert.assertNotNull(tomcatNodeTwoClusterNodeId);
+
+		// Assert cluster node id of node 1 is different from node 2
+
+		Assert.assertNotEquals(
+			tomcatNodeOneClusterNodeId, tomcatNodeTwoClusterNodeId);
+
+		// Stop node 1
+
+		_tomcatNode1.stop();
+
+		// Assert node 2 still have the same cluster node id running
+
+		Assert.assertEquals(
+			tomcatNodeTwoClusterNodeId,
+			_tomcatNode2.syncExecute(() -> _getClusterNodeIdByTomcatNode()));
+
+		// Restart node 1
+
+		_tomcatNode1.start(true);
+
+		tomcatNodeOneClusterNodeId = _tomcatNode1.syncExecute(
+			() -> _getClusterNodeIdByTomcatNode());
+
+		// Assert node 1 has a valid cluster node id
+
+		Assert.assertNotNull(tomcatNodeOneClusterNodeId);
+
+		// Assert node 2 still have the same cluster node id running
+
+		Assert.assertEquals(
+			tomcatNodeTwoClusterNodeId,
+			_tomcatNode2.syncExecute(() -> _getClusterNodeIdByTomcatNode()));
+
+		// Stop node 2
+
+		_tomcatNode2.stop();
+
+		// Assert node 1 still have the same cluster node id running
+
+		Assert.assertEquals(
+			tomcatNodeOneClusterNodeId,
+			_tomcatNode1.syncExecute(() -> _getClusterNodeIdByTomcatNode()));
+
+		_tomcatNode2.start(true);
+
+		// Assert node 1 still have the same cluster node id running
+
+		Assert.assertEquals(
+			tomcatNodeOneClusterNodeId,
+			_tomcatNode1.syncExecute(() -> _getClusterNodeIdByTomcatNode()));
+
+		Assert.assertNotNull(
+			_tomcatNode2.syncExecute(() -> _getClusterNodeIdByTomcatNode()));
+	}
+
+	@Test
 	public void testSlaveNodeCanBecomeMasterNode() throws Exception {
 
 		// Assert node 1 is the master node
@@ -134,6 +205,11 @@ public class ClusterGeneralTest implements Serializable {
 
 		Assert.assertFalse(
 			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
+	}
+
+	private String _getClusterNodeIdByTomcatNode() {
+		return ClusterExecutorUtil.getLocalClusterNode(
+		).getClusterNodeId();
 	}
 
 	private MVCActionCommand _getEditServerMVCActionCommand()
