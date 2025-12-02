@@ -12,10 +12,15 @@ import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
+import com.liferay.portal.kernel.model.BaseModelListener;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
+import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -78,6 +83,124 @@ public class ClusterGeneralTest implements Serializable {
 		_tomcatNode2 = builder2.build();
 
 		_tomcatNode2.start(true);
+	}
+
+	@Test
+	public void testCanCreateVirtualInstanceWithClustering() throws Exception {
+
+		// Create a company in node 1
+
+		long companyId = _tomcatNode1.syncExecute(
+			() -> {
+				TestCompanyModelListener.register();
+				Company company = CompanyTestUtil.addCompany();
+
+				TestCompanyModelListener.await();
+
+				return company.getCompanyId();
+			});
+
+
+		// Assert node 2 can see this new company
+
+//Thread.sleep(10000);
+		_tomcatNode2.syncExecute(
+			() -> {
+				Company company = CompanyLocalServiceUtil.fetchCompany(
+					companyId);
+
+				Assert.assertNotNull(company);
+
+				return null;
+			});
+
+
+		// Delete this company in node 1
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				TestCompanyModelListener.register();
+				CompanyLocalServiceUtil.deleteCompany(companyId);
+				TestCompanyModelListener.await();
+
+				return null;
+			});
+
+
+//     Thread.sleep(10000);
+		// Assert this company also deleted in node 2
+
+		_tomcatNode2.syncExecute(
+			() -> {
+				Company company = CompanyLocalServiceUtil.fetchCompany(
+					companyId);
+
+				Assert.assertNull(company);
+
+				return null;
+			});
+	}
+
+	private static class TestCompanyModelListener extends
+		BaseModelListener<Company> {
+
+		public static void await() throws Exception {
+			Map<String, Object> attributes =
+				LocalProcessLauncher.ProcessContext.getAttributes();
+
+			TestCompanyModelListener
+				testCompanyModelListener =
+				(TestCompanyModelListener)attributes.remove(
+					TestCompanyModelListener.class.
+						getName());
+
+			CountDownLatch countDownLatch =
+				testCompanyModelListener._countDownLatch;
+
+			countDownLatch.await();
+//Todo need to remove this listener
+
+			ServiceRegistration<?> serviceRegistration =
+				testCompanyModelListener._serviceRegistration;
+
+			serviceRegistration.unregister();
+		}
+
+		public static void register() {
+			BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+			TestCompanyModelListener
+				testCompanyModelListener =
+				new TestCompanyModelListener();
+
+			testCompanyModelListener._serviceRegistration =
+				bundleContext.registerService(
+					ModelListener.class,
+					testCompanyModelListener, null);
+
+			Map<String, Object> attributes =
+				LocalProcessLauncher.ProcessContext.getAttributes();
+
+			attributes.put(
+				TestCompanyModelListener.class.getName(),
+				testCompanyModelListener);
+		}
+
+		@Override
+		public void onAfterCreate(Company company){
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!! on After Create");
+			_countDownLatch.countDown();
+		}
+
+		@Override
+		public void onAfterRemove(Company company)  {
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!! on After Remove");
+			_countDownLatch.countDown();
+		}
+
+		private final CountDownLatch _countDownLatch = new CountDownLatch(1);
+
+		private ServiceRegistration<?> _serviceRegistration;
 	}
 
 	@Test
