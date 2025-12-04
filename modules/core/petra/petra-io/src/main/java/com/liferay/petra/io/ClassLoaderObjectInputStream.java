@@ -35,6 +35,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
 			objectStreamClass.getName(), _classLoader);
 	}
 
+	
 	private final ClassLoader _classLoader;
 
 }
