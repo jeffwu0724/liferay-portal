@@ -270,6 +270,8 @@ public class ClusterGeneralTest implements Serializable {
 
 					return CompanyLocalServiceUtil.fetchCompany(companyId);
 				}));
+
+		Thread.sleep(3000);
 	}
 
 	private void _assertNodesVisibleToEachOther(
