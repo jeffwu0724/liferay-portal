@@ -96,11 +96,15 @@ public class ClusterGeneralTest implements Serializable {
 
 	@Test
 	public void testCanCreateVirtualInstanceWithClustering() throws Exception {
+		PropsUtil.set(PropsKeys.CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT, "0");
+		
 		_assertCanCreateVirtualInstanceWithClustering(
 			_tomcatNode1, _tomcatNode2);
 
 		_assertCanCreateVirtualInstanceWithClustering(
 			_tomcatNode2, _tomcatNode1);
+
+		PropsUtil.set(PropsKeys.CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT, "10");
 	}
 
 	@Test
