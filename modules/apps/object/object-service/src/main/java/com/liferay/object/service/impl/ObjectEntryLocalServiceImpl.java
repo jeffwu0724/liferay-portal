@@ -1167,9 +1167,7 @@ public class ObjectEntryLocalServiceImpl
 	public Map<String, Serializable> getIndexedValues(ObjectEntry objectEntry)
 		throws PortalException {
 
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(
-				objectEntry.getObjectDefinitionId());
+		ObjectDefinition objectDefinition = objectEntry.getObjectDefinition();
 
 		List<ObjectField> indexedObjectFields =
 			_objectFieldPersistence.findByODI_I(
@@ -1772,9 +1770,7 @@ public class ObjectEntryLocalServiceImpl
 	public Map<String, Serializable> getValues(ObjectEntry objectEntry)
 		throws PortalException {
 
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(
-				objectEntry.getObjectDefinitionId());
+		ObjectDefinition objectDefinition = objectEntry.getObjectDefinition();
 
 		DynamicObjectDefinitionLocalizationTable
 			dynamicObjectDefinitionLocalizationTable =
