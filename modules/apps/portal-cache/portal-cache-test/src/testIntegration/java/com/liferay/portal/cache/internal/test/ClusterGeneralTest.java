@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
@@ -96,11 +97,32 @@ public class ClusterGeneralTest implements Serializable {
 
 	@Test
 	public void testCanCreateVirtualInstanceWithClustering() throws Exception {
+
+		String origin1 = PropsUtil.get(
+			PropsKeys.CLUSTER_LINK_CHANNEL_NAME_CONTROL);
+		String origin2 = PropsUtil.get(
+			"cluster.link.channel.name.transport.0");
+
+		PropsUtil.set(
+			PropsKeys.CLUSTER_LINK_CHANNEL_NAME_CONTROL,
+			RandomTestUtil.randomString());
+		PropsUtil.set(
+			"cluster.link.channel.name.transport.0",
+			RandomTestUtil.randomString());
+
 		_assertCanCreateVirtualInstanceWithClustering(
 			_tomcatNode1, _tomcatNode2);
 
 		_assertCanCreateVirtualInstanceWithClustering(
 			_tomcatNode2, _tomcatNode1);
+
+
+		PropsUtil.set(
+			PropsKeys.CLUSTER_LINK_CHANNEL_NAME_CONTROL,
+			origin1);
+		PropsUtil.set(
+			"cluster.link.channel.name.transport.0",
+			origin2);
 	}
 
 	@Test
@@ -270,6 +292,8 @@ public class ClusterGeneralTest implements Serializable {
 
 					return CompanyLocalServiceUtil.fetchCompany(companyId);
 				}));
+
+//		Thread.sleep(5000);
 	}
 
 	private void _assertNodesVisibleToEachOther(
