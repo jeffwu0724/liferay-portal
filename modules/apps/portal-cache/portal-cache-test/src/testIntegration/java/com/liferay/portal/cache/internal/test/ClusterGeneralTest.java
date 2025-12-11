@@ -99,6 +99,15 @@ public class ClusterGeneralTest implements Serializable {
 		_assertCanCreateVirtualInstanceWithClustering(
 			_tomcatNode1, _tomcatNode2);
 
+//		_assertCanCreateVirtualInstanceWithClustering(
+//			_tomcatNode2, _tomcatNode1);
+	}
+
+	@Test
+	public void testCanCreateVirtualInstanceWithClustering2() throws Exception {
+//		_assertCanCreateVirtualInstanceWithClustering(
+//			_tomcatNode1, _tomcatNode2);
+
 		_assertCanCreateVirtualInstanceWithClustering(
 			_tomcatNode2, _tomcatNode1);
 	}
@@ -271,13 +280,14 @@ public class ClusterGeneralTest implements Serializable {
 					return CompanyLocalServiceUtil.fetchCompany(companyId);
 				}));
 
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 	}
 
 	private void _assertNodesVisibleToEachOther(
 			TomcatNode tomcatNode1, TomcatNode tomcatNode2)
 		throws Exception {
 
+		// Assert node 1 has a valid cluster node
 		// Assert node 1 has a valid cluster node
 
 		ClusterNode clusterNode1 = tomcatNode1.syncExecute(
