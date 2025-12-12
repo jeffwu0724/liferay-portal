@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,7 +24,7 @@ import java.util.Set;
 /**
  * @author José Manuel Navarro
  */
-public class AssetVocabularySettingsHelper {
+public class AssetVocabularySettingsHelper implements Serializable {
 
 	public static final long[] DEFAULT_SELECTED_CLASS_NAME_IDS = {
 		AssetCategoryConstants.ALL_CLASS_NAME_ID

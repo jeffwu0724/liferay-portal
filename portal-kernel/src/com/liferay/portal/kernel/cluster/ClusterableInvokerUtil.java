@@ -219,9 +219,7 @@ public class ClusterableInvokerUtil {
 		}
 	}
 
-	private static final long _CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT =
-		GetterUtil.getLong(
-			PropsUtil.get(PropsKeys.CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT));
+	private static final long _CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT = 0L;
 
 	private static final MethodKey _invokeMethodKey = new MethodKey(
 		ClusterableInvokerUtil.class, "_invoke", MethodHandler.class,
