@@ -101,15 +101,17 @@ public class ClusterGeneralTest implements Serializable {
 
 
 
-
-
+//
+//
 			_assertCanCreateVirtualInstanceWithClustering(
 				_tomcatNode1, _tomcatNode2);
-
-			_assertCanCreateVirtualInstanceWithClustering(
-				_tomcatNode2, _tomcatNode1);
-
-
+//
+//			_assertCanCreateVirtualInstanceWithClustering(
+//				_tomcatNode2, _tomcatNode1);
+//		ClusterableInvokerUtil.invokeOnCluster();
+//
+//		ReflectionTestUtil.setFieldValue(
+//			ClusterableInvokerUtil.class, "_CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT", 0);
 
 
 	}

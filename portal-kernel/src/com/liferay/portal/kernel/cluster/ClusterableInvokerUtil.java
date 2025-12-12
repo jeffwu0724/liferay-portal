@@ -89,6 +89,7 @@ public class ClusterableInvokerUtil {
 			methodHandler);
 
 		if (_CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT <= 0) {
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! _CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT is 0");
 			return futureResult.get();
 		}
 
@@ -219,7 +220,7 @@ public class ClusterableInvokerUtil {
 		}
 	}
 
-	private static final long _CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT =
+	private static long _CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT =
 		GetterUtil.getLong(
 			PropsUtil.get(PropsKeys.CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT));
 
