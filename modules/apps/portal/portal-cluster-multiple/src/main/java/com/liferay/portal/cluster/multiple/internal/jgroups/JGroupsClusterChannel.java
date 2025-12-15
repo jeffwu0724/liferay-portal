@@ -154,6 +154,16 @@ public class JGroupsClusterChannel extends BaseClusterChannel {
 			return;
 		}
 
+		if (!_jChannel.isConnected()) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Cluster channel " + _clusterName +
+						" is already disconnected");
+			}
+
+			return;
+		}
+
 		org.jgroups.Address jgroupsAddress = null;
 
 		if (address != null) {
