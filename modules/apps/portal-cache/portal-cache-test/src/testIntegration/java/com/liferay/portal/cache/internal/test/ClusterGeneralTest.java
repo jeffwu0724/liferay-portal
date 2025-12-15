@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.cluster.ClusterNode;
+import com.liferay.portal.kernel.cluster.ClusterableInvokerUtil;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
@@ -236,6 +237,20 @@ public class ClusterGeneralTest implements Serializable {
 	private void _assertCanCreateVirtualInstanceWithClustering(
 			TomcatNode tomcatNode1, TomcatNode tomcatNode2)
 		throws Exception {
+
+		tomcatNode1.syncExecute(
+			() -> {
+				ReflectionTestUtil.setFieldValue(ClusterableInvokerUtil.class, "_CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT", 0L);
+
+				return null;
+			});
+
+		tomcatNode2.syncExecute(
+			() -> {
+				ReflectionTestUtil.setFieldValue(ClusterableInvokerUtil.class, "_CLUSTERABLE_ADVICE_CALL_MASTER_TIMEOUT", 0L);
+
+				return null;
+			});
 
 		long companyId = tomcatNode1.syncExecute(
 			() -> {
