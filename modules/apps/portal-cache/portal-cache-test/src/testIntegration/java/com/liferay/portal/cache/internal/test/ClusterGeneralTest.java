@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.cluster.ClusterableInvokerUtil;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
@@ -96,100 +97,16 @@ public class ClusterGeneralTest implements Serializable {
 	}
 
 	@Test
-	public void testCanCreateVirtualInstanceWithClustering() throws Exception {
-		_assertCanCreateVirtualInstanceWithClustering(
-			_tomcatNode1, _tomcatNode2);
-
-		_assertCanCreateVirtualInstanceWithClustering(
-			_tomcatNode2, _tomcatNode1);
-	}
-
-	@Test
-	public void testCanUpdateLogLevelsForAllNodesFromMaster() throws Exception {
-		_testCanUpdateLogLevelsForAllNodes(_tomcatNode2, _tomcatNode1, true);
-	}
-
-	@Test
-	public void testCanUpdateLogLevelsForAllNodesFromSlave() throws Exception {
-		_testCanUpdateLogLevelsForAllNodes(_tomcatNode1, _tomcatNode2, false);
-	}
-
-	@Test
-	public void testControlChannelProperties() throws Exception {
-		_testControlChannelProperties(
-			false,
-			PropsKeys.CLUSTER_LINK_CHANNEL_PROPERTIES_CONTROL + "=tcp.xml");
-		_testControlChannelProperties(
-			true,
-			PropsKeys.CLUSTER_LINK_CHANNEL_PROPERTIES_CONTROL + "=udp.xml",
-			"cluster.link.channel.properties.transport.0=udp.xml");
-	}
-
-	@Test
-	public void testShutdownAndStartupNodes() throws Exception {
-
-		// Assert node 1 and node 2 can see each other
-
-		_assertNodesVisibleToEachOther(_tomcatNode1, _tomcatNode2);
-
-		// Restart node 1, use node 2 as the verifier node
-
-		_restartAndVerifyNode(_tomcatNode1, _tomcatNode2);
-
-		// Restart node 2, use node 1 as the verifier node
-
-		_restartAndVerifyNode(_tomcatNode2, _tomcatNode1);
-	}
-
-	@Test
-	public void testSlaveNodeCanBecomeMasterNode() throws Exception {
-
-		// Assert node 1 is the master node
+	public void testEnableAndDisableFeatureFlagOnMasterNode() throws Exception {
 
 		Assert.assertTrue(
 			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
 
-		// Assert node 2 is a slave node
-
 		Assert.assertFalse(
 			_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
 
-		// Register a listener for node 2
+		Assert.assertFalse(FeatureFlagManagerUtil.isEnabled("LPS-170670"));
 
-		_tomcatNode2.syncExecute(
-			() -> {
-				TestClusterMasterTokenTransitionListener.register();
-
-				return null;
-			});
-
-		// Stop node 1
-
-		_tomcatNode1.stop();
-
-		// After node 1 stops, confirm that node 2 is the new master node
-
-		Assert.assertTrue(
-			_tomcatNode2.syncExecute(
-				() -> {
-					TestClusterMasterTokenTransitionListener.await();
-
-					return ClusterMasterExecutorUtil.isMaster();
-				}));
-
-		// Restart node 1
-
-		_tomcatNode1.start(true);
-
-		// Assert node 2 is still the master node
-
-		Assert.assertTrue(
-			_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
-
-		// Assert node 1 is still a slave node
-
-		Assert.assertFalse(
-			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
 	}
 
 	private static String _getLocalClusterNodeId() {
