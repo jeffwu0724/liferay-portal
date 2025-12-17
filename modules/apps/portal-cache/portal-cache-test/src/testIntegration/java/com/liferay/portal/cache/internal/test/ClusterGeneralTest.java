@@ -16,19 +16,29 @@ import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.cluster.ClusterableInvokerUtil;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManager;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
+import com.liferay.portal.kernel.feature.flag.constants.FeatureFlagConstants;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portlet.PortalPreferencesWrapper;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
+import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
 import com.liferay.portal.test.cluster.tomcat.TomcatNode;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.beans.PropertyChangeEvent;
@@ -59,10 +69,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 /**
  * @author Jiefeng Wu
@@ -105,7 +119,64 @@ public class ClusterGeneralTest implements Serializable {
 		Assert.assertFalse(
 			_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
 
-		Assert.assertFalse(FeatureFlagManagerUtil.isEnabled("LPS-170670"));
+		//This one work in the main tomcat
+
+		String key = RandomTestUtil.randomString();
+
+		PropsUtil.set(FeatureFlagConstants.getKey(key), Boolean.TRUE.toString());
+
+		Assert.assertTrue(FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(), key));
+
+
+		PropsUtil.set(FeatureFlagConstants.getKey(key), Boolean.FALSE.toString());
+
+		Assert.assertFalse(FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(), key));
+
+
+
+		//This is not working in tomcat 1
+		String key1 = RandomTestUtil.randomString();
+
+		_tomcatNode1.syncExecute(() -> {
+			PropsUtil.set(FeatureFlagConstants.getKey(key1), Boolean.TRUE.toString());
+			Assert.assertTrue(FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(), key1));
+
+			return null;
+		});
+
+
+//
+//		Assert.assertTrue(_tomcatNode1.syncExecute(
+//			() -> {
+//				return FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(), key);
+//			}));
+//
+//		Assert.assertTrue(_tomcatNode2.syncExecute(
+//			() -> {
+//				return FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(),key);
+//			}));
+//
+//		Thread.sleep(10000);
+//
+//		_tomcatNode1.syncExecute(
+//			() -> {
+//				PropsUtil.set(FeatureFlagConstants.getKey(key), Boolean.FALSE.toString());
+//				return null;
+//			});
+//
+//		Assert.assertFalse(_tomcatNode1.syncExecute(
+//			() -> {
+//				return FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(),key);
+//			}));
+//
+//
+//
+//		Assert.assertFalse(_tomcatNode2.syncExecute(
+//			() -> {
+//				return FeatureFlagManagerUtil.isEnabled(PortalUtil.getDefaultCompanyId(),key);
+//			}));
+
+
 
 	}
 
