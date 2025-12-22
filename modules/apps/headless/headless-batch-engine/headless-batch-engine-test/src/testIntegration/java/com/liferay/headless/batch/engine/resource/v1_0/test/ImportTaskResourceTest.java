@@ -74,6 +74,7 @@ public class ImportTaskResourceTest {
 			new LiferayIntegrationTestRule(),
 			PermissionCheckerMethodTestRule.INSTANCE);
 
+	
 	@Test
 	public void testPostImportTask() throws Exception {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
