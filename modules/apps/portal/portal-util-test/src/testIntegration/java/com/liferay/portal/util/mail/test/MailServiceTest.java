@@ -147,6 +147,38 @@ public class MailServiceTest {
 		}
 	}
 
+	@Test
+	public void testMailSessionRefreshesOnConfigurationUpdate()
+		throws Exception {
+
+		long companyId = RandomTestUtil.randomLong();
+		int port1 = 1111;
+		int port2 = 2222;
+
+		_updateAndAssertSMTPPort(companyId, port1);
+
+		_updateAndAssertSMTPPort(companyId, port2);
+
+		_mailService.clearSession();
+	}
+
+	private void _updateAndAssertSMTPPort(long companyId, int port)
+		throws Exception {
+
+		_configurationProvider.saveCompanyConfiguration(
+			companyId,
+			"com.liferay.mail.settings.configuration." +
+				"MailSettingCompanyConfiguration",
+			HashMapDictionaryBuilder.<String, Object>put(
+				"outgoingSMTPPort", port
+			).build());
+
+		Session session = _mailService.getSession(companyId);
+
+		Assert.assertEquals(
+			String.valueOf(port), session.getProperty("mail.smtp.port"));
+	}
+
 	@Inject
 	private CompanyLocalService _companyLocalService;
 
