@@ -173,6 +173,8 @@ public class MailServiceTest {
 				"outgoingSMTPPort", port
 			).build());
 
+		Thread.sleep(1000);
+
 		Session session = _mailService.getSession(companyId);
 
 		Assert.assertEquals(
