@@ -3401,6 +3401,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 			}
 		}
 	}
+	
 
 	private void _addOrUpdateObjectFolders(ServiceContext serviceContext)
 		throws Exception {
