@@ -109,8 +109,8 @@ public class ElasticsearchSearchEngineAdapterImpl
 						}
 
 						try {
-							finalBulkDocumentRequest.accept(
-								_documentRequestExecutor);
+							_documentRequestExecutor.executeBulkDocumentRequest(
+								finalBulkDocumentRequest);
 						}
 						catch (RuntimeException runtimeException) {
 							throw _getRuntimeException(runtimeException);
@@ -148,8 +148,9 @@ public class ElasticsearchSearchEngineAdapterImpl
 			}
 
 			try {
-				S documentResponse = documentRequest.accept(
-					_documentRequestExecutor);
+				S documentResponse =
+					(S)_documentRequestExecutor.executeBulkDocumentRequest(
+						bulkDocumentRequest);
 
 				bulkableDocumentRequests.clear();
 
