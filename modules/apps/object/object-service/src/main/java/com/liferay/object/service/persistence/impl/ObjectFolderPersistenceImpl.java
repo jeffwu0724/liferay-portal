@@ -3034,6 +3034,8 @@ public class ObjectFolderPersistenceImpl
 			throw new NoSuchObjectFolderException(sb.toString());
 		}
 
+		
+
 		return objectFolder;
 	}
 
