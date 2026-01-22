@@ -200,6 +200,9 @@ public class BatchEngineImportTaskExecutorImpl
 	protected void activate(
 		BundleContext bundleContext, Map<String, Object> properties) {
 
+		_log.error(
+			"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! BatchEngineImportTaskExecutorImpl.activate");
+
 		_batchEngineImportTaskExceptionHandlers =
 			ServiceTrackerListFactory.open(
 				bundleContext, BatchEngineImportTaskExceptionHandler.class);
@@ -494,6 +497,9 @@ public class BatchEngineImportTaskExecutorImpl
 			BatchEngineTaskItemDelegate<T> batchEngineTaskItemDelegate, T item,
 			UnsafeFunction<T, T, Exception> unsafeFunction)
 		throws Exception {
+
+		_log.error(
+			"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! BatchEngineImportTaskExecutorImpl._importItem");
 
 		Callable<Void> importItemCallable = _getImportItemCallable(
 			batchEngineImportTask, batchEngineTaskItemDelegate, item,

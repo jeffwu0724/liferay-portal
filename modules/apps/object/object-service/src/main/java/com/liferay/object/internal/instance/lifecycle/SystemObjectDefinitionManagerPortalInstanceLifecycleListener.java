@@ -130,6 +130,9 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 	protected void activate(
 		BundleContext bundleContext, Map<String, Object> properties) {
 
+		_log.error(
+			"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SystemObjectDefinitionManagerPortalInstanceLifecycleListener.activate");
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activate " + bundleContext);
 		}
@@ -223,11 +226,17 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 				(objectDefinition.getVersion() !=
 					systemObjectDefinitionManager.getVersion())) {
 
+				_log.error(
+					"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! _objectFolderLocalService.fetchDefaultObjectFolder");
+
 				ObjectFolder objectFolder =
 					_objectFolderLocalService.fetchDefaultObjectFolder(
 						companyId);
 
 				if (objectFolder == null) {
+
+					_log.error(
+						"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! _objectFolderLocalService.addObjectFolder");
 					objectFolder = _objectFolderLocalService.addObjectFolder(
 						ObjectFolderConstants.EXTERNAL_REFERENCE_CODE_DEFAULT,
 						_userLocalService.getGuestUserId(companyId),
