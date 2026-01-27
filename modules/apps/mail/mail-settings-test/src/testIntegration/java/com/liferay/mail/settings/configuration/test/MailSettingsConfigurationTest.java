@@ -59,5 +59,6 @@ public class MailSettingsConfigurationTest {
 
 	@Inject
 	private MailService _mailService;
+	
 
 }
