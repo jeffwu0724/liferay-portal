@@ -495,6 +495,8 @@ public class BatchEngineImportTaskExecutorImpl
 			UnsafeFunction<T, T, Exception> unsafeFunction)
 		throws Exception {
 
+		Thread.sleep(3000);
+
 		Callable<Void> importItemCallable = _getImportItemCallable(
 			batchEngineImportTask, batchEngineTaskItemDelegate, item,
 			unsafeFunction);
