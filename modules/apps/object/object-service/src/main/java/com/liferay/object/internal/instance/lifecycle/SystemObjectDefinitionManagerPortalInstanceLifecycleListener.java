@@ -235,6 +235,8 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 							ObjectFolderConstants.NAME_DEFAULT),
 						ObjectFolderConstants.NAME_DEFAULT);
 
+					Thread.sleep(3000);
+
 					Role guestRole = _roleLocalService.getRole(
 						companyId, RoleConstants.GUEST);
 
@@ -408,6 +410,9 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 		}
 		catch (PortalException portalException) {
 			_log.error(portalException);
+		}
+		catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
