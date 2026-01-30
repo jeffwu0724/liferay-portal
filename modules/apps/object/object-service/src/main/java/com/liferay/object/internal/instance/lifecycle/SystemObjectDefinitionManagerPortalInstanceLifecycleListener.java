@@ -107,6 +107,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.object.configuration.ObjectConfiguration",
+	property = "service.ranking:Integer=200",
 	service = PortalInstanceLifecycleListener.class
 )
 public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
