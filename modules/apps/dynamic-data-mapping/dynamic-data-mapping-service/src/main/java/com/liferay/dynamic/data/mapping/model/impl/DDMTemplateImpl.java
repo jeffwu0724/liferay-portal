@@ -7,6 +7,7 @@ package com.liferay.dynamic.data.mapping.model.impl;
 
 import com.liferay.dynamic.data.mapping.model.DDMTemplateVersion;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateVersionLocalServiceUtil;
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -22,9 +23,6 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsValues;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.webserver.WebServerServletTokenUtil;
-import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
 
 import java.util.Locale;
 
@@ -35,20 +33,17 @@ public class DDMTemplateImpl extends DDMTemplateBaseImpl {
 
 	@Override
 	public String getDefaultLanguageId() {
-		Document document = null;
+		String name = getName();
 
-		try {
-			document = SAXReaderUtil.read(getName());
+		int startIndex = name.indexOf("default-locale=\"");
 
-			if (document != null) {
-				Element rootElement = document.getRootElement();
+		if (startIndex != -1) {
+			startIndex += 16;
 
-				return rootElement.attributeValue("default-locale");
-			}
-		}
-		catch (Exception exception) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
+			int endIndex = name.indexOf(CharPool.QUOTE, startIndex);
+
+			if (endIndex != -1) {
+				return name.substring(startIndex, endIndex);
 			}
 		}
 
