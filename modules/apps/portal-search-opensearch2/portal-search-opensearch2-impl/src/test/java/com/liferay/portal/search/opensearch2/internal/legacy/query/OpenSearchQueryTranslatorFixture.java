@@ -21,7 +21,7 @@ public class OpenSearchQueryTranslatorFixture {
 
 	public OpenSearchQueryTranslatorFixture() {
 		OpenSearchQueryTranslator openSearchQueryTranslator =
-			new OpenSearchQueryTranslator(null);
+			new OpenSearchQueryTranslator();
 
 		OpenSearchFilterTranslatorFixture openSearchFilterTranslatorFixture =
 			new OpenSearchFilterTranslatorFixture(openSearchQueryTranslator);
