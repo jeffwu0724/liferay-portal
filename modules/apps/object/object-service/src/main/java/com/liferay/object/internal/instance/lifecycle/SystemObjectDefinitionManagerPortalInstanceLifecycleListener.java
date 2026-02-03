@@ -90,7 +90,9 @@ import com.liferay.portal.vulcan.extension.ExtensionProviderRegistry;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.template.info.item.provider.TemplateInfoItemFieldSetProvider;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -226,6 +228,14 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 				ObjectFolder objectFolder =
 					_objectFolderLocalService.fetchDefaultObjectFolder(
 						companyId);
+
+				Thread currentThread = Thread.currentThread();
+
+				_log.info("SystemObjectDefinitionManagerPortalInstanceLifecycleListener thread name: " + currentThread.getName());
+				_log.info("SystemObjectDefinitionManagerPortalInstanceLifecycleListener thread id: " + currentThread.getId());
+				_log.info("SystemObjectDefinitionManagerPortalInstanceLifecycleListener stack trace: " + Arrays.stream(Thread.currentThread().getStackTrace())
+					.map(StackTraceElement::toString)
+					.collect(Collectors.joining("\n\tat ")));
 
 				if (objectFolder == null) {
 					objectFolder = _objectFolderLocalService.addObjectFolder(

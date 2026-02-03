@@ -60,12 +60,14 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -508,6 +510,14 @@ public class BatchEngineImportTaskExecutorImpl
 		Callable<Void> importItemCallable = _getImportItemCallable(
 			batchEngineImportTask, batchEngineTaskItemDelegate, item,
 			unsafeFunction);
+
+		Thread currentThread = Thread.currentThread();
+
+		_log.info("BatchEngineImportTaskExecutorImpl thread name: " + currentThread.getName());
+		_log.info("BatchEngineImportTaskExecutorImpl thread id: " + currentThread.getId());
+		_log.info("BatchEngineImportTaskExecutorImpl stack trace: " + Arrays.stream(Thread.currentThread().getStackTrace())
+			.map(StackTraceElement::toString)
+			.collect(Collectors.joining("\n\tat ")));
 
 		try {
 			if (LazyReferencingThreadLocal.isEnabled()) {
