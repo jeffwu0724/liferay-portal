@@ -160,6 +160,7 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 
 					return systemObjectDefinitionManager;
 				}
+				
 
 				@Override
 				public void modifiedService(
