@@ -12,6 +12,7 @@ import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
 import com.liferay.mail.settings.configuration.MailSettingCompanyConfiguration;
 import com.liferay.mail.settings.configuration.MailSettingSystemConfiguration;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
@@ -41,6 +42,8 @@ import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 
 import java.io.IOException;
+
+import java.lang.reflect.Field;
 
 import java.util.Map;
 import java.util.Properties;
@@ -305,24 +308,31 @@ public class MailServiceImpl
 			}
 		}
 
+		session = Session.getInstance(properties);
+
 		if (smtpAuth) {
-			session = Session.getInstance(
-				properties,
-				new Authenticator() {
+			try {
+				Field field = ReflectionUtil.getDeclaredField(
+					Session.class, "authenticator");
 
-					protected PasswordAuthentication
-						getPasswordAuthentication() {
+				field.set(
+					session,
+					new Authenticator() {
 
-						return new PasswordAuthentication(
-							smtpUser,
-							properties.getProperty(
-								transportPrefix + "password"));
-					}
+						protected PasswordAuthentication
+							getPasswordAuthentication() {
 
-				});
-		}
-		else {
-			session = Session.getInstance(properties);
+							return new PasswordAuthentication(
+								smtpUser,
+								properties.getProperty(
+									transportPrefix + "password"));
+						}
+
+					});
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 		}
 
 		_debug(properties);
