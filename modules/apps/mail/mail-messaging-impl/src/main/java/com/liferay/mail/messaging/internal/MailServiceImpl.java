@@ -452,5 +452,6 @@ public class MailServiceImpl
 	private volatile MailSettingSystemConfiguration
 		_mailSettingSystemConfiguration;
 	private final Map<Long, Session> _sessions = new ConcurrentHashMap<>();
+	
 
 }
