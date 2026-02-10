@@ -147,6 +147,30 @@ public class MailServiceTest {
 		}
 	}
 
+	@Test
+	public void testGetSessionWithSmtpAuthOn() throws Exception {
+		long companyId = RandomTestUtil.randomLong();
+
+		try (CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper =
+					new CompanyConfigurationTemporarySwapper(
+						companyId,
+						"com.liferay.mail.settings.configuration." +
+							"MailSettingCompanyConfiguration",
+						HashMapDictionaryBuilder.<String, Object>put(
+							"smtpUserName", "testUser"
+						).build())) {
+
+			Session session = _mailService.getSession(companyId);
+
+			Assert.assertNotNull(session);
+
+			Assert.assertNotNull(session.getTransport("smtp"));
+
+			_mailService.clearSession();
+		}
+	}
+
 	@Inject
 	private CompanyLocalService _companyLocalService;
 
