@@ -8,11 +8,9 @@ package com.liferay.portal.search.elasticsearch8.internal.search.engine.adapter;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryVariant;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.SearchContext;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.search.elasticsearch8.internal.connection.ElasticsearchClientResolver;
 import com.liferay.portal.search.elasticsearch8.internal.legacy.query.ElasticsearchQueryVisitor;
 import com.liferay.portal.search.elasticsearch8.internal.search.engine.adapter.ccr.ElasticsearchCCRRequestExecutor;
@@ -143,7 +141,7 @@ public class ElasticsearchSearchEngineAdapterImpl
 			List<BulkableDocumentRequest<?>> bulkableDocumentRequests =
 				bulkDocumentRequest.getBulkableDocumentRequests();
 
-			if (bulkableDocumentRequests.size() < _HIBERNATE_JDBC_BATCH_SIZE) {
+			if (bulkableDocumentRequests.size() < Indexer.DEFAULT_INTERVAL) {
 				return null;
 			}
 
@@ -256,9 +254,6 @@ public class ElasticsearchSearchEngineAdapterImpl
 
 		return runtimeException1;
 	}
-
-	private static final int _HIBERNATE_JDBC_BATCH_SIZE = GetterUtil.getInteger(
-		PropsUtil.get(PropsKeys.HIBERNATE_JDBC_BATCH_SIZE));
 
 	private static final ThreadLocal<BulkDocumentRequest> _bulkDocumentRequest =
 		new CentralizedThreadLocal<>(
