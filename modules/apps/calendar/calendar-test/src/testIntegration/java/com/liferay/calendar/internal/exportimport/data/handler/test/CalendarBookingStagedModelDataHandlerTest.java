@@ -116,6 +116,7 @@ public class CalendarBookingStagedModelDataHandlerTest
 				importedCalendarBookingInstance.
 					getRecurringCalendarBookingId());
 		}
+		
 	}
 
 	@Override
