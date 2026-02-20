@@ -1575,5 +1575,6 @@ public class JournalArticleStagedModelDataHandlerTest
 
 	@Inject
 	private SegmentsExperienceLocalService _segmentsExperienceLocalService;
+	
 
 }
