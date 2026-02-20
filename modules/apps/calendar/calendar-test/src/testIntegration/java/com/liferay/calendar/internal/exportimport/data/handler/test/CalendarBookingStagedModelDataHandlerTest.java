@@ -134,6 +134,7 @@ public class CalendarBookingStagedModelDataHandlerTest
 
 		return dependentStagedModelsMap;
 	}
+	
 
 	@Override
 	protected StagedModel addStagedModel(
