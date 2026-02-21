@@ -113,6 +113,7 @@ public abstract class BaseDigitalSalesRoomResourceTestCase {
 			"yyyy-MM-dd'T'HH:mm:ss'Z'");
 	}
 
+	
 	@Before
 	public void setUp() throws Exception {
 		irrelevantGroup = GroupTestUtil.addGroup();
