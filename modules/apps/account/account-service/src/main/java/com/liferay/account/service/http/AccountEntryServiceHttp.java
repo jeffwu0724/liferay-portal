@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @generated
  */
 public class AccountEntryServiceHttp {
+	
 
 	public static void activateAccountEntries(
 			HttpPrincipal httpPrincipal, long[] accountEntryIds)
