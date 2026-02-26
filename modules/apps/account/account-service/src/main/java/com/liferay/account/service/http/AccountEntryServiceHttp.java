@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.MethodKey;
  */
 public class AccountEntryServiceHttp {
 
+	
 	public static void activateAccountEntries(
 			HttpPrincipal httpPrincipal, long[] accountEntryIds)
 		throws com.liferay.portal.kernel.exception.PortalException {
