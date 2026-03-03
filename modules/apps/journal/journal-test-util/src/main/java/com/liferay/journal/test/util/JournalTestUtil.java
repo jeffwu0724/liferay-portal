@@ -447,6 +447,7 @@ public class JournalTestUtil {
 					WorkflowConstants.ACTION_SAVE_DRAFT);
 			}
 		}
+		
 
 		return JournalArticleLocalServiceUtil.addArticle(
 			externalReferenceCode, serviceContext.getUserId(), groupId,
