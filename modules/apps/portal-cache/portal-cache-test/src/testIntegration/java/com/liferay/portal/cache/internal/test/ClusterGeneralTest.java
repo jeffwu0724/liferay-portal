@@ -27,10 +27,13 @@ import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.security.auth.CompanyInheritableThreadLocalCallable;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -58,6 +61,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.FutureTask;
 
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -136,6 +140,71 @@ public class ClusterGeneralTest implements Serializable {
 	public void testEnableAndDisableFeatureFlag() throws Exception {
 		_testEnableAndDisableFeatureFlag(_tomcatNode1, _tomcatNode2);
 		_testEnableAndDisableFeatureFlag(_tomcatNode2, _tomcatNode1);
+	}
+
+	@Test
+	public void testNoErrorOnNodeStartupIfCacheManagerNotReady()
+		throws Exception {
+
+		ClusterNode clusterNode2 = _tomcatNode2.syncExecute(
+			ClusterExecutorUtil::getLocalClusterNode);
+
+		Assert.assertNotNull(clusterNode2);
+
+		_tomcatNode2.stop();
+
+		Assert.assertFalse(
+			_tomcatNode1.syncExecute(
+				() -> {
+					List<ClusterNode> clusterNodes =
+						ClusterExecutorUtil.getClusterNodes();
+
+					return clusterNodes.contains(clusterNode2);
+				}));
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				FutureTask<Void> futureTask = new FutureTask<>(
+					new CompanyInheritableThreadLocalCallable<>(
+						() -> {
+							try {
+								for (int i = 1; i <= 1000; i++) {
+									UserLocalServiceUtil.
+										updateAgreedToTermsOfUse(
+											TestPropsValues.getUserId(), true);
+
+									Thread.sleep(50);
+								}
+							}
+							catch (Exception exception) {
+							}
+
+							return null;
+						}));
+
+				Thread thread = new Thread(futureTask);
+
+				thread.setDaemon(true);
+				thread.start();
+
+				return null;
+			});
+
+		_tomcatNode2.start(true);
+
+		ClusterNode newClusterNode2 = _tomcatNode2.syncExecute(
+			ClusterExecutorUtil::getLocalClusterNode);
+
+		Assert.assertNotNull(clusterNode2);
+
+		Assert.assertTrue(
+			_tomcatNode1.syncExecute(
+				() -> {
+					List<ClusterNode> clusterNodes =
+						ClusterExecutorUtil.getClusterNodes();
+
+					return clusterNodes.contains(newClusterNode2);
+				}));
 	}
 
 	@Test
