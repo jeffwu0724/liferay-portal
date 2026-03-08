@@ -152,10 +152,6 @@ public class GroupFinderImplTest {
 			}
 
 		};
-
-		ReflectionTestUtil.setFieldValue(
-			_groupFinderImpl, "_groupOrganizationClassNameIds",
-			new long[] {1L, 2L});
 	}
 
 	@Test
@@ -231,15 +227,12 @@ public class GroupFinderImplTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				"( select distinct group_.groupid as groupid, replace(",
-				"group_.name, ' lfr_organization', '') as groupname, ",
-				"group_.type_ as grouptype, group_.friendlyurl as ",
-				"groupfriendlyurl from group_ where (group_.companyid = ?) ",
-				"and (group_.parentgroupid = ?) and (group_.livegroupid = 0) ",
-				"and (group_.groupkey != 'control panel') and (lower(",
-				"group_.name) like ? or ? is null) and (lower(",
-				"group_.description) like ? or ? is null) ) order by ",
-				"groupname asc"),
+				"select tempgroup.groupid from (select distinct group_.groupid",
+				", group_.name, group_.type_, group_.friendlyurl from group_ ",
+				"where group_.companyid = ? and group_.parentgroupid = ? and ",
+				"group_.livegroupid = ? and group_.groupkey != ? and (lower(",
+				"group_.name) like ?) and (lower(group_.description) like ?)) ",
+				"tempgroup order by replace(tempgroup.name, ?, ?) asc"),
 			_capturedSQL);
 	}
 
@@ -252,15 +245,13 @@ public class GroupFinderImplTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				"( select distinct group_.groupid as groupid, replace(",
-				"group_.name, ' lfr_organization', '') as groupname, ",
-				"group_.type_ as grouptype, group_.friendlyurl as ",
-				"groupfriendlyurl from group_ where ((group_.classnameid = ",
-				"?)) and (group_.companyid = ?) and (group_.parentgroupid = ",
-				"?) and (group_.livegroupid = 0) and (group_.groupkey != ",
-				"'control panel') and (lower(group_.name) like ? or ? is ",
-				"null) and (lower(group_.description) like ? or ? is null) ) ",
-				"order by groupname asc"),
+				"select tempgroup.groupid from (select distinct group_.groupid",
+				", group_.name, group_.type_, group_.friendlyurl from group_ ",
+				"where group_.companyid = ? and group_.parentgroupid = ? and ",
+				"group_.livegroupid = ? and group_.groupkey != ? and (lower(",
+				"group_.name) like ?) and (lower(group_.description) like ?) ",
+				"and (group_.classnameid = ?)) tempgroup order by replace(",
+				"tempgroup.name, ?, ?) asc"),
 			_capturedSQL);
 	}
 
@@ -273,17 +264,13 @@ public class GroupFinderImplTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				"( select distinct group_.groupid as groupid, replace(",
-				"group_.name, ' lfr_organization', '') as groupname, ",
-				"group_.type_ as grouptype, group_.friendlyurl as ",
-				"groupfriendlyurl from group_ where (group_.companyid = ?) ",
-				"and (group_.parentgroupid = ?) and (group_.livegroupid = 0) ",
-				"and (group_.groupkey != 'control panel') and ((lower(",
-				"group_.name) like ? and ? is not null) or (lower(",
-				"group_.name) like ? and ? is not null)) or ((lower(",
-				"group_.description) like ? and ? is not null) or (lower(",
-				"group_.description) like ? and ? is not null)) ) order by ",
-				"groupname asc"),
+				"select tempgroup.groupid from (select distinct group_.groupid",
+				", group_.name, group_.type_, group_.friendlyurl from group_ ",
+				"where group_.companyid = ? and group_.parentgroupid = ? and ",
+				"group_.livegroupid = ? and group_.groupkey != ? and ((lower(",
+				"group_.name) like ? or lower(group_.name) like ?) or (lower(",
+				"group_.description) like ? or lower(group_.description) like ",
+				"?))) tempgroup order by replace(tempgroup.name, ?, ?) asc"),
 			_capturedSQL);
 	}
 
