@@ -5083,8 +5083,8 @@ information. Make sure to commit in all build-lib-versions results.
 		</run-batch-test>
 	</target>
 
-	<target name="bundle-blacklist-restart-mysql80">
-		<run-bundle-blacklist-restart-test database.type="mysql" database.version="8.0" />
+	<target name="bundle-blacklist-restart-mysql57">
+		<run-bundle-blacklist-restart-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="bundle-blacklist-restart-mysql84">
@@ -8520,8 +8520,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-lpkg-container-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="lpkg-container-mysql84">
-		<run-lpkg-container-test database.type="mysql" database.version="8.4" />
+	<target name="lpkg-container-mysql57">
+		<run-lpkg-container-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="lpkg-container-postgresql163">
@@ -8532,8 +8532,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-lpkg-controller-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="lpkg-controller-mysql84">
-		<run-lpkg-controller-test database.type="mysql" database.version="8.4" />
+	<target name="lpkg-controller-mysql57">
+		<run-lpkg-controller-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="lpkg-controller-postgresql163">
@@ -8544,8 +8544,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-lpkg-override-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="lpkg-override-mysql84">
-		<run-lpkg-override-test database.type="mysql" database.version="8.4" />
+	<target name="lpkg-override-mysql57">
+		<run-lpkg-override-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="lpkg-override-postgresql163">
@@ -8556,8 +8556,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-lpkg-persistence-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="lpkg-persistence-mysql84">
-		<run-lpkg-persistence-test database.type="mysql" database.version="8.4" />
+	<target name="lpkg-persistence-mysql57">
+		<run-lpkg-persistence-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="lpkg-persistence-postgresql163">
@@ -8568,8 +8568,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-lpkg-startup-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="lpkg-startup-mysql84">
-		<run-lpkg-startup-test database.type="mysql" database.version="8.4" />
+	<target name="lpkg-startup-mysql57">
+		<run-lpkg-startup-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="lpkg-startup-postgresql163">
@@ -9023,8 +9023,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-modules-integration-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="modules-integration-mysql84">
-		<run-modules-integration-test database.type="mysql" database.version="8.4" />
+	<target name="modules-integration-mysql57">
+		<run-modules-integration-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="modules-integration-mysql84-jdk17_zulu">
@@ -10038,8 +10038,8 @@ ${output.content}</echo>
 		<run-release-osgi-state-exploded-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="release-osgi-state-exploded-test-mysql84">
-		<run-release-osgi-state-exploded-test database.type="mysql" database.version="8.4" />
+	<target name="release-osgi-state-exploded-test-mysql57">
+		<run-release-osgi-state-exploded-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="release-osgi-state-exploded-test-postgresql163">
@@ -10050,8 +10050,8 @@ ${output.content}</echo>
 		<run-release-osgi-state-lpkg-change-directory-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="release-osgi-state-lpkg-change-directory-test-mysql84">
-		<run-release-osgi-state-lpkg-change-directory-test database.type="mysql" database.version="8.4" />
+	<target name="release-osgi-state-lpkg-change-directory-test-mysql57">
+		<run-release-osgi-state-lpkg-change-directory-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="release-osgi-state-lpkg-change-directory-test-postgresql163">
@@ -10062,8 +10062,8 @@ ${output.content}</echo>
 		<run-release-osgi-state-lpkg-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="release-osgi-state-lpkg-test-mysql84">
-		<run-release-osgi-state-lpkg-test database.type="mysql" database.version="8.4" />
+	<target name="release-osgi-state-lpkg-test-mysql57">
+		<run-release-osgi-state-lpkg-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="release-osgi-state-lpkg-test-postgresql163">
