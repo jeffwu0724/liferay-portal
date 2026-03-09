@@ -908,5 +908,26 @@ public class ClusterGeneralTest implements Serializable {
 		private final CountDownLatch _countDownLatch = new CountDownLatch(1);
 
 	}
+//	Start with a single active node.
+//
+//	From the node, hit home page and check This instance is not registered.
+//
+//	Deploy free type license to the node.
+//
+//	From the node, hit home page and check page loaded correctly.
+//
+//	Start up two additional nodes.
+//
+//	From the new nodes, hit home page and check This instance is not registered.
+//
+//	Deploy free type license to the two new nodes.
+//
+//	From every node, hit home page and check page loaded correctly.
+//
+//	Start up three additional nodes.
+//
+//	From the first three nodes, check that the console has the warnings The maximum number of 3 nodes licensed for this cluster has been exceeded and This current node is within the licensed node count and will not be automatically deactivated nor shut down after the grace period expires.
+//
+//	From every new node, hit home page and check This instance is not registered.
 
 }
