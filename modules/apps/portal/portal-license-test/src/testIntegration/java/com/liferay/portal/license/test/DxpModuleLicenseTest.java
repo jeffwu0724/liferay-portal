@@ -83,7 +83,7 @@ public class DxpModuleLicenseTest {
 
 		response = LicenseTestUtil.hitHomePage("localhost", 8080);
 
-		Assert.assertTrue(response.contains("setup_wizard"));
+		Assert.assertTrue(response.contains("Welcome to Liferay"));
 
 		currentBundleNames = LicenseTestUtil.getCurrentBundleNames();
 
