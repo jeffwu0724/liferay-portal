@@ -9015,8 +9015,8 @@ information. Make sure to commit in all format-javadoc results.
 		<run-modules-integration-test database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="modules-integration-mysql80-jdk21_zulu">
-		<run-modules-integration-test database.type="mysql" database.version="8.0" />
+	<target name="modules-integration-mysql57">
+		<run-modules-integration-test database.type="mysql" database.version="5.7" />
 	</target>
 
 	<target name="modules-integration-mysql80_stable">
