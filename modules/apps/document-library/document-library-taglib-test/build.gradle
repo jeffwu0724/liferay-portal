@@ -1,4 +1,5 @@
 dependencies {
+	compileOnly project(":core:petra:petra-io")
 	testIntegrationImplementation group: "com.liferay.portal", name: "com.liferay.util.taglib", version: "default"
 	testIntegrationImplementation project(":apps:document-library:document-library-taglib")
 	testIntegrationImplementation project(":apps:frontend-taglib:frontend-taglib-clay")
