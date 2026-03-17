@@ -754,13 +754,8 @@ public class ClusterGeneralTest implements Serializable {
 				fileEntry.getFileEntryId()));
 
 		Assert.assertNotNull(syncedFileEntry);
-		Assert.assertEquals(fileEntry.getUuid(), syncedFileEntry.getUuid());
-		Assert.assertEquals(
-			fileEntry.getFileName(), syncedFileEntry.getFileName());
-		Assert.assertEquals(fileEntry.getTitle(), syncedFileEntry.getTitle());
-		Assert.assertEquals(
-			fileEntry.getMimeType(), syncedFileEntry.getMimeType());
-		Assert.assertEquals(fileEntry.getSize(), syncedFileEntry.getSize());
+		Assert.assertEquals(fileEntry, syncedFileEntry);
+
 	}
 
 	private static transient TomcatNode _tomcatNode1;
