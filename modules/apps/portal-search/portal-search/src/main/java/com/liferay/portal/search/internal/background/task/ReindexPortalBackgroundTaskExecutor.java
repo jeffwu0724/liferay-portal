@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.search.SearchEngineHelper;
 import com.liferay.portal.kernel.search.background.task.ReindexBackgroundTaskConstants;
 import com.liferay.portal.kernel.search.background.task.ReindexStatusMessageSenderUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.search.index.ConcurrentReindexManager;
 import com.liferay.portal.search.index.SyncReindexManager;
 import com.liferay.portal.search.internal.SearchEngineInitializer;
@@ -28,6 +29,7 @@ import com.liferay.portal.search.internal.SearchEngineInitializer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.osgi.framework.BundleContext;
@@ -71,8 +73,10 @@ public class ReindexPortalBackgroundTaskExecutor
 		throws Exception {
 
 		long backgroundTaskId = BackgroundTaskThreadLocal.getBackgroundTaskId();
-		ExecutorService executorService =
-			_searchEngineHelper.getDocumentsProducerExecutorService();
+		ExecutorService executorService = Executors.newThreadPerTaskExecutor(
+			new NamedThreadFactory(
+				ReindexPortalBackgroundTaskExecutor.class.getSimpleName(),
+				Thread.NORM_PRIORITY, null));
 		List<Future<?>> futures = new ArrayList<>();
 
 		try (SafeCloseable safeCloseable1 = SearchContext.openBatchMode()) {
@@ -90,7 +94,7 @@ public class ReindexPortalBackgroundTaskExecutor
 
 								_reindexCompany(
 									companyId, companyIds, executionMode,
-									executorService, indexers);
+									indexers);
 
 								return null;
 							}
@@ -101,11 +105,14 @@ public class ReindexPortalBackgroundTaskExecutor
 				future.get();
 			}
 		}
+		finally {
+			executorService.shutdown();
+		}
 	}
 
 	private void _reindexCompany(
 		long companyId, long[] companyIds, String executionMode,
-		ExecutorService executorService, List<Indexer<?>> indexers) {
+		List<Indexer<?>> indexers) {
 
 		ReindexStatusMessageSenderUtil.sendStatusMessage(
 			ReindexBackgroundTaskConstants.PORTAL_START, companyId, companyIds);
@@ -121,8 +128,9 @@ public class ReindexPortalBackgroundTaskExecutor
 			SearchEngineInitializer searchEngineInitializer =
 				new SearchEngineInitializer(
 					companyId, _concurrentReindexManagerSnapshot.get(),
-					executionMode, executorService, indexers,
-					_syncReindexManagerSnapshot.get());
+					executionMode,
+					_searchEngineHelper.getDocumentsProducerExecutorService(),
+					indexers, _syncReindexManagerSnapshot.get());
 
 			searchEngineInitializer.reindex();
 		}
