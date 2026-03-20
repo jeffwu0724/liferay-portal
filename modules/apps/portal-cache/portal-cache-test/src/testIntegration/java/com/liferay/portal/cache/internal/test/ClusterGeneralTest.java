@@ -12,6 +12,7 @@ import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.process.local.LocalProcessLauncher;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringUtil;
+import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
@@ -21,7 +22,11 @@ import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.cluster.ClusterNode;
+import com.liferay.portal.kernel.cluster.ClusterNodeResponse;
+import com.liferay.portal.kernel.cluster.ClusterNodeResponses;
+import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.ClusterableInvokerUtil;
+import com.liferay.portal.kernel.cluster.FutureClusterResponses;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagListener;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
@@ -42,8 +47,11 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -52,6 +60,9 @@ import com.liferay.portal.language.override.service.PLOEntryLocalServiceUtil;
 import com.liferay.portal.model.impl.CompanyImpl;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
 import com.liferay.portal.test.cluster.tomcat.TomcatNode;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.beans.PropertyChangeEvent;
@@ -59,7 +70,10 @@ import java.beans.PropertyChangeListener;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+
+import java.net.InetSocketAddress;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,6 +87,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -83,7 +98,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -124,6 +141,161 @@ public class ClusterGeneralTest implements Serializable {
 	public void testCanCreateVirtualInstanceWithClustering() throws Exception {
 		_testCanCreateVirtualInstanceWithClustering(_tomcatNode1, _tomcatNode2);
 		_testCanCreateVirtualInstanceWithClustering(_tomcatNode2, _tomcatNode1);
+	}
+
+	@Test
+	public void testCanInvokeMethods() throws Exception {
+		Assert.assertTrue(
+			_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		Assert.assertFalse(
+			_tomcatNode2.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		// using groovy
+
+		String tomcatNode1ClusterNodeId = _tomcatNode1.syncExecute(
+			ClusterGeneralTest::_getLocalClusterNodeId);
+
+		String tomcatNode2ClusterNodeId = _tomcatNode2.syncExecute(
+			ClusterGeneralTest::_getLocalClusterNodeId);
+
+		Assert.assertEquals(
+			tomcatNode2ClusterNodeId,
+			_tomcatNode1.syncExecute(() -> _testInvokeMethodPortal()));
+
+		Assert.assertEquals(
+			tomcatNode1ClusterNodeId,
+			_tomcatNode2.syncExecute(() -> _testInvokeMethodPortal()));
+
+		Assert.assertEquals(
+			tomcatNode1ClusterNodeId,
+			_tomcatNode1.syncExecute(() -> _testInvokeMethodPortalOnMaster()));
+
+		Assert.assertEquals(
+			tomcatNode1ClusterNodeId,
+			_tomcatNode2.syncExecute(() -> _testInvokeMethodPortalOnMaster()));
+
+		// using com.liferay.portal.cluster.multiple.sample.web
+
+		Bundle bundle = FrameworkUtil.getBundle(ClusterGeneralTest.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		String location =
+			"inputstream:com.liferay.portal.cluster.multiple.sample.web";
+
+		String resourcePath =
+			"/com.liferay.portal.cluster.multiple.sample.web-1.0.0.jar";
+
+		try (InputStream inputStream =
+				ClusterGeneralTest.class.getResourceAsStream(resourcePath)) {
+
+			if (inputStream == null) {
+				throw new RuntimeException(
+					"Could not find jar at: " + resourcePath);
+			}
+
+			bundle = bundleContext.installBundle(location, inputStream);
+			bundle.start();
+
+			System.out.println(
+				"Successfully deployed: " + bundle.getSymbolicName());
+		}
+
+		int port1 = _tomcatNode1.getConnectorPort();
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~port 1: " + port1);
+		int port2 = _tomcatNode2.getConnectorPort();
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~port 2: " + port2);
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				ClusterNode localClusterNode =
+					ClusterExecutorUtil.getLocalClusterNode();
+
+				ReflectionTestUtil.setFieldValue(
+					localClusterNode, "_portalInetSocketAddress",
+					new InetSocketAddress("localhost", port1));
+
+				return null;
+			});
+
+		_tomcatNode2.syncExecute(
+			() -> {
+				ClusterNode localClusterNode =
+					ClusterExecutorUtil.getLocalClusterNode();
+
+				ReflectionTestUtil.setFieldValue(
+					localClusterNode, "_portalInetSocketAddress",
+					new InetSocketAddress("localhost", port2));
+
+				return null;
+			});
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				Company company = CompanyTestUtil.addCompany();
+
+				try (LogCapture logCapture =
+						LoggerTestUtil.configureLog4JLogger(
+							"com.liferay.portal.cluster.multiple.sample.web.internal.ClusterSampleDispatcher",
+							LoggerTestUtil.INFO)) {
+
+					try (ConfigurationTemporarySwapper
+							configurationTemporarySwapper =
+								new ConfigurationTemporarySwapper(
+									"com.liferay.portal.cluster.multiple.sample.web.internal.configuration.ClusterSampleConfiguration",
+									HashMapDictionaryBuilder.
+										<String, Object>put(
+											"clusterSampleCommand",
+											"invoke-method-module"
+										).build())) {
+
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~");
+					}
+
+					List<LogEntry> logEntries = logCapture.getLogEntries();
+
+					return logEntries.get(
+						0
+					).getMessage(
+					).contains(
+						"Result of invoke-method-module: " + port2
+					);
+				}
+			});
+
+		_tomcatNode2.syncExecute(
+			() -> {
+				Company company = CompanyTestUtil.addCompany();
+
+				try (LogCapture logCapture =
+						LoggerTestUtil.configureLog4JLogger(
+							"com.liferay.portal.cluster.multiple.sample.web.internal.ClusterSampleDispatcher",
+							LoggerTestUtil.INFO)) {
+
+					try (ConfigurationTemporarySwapper
+							configurationTemporarySwapper =
+								new ConfigurationTemporarySwapper(
+									"com.liferay.portal.cluster.multiple.sample.web.internal.configuration.ClusterSampleConfiguration",
+									HashMapDictionaryBuilder.
+										<String, Object>put(
+											"clusterSampleCommand",
+											"invoke-method-module"
+										).build())) {
+
+						System.out.println("+++++++++++++++++++++++=");
+					}
+
+					List<LogEntry> logEntries = logCapture.getLogEntries();
+
+					return logEntries.get(
+						0
+					).getMessage(
+					).contains(
+						"Result of invoke-method-module: " + port1
+					);
+				}
+			});
 	}
 
 	@Test
@@ -733,6 +905,72 @@ public class ClusterGeneralTest implements Serializable {
 					return FeatureFlagManagerUtil.isEnabled(
 						PortalUtil.getDefaultCompanyId(), key);
 				}));
+	}
+
+	private Serializable _testInvokeMethodPortal() {
+		ClusterNode localClusterNode =
+			ClusterExecutorUtil.getLocalClusterNode();
+
+		ClusterNode targetClusterNode = null;
+
+		for (ClusterNode clusterNode : ClusterExecutorUtil.getClusterNodes()) {
+			if (!clusterNode.equals(localClusterNode)) {
+				targetClusterNode = clusterNode;
+
+				break;
+			}
+		}
+
+		if (targetClusterNode == null) {
+			return null;
+		}
+
+		MethodKey methodKey = new MethodKey(
+			ClusterExecutorUtil.class, "getLocalClusterNode");
+
+		MethodHandler methodHandler = new MethodHandler(methodKey);
+
+		ClusterRequest clusterRequest = ClusterRequest.createUnicastRequest(
+			methodHandler, targetClusterNode.getClusterNodeId());
+
+		FutureClusterResponses futureClusterResponses =
+			ClusterExecutorUtil.execute(clusterRequest);
+
+		try {
+			ClusterNodeResponses clusterNodeResponses =
+				futureClusterResponses.get();
+
+			ClusterNodeResponse clusterNodeResponse =
+				clusterNodeResponses.getClusterResponse(
+					targetClusterNode.getClusterNodeId());
+
+			ClusterNode clusterNode =
+				(ClusterNode)clusterNodeResponse.getResult();
+
+			return clusterNode.getClusterNodeId();
+		}
+		catch (Exception exception) {
+			return null;
+		}
+	}
+
+	private Serializable _testInvokeMethodPortalOnMaster() {
+		MethodKey methodKey = new MethodKey(
+			ClusterExecutorUtil.class, "getLocalClusterNode");
+
+		MethodHandler methodHandler = new MethodHandler(methodKey);
+
+		Future<ClusterNode> future = ClusterMasterExecutorUtil.executeOnMaster(
+			methodHandler);
+
+		try {
+			ClusterNode clusterNode = future.get();
+
+			return clusterNode.getClusterNodeId();
+		}
+		catch (Exception exception) {
+			return null;
+		}
 	}
 
 	private void _testValidateFileEntryOnSeparateNodes(
