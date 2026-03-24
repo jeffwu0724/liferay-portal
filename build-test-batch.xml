@@ -10389,8 +10389,6 @@ tar --extract --file=liferay-portal-source.tar.gz modules/core/portal-bootstrap/
 					<arg value="${liferay.portal.branch}..HEAD" />
 				</exec>
 
-				<antcall target="service-builder" />
-
 				<if>
 					<or>
 						<contains string="${git.diff}" substring="modules${file.separator}util${file.separator}source-formatter" />
