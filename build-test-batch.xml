@@ -10370,6 +10370,8 @@ tar --extract --file=liferay-portal-source.tar.gz modules/core/portal-bootstrap/
 					<property name="source.print.errors" value="false" />
 					<property name="source.use.properties" value="false" />
 				</ant>
+
+				<execute-ant-target-build-services ant.target.file="portal-impl/build.xml" ant.target.name="build-services" />
 			</test-action>
 
 			<test-set-up>
