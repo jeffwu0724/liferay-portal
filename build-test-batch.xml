@@ -10327,6 +10327,7 @@ tar --extract --file=liferay-portal-source.tar.gz modules/core/portal-bootstrap/
 	</target>
 
 	<target name="service-builder">
+		<stopwatch name="timer.serviceBuilder" action="start" />
 		<run-batch-test>
 			<test-action>
 				<if>
@@ -10353,7 +10354,9 @@ tar --extract --file=liferay-portal-source.tar.gz modules/core/portal-bootstrap/
 						</not>
 					</or>
 					<then>
+						<stopwatch name="timer.insideBuildServices" action="start" />
 						<execute-ant-target-build-services ant.target.file="portal-impl/build.xml" ant.target.name="build-services" />
+						<stopwatch name="timer.insideBuildServices" action="total" />
 					</then>
 				</if>
 			</test-action>
@@ -10362,6 +10365,7 @@ tar --extract --file=liferay-portal-source.tar.gz modules/core/portal-bootstrap/
 				<setup-test-environment />
 			</test-set-up>
 		</run-batch-test>
+		<stopwatch name="timer.serviceBuilder" action="total" />
 	</target>
 
 	<target name="setup-testable-tomcat-gc">
