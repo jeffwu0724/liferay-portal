@@ -418,6 +418,7 @@ mariadb.executable=${mariadb.executable}]]></echo>
 					<local name="ant.target.file.name" />
 
 					<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DEBUG: The original file path is: @{ant.target.file}" />
+					<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Current ant.target.dir is: ${ant.target.dir}" />
 
 					<propertyregex
 						input="@{ant.target.file}"
@@ -439,7 +440,7 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 					<record-git-diffs-build-services>
 						<action>
-
+							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!The base directory is: ${basedir}" />
 							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Current ant.target.dir is: ${ant.target.dir}" />
 
 							<ant antfile="${ant.target.file.name}" dir="${ant.target.dir}" target="@{ant.target.name}" />
