@@ -24,6 +24,8 @@
 		<attribute name="service.file" />
 		<attribute default="false" name="skip.compile" />
 		<sequential>
+
+			<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DEBUG: project.dir is set to: ${project.dir}" />
 			<java
 				classname="com.liferay.portal.tools.service.builder.ServiceBuilder"
 				classpathref="service.builder.classpath"
