@@ -435,8 +435,15 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 					<record action="start" name="${project.dir}/execute.ant.target.log" />
 
+					<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! basedir is: ${basedir}" />
+					<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! user.dir is: ${user.dir}" />
+
 					<record-git-diffs-build-services>
 						<action>
+							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {ant.target.file} is: @{ant.target.file}" />
+							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {project.dir} is: ${project.dir}" />
+							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {ant.target.name} is: @{ant.target.name}" />
+
 							<ant antfile="${ant.target.file.name}" dir="${ant.target.dir}" target="@{ant.target.name}" />
 						</action>
 					</record-git-diffs-build-services>

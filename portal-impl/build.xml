@@ -24,11 +24,13 @@
 		<attribute name="service.file" />
 		<attribute default="false" name="skip.compile" />
 		<sequential>
+
 			<java
 				classname="com.liferay.portal.tools.service.builder.ServiceBuilder"
 				classpathref="service.builder.classpath"
+				dir="${project.dir}"
 				failonerror="true"
-				fork="${fork.mode}"
+				fork="true"
 				logError="true"
 				newenvironment="${fork.mode}"
 			>
@@ -358,8 +360,9 @@
 		<java
 			classname="com.liferay.portal.tools.service.builder.ServiceBuilder"
 			classpathref="service.builder.classpath"
+			dir="${project.dir}"
 			failonerror="true"
-			fork="${fork.mode}"
+			fork="true"
 			logError="true"
 			newenvironment="${fork.mode}"
 			outputproperty="service.builder.batch.output"
