@@ -1581,20 +1581,20 @@ app.server.type=@{app.server.type}]]></echo>
 				<format pattern="yyyyMMddkkmmssSSS" property="tstamp" />
 			</tstamp>
 
-			<exec executable="git" output="${tstamp}.diff">
+			<exec executable="git" output="${tstamp}.diff" dir="${project.dir}">
 				<arg value="diff" />
 				<arg value="--" />
-				<arg value="." />
+				<arg value="${ant.target.dir}" />
 				<arg value=":!*/*-portlet-service.jar" />
 				<arg value=":!*/packageinfo" />
 				<arg value=":!*/src/main/resources/service.properties" />
 				<arg value=":!*/src/service.properties" />
 			</exec>
 
-			<exec executable="git">
+			<exec executable="git" dir="${project.dir}">
 				<arg value="checkout" />
 				<arg value="--" />
-				<arg value="." />
+				<arg value="${ant.target.dir}" />
 			</exec>
 
 			<loadfile
