@@ -52,6 +52,7 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.security.auth.AuthException;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
@@ -77,6 +78,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.language.override.model.PLOEntry;
 import com.liferay.portal.language.override.service.PLOEntryLocalServiceUtil;
 import com.liferay.portal.model.impl.CompanyImpl;
+import com.liferay.portal.security.auth.session.AuthenticatedSessionManagerUtil;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
 import com.liferay.portal.test.cluster.tomcat.TomcatNode;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -115,6 +117,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+
+import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * @author Jiefeng Wu
@@ -326,6 +330,92 @@ public class ClusterGeneralTest implements Serializable {
 	}
 
 	@Test
+	public void testCanUpdatePortalPropertiesWithMultipleClusters()
+		throws Exception {
+
+		String newProperty = "company.security.auth.type=screenName";
+
+		Assert.assertEquals(
+			"emailAddress",
+			_tomcatNode1.syncExecute(
+				() -> PropsUtil.get("company.security.auth.type")));
+		Assert.assertEquals(
+			"emailAddress",
+			_tomcatNode2.syncExecute(
+				() -> PropsUtil.get("company.security.auth.type")));
+
+		_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
+		_assertAuthenticationSucceeds(_tomcatNode2, "test@liferay.com");
+		_assertAuthenticationFails(_tomcatNode1, "test");
+		_assertAuthenticationFails(_tomcatNode2, "test");
+
+		try (Closeable closeable1 = _applyPortalExtPropertiesLines(
+				true, _tomcatNode2, newProperty)) {
+
+			Assert.assertEquals(
+				"emailAddress",
+				_tomcatNode1.syncExecute(
+					() -> PropsUtil.get("company.security.auth.type")));
+
+			Assert.assertEquals(
+				"screenName",
+				_tomcatNode2.syncExecute(
+					() -> PropsUtil.get("company.security.auth.type")));
+
+			_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
+			_assertAuthenticationSucceeds(_tomcatNode2, "test");
+			_assertAuthenticationFails(_tomcatNode1, "test");
+			_assertAuthenticationFails(_tomcatNode2, "test@liferay.com");
+
+			try (Closeable closeable2 = _applyPortalExtPropertiesLines(
+					true, _tomcatNode1, newProperty)) {
+
+				Assert.assertEquals(
+					"screenName",
+					_tomcatNode1.syncExecute(
+						() -> PropsUtil.get("company.security.auth.type")));
+				Assert.assertEquals(
+					"screenName",
+					_tomcatNode2.syncExecute(
+						() -> PropsUtil.get("company.security.auth.type")));
+
+				_assertAuthenticationSucceeds(_tomcatNode1, "test");
+				_assertAuthenticationSucceeds(_tomcatNode2, "test");
+				_assertAuthenticationFails(_tomcatNode1, "test@liferay.com");
+				_assertAuthenticationFails(_tomcatNode2, "test@liferay.com");
+			}
+
+			Assert.assertEquals(
+				"emailAddress",
+				_tomcatNode1.syncExecute(
+					() -> PropsUtil.get("company.security.auth.type")));
+			Assert.assertEquals(
+				"screenName",
+				_tomcatNode2.syncExecute(
+					() -> PropsUtil.get("company.security.auth.type")));
+
+			_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
+			_assertAuthenticationSucceeds(_tomcatNode2, "test");
+			_assertAuthenticationFails(_tomcatNode1, "test");
+			_assertAuthenticationFails(_tomcatNode2, "test@liferay.com");
+		}
+
+		Assert.assertEquals(
+			"emailAddress",
+			_tomcatNode1.syncExecute(
+				() -> PropsUtil.get("company.security.auth.type")));
+		Assert.assertEquals(
+			"emailAddress",
+			_tomcatNode2.syncExecute(
+				() -> PropsUtil.get("company.security.auth.type")));
+
+		_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
+		_assertAuthenticationSucceeds(_tomcatNode2, "test@liferay.com");
+		_assertAuthenticationFails(_tomcatNode1, "test");
+		_assertAuthenticationFails(_tomcatNode2, "test");
+	}
+
+	@Test
 	public void testControlChannelProperties() throws Exception {
 		_testControlChannelProperties(
 			false,
@@ -526,6 +616,45 @@ public class ClusterGeneralTest implements Serializable {
 				throw new IOException(exception);
 			}
 		};
+	}
+
+	private void _assertAuthenticationFails(TomcatNode tomcatNode, String login)
+		throws Exception {
+
+		Assert.assertTrue(
+			tomcatNode.syncExecute(
+				() -> {
+					try {
+						AuthenticatedSessionManagerUtil.getAuthenticatedUserId(
+							new MockHttpServletRequest(), login,
+							TestPropsValues.USER_PASSWORD, null);
+
+						return Boolean.FALSE;
+					}
+					catch (AuthException authException) {
+						return Boolean.TRUE;
+					}
+				}));
+	}
+
+	private void _assertAuthenticationSucceeds(
+			TomcatNode tomcatNode, String login)
+		throws Exception {
+
+		Assert.assertTrue(
+			tomcatNode.syncExecute(
+				() -> {
+					try {
+						AuthenticatedSessionManagerUtil.getAuthenticatedUserId(
+							new MockHttpServletRequest(), login,
+							TestPropsValues.USER_PASSWORD, null);
+
+						return Boolean.TRUE;
+					}
+					catch (AuthException authException) {
+						return Boolean.FALSE;
+					}
+				}));
 	}
 
 	private void _assertNodesVisibleToEachOther(
