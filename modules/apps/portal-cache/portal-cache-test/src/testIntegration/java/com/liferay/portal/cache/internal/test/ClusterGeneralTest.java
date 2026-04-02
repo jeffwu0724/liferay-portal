@@ -17,6 +17,10 @@ import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.journal.model.JournalArticle;
+import com.liferay.journal.service.JournalArticleLocalServiceUtil;
+import com.liferay.journal.test.util.JournalTestUtil;
+import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.process.local.LocalProcessLauncher;
 import com.liferay.petra.string.CharPool;
@@ -42,8 +46,11 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutTypePortlet;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
+import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Hits;
@@ -54,6 +61,7 @@ import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.constants.TestDataConstants;
@@ -68,11 +76,13 @@ import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.language.override.model.PLOEntry;
@@ -93,6 +103,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -342,6 +353,100 @@ public class ClusterGeneralTest implements Serializable {
 	@Test
 	public void testCanUpdateLogLevelsForAllNodesFromSlave() throws Exception {
 		_testCanUpdateLogLevelsForAllNodes(_tomcatNode1, _tomcatNode2, false);
+	}
+
+	@Test
+	public void testCanUpdatePortalPropertiesWithMultipleClusters()
+		throws Exception {
+
+		long groupId = TestPropsValues.getGroupId();
+		String newProperty = "company.security.auth.type=screenName";
+
+		Assert.assertEquals(
+			"emailAddress",
+			_tomcatNode2.syncExecute(
+				() -> PropsUtil.get("company.security.auth.type")));
+
+		try (Closeable closeable1 = _applyPortalExtPropertiesLines(
+				true, _tomcatNode2, newProperty)) {
+
+			Assert.assertEquals(
+				"screenName",
+				_tomcatNode2.syncExecute(
+					() -> PropsUtil.get("company.security.auth.type")));
+
+			JournalArticle journalArticle = _tomcatNode2.syncExecute(
+				() -> JournalTestUtil.addArticle(
+					groupId, "WC WebContent Title Cluster",
+					"WC WebContent Content Cluster"));
+
+			Assert.assertEquals(
+				"emailAddress",
+				_tomcatNode1.syncExecute(
+					() -> PropsUtil.get("company.security.auth.type")));
+
+			Assert.assertNotNull(
+				_tomcatNode1.syncExecute(
+					() -> JournalArticleLocalServiceUtil.fetchArticle(
+						groupId, journalArticle.getArticleId())));
+
+			try (Closeable closeable2 = _applyPortalExtPropertiesLines(
+					true, _tomcatNode1, newProperty)) {
+
+				Assert.assertEquals(
+					"screenName",
+					_tomcatNode1.syncExecute(
+						() -> PropsUtil.get("company.security.auth.type")));
+
+				_tomcatNode1.syncExecute(
+					() -> {
+						long adminUserId = TestPropsValues.getUserId();
+
+						PermissionThreadLocal.setPermissionChecker(
+							PermissionCheckerFactoryUtil.create(
+								UserLocalServiceUtil.getUser(adminUserId)));
+
+						Layout layout = LayoutTestUtil.addTypePortletLayout(
+							groupId, "Documents and Media Page", false);
+
+						layout = LayoutTestUtil.updateLayoutTemplateId(
+							layout, "1_column");
+
+						LayoutTestUtil.addPortletToLayout(
+							adminUserId, layout, PortletKeys.DOCUMENT_LIBRARY,
+							"column-1",
+							HashMapBuilder.put(
+								"enableActionsMenu", new String[] {"true"}
+							).build());
+
+						return null;
+					});
+
+				Assert.assertEquals(
+					"screenName",
+					_tomcatNode2.syncExecute(
+						() -> PropsUtil.get("company.security.auth.type")));
+
+				List<String> portletIds = _tomcatNode2.syncExecute(
+					() -> {
+						Layout layout =
+							LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
+								groupId, false, "/documents-and-media-page");
+
+						LayoutTypePortlet layoutTypePortlet =
+							(LayoutTypePortlet)layout.getLayoutType();
+
+						return new ArrayList<>(
+							layoutTypePortlet.getPortletIds());
+					});
+
+				Assert.assertFalse(portletIds.isEmpty());
+
+				Assert.assertEquals(
+					PortletKeys.DOCUMENT_LIBRARY,
+					PortletIdCodec.decodePortletName(portletIds.get(0)));
+			}
+		}
 	}
 
 	@Test
