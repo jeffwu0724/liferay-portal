@@ -316,6 +316,10 @@
 	</target>
 
 	<target name="build-services">
+
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! inside build-services: basedir is: ${basedir}" />
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! inside build-services: user.dir is: ${user.dir}" />
+
 		<build-service
 			hbm.file="counter-hbm.xml"
 			service.file="${basedir}/src/com/liferay/counter/service.xml"
