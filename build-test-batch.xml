@@ -444,9 +444,22 @@ mariadb.executable=${mariadb.executable}]]></echo>
 							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {project.dir} is: ${project.dir}" />
 							<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {ant.target.name} is: @{ant.target.name}" />
 
-							<ant antfile="${ant.target.file.name}" dir="${ant.target.dir}" target="@{ant.target.name}" />
+
+							<beanshell>
+								   String projectDir = project.getProperty("project.dir");
+
+								   if (projectDir != null) {
+									   System.setProperty("user.dir", projectDir);
+									   System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! [BeanShell] user.dir: " + System.getProperty("user.dir"));
+								   }
+
+							</beanshell>
+
+							<ant antfile="${ant.target.file.name}" dir="${ant.target.dir}" target="@{ant.target.name}"/>
+
 						</action>
 					</record-git-diffs-build-services>
+
 
 					<generate-backend-batch-junit-report-ant-target
 						ant.target.failure.count="0"
@@ -1581,20 +1594,20 @@ app.server.type=@{app.server.type}]]></echo>
 				<format pattern="yyyyMMddkkmmssSSS" property="tstamp" />
 			</tstamp>
 
-			<exec executable="git" output="${tstamp}.diff" dir="${project.dir}">
+			<exec executable="git" output="${tstamp}.diff">
 				<arg value="diff" />
 				<arg value="--" />
-				<arg value="${ant.target.dir}" />
+				<arg value="." />
 				<arg value=":!*/*-portlet-service.jar" />
 				<arg value=":!*/packageinfo" />
 				<arg value=":!*/src/main/resources/service.properties" />
 				<arg value=":!*/src/service.properties" />
 			</exec>
 
-			<exec executable="git" dir="${project.dir}">
+			<exec executable="git">
 				<arg value="checkout" />
 				<arg value="--" />
-				<arg value="${ant.target.dir}" />
+				<arg value="." />
 			</exec>
 
 			<loadfile
