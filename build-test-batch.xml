@@ -445,7 +445,16 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 					<record-git-diffs-build-services>
 						<action>
-							<ant antfile="${ant.target.file.name}" dir="${ant.target.dir}" target="@{ant.target.name}" />
+<!--							<ant antfile="${ant.target.file.name}" dir="${ant.target.dir}" target="@{ant.target.name}" />-->
+							<exec executable="ant" dir="${ant.target.dir}" failonerror="true">
+								<arg value="-f" />
+								<arg value="${ant.target.file.name}" />
+
+								<arg value="@{ant.target.name}" />
+
+								<arg value="-Dproject.dir=${project.dir}" />
+								<arg value="-Dfork.mode=false" />
+							</exec>
 						</action>
 					</record-git-diffs-build-services>
 
