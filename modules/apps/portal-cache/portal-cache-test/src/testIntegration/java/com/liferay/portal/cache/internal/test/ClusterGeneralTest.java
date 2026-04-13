@@ -12,6 +12,8 @@ import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalServiceUtil;
 import com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil;
 import com.liferay.asset.kernel.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.blogs.model.BlogsEntry;
+import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
@@ -40,18 +42,30 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.constants.TestDataConstants;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.SearchContextTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -133,6 +147,84 @@ public class ClusterGeneralTest implements Serializable {
 		_tomcatNode2 = builder2.build();
 
 		_tomcatNode2.start(true);
+	}
+
+	@Test
+	public void testAddAndDeleteBlogEntriesOnSeparateNodes() throws Exception {
+		long groupId = TestPropsValues.getGroupId();
+		long userId = TestPropsValues.getUserId();
+
+		BlogsEntry blogsEntry1 = _tomcatNode1.syncExecute(
+			() -> BlogsEntryLocalServiceUtil.addEntry(
+				userId, "Blogs Entry1 Title", "Blogs Entry1 Content",
+				ServiceContextTestUtil.getServiceContext(groupId, userId)));
+
+		Assert.assertNotNull(
+			_tomcatNode2.syncExecute(
+				() -> BlogsEntryLocalServiceUtil.fetchBlogsEntry(
+					blogsEntry1.getEntryId())));
+
+		BlogsEntry blogsEntry2 = _tomcatNode2.syncExecute(
+			() -> BlogsEntryLocalServiceUtil.addEntry(
+				userId, "Blogs Entry2 Title", "Blogs Entry2 Content",
+				ServiceContextTestUtil.getServiceContext(groupId, userId)));
+
+		Assert.assertNotNull(
+			_tomcatNode1.syncExecute(
+				() -> BlogsEntryLocalServiceUtil.fetchBlogsEntry(
+					blogsEntry2.getEntryId())));
+
+		_tomcatNode2.syncExecute(
+			() -> {
+				BlogsEntryLocalServiceUtil.moveEntryToTrash(
+					userId, blogsEntry2.getEntryId());
+
+				TrashHandler trashHandler =
+					TrashHandlerRegistryUtil.getTrashHandler(
+						BlogsEntry.class.getName());
+
+				if (trashHandler != null) {
+					trashHandler.deleteTrashEntry(blogsEntry2.getEntryId());
+				}
+
+				return null;
+			});
+
+		Assert.assertNotNull(
+			_tomcatNode1.syncExecute(
+				() -> BlogsEntryLocalServiceUtil.fetchBlogsEntry(
+					blogsEntry1.getEntryId())));
+
+		Assert.assertNull(
+			_tomcatNode1.syncExecute(
+				() -> BlogsEntryLocalServiceUtil.fetchBlogsEntry(
+					blogsEntry2.getEntryId())));
+
+		Hits hits = _tomcatNode1.syncExecute(
+			() -> {
+				User user = UserTestUtil.addUser();
+
+				try {
+					PermissionThreadLocal.setPermissionChecker(
+						PermissionCheckerFactoryUtil.create(user));
+
+					Indexer<BlogsEntry> indexer =
+						IndexerRegistryUtil.getIndexer(BlogsEntry.class);
+
+					SearchContext searchContext =
+						SearchContextTestUtil.getSearchContext();
+
+					searchContext.setKeywords("Entry2");
+
+					return indexer.search(searchContext);
+				}
+				finally {
+					PermissionThreadLocal.setPermissionChecker(null);
+					UserLocalServiceUtil.deleteUser(user);
+				}
+			});
+
+		Assert.assertEquals(hits.toString(), 0, hits.getLength());
 	}
 
 	@Test
