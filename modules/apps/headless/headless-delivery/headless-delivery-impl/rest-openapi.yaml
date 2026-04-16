@@ -107,6 +107,9 @@ components:
                     format: date-time
                     readOnly: true
                     type: string
+                testField:
+                    description: My test field.
+                    type: fooBarInvalidType
                 datePublished:
                     description:
                         The blog post's publication date.
