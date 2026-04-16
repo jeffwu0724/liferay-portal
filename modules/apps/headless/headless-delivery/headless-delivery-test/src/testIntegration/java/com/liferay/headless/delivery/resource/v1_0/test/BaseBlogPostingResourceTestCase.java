@@ -224,6 +224,7 @@ public abstract class BaseBlogPostingResourceTestCase {
 		blogPosting.setExternalReferenceCode(regex);
 		blogPosting.setFriendlyUrlPath(regex);
 		blogPosting.setHeadline(regex);
+		blogPosting.setTestField(regex);
 
 		String json = BlogPostingSerDes.toJSON(blogPosting);
 
@@ -238,6 +239,7 @@ public abstract class BaseBlogPostingResourceTestCase {
 		Assert.assertEquals(regex, blogPosting.getExternalReferenceCode());
 		Assert.assertEquals(regex, blogPosting.getFriendlyUrlPath());
 		Assert.assertEquals(regex, blogPosting.getHeadline());
+		Assert.assertEquals(regex, blogPosting.getTestField());
 	}
 
 	@Test
@@ -2673,6 +2675,14 @@ public abstract class BaseBlogPostingResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("testField", additionalAssertFieldName)) {
+				if (blogPosting.getTestField() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("viewableBy", additionalAssertFieldName)) {
 				if (blogPosting.getViewableBy() == null) {
 					valid = false;
@@ -3121,6 +3131,17 @@ public abstract class BaseBlogPostingResourceTestCase {
 				if (!Objects.deepEquals(
 						blogPosting1.getTaxonomyCategoryIds(),
 						blogPosting2.getTaxonomyCategoryIds())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("testField", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						blogPosting1.getTestField(),
+						blogPosting2.getTestField())) {
 
 					return false;
 				}
@@ -3815,6 +3836,52 @@ public abstract class BaseBlogPostingResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("testField")) {
+			Object object = blogPosting.getTestField();
+
+			String value = String.valueOf(object);
+
+			if (operator.equals("contains")) {
+				sb = new StringBundler();
+
+				sb.append("contains(");
+				sb.append(entityFieldName);
+				sb.append(",'");
+
+				if ((object != null) && (value.length() > 2)) {
+					sb.append(value.substring(1, value.length() - 1));
+				}
+				else {
+					sb.append(value);
+				}
+
+				sb.append("')");
+			}
+			else if (operator.equals("startswith")) {
+				sb = new StringBundler();
+
+				sb.append("startswith(");
+				sb.append(entityFieldName);
+				sb.append(",'");
+
+				if ((object != null) && (value.length() > 1)) {
+					sb.append(value.substring(0, value.length() - 1));
+				}
+				else {
+					sb.append(value);
+				}
+
+				sb.append("')");
+			}
+			else {
+				sb.append("'");
+				sb.append(value);
+				sb.append("'");
+			}
+
+			return sb.toString();
+		}
+
 		if (entityFieldName.equals("viewableBy")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -3885,6 +3952,8 @@ public abstract class BaseBlogPostingResourceTestCase {
 				id = RandomTestUtil.randomLong();
 				numberOfComments = RandomTestUtil.randomInt();
 				siteId = testGroup.getGroupId();
+				testField = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 			}
 		};
 	}
@@ -4169,4 +4238,4 @@ public abstract class BaseBlogPostingResourceTestCase {
 		_vulcanCRUDItemDelegateBuilderRegistry;
 
 }
-// LIFERAY-REST-BUILDER-HASH:1875528085
+// LIFERAY-REST-BUILDER-HASH:-1566408463

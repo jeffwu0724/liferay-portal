@@ -393,6 +393,20 @@ public class BlogPostingSerDes {
 			sb.append("]");
 		}
 
+		if (blogPosting.getTestField() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"testField\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(blogPosting.getTestField()));
+
+			sb.append("\"");
+		}
+
 		if (blogPosting.getViewableBy() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -617,6 +631,13 @@ public class BlogPostingSerDes {
 				String.valueOf(blogPosting.getTaxonomyCategoryIds()));
 		}
 
+		if (blogPosting.getTestField() == null) {
+			map.put("testField", null);
+		}
+		else {
+			map.put("testField", String.valueOf(blogPosting.getTestField()));
+		}
+
 		if (blogPosting.getViewableBy() == null) {
 			map.put("viewableBy", null);
 		}
@@ -717,6 +738,9 @@ public class BlogPostingSerDes {
 			else if (Objects.equals(
 						jsonParserFieldName, "taxonomyCategoryIds")) {
 
+				return false;
+			}
+			else if (Objects.equals(jsonParserFieldName, "testField")) {
 				return false;
 			}
 			else if (Objects.equals(jsonParserFieldName, "viewableBy")) {
@@ -922,6 +946,11 @@ public class BlogPostingSerDes {
 						toLongs((Object[])jsonParserFieldValue));
 				}
 			}
+			else if (Objects.equals(jsonParserFieldName, "testField")) {
+				if (jsonParserFieldValue != null) {
+					blogPosting.setTestField((String)jsonParserFieldValue);
+				}
+			}
 			else if (Objects.equals(jsonParserFieldName, "viewableBy")) {
 				if (jsonParserFieldValue != null) {
 					blogPosting.setViewableBy(
@@ -1010,4 +1039,4 @@ public class BlogPostingSerDes {
 	}
 
 }
-// LIFERAY-REST-BUILDER-HASH:853595003
+// LIFERAY-REST-BUILDER-HASH:-1473669297

@@ -1090,6 +1090,47 @@ public class BlogPosting implements Serializable {
 	@JsonIgnore
 	private Supplier<Long[]> _taxonomyCategoryIdsSupplier;
 
+	@io.swagger.v3.oas.annotations.media.Schema(description = "My test field.")
+	public String getTestField() {
+		if (_testFieldSupplier != null) {
+			testField = _testFieldSupplier.get();
+
+			_testFieldSupplier = null;
+		}
+
+		return testField;
+	}
+
+	public void setTestField(String testField) {
+		this.testField = testField;
+
+		_testFieldSupplier = null;
+	}
+
+	@JsonIgnore
+	public void setTestField(
+		UnsafeSupplier<String, Exception> testFieldUnsafeSupplier) {
+
+		_testFieldSupplier = () -> {
+			try {
+				return testFieldUnsafeSupplier.get();
+			}
+			catch (RuntimeException runtimeException) {
+				throw runtimeException;
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
+	}
+
+	@GraphQLField(description = "My test field.")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String testField;
+
+	@JsonIgnore
+	private Supplier<String> _testFieldSupplier;
+
 	@io.swagger.v3.oas.annotations.media.Schema(
 		description = "A write-only property that specifies the default permissions."
 	)
@@ -1560,6 +1601,22 @@ public class BlogPosting implements Serializable {
 			sb.append("]");
 		}
 
+		String testField = getTestField();
+
+		if (testField != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"testField\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(testField));
+
+			sb.append("\"");
+		}
+
 		ViewableBy viewableBy = getViewableBy();
 
 		if (viewableBy != null) {
@@ -1713,4 +1770,4 @@ public class BlogPosting implements Serializable {
 	private Map<String, Serializable> _extendedProperties;
 
 }
-// LIFERAY-REST-BUILDER-HASH:-2145154844
+// LIFERAY-REST-BUILDER-HASH:-1518294242

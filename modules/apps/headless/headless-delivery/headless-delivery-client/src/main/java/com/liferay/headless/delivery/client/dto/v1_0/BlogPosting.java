@@ -521,6 +521,27 @@ public class BlogPosting implements Cloneable, Serializable {
 
 	protected Long[] taxonomyCategoryIds;
 
+	public String getTestField() {
+		return testField;
+	}
+
+	public void setTestField(String testField) {
+		this.testField = testField;
+	}
+
+	public void setTestField(
+		UnsafeSupplier<String, Exception> testFieldUnsafeSupplier) {
+
+		try {
+			testField = testFieldUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String testField;
+
 	public ViewableBy getViewableBy() {
 		return viewableBy;
 	}
@@ -615,4 +636,4 @@ public class BlogPosting implements Cloneable, Serializable {
 	}
 
 }
-// LIFERAY-REST-BUILDER-HASH:234172097
+// LIFERAY-REST-BUILDER-HASH:-829385072
