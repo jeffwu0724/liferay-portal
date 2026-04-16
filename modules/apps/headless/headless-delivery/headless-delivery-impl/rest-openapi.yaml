@@ -109,7 +109,7 @@ components:
                     type: string
                 testField:
                     description: My test field.
-                    type: fooBarInvalidType
+                    type: string
                 datePublished:
                     description:
                         The blog post's publication date.
