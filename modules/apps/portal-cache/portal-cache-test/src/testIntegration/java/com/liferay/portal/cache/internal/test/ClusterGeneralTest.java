@@ -19,6 +19,7 @@ import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.process.local.LocalProcessLauncher;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
@@ -333,86 +334,40 @@ public class ClusterGeneralTest implements Serializable {
 	public void testCanUpdatePortalPropertiesWithMultipleClusters()
 		throws Exception {
 
+		_testCanUpdatePortalPropertiesWithMultipleClusters(
+			_tomcatNode1, "emailAddress");
+		_testCanUpdatePortalPropertiesWithMultipleClusters(
+			_tomcatNode2, "emailAddress");
+
 		String newProperty = "company.security.auth.type=screenName";
 
-		Assert.assertEquals(
-			"emailAddress",
-			_tomcatNode1.syncExecute(
-				() -> PropsUtil.get("company.security.auth.type")));
-		Assert.assertEquals(
-			"emailAddress",
-			_tomcatNode2.syncExecute(
-				() -> PropsUtil.get("company.security.auth.type")));
-
-		_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
-		_assertAuthenticationSucceeds(_tomcatNode2, "test@liferay.com");
-		_assertAuthenticationFails(_tomcatNode1, "test");
-		_assertAuthenticationFails(_tomcatNode2, "test");
-
-		try (Closeable closeable1 = _applyPortalExtPropertiesLines(
+		try (Closeable closeable2 = _applyPortalExtPropertiesLines(
 				true, _tomcatNode2, newProperty)) {
 
-			Assert.assertEquals(
-				"emailAddress",
-				_tomcatNode1.syncExecute(
-					() -> PropsUtil.get("company.security.auth.type")));
+			_testCanUpdatePortalPropertiesWithMultipleClusters(
+				_tomcatNode1, "emailAddress");
+			_testCanUpdatePortalPropertiesWithMultipleClusters(
+				_tomcatNode2, "screenName");
 
-			Assert.assertEquals(
-				"screenName",
-				_tomcatNode2.syncExecute(
-					() -> PropsUtil.get("company.security.auth.type")));
-
-			_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
-			_assertAuthenticationSucceeds(_tomcatNode2, "test");
-			_assertAuthenticationFails(_tomcatNode1, "test");
-			_assertAuthenticationFails(_tomcatNode2, "test@liferay.com");
-
-			try (Closeable closeable2 = _applyPortalExtPropertiesLines(
+			try (Closeable closeable1 = _applyPortalExtPropertiesLines(
 					true, _tomcatNode1, newProperty)) {
 
-				Assert.assertEquals(
-					"screenName",
-					_tomcatNode1.syncExecute(
-						() -> PropsUtil.get("company.security.auth.type")));
-				Assert.assertEquals(
-					"screenName",
-					_tomcatNode2.syncExecute(
-						() -> PropsUtil.get("company.security.auth.type")));
-
-				_assertAuthenticationSucceeds(_tomcatNode1, "test");
-				_assertAuthenticationSucceeds(_tomcatNode2, "test");
-				_assertAuthenticationFails(_tomcatNode1, "test@liferay.com");
-				_assertAuthenticationFails(_tomcatNode2, "test@liferay.com");
+				_testCanUpdatePortalPropertiesWithMultipleClusters(
+					_tomcatNode1, "screenName");
+				_testCanUpdatePortalPropertiesWithMultipleClusters(
+					_tomcatNode2, "screenName");
 			}
 
-			Assert.assertEquals(
-				"emailAddress",
-				_tomcatNode1.syncExecute(
-					() -> PropsUtil.get("company.security.auth.type")));
-			Assert.assertEquals(
-				"screenName",
-				_tomcatNode2.syncExecute(
-					() -> PropsUtil.get("company.security.auth.type")));
-
-			_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
-			_assertAuthenticationSucceeds(_tomcatNode2, "test");
-			_assertAuthenticationFails(_tomcatNode1, "test");
-			_assertAuthenticationFails(_tomcatNode2, "test@liferay.com");
+			_testCanUpdatePortalPropertiesWithMultipleClusters(
+				_tomcatNode1, "emailAddress");
+			_testCanUpdatePortalPropertiesWithMultipleClusters(
+				_tomcatNode2, "screenName");
 		}
 
-		Assert.assertEquals(
-			"emailAddress",
-			_tomcatNode1.syncExecute(
-				() -> PropsUtil.get("company.security.auth.type")));
-		Assert.assertEquals(
-			"emailAddress",
-			_tomcatNode2.syncExecute(
-				() -> PropsUtil.get("company.security.auth.type")));
-
-		_assertAuthenticationSucceeds(_tomcatNode1, "test@liferay.com");
-		_assertAuthenticationSucceeds(_tomcatNode2, "test@liferay.com");
-		_assertAuthenticationFails(_tomcatNode1, "test");
-		_assertAuthenticationFails(_tomcatNode2, "test");
+		_testCanUpdatePortalPropertiesWithMultipleClusters(
+			_tomcatNode1, "emailAddress");
+		_testCanUpdatePortalPropertiesWithMultipleClusters(
+			_tomcatNode2, "emailAddress");
 	}
 
 	@Test
@@ -618,45 +573,6 @@ public class ClusterGeneralTest implements Serializable {
 		};
 	}
 
-	private void _assertAuthenticationFails(TomcatNode tomcatNode, String login)
-		throws Exception {
-
-		Assert.assertTrue(
-			tomcatNode.syncExecute(
-				() -> {
-					try {
-						AuthenticatedSessionManagerUtil.getAuthenticatedUserId(
-							new MockHttpServletRequest(), login,
-							TestPropsValues.USER_PASSWORD, null);
-
-						return Boolean.FALSE;
-					}
-					catch (AuthException authException) {
-						return Boolean.TRUE;
-					}
-				}));
-	}
-
-	private void _assertAuthenticationSucceeds(
-			TomcatNode tomcatNode, String login)
-		throws Exception {
-
-		Assert.assertTrue(
-			tomcatNode.syncExecute(
-				() -> {
-					try {
-						AuthenticatedSessionManagerUtil.getAuthenticatedUserId(
-							new MockHttpServletRequest(), login,
-							TestPropsValues.USER_PASSWORD, null);
-
-						return Boolean.TRUE;
-					}
-					catch (AuthException authException) {
-						return Boolean.FALSE;
-					}
-				}));
-	}
-
 	private void _assertNodesVisibleToEachOther(
 			TomcatNode tomcatNode1, TomcatNode tomcatNode2)
 		throws Exception {
@@ -696,6 +612,26 @@ public class ClusterGeneralTest implements Serializable {
 
 					return clusterNodes.contains(clusterNode1);
 				}));
+	}
+
+	private long _authenticate(TomcatNode tomcatNode, String login)
+		throws Exception {
+
+		try {
+			return tomcatNode.syncExecute(
+				() -> AuthenticatedSessionManagerUtil.getAuthenticatedUserId(
+					new MockHttpServletRequest(), login,
+					TestPropsValues.USER_PASSWORD, null));
+		}
+		catch (Exception exception) {
+			Throwable throwable = exception;
+
+			while (throwable.getCause() != null) {
+				throwable = throwable.getCause();
+			}
+
+			return ReflectionUtil.throwException(throwable);
+		}
 	}
 
 	private AutoCloseable _disableClusterableAdviceCallMasterTimeout(
@@ -977,6 +913,33 @@ public class ClusterGeneralTest implements Serializable {
 					return Log4JUtil.getPriority(
 						ClusterGeneralTest.class.getName());
 				}));
+	}
+
+	private void _testCanUpdatePortalPropertiesWithMultipleClusters(
+			TomcatNode tomcatNode, String expectedAuthType)
+		throws Exception {
+
+		Assert.assertEquals(
+			expectedAuthType,
+			tomcatNode.syncExecute(
+				() -> PropsUtil.get("company.security.auth.type")));
+
+		if (expectedAuthType.equals("emailAddress")) {
+			Assert.assertEquals(
+				TestPropsValues.getUserId(),
+				_authenticate(tomcatNode, "test@liferay.com"));
+
+			Assert.assertThrows(
+				AuthException.class, () -> _authenticate(tomcatNode, "test"));
+		}
+		else if (expectedAuthType.equals("screenName")) {
+			Assert.assertEquals(
+				TestPropsValues.getUserId(), _authenticate(tomcatNode, "test"));
+
+			Assert.assertThrows(
+				AuthException.class,
+				() -> _authenticate(tomcatNode, "test@liferay.com"));
+		}
 	}
 
 	private void _testControlChannelProperties(
