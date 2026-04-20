@@ -237,6 +237,7 @@
 	</target>
 
 	<target name="build-rests">
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Rest Builder" />
 		<tstamp>
 			<format pattern="yyyyMMddkkmmssSSS" property="build.rests.tstamp.value" />
 		</tstamp>
@@ -381,6 +382,7 @@
 	</target>
 
 	<target name="build-services">
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Service Builder" />
 		<build-service
 			hbm.file="counter-hbm.xml"
 			service.file="${basedir}/src/com/liferay/counter/service.xml"
