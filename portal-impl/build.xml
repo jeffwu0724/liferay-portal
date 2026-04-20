@@ -243,6 +243,8 @@
 
 		<property name="rest.builder.baseline.output.file" value="${java.io.tmpdir}/rest-builder-baseline-${build.rests.tstamp.value}" />
 
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!The current fork mode is: ${fork.mode}" />
+
 		<java
 			classname="com.liferay.portal.tools.rest.builder.RESTBuilder"
 			classpathref="rest.builder.classpath"
@@ -260,6 +262,8 @@
 			<arg value="rest.config.dirs=${basedir}/../modules" />
 			<arg if:true="${build.rests.baseline.enabled}" value="rest.builder.baseline.output.file=${rest.builder.baseline.output.file}" />
 		</java>
+
+		<echo message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!The current fork mode is: ${fork.mode}" />
 
 		<if>
 			<istrue value="${build.rests.baseline.enabled}" />
