@@ -470,7 +470,7 @@ public class SegmentsEntryLocalServiceImpl
 			searchContext.setBooleanClauses(
 				new BooleanClause[] {
 					BooleanClauseFactoryUtil.create(
-						booleanQuery, BooleanClauseOccur.MUST.getName())
+						booleanQuery, BooleanClauseOccur.MUST)
 				});
 		}
 
