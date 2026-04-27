@@ -10280,7 +10280,7 @@ ${output.content}</echo>
 		</run-batch-test>
 	</target>
 
-	<target name="service-and-rest-builder">
+	<target name="rest-builder-and-service-builder">
 		<run-batch-test>
 			<test-action>
 				<if>
