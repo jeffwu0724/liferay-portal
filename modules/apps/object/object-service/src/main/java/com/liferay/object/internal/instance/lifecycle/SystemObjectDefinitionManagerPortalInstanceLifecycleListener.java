@@ -115,6 +115,10 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 
 	@Override
 	public void portalInstanceRegistered(Company company) throws Exception {
+		_log.warn(
+			"[LPD-70455] portalInstanceRegistered ENTER companyId=" +
+				company.getCompanyId());
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Registered portal instance " + company);
 		}
@@ -124,11 +128,17 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 
 			_apply(company.getCompanyId(), systemObjectDefinitionManager);
 		}
+
+		_log.warn(
+			"[LPD-70455] portalInstanceRegistered EXIT companyId=" +
+				company.getCompanyId());
 	}
 
 	@Activate
 	protected void activate(
 		BundleContext bundleContext, Map<String, Object> properties) {
+
+		_log.warn("[LPD-70455] listener.activate ENTER");
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activate " + bundleContext);
@@ -154,6 +164,11 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 					SystemObjectDefinitionManager
 						systemObjectDefinitionManager =
 							bundleContext.getService(serviceReference);
+
+					_log.warn(
+						"[LPD-70455] addingService manager=" +
+							systemObjectDefinitionManager.getName() +
+								" _opening=" + _opening.get());
 
 					if (_log.isDebugEnabled()) {
 						_log.debug(
@@ -190,6 +205,8 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 			});
 
 		_opening.set(Boolean.FALSE);
+
+		_log.warn("[LPD-70455] listener.activate EXIT _opening=false");
 	}
 
 	@Deactivate
@@ -227,6 +244,13 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 					_objectFolderLocalService.fetchDefaultObjectFolder(
 						companyId);
 
+				_log.warn(
+					"[LPD-70455] _apply fetched folder=" +
+						((objectFolder == null) ? "NULL" :
+							String.valueOf(objectFolder.getObjectFolderId())) +
+						" companyId=" + companyId + " manager=" +
+							systemObjectDefinitionManager.getName());
+
 				if (objectFolder == null) {
 					objectFolder = _objectFolderLocalService.addObjectFolder(
 						ObjectFolderConstants.EXTERNAL_REFERENCE_CODE_DEFAULT,
@@ -234,6 +258,11 @@ public class SystemObjectDefinitionManagerPortalInstanceLifecycleListener
 						LocalizedMapUtil.getLocalizedMap(
 							ObjectFolderConstants.NAME_DEFAULT),
 						ObjectFolderConstants.NAME_DEFAULT);
+
+					_log.warn(
+						"[LPD-70455] _apply CREATED folder id=" +
+							objectFolder.getObjectFolderId() + " companyId=" +
+								companyId);
 
 					Role guestRole = _roleLocalService.getRole(
 						companyId, RoleConstants.GUEST);

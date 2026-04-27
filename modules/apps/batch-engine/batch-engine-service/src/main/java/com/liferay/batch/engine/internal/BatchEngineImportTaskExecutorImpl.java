@@ -102,6 +102,12 @@ public class BatchEngineImportTaskExecutorImpl
 
 		long startTime = 0;
 
+		_log.warn(
+			"[LPD-70455] batch.execute ENTER taskId=" +
+				batchEngineImportTask.getBatchEngineImportTaskId() +
+					" companyId=" + batchEngineImportTask.getCompanyId() +
+						" className=" + batchEngineImportTask.getClassName());
+
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				"Started batch engine import task " +
