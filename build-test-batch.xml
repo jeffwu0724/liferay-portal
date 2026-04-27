@@ -401,6 +401,12 @@ mariadb.executable=${mariadb.executable}]]></echo>
 		<attribute name="ant.target.file" />
 
 		<sequential>
+			<local name="builder.type" />
+
+			<condition else="build services" property="builder.type" value="REST builder">
+				<equals arg1="@{ant.target.name}" arg2="build-rests" />
+			</condition>
+
 			<trycatch property="ant.target.failure">
 				<try>
 					<beanshell>
@@ -470,7 +476,7 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 					<generate-backend-batch-junit-report-ant-target
 						ant.target.failure.count="1"
-						ant.target.failure.message="Detected build services compilation error. Please check the logs for details."
+						ant.target.failure.message="Detected ${builder.type} compilation error. Please check the logs for details."
 						ant.target.failure.stacktrace="${ant.target.failure.stacktrace}"
 						ant.target.file="@{ant.target.file}"
 						ant.target.name="@{ant.target.name}"
@@ -487,7 +493,7 @@ mariadb.executable=${mariadb.executable}]]></echo>
 						<then>
 							<generate-backend-batch-junit-report-ant-target
 								ant.target.failure.count="1"
-								ant.target.failure.message="Detected build services changes. Please check the logs for details. Make sure to commit in all build services results."
+								ant.target.failure.message="Detected ${builder.type} changes. Please check the logs for details. Make sure to commit in all ${builder.type} results."
 								ant.target.failure.stacktrace="${git.diffs}"
 								ant.target.file="@{ant.target.file}"
 								ant.target.name="@{ant.target.name}"
