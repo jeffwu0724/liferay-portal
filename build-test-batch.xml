@@ -407,7 +407,7 @@ mariadb.executable=${mariadb.executable}]]></echo>
 				<equals arg1="@{ant.target.name}" arg2="build-rests" />
 			</condition>
 
-			<trycatch property="ant.target.failure">
+			<trycatch property="ant.target.failure" reference="ant.target.failure.ref">
 				<try>
 					<beanshell>
 						project.setProperty("ant.target.start.time", String.valueOf(System.currentTimeMillis()));
@@ -455,6 +455,32 @@ mariadb.executable=${mariadb.executable}]]></echo>
 					/>
 				</try>
 				<catch>
+					<var name="ant.target.failure.full.stack" unset="true" />
+
+					<beanshell>
+						<![CDATA[
+							import java.io.PrintWriter;
+							import java.io.StringWriter;
+
+							Object reference = project.getReference("ant.target.failure.ref");
+
+							if (!(reference instanceof Throwable)) {
+								return;
+							}
+
+							Throwable throwable = (Throwable)reference;
+
+							StringWriter stringWriter = new StringWriter();
+							PrintWriter printWriter = new PrintWriter(stringWriter);
+
+							throwable.printStackTrace(printWriter);
+
+							project.setProperty("ant.target.failure.full.stack", stringWriter.toString());
+						]]>
+					</beanshell>
+
+					<echo>${ant.target.failure.full.stack}</echo>
+
 					<record action="stop" name="${project.dir}/execute.ant.target.log" />
 
 					<local name="execute.ant.target.log" />
@@ -470,9 +496,15 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 					<local name="ant.target.failure.stacktrace" />
 
-					<condition else="${ant.target.failure}" property="ant.target.failure.stacktrace" value="${console.log.failure.message}">
+					<condition property="ant.target.failure.stacktrace" value="${console.log.failure.message}">
 						<isset property="console.log.failure.message" />
 					</condition>
+
+					<condition property="ant.target.failure.stacktrace" value="${ant.target.failure.full.stack}">
+						<isset property="ant.target.failure.full.stack" />
+					</condition>
+
+					<property name="ant.target.failure.stacktrace" value="${ant.target.failure}" />
 
 					<generate-backend-batch-junit-report-ant-target
 						ant.target.failure.count="1"
