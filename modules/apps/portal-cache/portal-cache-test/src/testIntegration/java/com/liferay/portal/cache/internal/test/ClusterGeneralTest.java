@@ -630,25 +630,19 @@ public class ClusterGeneralTest implements Serializable {
 
 		future.get();
 
-		Layout liveLayoutFromSlave = slaveTomcatNode.syncExecute(
+		_assertEqualOnBothNodes(
+			masterTomcatNode, slaveTomcatNode,
 			() -> LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
 				stagingLayout.getUuid(), liveGroupId, false));
 
-		Layout liveLayoutFromMaster = masterTomcatNode.syncExecute(
-			() -> LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
-				stagingLayout.getUuid(), liveGroupId, false));
-
-		Assert.assertEquals(liveLayoutFromSlave, liveLayoutFromMaster);
-
-		BlogsEntry liveBlogsEntryFromSlave = slaveTomcatNode.syncExecute(
+		_assertEqualOnBothNodes(
+			masterTomcatNode, slaveTomcatNode,
 			() -> BlogsEntryLocalServiceUtil.fetchBlogsEntryByUuidAndGroupId(
 				stagingBlogsEntry.getUuid(), liveGroupId));
 
 		BlogsEntry liveBlogsEntryFromMaster = masterTomcatNode.syncExecute(
 			() -> BlogsEntryLocalServiceUtil.fetchBlogsEntryByUuidAndGroupId(
 				stagingBlogsEntry.getUuid(), liveGroupId));
-
-		Assert.assertEquals(liveBlogsEntryFromSlave, liveBlogsEntryFromMaster);
 
 		JournalArticle stagingArticle = slaveTomcatNode.syncExecute(
 			() -> JournalTestUtil.addArticle(
@@ -681,19 +675,12 @@ public class ClusterGeneralTest implements Serializable {
 					BlogsEntryLocalServiceUtil.fetchBlogsEntryByUuidAndGroupId(
 						stagingBlogsEntry.getUuid(), liveGroupId)));
 
-		JournalArticle liveArticleFromMaster = masterTomcatNode.syncExecute(
+		_assertEqualOnBothNodes(
+			masterTomcatNode, slaveTomcatNode,
 			() ->
 				JournalArticleLocalServiceUtil.
 					fetchJournalArticleByUuidAndGroupId(
 						stagingArticle.getUuid(), liveGroupId));
-
-		JournalArticle liveArticleFromSlave = slaveTomcatNode.syncExecute(
-			() ->
-				JournalArticleLocalServiceUtil.
-					fetchJournalArticleByUuidAndGroupId(
-						stagingArticle.getUuid(), liveGroupId));
-
-		Assert.assertEquals(liveArticleFromMaster, liveArticleFromSlave);
 	}
 
 	private static String _getLocalClusterNodeId() {
@@ -736,6 +723,16 @@ public class ClusterGeneralTest implements Serializable {
 				throw new IOException(exception);
 			}
 		};
+	}
+
+	private <T extends Serializable> void _assertEqualOnBothNodes(
+			TomcatNode masterTomcatNode, TomcatNode slaveTomcatNode,
+			TomcatNode.ClusterExecutable<T> clusterExecutable)
+		throws Exception {
+
+		Assert.assertEquals(
+			masterTomcatNode.syncExecute(clusterExecutable),
+			slaveTomcatNode.syncExecute(clusterExecutable));
 	}
 
 	private void _assertNodesVisibleToEachOther(
