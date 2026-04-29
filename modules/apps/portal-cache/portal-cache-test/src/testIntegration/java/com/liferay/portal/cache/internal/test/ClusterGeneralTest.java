@@ -17,6 +17,18 @@ import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.exportimport.kernel.configuration.ExportImportConfigurationParameterMapFactoryUtil;
+import com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys;
+import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleEvent;
+import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleListener;
+import com.liferay.exportimport.kernel.lifecycle.constants.ExportImportLifecycleConstants;
+import com.liferay.exportimport.kernel.service.StagingLocalServiceUtil;
+import com.liferay.exportimport.kernel.staging.StagingUtil;
+import com.liferay.journal.constants.JournalFolderConstants;
+import com.liferay.journal.model.JournalArticle;
+import com.liferay.journal.service.JournalArticleLocalServiceUtil;
+import com.liferay.journal.test.util.JournalTestUtil;
+import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.process.local.LocalProcessLauncher;
 import com.liferay.petra.string.CharPool;
@@ -40,8 +52,13 @@ import com.liferay.portal.kernel.feature.flag.FeatureFlagListener;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log4j.Log4JUtil;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -53,13 +70,19 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.security.auth.AuthException;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.constants.TestDataConstants;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.SearchContextTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
@@ -92,6 +115,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -533,6 +557,145 @@ public class ClusterGeneralTest implements Serializable {
 			_tomcatNode1);
 	}
 
+	@Test
+	public void testValidatePublishOnTwoNodes() throws Exception {
+		long userId = TestPropsValues.getUserId();
+
+		TomcatNode masterTomcatNode;
+		TomcatNode slaveTomcatNode;
+
+		if (_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster)) {
+			masterTomcatNode = _tomcatNode1;
+			slaveTomcatNode = _tomcatNode2;
+		}
+		else {
+			masterTomcatNode = _tomcatNode2;
+			slaveTomcatNode = _tomcatNode1;
+		}
+
+		long[] groupIds = masterTomcatNode.syncExecute(
+			() -> {
+				try {
+					PermissionThreadLocal.setPermissionChecker(
+						PermissionCheckerFactoryUtil.create(
+							UserLocalServiceUtil.getUser(userId)));
+
+					Group liveGroup = GroupTestUtil.addGroup();
+
+					long liveGroupId = liveGroup.getGroupId();
+
+					StagingLocalServiceUtil.enableLocalStaging(
+						userId, liveGroup, false, false, new ServiceContext());
+
+					liveGroup = GroupLocalServiceUtil.getGroup(liveGroupId);
+
+					Group stagingGroup = liveGroup.getStagingGroup();
+
+					return new long[] {liveGroupId, stagingGroup.getGroupId()};
+				}
+				finally {
+					PermissionThreadLocal.setPermissionChecker(null);
+				}
+			});
+
+		long liveGroupId = groupIds[0];
+
+		long stagingGroupId = groupIds[1];
+
+		Layout stagingLayout = masterTomcatNode.syncExecute(
+			() -> LayoutTestUtil.addTypePortletLayout(
+				stagingGroupId, "Staging Test Page", false));
+
+		BlogsEntry stagingBlogsEntry = masterTomcatNode.syncExecute(
+			() -> BlogsEntryLocalServiceUtil.addEntry(
+				userId, "Blogs Entry Title", "Blogs Entry Content",
+				ServiceContextTestUtil.getServiceContext(
+					stagingGroupId, userId)));
+
+		Future<?> future = slaveTomcatNode.execute(
+			() -> {
+				TestClusterCacheMessageListener
+					testClusterCacheMessageListener =
+						TestClusterCacheMessageListener.register(
+							"LayoutImpl", "BlogsEntryImpl");
+
+				testClusterCacheMessageListener.await();
+
+				return null;
+			});
+
+		_publishLayouts(
+			masterTomcatNode, masterTomcatNode, userId, stagingGroupId,
+			liveGroupId, stagingLayout.getLayoutId());
+
+		future.get();
+
+		Layout liveLayoutFromSlave = slaveTomcatNode.syncExecute(
+			() -> LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
+				stagingLayout.getUuid(), liveGroupId, false));
+
+		Layout liveLayoutFromMaster = masterTomcatNode.syncExecute(
+			() -> LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
+				stagingLayout.getUuid(), liveGroupId, false));
+
+		Assert.assertEquals(liveLayoutFromSlave, liveLayoutFromMaster);
+
+		BlogsEntry liveBlogsEntryFromSlave = slaveTomcatNode.syncExecute(
+			() -> BlogsEntryLocalServiceUtil.fetchBlogsEntryByUuidAndGroupId(
+				stagingBlogsEntry.getUuid(), liveGroupId));
+
+		BlogsEntry liveBlogsEntryFromMaster = masterTomcatNode.syncExecute(
+			() -> BlogsEntryLocalServiceUtil.fetchBlogsEntryByUuidAndGroupId(
+				stagingBlogsEntry.getUuid(), liveGroupId));
+
+		Assert.assertEquals(liveBlogsEntryFromSlave, liveBlogsEntryFromMaster);
+
+		JournalArticle stagingArticle = slaveTomcatNode.syncExecute(
+			() -> JournalTestUtil.addArticle(
+				stagingGroupId, JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+				"WebContent Title", "WebContent Content",
+				LocaleUtil.getSiteDefault(), false, true));
+
+		future = masterTomcatNode.execute(
+			() -> {
+				TestClusterCacheMessageListener
+					testClusterCacheMessageListener =
+						TestClusterCacheMessageListener.register(
+							"JournalArticleImpl");
+
+				testClusterCacheMessageListener.await();
+
+				return null;
+			});
+
+		_publishLayouts(
+			slaveTomcatNode, masterTomcatNode, userId, stagingGroupId,
+			liveGroupId, stagingLayout.getLayoutId());
+
+		future.get();
+
+		Assert.assertEquals(
+			liveBlogsEntryFromMaster,
+			masterTomcatNode.syncExecute(
+				() ->
+					BlogsEntryLocalServiceUtil.fetchBlogsEntryByUuidAndGroupId(
+						stagingBlogsEntry.getUuid(), liveGroupId)));
+
+		JournalArticle liveArticleFromMaster = masterTomcatNode.syncExecute(
+			() ->
+				JournalArticleLocalServiceUtil.
+					fetchJournalArticleByUuidAndGroupId(
+						stagingArticle.getUuid(), liveGroupId));
+
+		JournalArticle liveArticleFromSlave = slaveTomcatNode.syncExecute(
+			() ->
+				JournalArticleLocalServiceUtil.
+					fetchJournalArticleByUuidAndGroupId(
+						stagingArticle.getUuid(), liveGroupId));
+
+		Assert.assertEquals(liveArticleFromMaster, liveArticleFromSlave);
+	}
+
 	private static String _getLocalClusterNodeId() {
 		ClusterNode localClusterNode =
 			ClusterExecutorUtil.getLocalClusterNode();
@@ -684,6 +847,56 @@ public class ClusterGeneralTest implements Serializable {
 					PermissionThreadLocal.setPermissionChecker(null);
 				}
 			});
+	}
+
+	private void _publishLayouts(
+			TomcatNode invokerTomcatNode, TomcatNode masterTomcatNode,
+			long userId, long stagingGroupId, long liveGroupId, long layoutId)
+		throws Exception {
+
+		Future<?> future = masterTomcatNode.execute(
+			() -> {
+				TestExportImportLifecycleListener
+					testExportImportLifecycleListener =
+						TestExportImportLifecycleListener.register();
+
+				testExportImportLifecycleListener.await();
+
+				return null;
+			});
+
+		invokerTomcatNode.syncExecute(
+			() -> {
+				String originalName = PrincipalThreadLocal.getName();
+
+				try {
+					PrincipalThreadLocal.setName(userId);
+
+					PermissionThreadLocal.setPermissionChecker(
+						PermissionCheckerFactoryUtil.create(
+							UserLocalServiceUtil.getUser(userId)));
+
+					Map<String, String[]> parameterMap =
+						ExportImportConfigurationParameterMapFactoryUtil.
+							buildParameterMap();
+
+					parameterMap.put(
+						PortletDataHandlerKeys.PORTLET_DATA_ALL,
+						new String[] {"true"});
+
+					StagingUtil.publishLayouts(
+						userId, stagingGroupId, liveGroupId, false,
+						new long[] {layoutId}, parameterMap);
+
+					return null;
+				}
+				finally {
+					PermissionThreadLocal.setPermissionChecker(null);
+					PrincipalThreadLocal.setName(originalName);
+				}
+			});
+
+		future.get();
 	}
 
 	private void _restartAndVerifyNode(
@@ -1121,6 +1334,70 @@ public class ClusterGeneralTest implements Serializable {
 
 	}
 
+	private static class TestClusterCacheMessageListener
+		extends BaseMessageListener {
+
+		public static TestClusterCacheMessageListener register(
+			String... cacheNameSubstrings) {
+
+			BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+			TestClusterCacheMessageListener testClusterCacheMessageListener =
+				new TestClusterCacheMessageListener(cacheNameSubstrings);
+
+			testClusterCacheMessageListener._serviceRegistration =
+				bundleContext.registerService(
+					MessageListener.class, testClusterCacheMessageListener,
+					MapUtil.singletonDictionary(
+						"destination.name", "liferay/cache_replication"));
+
+			return testClusterCacheMessageListener;
+		}
+
+		public void await() throws Exception {
+			_countDownLatch.await();
+
+			_serviceRegistration.unregister();
+		}
+
+		@Override
+		protected void doReceive(Message message) {
+			String cacheName = message.getString("cache.name");
+
+			if (cacheName == null) {
+				return;
+			}
+
+			synchronized (_remainingCacheNameSubstrings) {
+				Iterator<String> iterator =
+					_remainingCacheNameSubstrings.iterator();
+
+				while (iterator.hasNext()) {
+					String substring = iterator.next();
+
+					if (cacheName.contains(substring)) {
+						iterator.remove();
+
+						_countDownLatch.countDown();
+
+						break;
+					}
+				}
+			}
+		}
+
+		private TestClusterCacheMessageListener(String... cacheNameSubstrings) {
+			_remainingCacheNameSubstrings = new ArrayList<>(
+				Arrays.asList(cacheNameSubstrings));
+			_countDownLatch = new CountDownLatch(cacheNameSubstrings.length);
+		}
+
+		private final CountDownLatch _countDownLatch;
+		private final List<String> _remainingCacheNameSubstrings;
+		private ServiceRegistration<MessageListener> _serviceRegistration;
+
+	}
+
 	private static class TestClusterMasterTokenTransitionListener
 		implements ClusterMasterTokenTransitionListener {
 
@@ -1172,6 +1449,52 @@ public class ClusterGeneralTest implements Serializable {
 
 		@Override
 		public void masterTokenReleased() {
+		}
+
+		private final CountDownLatch _countDownLatch = new CountDownLatch(1);
+		private ServiceRegistration<?> _serviceRegistration;
+
+	}
+
+	private static class TestExportImportLifecycleListener
+		implements ExportImportLifecycleListener {
+
+		public static TestExportImportLifecycleListener register() {
+			BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+			TestExportImportLifecycleListener
+				testExportImportLifecycleListener =
+					new TestExportImportLifecycleListener();
+
+			testExportImportLifecycleListener._serviceRegistration =
+				bundleContext.registerService(
+					ExportImportLifecycleListener.class,
+					testExportImportLifecycleListener, null);
+
+			return testExportImportLifecycleListener;
+		}
+
+		public void await() throws Exception {
+			_countDownLatch.await();
+
+			_serviceRegistration.unregister();
+		}
+
+		@Override
+		public boolean isParallel() {
+			return false;
+		}
+
+		@Override
+		public void onExportImportLifecycleEvent(
+			ExportImportLifecycleEvent exportImportLifecycleEvent) {
+
+			if (exportImportLifecycleEvent.getCode() ==
+					ExportImportLifecycleConstants.
+						EVENT_PUBLICATION_LAYOUT_LOCAL_SUCCEEDED) {
+
+				_countDownLatch.countDown();
+			}
 		}
 
 		private final CountDownLatch _countDownLatch = new CountDownLatch(1);
