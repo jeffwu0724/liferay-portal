@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
+import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.service.UserGroupLocalServiceUtil;
@@ -33,6 +34,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
@@ -224,6 +226,153 @@ public class ClusterCacheReplicationTest implements Serializable {
 
 					return portalCache.get(testKey);
 				}));
+	}
+
+	@Test
+	public void testEntityAndFinderCacheReplicationMessageCount()
+		throws Exception {
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				EntityCacheUtil.clearCache(UserGroupImpl.class);
+				FinderCacheUtil.clearCache(UserGroupImpl.class);
+
+				//				UserGroupLocalServiceUtil.getUserGroups(0, 1);
+
+				PortalCache<Serializable, Serializable> entityPortalCache =
+					_getEntityEhcachePortalCache(UserGroupImpl.class);
+
+				entityPortalCache.registerPortalCacheListener(
+					new TestPortalCacheReplicator());
+
+				TestPortalCacheReplicator testPortalCacheReplicator =
+					new TestPortalCacheReplicator();
+
+				for (PortalCache<Serializable, Serializable> finderPortalCache :
+						_getFinderEhcachePortalCaches()) {
+
+					finderPortalCache.registerPortalCacheListener(
+						testPortalCacheReplicator);
+				}
+
+				return null;
+			});
+
+		String userGroupName =
+			ClusterCacheReplicationTest.class.getSimpleName() +
+				"_entityAndFinder";
+
+		long userGroupId = _tomcatNode1.syncExecute(
+			() -> {
+				UserGroup userGroup = UserGroupTestUtil.addUserGroup();
+
+				return userGroup.getUserGroupId();
+			});
+
+		Assert.assertNotNull(
+			_tomcatNode2.syncExecute(
+				() -> UserGroupLocalServiceUtil.fetchUserGroup(userGroupId)));
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				UserGroup userGroup = UserGroupLocalServiceUtil.getUserGroup(
+					userGroupId);
+
+				userGroup.setName(userGroupName);
+
+				UserGroupLocalServiceUtil.updateUserGroup(userGroup);
+
+				return null;
+			});
+
+		Assert.assertEquals(
+			userGroupName,
+			_tomcatNode2.syncExecute(
+				() -> {
+					UserGroup userGroup =
+						UserGroupLocalServiceUtil.fetchUserGroup(userGroupId);
+
+					return userGroup.getName();
+				}));
+
+		_tomcatNode1.syncExecute(
+			() -> {
+				UserGroupLocalServiceUtil.deleteUserGroup(userGroupId);
+
+				return null;
+			});
+
+		Assert.assertNull(
+			_tomcatNode2.syncExecute(
+				() -> UserGroupLocalServiceUtil.fetchUserGroup(userGroupId)));
+
+		int[][] counts = _tomcatNode1.syncExecute(
+			() -> {
+				PortalCache<Serializable, Serializable> entityPortalCache =
+					_getEntityEhcachePortalCache(UserGroupImpl.class);
+
+				TestPortalCacheReplicator entityListener =
+					(TestPortalCacheReplicator)_getListenerOnEhcachePortalCache(
+						TestPortalCacheReplicator.class.getName(),
+						entityPortalCache);
+
+				int[] entityCounts = {
+					entityListener.getPutCount(),
+					entityListener.getUpdateCount(),
+					entityListener.getRemoveCount(),
+					entityListener.getRemoveAllCount()
+				};
+
+				entityPortalCache.unregisterPortalCacheListener(entityListener);
+
+				List<PortalCache<Serializable, Serializable>>
+					finderPortalCaches = _getFinderEhcachePortalCaches();
+
+				TestPortalCacheReplicator finderListener =
+					(TestPortalCacheReplicator)_getListenerOnEhcachePortalCache(
+						TestPortalCacheReplicator.class.getName(),
+						finderPortalCaches.get(0));
+
+				int[] finderCounts = {
+					finderListener.getPutCount(),
+					finderListener.getUpdateCount(),
+					finderListener.getRemoveCount(),
+					finderListener.getRemoveAllCount()
+				};
+
+				for (PortalCache<Serializable, Serializable> finderPortalCache :
+						finderPortalCaches) {
+
+					finderPortalCache.unregisterPortalCacheListener(
+						finderListener);
+				}
+
+				EntityCacheUtil.clearCache(UserGroupImpl.class);
+				FinderCacheUtil.clearCache(UserGroupImpl.class);
+
+				return new int[][] {entityCounts, finderCounts};
+			});
+
+		int[] entityCounts = counts[0];
+		int[] finderCounts = counts[1];
+
+		System.out.println(
+			StringBundler.concat(
+				"!!!!!!!!!!! events on node 1: put=", entityCounts[0],
+				", update=", entityCounts[1], ", remove=", entityCounts[2],
+				", removeAll=", entityCounts[3]));
+
+		Assert.assertEquals("put", 1, entityCounts[0]);
+		Assert.assertEquals("update", 1, entityCounts[1]);
+		Assert.assertEquals("remove", 1, entityCounts[2]);
+		Assert.assertEquals("removeAll", 0, entityCounts[3]);
+
+		int finderTotal =
+			finderCounts[0] + finderCounts[1] + finderCounts[2] +
+				finderCounts[3];
+
+		System.out.println(
+			"!!!!!!!!!!! finder events on node 1: total=" + finderTotal);
 	}
 
 	@Test
@@ -973,30 +1122,36 @@ public class ClusterCacheReplicationTest implements Serializable {
 		throw new IllegalStateException(className + " does not exist");
 	}
 
-	@SuppressWarnings("unchecked")
 	private PortalCache<Serializable, Serializable>
 		_getEntityEhcachePortalCache(Class<?> modelImplClass) {
 
-		PortalCache<?, ?> portalCache = EntityCacheUtil.getPortalCache(
-			modelImplClass);
+		return _unwrapToEhcachePortalCache(
+			EntityCacheUtil.getPortalCache(modelImplClass));
+	}
 
-		if (Objects.equals(
-				portalCache.getClass(
-				).getName(),
-				_CLASS_NAME_CT_AWARE_PORTAL_CACHE)) {
+	private List<PortalCache<Serializable, Serializable>>
+		_getFinderEhcachePortalCaches() {
 
-			portalCache = ReflectionTestUtil.getFieldValue(
-				portalCache, "_productionPortalCache");
+		ConcurrentMap<String, PortalCache<Serializable, Serializable>>
+			portalCaches = ReflectionTestUtil.getFieldValue(
+				FinderCacheUtil.getFinderCache(), "_portalCaches");
+
+		List<PortalCache<Serializable, Serializable>> result =
+			new ArrayList<>();
+
+		for (Map.Entry<String, PortalCache<Serializable, Serializable>> entry :
+				portalCaches.entrySet()) {
+
+			if (entry.getKey(
+				).startsWith(
+					UserGroupImpl.class.getName()
+				)) {
+
+				result.add(_unwrapToEhcachePortalCache(entry.getValue()));
+			}
 		}
 
-		while (portalCache instanceof PortalCacheWrapper) {
-			PortalCacheWrapper<?, ?> portalCacheWrapper =
-				(PortalCacheWrapper<?, ?>)portalCache;
-
-			portalCache = portalCacheWrapper.getWrappedPortalCache();
-		}
-
-		return (PortalCache<Serializable, Serializable>)portalCache;
+		return result;
 	}
 
 	private PortalCacheListener<?, ?> _getListenerOnEhcachePortalCache(
@@ -1031,6 +1186,29 @@ public class ClusterCacheReplicationTest implements Serializable {
 					_CLASS_NAME_EHCACHE_PORTAL_CACHE_REPLICATOR, portalCache),
 				"_portalCacheReplicator"),
 			fieldName, fieldValue);
+	}
+
+	@SuppressWarnings("unchecked")
+	private PortalCache<Serializable, Serializable> _unwrapToEhcachePortalCache(
+		PortalCache<?, ?> portalCache) {
+
+		if (Objects.equals(
+				portalCache.getClass(
+				).getName(),
+				_CLASS_NAME_CT_AWARE_PORTAL_CACHE)) {
+
+			portalCache = ReflectionTestUtil.getFieldValue(
+				portalCache, "_productionPortalCache");
+		}
+
+		while (portalCache instanceof PortalCacheWrapper) {
+			PortalCacheWrapper<?, ?> portalCacheWrapper =
+				(PortalCacheWrapper<?, ?>)portalCache;
+
+			portalCache = portalCacheWrapper.getWrappedPortalCache();
+		}
+
+		return (PortalCache<Serializable, Serializable>)portalCache;
 	}
 
 	private static final String _CLASS_NAME_CT_AWARE_PORTAL_CACHE =
