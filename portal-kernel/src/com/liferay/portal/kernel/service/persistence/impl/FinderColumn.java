@@ -7,6 +7,7 @@ package com.liferay.portal.kernel.service.persistence.impl;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Date;
 import java.util.Objects;
@@ -19,9 +20,11 @@ public class FinderColumn<T extends BaseModel<T>> {
 
 	public FinderColumn(
 		String entityAlias, String columnName, Type type, String comparator,
-		boolean convertNull, boolean last, Function<T, Object> valueExtractor) {
+		boolean caseSensitive, boolean convertNull, boolean last,
+		Function<T, Object> valueExtractor) {
 
 		_type = type;
+		_caseSensitive = caseSensitive;
 		_convertNull = convertNull;
 		_valueExtractor = valueExtractor;
 
@@ -36,8 +39,15 @@ public class FinderColumn<T extends BaseModel<T>> {
 
 		String suffix = last ? "" : " AND ";
 
-		_sqlBind = StringBundler.concat(
-			entityAlias, columnName, " ", comparator, " ?", suffix);
+		if ((type == Type.STRING) && !caseSensitive) {
+			_sqlBind = StringBundler.concat(
+				"lower(", entityAlias, columnName, ") ", comparator, " ?",
+				suffix);
+		}
+		else {
+			_sqlBind = StringBundler.concat(
+				entityAlias, columnName, " ", comparator, " ?", suffix);
+		}
 
 		if (type == Type.STRING) {
 			_sqlNull = StringBundler.concat(
@@ -89,12 +99,26 @@ public class FinderColumn<T extends BaseModel<T>> {
 	}
 
 	public boolean matches(T entity, Object normalizedValue) {
-		return Objects.equals(_valueExtractor.apply(entity), normalizedValue);
+		Object entityValue = _valueExtractor.apply(entity);
+
+		if ((_type == Type.STRING) && !_caseSensitive &&
+			(entityValue != null)) {
+
+			entityValue = StringUtil.toLowerCase((String)entityValue);
+		}
+
+		return Objects.equals(entityValue, normalizedValue);
 	}
 
 	public Object normalizeValue(Object value) {
-		if ((_type == Type.STRING) && _convertNull) {
-			return Objects.toString(value, "");
+		if (_type == Type.STRING) {
+			if (_convertNull) {
+				value = Objects.toString(value, "");
+			}
+
+			if (!_caseSensitive && (value != null)) {
+				value = StringUtil.toLowerCase((String)value);
+			}
 		}
 
 		return value;
@@ -145,6 +169,7 @@ public class FinderColumn<T extends BaseModel<T>> {
 
 	}
 
+	private final boolean _caseSensitive;
 	private final boolean _convertNull;
 	private final String _keyFragment;
 	private final String _sqlBind;

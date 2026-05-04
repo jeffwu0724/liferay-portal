@@ -79,6 +79,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyFactory;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.Serializable;
 
@@ -901,6 +902,25 @@ public class BasePersistenceImpl
 		finally {
 			ServiceContextThreadLocal.popServiceContext();
 		}
+	}
+
+	protected static <T> Function<T, Object> convertNullExtractor(
+		Function<T, String> getter) {
+
+		return baseModel -> Objects.toString(getter.apply(baseModel), "");
+	}
+
+	protected static <T> Function<T, Object> lowerCaseConvertNullExtractor(
+		Function<T, String> getter) {
+
+		return baseModel -> StringUtil.toLowerCase(
+			Objects.toString(getter.apply(baseModel), ""));
+	}
+
+	protected static <T> Function<T, Object> lowerCaseExtractor(
+		Function<T, String> getter) {
+
+		return baseModel -> StringUtil.toLowerCase(getter.apply(baseModel));
 	}
 
 	protected static String removeConjunction(String sql) {
