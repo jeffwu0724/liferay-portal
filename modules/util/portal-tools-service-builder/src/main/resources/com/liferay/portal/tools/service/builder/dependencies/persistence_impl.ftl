@@ -3059,6 +3059,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								</#if>
 								${entityColumn.finderColumnTypeName},
 								"${entityColumn.comparator}",
+								${entityColumn.isCaseSensitive()?c},
 								${entityColumn.isConvertNull()?c},
 								${(!entityColumn_has_next)?c},
 								<#if stringUtil.equals(entityColumn.type, "boolean")>
@@ -3091,6 +3092,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								</#if>
 								${entityColumn.finderColumnTypeName},
 								"${entityColumn.comparator}",
+								${entityColumn.isCaseSensitive()?c},
 								${entityColumn.isConvertNull()?c},
 								${(!entityColumn_has_next)?c},
 								<#if stringUtil.equals(entityColumn.type, "boolean")>
