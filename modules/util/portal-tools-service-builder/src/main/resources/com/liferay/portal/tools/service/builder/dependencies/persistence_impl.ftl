@@ -2927,7 +2927,15 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 							<#list entityColumns as entityColumn>
 								,
-								${entity.name}::<#if stringUtil.equals(entityColumn.type, "boolean")>is<#else>get</#if>${entityColumn.methodName}
+								<#if stringUtil.equals(entityColumn.type, "String") && !entityColumn.isCaseSensitive() && entityColumn.isConvertNull()>
+									lowerCaseConvertNullExtractor(${entity.name}::get${entityColumn.methodName})
+								<#elseif stringUtil.equals(entityColumn.type, "String") && !entityColumn.isCaseSensitive()>
+									lowerCaseExtractor(${entity.name}::get${entityColumn.methodName})
+								<#elseif stringUtil.equals(entityColumn.type, "String") && entityColumn.isConvertNull()>
+									convertNullExtractor(${entity.name}::get${entityColumn.methodName})
+								<#else>
+									${entity.name}::<#if stringUtil.equals(entityColumn.type, "boolean")>is<#else>get</#if>${entityColumn.methodName}
+								</#if>
 							</#list>
 						<#else>
 							,
@@ -3059,6 +3067,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								</#if>
 								${entityColumn.finderColumnTypeName},
 								"${entityColumn.comparator}",
+								${entityColumn.isCaseSensitive()?c},
 								${entityColumn.isConvertNull()?c},
 								${(!entityColumn_has_next)?c},
 								<#if stringUtil.equals(entityColumn.type, "boolean")>
@@ -3091,6 +3100,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								</#if>
 								${entityColumn.finderColumnTypeName},
 								"${entityColumn.comparator}",
+								${entityColumn.isCaseSensitive()?c},
 								${entityColumn.isConvertNull()?c},
 								${(!entityColumn_has_next)?c},
 								<#if stringUtil.equals(entityColumn.type, "boolean")>
