@@ -36,10 +36,11 @@ public abstract class BasePersistenceFinder<T extends BaseModel<T>> {
 	@SafeVarargs
 	protected BasePersistenceFinder(
 		BasePersistenceImpl<T, ?> basePersistenceImpl, String sqlSelectWhere,
-		FinderColumn<T>... finderColumns) {
+		String where, FinderColumn<T>... finderColumns) {
 
 		this.basePersistenceImpl = basePersistenceImpl;
 		this.sqlSelectWhere = sqlSelectWhere;
+		this.where = where;
 		this.finderColumns = finderColumns;
 	}
 
@@ -62,12 +63,21 @@ public abstract class BasePersistenceFinder<T extends BaseModel<T>> {
 	}
 
 	protected String buildSQLWhere(String sqlWhere, Object[] values) {
-		StringBundler sb = new StringBundler(finderColumns.length + 1);
+		StringBundler sb = new StringBundler((finderColumns.length * 2) + 2);
 
 		sb.append(sqlWhere);
 
 		for (int i = 0; i < finderColumns.length; i++) {
+			if (i > 0) {
+				sb.append(" AND ");
+			}
+
 			sb.append(finderColumns[i].getSqlFragment(values[i]));
+		}
+
+		if ((where != null) && !where.isEmpty()) {
+			sb.append(" AND ");
+			sb.append(where);
 		}
 
 		return sb.toString();
@@ -92,5 +102,6 @@ public abstract class BasePersistenceFinder<T extends BaseModel<T>> {
 	protected final BasePersistenceImpl<T, ?> basePersistenceImpl;
 	protected final FinderColumn<T>[] finderColumns;
 	protected final String sqlSelectWhere;
+	protected final String where;
 
 }
