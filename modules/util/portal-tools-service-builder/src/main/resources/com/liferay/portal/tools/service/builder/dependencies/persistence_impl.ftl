@@ -3057,6 +3057,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						_SQL_COUNT_${entity.alias?upper_case}_WHERE,
 						${entity.name}ModelImpl.ORDER_BY_JPQL,
 						_ENTITY_ALIAS_PREFIX,
+						"${entityFinder.where!}",
 						<#list entityColumns as entityColumn>
 							new FinderColumn<>(
 								"${entity.alias}.",
@@ -3069,7 +3070,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								"${entityColumn.comparator}",
 								${entityColumn.isCaseSensitive()?c},
 								${entityColumn.isConvertNull()?c},
-								${(!entityColumn_has_next)?c},
 								<#if stringUtil.equals(entityColumn.type, "boolean")>
 									${entity.name}::is${entityColumn.methodName}
 								<#else>
@@ -3090,6 +3090,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						this,
 						_finderPathFetchBy${entityFinder.name},
 						_SQL_SELECT_${entity.alias?upper_case}_WHERE,
+						"${entityFinder.where!}",
 						<#list entityColumns as entityColumn>
 							new FinderColumn<>(
 								"${entity.alias}.",
@@ -3102,7 +3103,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 								"${entityColumn.comparator}",
 								${entityColumn.isCaseSensitive()?c},
 								${entityColumn.isConvertNull()?c},
-								${(!entityColumn_has_next)?c},
 								<#if stringUtil.equals(entityColumn.type, "boolean")>
 									${entity.name}::is${entityColumn.methodName}
 								<#else>
