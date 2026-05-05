@@ -115,6 +115,7 @@ import com.liferay.portal.kernel.service.persistence.change.tracking.helper.CTPe
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 
 <#if serviceBuilder.isVersionGTE_7_4_0()>
+	import com.liferay.portal.kernel.service.persistence.impl.ArrayableFinderColumn;
 	import com.liferay.portal.kernel.service.persistence.impl.CollectionPersistenceFinder;
 	import com.liferay.portal.kernel.service.persistence.impl.FinderColumn;
 </#if>
@@ -2981,7 +2982,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 							${finderCacheEnabled},
 							Long.class,
 					</#if>
-					FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+					<#if serviceBuilder.isVersionGTE_7_4_0() && entityFinder.hasArrayableOperator()>
+						FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+					<#else>
+						FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+					</#if>
 					"countBy${entityFinder.name}",
 					new String[] {
 						<#list entityColumns as entityColumn>
@@ -3008,7 +3013,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 					);
 			</#if>
 
-			<#if entityFinder.hasArrayableOperator() || entityFinder.hasCustomComparator()>
+			<#if entityFinder.hasCustomComparator() || (entityFinder.hasArrayableOperator() && !entityFinder.collectionPersistenceFinderEnabled)>
 				_finderPathWithPaginationCountBy${entityFinder.name} =
 					<#if serviceBuilder.isVersionGTE_7_4_0()>
 						new FinderPath(
@@ -3068,23 +3073,44 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						_ENTITY_ALIAS_PREFIX,
 						"${entityFinder.where!}",
 						<#list entityColumns as entityColumn>
-							new FinderColumn<>(
-								"${entity.alias}.",
-								<#if entity.hasCompoundPK() && entityColumn.isPrimary()>
-									"id.${entityColumn.name}",
-								<#else>
-									"${entityColumn.name}",
-								</#if>
-								${entityColumn.finderColumnTypeName},
-								"${entityColumn.comparator}",
-								${entityColumn.isCaseSensitive()?c},
-								${entityColumn.isConvertNull()?c},
-								<#if stringUtil.equals(entityColumn.type, "boolean")>
-									${entity.name}::is${entityColumn.methodName}
-								<#else>
-									${entity.name}::get${entityColumn.methodName}
-								</#if>
-							)
+							<#if entityColumn.hasArrayableOperator()>
+								new ArrayableFinderColumn<>(
+									"${entity.alias}.",
+									<#if entity.hasCompoundPK() && entityColumn.isPrimary()>
+										"id.${entityColumn.name}",
+									<#else>
+										"${entityColumn.name}",
+									</#if>
+									${entityColumn.finderColumnTypeName},
+									"${entityColumn.comparator}",
+									${entityColumn.isArrayableAndOperator()?c},
+									${entityColumn.isCaseSensitive()?c},
+									${entityColumn.isConvertNull()?c},
+									<#if stringUtil.equals(entityColumn.type, "boolean")>
+										${entity.name}::is${entityColumn.methodName}
+									<#else>
+										${entity.name}::get${entityColumn.methodName}
+									</#if>
+								)
+							<#else>
+								new FinderColumn<>(
+									"${entity.alias}.",
+									<#if entity.hasCompoundPK() && entityColumn.isPrimary()>
+										"id.${entityColumn.name}",
+									<#else>
+										"${entityColumn.name}",
+									</#if>
+									${entityColumn.finderColumnTypeName},
+									"${entityColumn.comparator}",
+									${entityColumn.isCaseSensitive()?c},
+									${entityColumn.isConvertNull()?c},
+									<#if stringUtil.equals(entityColumn.type, "boolean")>
+										${entity.name}::is${entityColumn.methodName}
+									<#else>
+										${entity.name}::get${entityColumn.methodName}
+									</#if>
+								)
+							</#if>
 
 							<#if entityColumn_has_next>
 								,
@@ -3263,7 +3289,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	<#assign hasDateFinder = false />
 
 	<#list entity.entityFinders as entityFinder>
-		<#if !entityFinder.collectionPersistenceFinderEnabled && !entityFinder.uniquePersistenceFinderEnabled>
+		<#if (!entityFinder.collectionPersistenceFinderEnabled && !entityFinder.uniquePersistenceFinderEnabled) || entityFinder.hasArrayableOperator()>
 			<#list entityFinder.entityColumns as entityColumn>
 				<#if stringUtil.equals(entityColumn.type, "Date")>
 					<#assign hasDateFinder = true />
