@@ -528,7 +528,7 @@ public class EagerBlobEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_EAGERBLOBENTRY_WHERE, _SQL_COUNT_EAGERBLOBENTRY_WHERE,
-			EagerBlobEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			EagerBlobEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"eagerBlobEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, EagerBlobEntry::getUuid));
@@ -541,9 +541,10 @@ public class EagerBlobEntryPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_EAGERBLOBENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"eagerBlobEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, EagerBlobEntry::getUuid),
+				true, EagerBlobEntry::getUuid),
 			new FinderColumn<>(
 				"eagerBlobEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, EagerBlobEntry::getGroupId));
@@ -611,4 +612,4 @@ public class EagerBlobEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1138423252
+// LIFERAY-SERVICE-BUILDER-HASH:559228271

@@ -334,6 +334,7 @@ public class ConvertNullEntryPersistenceImpl
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByName, _SQL_SELECT_CONVERTNULLENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"convertNullEntry.", "name", FinderColumn.Type.STRING, "=",
 				true, true, ConvertNullEntry::getName));
@@ -395,4 +396,4 @@ public class ConvertNullEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1946170537
+// LIFERAY-SERVICE-BUILDER-HASH:-2100860395

@@ -855,7 +855,7 @@ public class ERCGroupEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_ERCGROUPENTRY_WHERE, _SQL_COUNT_ERCGROUPENTRY_WHERE,
-			ERCGroupEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ERCGroupEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ercGroupEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, ERCGroupEntry::getUuid));
@@ -867,10 +867,10 @@ public class ERCGroupEntryPersistenceImpl
 			ERCGroupEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_ERCGROUPENTRY_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_ERCGROUPENTRY_WHERE, "",
 			new FinderColumn<>(
 				"ercGroupEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, ERCGroupEntry::getUuid),
+				true, ERCGroupEntry::getUuid),
 			new FinderColumn<>(
 				"ercGroupEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, ERCGroupEntry::getGroupId));
@@ -900,10 +900,10 @@ public class ERCGroupEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_ERCGROUPENTRY_WHERE,
 				_SQL_COUNT_ERCGROUPENTRY_WHERE,
-				ERCGroupEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				ERCGroupEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ercGroupEntry.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, ERCGroupEntry::getUuid),
+					true, true, ERCGroupEntry::getUuid),
 				new FinderColumn<>(
 					"ercGroupEntry.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, ERCGroupEntry::getCompanyId));
@@ -915,10 +915,10 @@ public class ERCGroupEntryPersistenceImpl
 			ERCGroupEntry::getExternalReferenceCode, ERCGroupEntry::getGroupId);
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_G, _SQL_SELECT_ERCGROUPENTRY_WHERE,
+			this, _finderPathFetchByERC_G, _SQL_SELECT_ERCGROUPENTRY_WHERE, "",
 			new FinderColumn<>(
 				"ercGroupEntry.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				ERCGroupEntry::getExternalReferenceCode),
 			new FinderColumn<>(
 				"ercGroupEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
@@ -993,4 +993,4 @@ public class ERCGroupEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:734667307
+// LIFERAY-SERVICE-BUILDER-HASH:186807514
