@@ -871,7 +871,7 @@ public class BasicEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByGroupId,
 				_finderPathCountByGroupId, _SQL_SELECT_BASICENTRY_WHERE,
 				_SQL_COUNT_BASICENTRY_WHERE, BasicEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"basicEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 					true, BasicEntry::getGroupId));
@@ -880,13 +880,13 @@ public class BasicEntryPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
 			new String[] {"companyId", "name"}, false, BasicEntry::getCompanyId,
-			BasicEntry::getName);
+			convertNullExtractor(BasicEntry::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByC_N, _SQL_SELECT_BASICENTRY_WHERE,
+			this, _finderPathFetchByC_N, _SQL_SELECT_BASICENTRY_WHERE, "",
 			new FinderColumn<>(
 				"basicEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, BasicEntry::getCompanyId),
+				true, BasicEntry::getCompanyId),
 			new FinderColumn<>(
 				"basicEntry.", "name", FinderColumn.Type.STRING, "=", true,
 				true, BasicEntry::getName));
@@ -963,4 +963,4 @@ public class BasicEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1973338623
+// LIFERAY-SERVICE-BUILDER-HASH:-1264412345

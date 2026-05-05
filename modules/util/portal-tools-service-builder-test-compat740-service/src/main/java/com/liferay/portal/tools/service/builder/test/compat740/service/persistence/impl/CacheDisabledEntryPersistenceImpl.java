@@ -334,10 +334,11 @@ public class CacheDisabledEntryPersistenceImpl
 		_finderPathFetchByName = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByName",
 			new String[] {String.class.getName()}, new String[] {"name"}, false,
-			CacheDisabledEntry::getName);
+			convertNullExtractor(CacheDisabledEntry::getName));
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByName, _SQL_SELECT_CACHEDISABLEDENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"cacheDisabledEntry.", "name", FinderColumn.Type.STRING, "=",
 				true, true, CacheDisabledEntry::getName));
@@ -399,4 +400,4 @@ public class CacheDisabledEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1716452837
+// LIFERAY-SERVICE-BUILDER-HASH:578200171
