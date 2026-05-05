@@ -2869,7 +2869,7 @@ public class AccountRolePersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_ACCOUNTROLE_WHERE,
 				_SQL_COUNT_ACCOUNTROLE_WHERE,
-				AccountRoleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				AccountRoleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"accountRole.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, AccountRole::getCompanyId));
@@ -2903,7 +2903,7 @@ public class AccountRolePersistenceImpl
 			AccountRole::getRoleId);
 
 		_uniquePersistenceFinderByRoleId = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByRoleId, _SQL_SELECT_ACCOUNTROLE_WHERE,
+			this, _finderPathFetchByRoleId, _SQL_SELECT_ACCOUNTROLE_WHERE, "",
 			new FinderColumn<>(
 				"accountRole.", "roleId", FinderColumn.Type.LONG, "=", true,
 				true, AccountRole::getRoleId));
@@ -2939,10 +2939,10 @@ public class AccountRolePersistenceImpl
 			AccountRole::getExternalReferenceCode, AccountRole::getCompanyId);
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_C, _SQL_SELECT_ACCOUNTROLE_WHERE,
+			this, _finderPathFetchByERC_C, _SQL_SELECT_ACCOUNTROLE_WHERE, "",
 			new FinderColumn<>(
 				"accountRole.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				AccountRole::getExternalReferenceCode),
 			new FinderColumn<>(
 				"accountRole.", "companyId", FinderColumn.Type.LONG, "=", true,
@@ -3037,4 +3037,4 @@ public class AccountRolePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1246813649
+// LIFERAY-SERVICE-BUILDER-HASH:-1033390016

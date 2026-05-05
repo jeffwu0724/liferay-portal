@@ -728,7 +728,7 @@ public class CommerceShippingMethodPersistenceImpl
 				_SQL_SELECT_COMMERCESHIPPINGMETHOD_WHERE,
 				_SQL_COUNT_COMMERCESHIPPINGMETHOD_WHERE,
 				CommerceShippingMethodModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"commerceShippingMethod.", "groupId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -759,9 +759,10 @@ public class CommerceShippingMethodPersistenceImpl
 			_SQL_SELECT_COMMERCESHIPPINGMETHOD_WHERE,
 			_SQL_COUNT_COMMERCESHIPPINGMETHOD_WHERE,
 			CommerceShippingMethodModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"commerceShippingMethod.", "groupId", FinderColumn.Type.LONG,
-				"=", true, false, CommerceShippingMethod::getGroupId),
+				"=", true, true, CommerceShippingMethod::getGroupId),
 			new FinderColumn<>(
 				"commerceShippingMethod.", "active", FinderColumn.Type.BOOLEAN,
 				"=", true, true, CommerceShippingMethod::isActive));
@@ -775,10 +776,10 @@ public class CommerceShippingMethodPersistenceImpl
 
 		_uniquePersistenceFinderByG_E = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_E,
-			_SQL_SELECT_COMMERCESHIPPINGMETHOD_WHERE,
+			_SQL_SELECT_COMMERCESHIPPINGMETHOD_WHERE, "",
 			new FinderColumn<>(
 				"commerceShippingMethod.", "groupId", FinderColumn.Type.LONG,
-				"=", true, false, CommerceShippingMethod::getGroupId),
+				"=", true, true, CommerceShippingMethod::getGroupId),
 			new FinderColumn<>(
 				"commerceShippingMethod.", "engineKey",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -853,4 +854,4 @@ public class CommerceShippingMethodPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-566872100
+// LIFERAY-SERVICE-BUILDER-HASH:1851376384

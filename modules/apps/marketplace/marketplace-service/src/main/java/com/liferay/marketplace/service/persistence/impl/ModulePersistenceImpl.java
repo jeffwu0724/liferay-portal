@@ -1286,7 +1286,7 @@ public class ModulePersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_MODULE_WHERE, _SQL_COUNT_MODULE_WHERE,
-			ModuleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ModuleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"module.", "uuid", FinderColumn.Type.STRING, "=", true, true,
 				Module::getUuid));
@@ -1316,10 +1316,10 @@ public class ModulePersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_MODULE_WHERE,
 				_SQL_COUNT_MODULE_WHERE, ModuleModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"module.", "uuid", FinderColumn.Type.STRING, "=", true,
-					false, Module::getUuid),
+					true, Module::getUuid),
 				new FinderColumn<>(
 					"module.", "companyId", FinderColumn.Type.LONG, "=", true,
 					true, Module::getCompanyId));
@@ -1344,7 +1344,7 @@ public class ModulePersistenceImpl
 			this, _finderPathWithPaginationFindByAppId,
 			_finderPathWithoutPaginationFindByAppId, _finderPathCountByAppId,
 			_SQL_SELECT_MODULE_WHERE, _SQL_COUNT_MODULE_WHERE,
-			ModuleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ModuleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"module.", "appId", FinderColumn.Type.LONG, "=", true, true,
 				Module::getAppId));
@@ -1373,7 +1373,7 @@ public class ModulePersistenceImpl
 				_finderPathWithoutPaginationFindByBundleSymbolicName,
 				_finderPathCountByBundleSymbolicName, _SQL_SELECT_MODULE_WHERE,
 				_SQL_COUNT_MODULE_WHERE, ModuleModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"module.", "bundleSymbolicName", FinderColumn.Type.STRING,
 					"=", true, true, Module::getBundleSymbolicName));
@@ -1402,7 +1402,7 @@ public class ModulePersistenceImpl
 				_finderPathWithoutPaginationFindByContextName,
 				_finderPathCountByContextName, _SQL_SELECT_MODULE_WHERE,
 				_SQL_COUNT_MODULE_WHERE, ModuleModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"module.", "contextName", FinderColumn.Type.STRING, "=",
 					true, true, Module::getContextName));
@@ -1430,9 +1430,9 @@ public class ModulePersistenceImpl
 			this, _finderPathWithPaginationFindByA_CN,
 			_finderPathWithoutPaginationFindByA_CN, _finderPathCountByA_CN,
 			_SQL_SELECT_MODULE_WHERE, _SQL_COUNT_MODULE_WHERE,
-			ModuleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ModuleModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
-				"module.", "appId", FinderColumn.Type.LONG, "=", true, false,
+				"module.", "appId", FinderColumn.Type.LONG, "=", true, true,
 				Module::getAppId),
 			new FinderColumn<>(
 				"module.", "contextName", FinderColumn.Type.STRING, "=", true,
@@ -1449,13 +1449,13 @@ public class ModulePersistenceImpl
 			Module::getBundleVersion);
 
 		_uniquePersistenceFinderByA_BSN_BV = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByA_BSN_BV, _SQL_SELECT_MODULE_WHERE,
+			this, _finderPathFetchByA_BSN_BV, _SQL_SELECT_MODULE_WHERE, "",
 			new FinderColumn<>(
-				"module.", "appId", FinderColumn.Type.LONG, "=", true, false,
+				"module.", "appId", FinderColumn.Type.LONG, "=", true, true,
 				Module::getAppId),
 			new FinderColumn<>(
 				"module.", "bundleSymbolicName", FinderColumn.Type.STRING, "=",
-				true, false, Module::getBundleSymbolicName),
+				true, true, Module::getBundleSymbolicName),
 			new FinderColumn<>(
 				"module.", "bundleVersion", FinderColumn.Type.STRING, "=", true,
 				true, Module::getBundleVersion));
@@ -1529,4 +1529,4 @@ public class ModulePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1668853993
+// LIFERAY-SERVICE-BUILDER-HASH:-1584793115

@@ -1536,7 +1536,7 @@ public class PasswordPolicyPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_PASSWORDPOLICY_WHERE, _SQL_COUNT_PASSWORDPOLICY_WHERE,
-			PasswordPolicyModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			PasswordPolicyModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"passwordPolicy.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, PasswordPolicy::getUuid));
@@ -1566,10 +1566,10 @@ public class PasswordPolicyPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_PASSWORDPOLICY_WHERE,
 				_SQL_COUNT_PASSWORDPOLICY_WHERE,
-				PasswordPolicyModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				PasswordPolicyModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"passwordPolicy.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, PasswordPolicy::getUuid),
+					true, true, PasswordPolicy::getUuid),
 				new FinderColumn<>(
 					"passwordPolicy.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, PasswordPolicy::getCompanyId));
@@ -1598,7 +1598,7 @@ public class PasswordPolicyPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_PASSWORDPOLICY_WHERE,
 				_SQL_COUNT_PASSWORDPOLICY_WHERE,
-				PasswordPolicyModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				PasswordPolicyModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"passwordPolicy.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, PasswordPolicy::getCompanyId));
@@ -1610,10 +1610,10 @@ public class PasswordPolicyPersistenceImpl
 			PasswordPolicy::getCompanyId, PasswordPolicy::getName);
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByC_N, _SQL_SELECT_PASSWORDPOLICY_WHERE,
+			this, _finderPathFetchByC_N, _SQL_SELECT_PASSWORDPOLICY_WHERE, "",
 			new FinderColumn<>(
 				"passwordPolicy.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, PasswordPolicy::getCompanyId),
+				true, true, PasswordPolicy::getCompanyId),
 			new FinderColumn<>(
 				"passwordPolicy.", "name", FinderColumn.Type.STRING, "=", true,
 				true, PasswordPolicy::getName));
@@ -1677,4 +1677,4 @@ public class PasswordPolicyPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:783591641
+// LIFERAY-SERVICE-BUILDER-HASH:95120765

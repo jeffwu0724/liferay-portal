@@ -326,6 +326,7 @@ public class CacheDisabledEntryPersistenceImpl
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByName, _SQL_SELECT_CACHEDISABLEDENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"cacheDisabledEntry.", "name", FinderColumn.Type.STRING, "=",
 				true, true, CacheDisabledEntry::getName));
@@ -360,4 +361,4 @@ public class CacheDisabledEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1662725333
+// LIFERAY-SERVICE-BUILDER-HASH:1644022483

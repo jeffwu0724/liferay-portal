@@ -1091,7 +1091,7 @@ public class MBMailingListPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_MBMAILINGLIST_WHERE, _SQL_COUNT_MBMAILINGLIST_WHERE,
-			MBMailingListModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			MBMailingListModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"mbMailingList.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, MBMailingList::getUuid));
@@ -1103,10 +1103,10 @@ public class MBMailingListPersistenceImpl
 			MBMailingList::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_MBMAILINGLIST_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_MBMAILINGLIST_WHERE, "",
 			new FinderColumn<>(
 				"mbMailingList.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, MBMailingList::getUuid),
+				true, MBMailingList::getUuid),
 			new FinderColumn<>(
 				"mbMailingList.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, MBMailingList::getGroupId));
@@ -1136,10 +1136,10 @@ public class MBMailingListPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_MBMAILINGLIST_WHERE,
 				_SQL_COUNT_MBMAILINGLIST_WHERE,
-				MBMailingListModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				MBMailingListModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"mbMailingList.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, MBMailingList::getUuid),
+					true, true, MBMailingList::getUuid),
 				new FinderColumn<>(
 					"mbMailingList.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, MBMailingList::getCompanyId));
@@ -1168,7 +1168,7 @@ public class MBMailingListPersistenceImpl
 				_finderPathWithoutPaginationFindByActive,
 				_finderPathCountByActive, _SQL_SELECT_MBMAILINGLIST_WHERE,
 				_SQL_COUNT_MBMAILINGLIST_WHERE,
-				MBMailingListModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				MBMailingListModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"mbMailingList.", "active", FinderColumn.Type.BOOLEAN, "=",
 					true, true, MBMailingList::isActive));
@@ -1180,10 +1180,10 @@ public class MBMailingListPersistenceImpl
 			MBMailingList::getGroupId, MBMailingList::getCategoryId);
 
 		_uniquePersistenceFinderByG_C = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_C, _SQL_SELECT_MBMAILINGLIST_WHERE,
+			this, _finderPathFetchByG_C, _SQL_SELECT_MBMAILINGLIST_WHERE, "",
 			new FinderColumn<>(
 				"mbMailingList.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, MBMailingList::getGroupId),
+				true, MBMailingList::getGroupId),
 			new FinderColumn<>(
 				"mbMailingList.", "categoryId", FinderColumn.Type.LONG, "=",
 				true, true, MBMailingList::getCategoryId));
@@ -1260,4 +1260,4 @@ public class MBMailingListPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2099879853
+// LIFERAY-SERVICE-BUILDER-HASH:1706172254

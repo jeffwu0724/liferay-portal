@@ -634,10 +634,10 @@ public class ExportImportReportEntryPersistenceImpl
 			_SQL_SELECT_EXPORTIMPORTREPORTENTRY_WHERE,
 			_SQL_COUNT_EXPORTIMPORTREPORTENTRY_WHERE,
 			ExportImportReportEntryModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"exportImportReportEntry.", "companyId", FinderColumn.Type.LONG,
-				"=", true, false, ExportImportReportEntry::getCompanyId),
+				"=", true, true, ExportImportReportEntry::getCompanyId),
 			new FinderColumn<>(
 				"exportImportReportEntry.", "exportImportConfigurationId",
 				FinderColumn.Type.LONG, "=", true, true,
@@ -663,24 +663,24 @@ public class ExportImportReportEntryPersistenceImpl
 
 		_uniquePersistenceFinderByG_C_C_C_E_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_C_C_C_E_T,
-			_SQL_SELECT_EXPORTIMPORTREPORTENTRY_WHERE,
+			_SQL_SELECT_EXPORTIMPORTREPORTENTRY_WHERE, "",
 			new FinderColumn<>(
 				"exportImportReportEntry.", "groupId", FinderColumn.Type.LONG,
-				"=", true, false, ExportImportReportEntry::getGroupId),
+				"=", true, true, ExportImportReportEntry::getGroupId),
 			new FinderColumn<>(
 				"exportImportReportEntry.", "companyId", FinderColumn.Type.LONG,
-				"=", true, false, ExportImportReportEntry::getCompanyId),
+				"=", true, true, ExportImportReportEntry::getCompanyId),
 			new FinderColumn<>(
 				"exportImportReportEntry.", "classExternalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				ExportImportReportEntry::getClassExternalReferenceCode),
 			new FinderColumn<>(
 				"exportImportReportEntry.", "classNameId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				ExportImportReportEntry::getClassNameId),
 			new FinderColumn<>(
 				"exportImportReportEntry.", "exportImportConfigurationId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				ExportImportReportEntry::getExportImportConfigurationId),
 			new FinderColumn<>(
 				"exportImportReportEntry.", "type", FinderColumn.Type.INTEGER,
@@ -755,4 +755,4 @@ public class ExportImportReportEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:486084463
+// LIFERAY-SERVICE-BUILDER-HASH:-1961588895

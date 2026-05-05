@@ -1081,7 +1081,7 @@ public class OpenIdConnectSessionPersistenceImpl
 				_SQL_SELECT_OPENIDCONNECTSESSION_WHERE,
 				_SQL_COUNT_OPENIDCONNECTSESSION_WHERE,
 				OpenIdConnectSessionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"openIdConnectSession.", "userId", FinderColumn.Type.LONG,
 					"=", true, true, OpenIdConnectSession::getUserId));
@@ -1112,7 +1112,7 @@ public class OpenIdConnectSessionPersistenceImpl
 				_SQL_SELECT_OPENIDCONNECTSESSION_WHERE,
 				_SQL_COUNT_OPENIDCONNECTSESSION_WHERE,
 				OpenIdConnectSessionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"openIdConnectSession.", "accessTokenExpirationDate",
 					FinderColumn.Type.DATE, "<", true, true,
@@ -1126,9 +1126,10 @@ public class OpenIdConnectSessionPersistenceImpl
 
 		_uniquePersistenceFinderByU_I = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByU_I, _SQL_SELECT_OPENIDCONNECTSESSION_WHERE,
+			"",
 			new FinderColumn<>(
 				"openIdConnectSession.", "userId", FinderColumn.Type.LONG, "=",
-				true, false, OpenIdConnectSession::getUserId),
+				true, true, OpenIdConnectSession::getUserId),
 			new FinderColumn<>(
 				"openIdConnectSession.", "issuer", FinderColumn.Type.STRING,
 				"=", true, true, OpenIdConnectSession::getIssuer));
@@ -1142,9 +1143,10 @@ public class OpenIdConnectSessionPersistenceImpl
 
 		_uniquePersistenceFinderByI_S = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByI_S, _SQL_SELECT_OPENIDCONNECTSESSION_WHERE,
+			"",
 			new FinderColumn<>(
 				"openIdConnectSession.", "issuer", FinderColumn.Type.STRING,
-				"=", true, false, OpenIdConnectSession::getIssuer),
+				"=", true, true, OpenIdConnectSession::getIssuer),
 			new FinderColumn<>(
 				"openIdConnectSession.", "sessionId", FinderColumn.Type.STRING,
 				"=", true, true, OpenIdConnectSession::getSessionId));
@@ -1183,12 +1185,13 @@ public class OpenIdConnectSessionPersistenceImpl
 			_SQL_SELECT_OPENIDCONNECTSESSION_WHERE,
 			_SQL_COUNT_OPENIDCONNECTSESSION_WHERE,
 			OpenIdConnectSessionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"openIdConnectSession.", "companyId", FinderColumn.Type.LONG,
-				"=", true, false, OpenIdConnectSession::getCompanyId),
+				"=", true, true, OpenIdConnectSession::getCompanyId),
 			new FinderColumn<>(
 				"openIdConnectSession.", "authServerWellKnownURI",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				OpenIdConnectSession::getAuthServerWellKnownURI),
 			new FinderColumn<>(
 				"openIdConnectSession.", "clientId", FinderColumn.Type.STRING,
@@ -1207,13 +1210,13 @@ public class OpenIdConnectSessionPersistenceImpl
 
 		_uniquePersistenceFinderByU_A_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByU_A_C,
-			_SQL_SELECT_OPENIDCONNECTSESSION_WHERE,
+			_SQL_SELECT_OPENIDCONNECTSESSION_WHERE, "",
 			new FinderColumn<>(
 				"openIdConnectSession.", "userId", FinderColumn.Type.LONG, "=",
-				true, false, OpenIdConnectSession::getUserId),
+				true, true, OpenIdConnectSession::getUserId),
 			new FinderColumn<>(
 				"openIdConnectSession.", "authServerWellKnownURI",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				OpenIdConnectSession::getAuthServerWellKnownURI),
 			new FinderColumn<>(
 				"openIdConnectSession.", "clientId", FinderColumn.Type.STRING,
@@ -1285,4 +1288,4 @@ public class OpenIdConnectSessionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-194384117
+// LIFERAY-SERVICE-BUILDER-HASH:-1006577625

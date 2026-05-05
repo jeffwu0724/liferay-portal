@@ -613,6 +613,7 @@ public class SamlIdpSsoSessionPersistenceImpl
 
 		_uniquePersistenceFinderByUserId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUserId, _SQL_SELECT_SAMLIDPSSOSESSION_WHERE,
+			"",
 			new FinderColumn<>(
 				"samlIdpSsoSession.", "userId", FinderColumn.Type.LONG, "=",
 				true, true, SamlIdpSsoSession::getUserId));
@@ -637,6 +638,7 @@ public class SamlIdpSsoSessionPersistenceImpl
 				_SQL_SELECT_SAMLIDPSSOSESSION_WHERE,
 				_SQL_COUNT_SAMLIDPSSOSESSION_WHERE,
 				SamlIdpSsoSessionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"samlIdpSsoSession.", "createDate", FinderColumn.Type.DATE,
 					"<", true, true, SamlIdpSsoSession::getCreateDate));
@@ -650,7 +652,7 @@ public class SamlIdpSsoSessionPersistenceImpl
 		_uniquePersistenceFinderBySamlIdpSsoSessionKey =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchBySamlIdpSsoSessionKey,
-				_SQL_SELECT_SAMLIDPSSOSESSION_WHERE,
+				_SQL_SELECT_SAMLIDPSSOSESSION_WHERE, "",
 				new FinderColumn<>(
 					"samlIdpSsoSession.", "samlIdpSsoSessionKey",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -722,4 +724,4 @@ public class SamlIdpSsoSessionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-140434594
+// LIFERAY-SERVICE-BUILDER-HASH:-525964444

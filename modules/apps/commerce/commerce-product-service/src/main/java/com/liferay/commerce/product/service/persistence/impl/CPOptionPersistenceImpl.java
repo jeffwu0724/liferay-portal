@@ -1799,7 +1799,7 @@ public class CPOptionPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_CPOPTION_WHERE, _SQL_COUNT_CPOPTION_WHERE,
-			CPOptionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			CPOptionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"cpOption.", "uuid", FinderColumn.Type.STRING, "=", true, true,
 				CPOption::getUuid));
@@ -1829,10 +1829,10 @@ public class CPOptionPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_CPOPTION_WHERE,
 				_SQL_COUNT_CPOPTION_WHERE, CPOptionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpOption.", "uuid", FinderColumn.Type.STRING, "=", true,
-					false, CPOption::getUuid),
+					true, CPOption::getUuid),
 				new FinderColumn<>(
 					"cpOption.", "companyId", FinderColumn.Type.LONG, "=", true,
 					true, CPOption::getCompanyId));
@@ -1861,7 +1861,7 @@ public class CPOptionPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_CPOPTION_WHERE,
 				_SQL_COUNT_CPOPTION_WHERE, CPOptionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpOption.", "companyId", FinderColumn.Type.LONG, "=", true,
 					true, CPOption::getCompanyId));
@@ -1873,10 +1873,10 @@ public class CPOptionPersistenceImpl
 			CPOption::getKey);
 
 		_uniquePersistenceFinderByC_K = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByC_K, _SQL_SELECT_CPOPTION_WHERE,
+			this, _finderPathFetchByC_K, _SQL_SELECT_CPOPTION_WHERE, "",
 			new FinderColumn<>(
 				"cpOption.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, CPOption::getCompanyId),
+				true, CPOption::getCompanyId),
 			new FinderColumn<>(
 				"cpOption.", "key", FinderColumn.Type.STRING, "=", true, true,
 				CPOption::getKey));
@@ -1888,10 +1888,10 @@ public class CPOptionPersistenceImpl
 			CPOption::getExternalReferenceCode, CPOption::getCompanyId);
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_C, _SQL_SELECT_CPOPTION_WHERE,
+			this, _finderPathFetchByERC_C, _SQL_SELECT_CPOPTION_WHERE, "",
 			new FinderColumn<>(
 				"cpOption.", "externalReferenceCode", FinderColumn.Type.STRING,
-				"=", true, false, CPOption::getExternalReferenceCode),
+				"=", true, true, CPOption::getExternalReferenceCode),
 			new FinderColumn<>(
 				"cpOption.", "companyId", FinderColumn.Type.LONG, "=", true,
 				true, CPOption::getCompanyId));
@@ -1991,4 +1991,4 @@ public class CPOptionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-257447803
+// LIFERAY-SERVICE-BUILDER-HASH:-243869828

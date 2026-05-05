@@ -366,7 +366,7 @@ public class SamlIbSloMessagePersistenceImpl
 		_uniquePersistenceFinderBySamlIdpSessionIndex =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchBySamlIdpSessionIndex,
-				_SQL_SELECT_SAMLIBSLOMESSAGE_WHERE,
+				_SQL_SELECT_SAMLIBSLOMESSAGE_WHERE, "",
 				new FinderColumn<>(
 					"samlIbSloMessage.", "samlIdpSessionIndex",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -435,4 +435,4 @@ public class SamlIbSloMessagePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-938103191
+// LIFERAY-SERVICE-BUILDER-HASH:-825124249

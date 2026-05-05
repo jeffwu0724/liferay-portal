@@ -2204,6 +2204,7 @@ public class FragmentCompositionPersistenceImpl
 			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 			_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 			FragmentCompositionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"fragmentComposition.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, FragmentComposition::getUuid));
@@ -2216,10 +2217,10 @@ public class FragmentCompositionPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
+			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE, "",
 			new FinderColumn<>(
 				"fragmentComposition.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, FragmentComposition::getUuid),
+				true, true, FragmentComposition::getUuid),
 			new FinderColumn<>(
 				"fragmentComposition.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, FragmentComposition::getGroupId));
@@ -2250,10 +2251,10 @@ public class FragmentCompositionPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 				_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 				FragmentCompositionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"fragmentComposition.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, FragmentComposition::getUuid),
+					"=", true, true, FragmentComposition::getUuid),
 				new FinderColumn<>(
 					"fragmentComposition.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, FragmentComposition::getCompanyId));
@@ -2284,7 +2285,7 @@ public class FragmentCompositionPersistenceImpl
 				_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 				_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 				FragmentCompositionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"fragmentComposition.", "groupId", FinderColumn.Type.LONG,
 					"=", true, true, FragmentComposition::getGroupId));
@@ -2316,7 +2317,7 @@ public class FragmentCompositionPersistenceImpl
 				_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 				_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 				FragmentCompositionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"fragmentComposition.", "fragmentCollectionId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -2347,9 +2348,10 @@ public class FragmentCompositionPersistenceImpl
 			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 			_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 			FragmentCompositionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"fragmentComposition.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, FragmentComposition::getGroupId),
+				true, true, FragmentComposition::getGroupId),
 			new FinderColumn<>(
 				"fragmentComposition.", "fragmentCollectionId",
 				FinderColumn.Type.LONG, "=", true, true,
@@ -2364,10 +2366,10 @@ public class FragmentCompositionPersistenceImpl
 
 		_uniquePersistenceFinderByG_FCK = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_FCK,
-			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
+			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE, "",
 			new FinderColumn<>(
 				"fragmentComposition.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, FragmentComposition::getGroupId),
+				true, true, FragmentComposition::getGroupId),
 			new FinderColumn<>(
 				"fragmentComposition.", "fragmentCompositionKey",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -2397,13 +2399,13 @@ public class FragmentCompositionPersistenceImpl
 				_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 				_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 				FragmentCompositionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"fragmentComposition.", "groupId", FinderColumn.Type.LONG,
-					"=", true, false, FragmentComposition::getGroupId),
+					"=", true, true, FragmentComposition::getGroupId),
 				new FinderColumn<>(
 					"fragmentComposition.", "fragmentCollectionId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					FragmentComposition::getFragmentCollectionId),
 				new FinderColumn<>(
 					"fragmentComposition.", "name", FinderColumn.Type.STRING,
@@ -2442,13 +2444,13 @@ public class FragmentCompositionPersistenceImpl
 				_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 				_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 				FragmentCompositionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"fragmentComposition.", "groupId", FinderColumn.Type.LONG,
-					"=", true, false, FragmentComposition::getGroupId),
+					"=", true, true, FragmentComposition::getGroupId),
 				new FinderColumn<>(
 					"fragmentComposition.", "fragmentCollectionId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					FragmentComposition::getFragmentCollectionId),
 				new FinderColumn<>(
 					"fragmentComposition.", "status", FinderColumn.Type.INTEGER,
@@ -2481,17 +2483,17 @@ public class FragmentCompositionPersistenceImpl
 				_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
 				_SQL_COUNT_FRAGMENTCOMPOSITION_WHERE,
 				FragmentCompositionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"fragmentComposition.", "groupId", FinderColumn.Type.LONG,
-					"=", true, false, FragmentComposition::getGroupId),
+					"=", true, true, FragmentComposition::getGroupId),
 				new FinderColumn<>(
 					"fragmentComposition.", "fragmentCollectionId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					FragmentComposition::getFragmentCollectionId),
 				new FinderColumn<>(
 					"fragmentComposition.", "name", FinderColumn.Type.STRING,
-					"LIKE", true, false, FragmentComposition::getName),
+					"LIKE", true, true, FragmentComposition::getName),
 				new FinderColumn<>(
 					"fragmentComposition.", "status", FinderColumn.Type.INTEGER,
 					"=", true, true, FragmentComposition::getStatus));
@@ -2505,10 +2507,10 @@ public class FragmentCompositionPersistenceImpl
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_G,
-			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE,
+			_SQL_SELECT_FRAGMENTCOMPOSITION_WHERE, "",
 			new FinderColumn<>(
 				"fragmentComposition.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				FragmentComposition::getExternalReferenceCode),
 			new FinderColumn<>(
 				"fragmentComposition.", "groupId", FinderColumn.Type.LONG, "=",
@@ -2586,4 +2588,4 @@ public class FragmentCompositionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1465745527
+// LIFERAY-SERVICE-BUILDER-HASH:421242917

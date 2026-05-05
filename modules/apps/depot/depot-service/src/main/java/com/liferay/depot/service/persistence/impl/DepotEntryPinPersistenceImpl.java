@@ -1197,7 +1197,7 @@ public class DepotEntryPinPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_DEPOTENTRYPIN_WHERE, _SQL_COUNT_DEPOTENTRYPIN_WHERE,
-			DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"depotEntryPin.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, DepotEntryPin::getUuid));
@@ -1209,10 +1209,10 @@ public class DepotEntryPinPersistenceImpl
 			DepotEntryPin::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_DEPOTENTRYPIN_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_DEPOTENTRYPIN_WHERE, "",
 			new FinderColumn<>(
 				"depotEntryPin.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, DepotEntryPin::getUuid),
+				true, DepotEntryPin::getUuid),
 			new FinderColumn<>(
 				"depotEntryPin.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, DepotEntryPin::getGroupId));
@@ -1242,10 +1242,10 @@ public class DepotEntryPinPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_DEPOTENTRYPIN_WHERE,
 				_SQL_COUNT_DEPOTENTRYPIN_WHERE,
-				DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"depotEntryPin.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, DepotEntryPin::getUuid),
+					true, true, DepotEntryPin::getUuid),
 				new FinderColumn<>(
 					"depotEntryPin.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, DepotEntryPin::getCompanyId));
@@ -1273,7 +1273,7 @@ public class DepotEntryPinPersistenceImpl
 				_finderPathWithoutPaginationFindByUserId,
 				_finderPathCountByUserId, _SQL_SELECT_DEPOTENTRYPIN_WHERE,
 				_SQL_COUNT_DEPOTENTRYPIN_WHERE,
-				DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"depotEntryPin.", "userId", FinderColumn.Type.LONG, "=",
 					true, true, DepotEntryPin::getUserId));
@@ -1302,7 +1302,7 @@ public class DepotEntryPinPersistenceImpl
 				_finderPathWithoutPaginationFindByDepotEntryId,
 				_finderPathCountByDepotEntryId, _SQL_SELECT_DEPOTENTRYPIN_WHERE,
 				_SQL_COUNT_DEPOTENTRYPIN_WHERE,
-				DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DepotEntryPinModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"depotEntryPin.", "depotEntryId", FinderColumn.Type.LONG,
 					"=", true, true, DepotEntryPin::getDepotEntryId));
@@ -1314,10 +1314,10 @@ public class DepotEntryPinPersistenceImpl
 			DepotEntryPin::getUserId, DepotEntryPin::getDepotEntryId);
 
 		_uniquePersistenceFinderByU_D = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByU_D, _SQL_SELECT_DEPOTENTRYPIN_WHERE,
+			this, _finderPathFetchByU_D, _SQL_SELECT_DEPOTENTRYPIN_WHERE, "",
 			new FinderColumn<>(
 				"depotEntryPin.", "userId", FinderColumn.Type.LONG, "=", true,
-				false, DepotEntryPin::getUserId),
+				true, DepotEntryPin::getUserId),
 			new FinderColumn<>(
 				"depotEntryPin.", "depotEntryId", FinderColumn.Type.LONG, "=",
 				true, true, DepotEntryPin::getDepotEntryId));
@@ -1394,4 +1394,4 @@ public class DepotEntryPinPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1763840779
+// LIFERAY-SERVICE-BUILDER-HASH:-598293836

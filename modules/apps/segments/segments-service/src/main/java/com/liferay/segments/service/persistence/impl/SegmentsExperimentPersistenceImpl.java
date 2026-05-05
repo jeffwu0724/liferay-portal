@@ -1589,7 +1589,7 @@ public class SegmentsExperimentPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
 			_SQL_COUNT_SEGMENTSEXPERIMENT_WHERE,
-			SegmentsExperimentModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SegmentsExperimentModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"segmentsExperiment.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, SegmentsExperiment::getUuid));
@@ -1602,10 +1602,10 @@ public class SegmentsExperimentPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
+			_SQL_SELECT_SEGMENTSEXPERIMENT_WHERE, "",
 			new FinderColumn<>(
 				"segmentsExperiment.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, SegmentsExperiment::getUuid),
+				true, true, SegmentsExperiment::getUuid),
 			new FinderColumn<>(
 				"segmentsExperiment.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, SegmentsExperiment::getGroupId));
@@ -1636,9 +1636,10 @@ public class SegmentsExperimentPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
 				_SQL_COUNT_SEGMENTSEXPERIMENT_WHERE,
 				SegmentsExperimentModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"segmentsExperiment.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, SegmentsExperiment::getUuid),
+					"=", true, true, SegmentsExperiment::getUuid),
 				new FinderColumn<>(
 					"segmentsExperiment.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, SegmentsExperiment::getCompanyId));
@@ -1668,6 +1669,7 @@ public class SegmentsExperimentPersistenceImpl
 				_finderPathCountByGroupId, _SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
 				_SQL_COUNT_SEGMENTSEXPERIMENT_WHERE,
 				SegmentsExperimentModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"segmentsExperiment.", "groupId", FinderColumn.Type.LONG,
 					"=", true, true, SegmentsExperiment::getGroupId));
@@ -1702,6 +1704,7 @@ public class SegmentsExperimentPersistenceImpl
 				_SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
 				_SQL_COUNT_SEGMENTSEXPERIMENT_WHERE,
 				SegmentsExperimentModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"segmentsExperiment.", "segmentsExperimentKey",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -1716,9 +1719,10 @@ public class SegmentsExperimentPersistenceImpl
 
 		_uniquePersistenceFinderByG_S = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_S, _SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
+			"",
 			new FinderColumn<>(
 				"segmentsExperiment.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SegmentsExperiment::getGroupId),
+				true, true, SegmentsExperiment::getGroupId),
 			new FinderColumn<>(
 				"segmentsExperiment.", "segmentsExperimentKey",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -1736,12 +1740,13 @@ public class SegmentsExperimentPersistenceImpl
 
 		_uniquePersistenceFinderByG_S_P = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_S_P, _SQL_SELECT_SEGMENTSEXPERIMENT_WHERE,
+			"",
 			new FinderColumn<>(
 				"segmentsExperiment.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SegmentsExperiment::getGroupId),
+				true, true, SegmentsExperiment::getGroupId),
 			new FinderColumn<>(
 				"segmentsExperiment.", "segmentsExperienceId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				SegmentsExperiment::getSegmentsExperienceId),
 			new FinderColumn<>(
 				"segmentsExperiment.", "plid", FinderColumn.Type.LONG, "=",
@@ -1842,4 +1847,4 @@ public class SegmentsExperimentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:843230815
+// LIFERAY-SERVICE-BUILDER-HASH:226901274

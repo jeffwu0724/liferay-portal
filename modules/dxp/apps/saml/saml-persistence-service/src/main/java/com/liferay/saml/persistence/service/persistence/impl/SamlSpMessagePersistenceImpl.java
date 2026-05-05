@@ -533,7 +533,7 @@ public class SamlSpMessagePersistenceImpl
 				this, _finderPathWithPaginationFindByLtExpirationDate, null,
 				_finderPathWithPaginationCountByLtExpirationDate,
 				_SQL_SELECT_SAMLSPMESSAGE_WHERE, _SQL_COUNT_SAMLSPMESSAGE_WHERE,
-				SamlSpMessageModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				SamlSpMessageModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"samlSpMessage.", "expirationDate", FinderColumn.Type.DATE,
 					"<", true, true, SamlSpMessage::getExpirationDate));
@@ -547,9 +547,10 @@ public class SamlSpMessagePersistenceImpl
 
 		_uniquePersistenceFinderBySIEI_SIRK = new UniquePersistenceFinder<>(
 			this, _finderPathFetchBySIEI_SIRK, _SQL_SELECT_SAMLSPMESSAGE_WHERE,
+			"",
 			new FinderColumn<>(
 				"samlSpMessage.", "samlIdpEntityId", FinderColumn.Type.STRING,
-				"=", true, false, SamlSpMessage::getSamlIdpEntityId),
+				"=", true, true, SamlSpMessage::getSamlIdpEntityId),
 			new FinderColumn<>(
 				"samlSpMessage.", "samlIdpResponseKey",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -621,4 +622,4 @@ public class SamlSpMessagePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1135059415
+// LIFERAY-SERVICE-BUILDER-HASH:-646021750

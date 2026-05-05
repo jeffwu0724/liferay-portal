@@ -9046,7 +9046,7 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, BlogsEntry::getUuid));
@@ -9058,10 +9058,10 @@ public class BlogsEntryPersistenceImpl
 			BlogsEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_BLOGSENTRY_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_BLOGSENTRY_WHERE, "",
 			new FinderColumn<>(
 				"blogsEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, BlogsEntry::getUuid),
+				true, BlogsEntry::getUuid),
 			new FinderColumn<>(
 				"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, BlogsEntry::getGroupId));
@@ -9091,10 +9091,10 @@ public class BlogsEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_BLOGSENTRY_WHERE,
 				_SQL_COUNT_BLOGSENTRY_WHERE, BlogsEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
-					false, BlogsEntry::getUuid),
+					true, BlogsEntry::getUuid),
 				new FinderColumn<>(
 					"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, BlogsEntry::getCompanyId));
@@ -9123,7 +9123,7 @@ public class BlogsEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByGroupId,
 				_finderPathCountByGroupId, _SQL_SELECT_BLOGSENTRY_WHERE,
 				_SQL_COUNT_BLOGSENTRY_WHERE, BlogsEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 					true, BlogsEntry::getGroupId));
@@ -9152,7 +9152,7 @@ public class BlogsEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_BLOGSENTRY_WHERE,
 				_SQL_COUNT_BLOGSENTRY_WHERE, BlogsEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, BlogsEntry::getCompanyId));
@@ -9164,10 +9164,10 @@ public class BlogsEntryPersistenceImpl
 			BlogsEntry::getUrlTitle);
 
 		_uniquePersistenceFinderByG_UT = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_UT, _SQL_SELECT_BLOGSENTRY_WHERE,
+			this, _finderPathFetchByG_UT, _SQL_SELECT_BLOGSENTRY_WHERE, "",
 			new FinderColumn<>(
 				"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getGroupId),
+				true, BlogsEntry::getGroupId),
 			new FinderColumn<>(
 				"blogsEntry.", "urlTitle", FinderColumn.Type.STRING, "=", true,
 				true, BlogsEntry::getUrlTitle));
@@ -9190,10 +9190,10 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByG_LtD, null,
 			_finderPathWithPaginationCountByG_LtD, _SQL_SELECT_BLOGSENTRY_WHERE,
 			_SQL_COUNT_BLOGSENTRY_WHERE, BlogsEntryModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getGroupId),
+				true, BlogsEntry::getGroupId),
 			new FinderColumn<>(
 				"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<", true,
 				true, BlogsEntry::getDisplayDate));
@@ -9221,10 +9221,10 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByG_S,
 			_finderPathWithoutPaginationFindByG_S, _finderPathCountByG_S,
 			_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getGroupId),
+				true, BlogsEntry::getGroupId),
 			new FinderColumn<>(
 				"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=", true,
 				true, BlogsEntry::getStatus));
@@ -9248,10 +9248,10 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_NotS, null,
 				_finderPathWithPaginationCountByG_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9279,10 +9279,10 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByC_U,
 			_finderPathWithoutPaginationFindByC_U, _finderPathCountByC_U,
 			_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getCompanyId),
+				true, BlogsEntry::getCompanyId),
 			new FinderColumn<>(
 				"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
 				true, BlogsEntry::getUserId));
@@ -9305,10 +9305,10 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByC_LtD, null,
 			_finderPathWithPaginationCountByC_LtD, _SQL_SELECT_BLOGSENTRY_WHERE,
 			_SQL_COUNT_BLOGSENTRY_WHERE, BlogsEntryModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getCompanyId),
+				true, BlogsEntry::getCompanyId),
 			new FinderColumn<>(
 				"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<", true,
 				true, BlogsEntry::getDisplayDate));
@@ -9336,10 +9336,10 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByC_S,
 			_finderPathWithoutPaginationFindByC_S, _finderPathCountByC_S,
 			_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getCompanyId),
+				true, BlogsEntry::getCompanyId),
 			new FinderColumn<>(
 				"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=", true,
 				true, BlogsEntry::getStatus));
@@ -9363,10 +9363,10 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByC_NotS, null,
 				_finderPathWithPaginationCountByC_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=",
-					true, false, BlogsEntry::getCompanyId),
+					true, true, BlogsEntry::getCompanyId),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9389,10 +9389,10 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByLtD_S, null,
 			_finderPathWithPaginationCountByLtD_S, _SQL_SELECT_BLOGSENTRY_WHERE,
 			_SQL_COUNT_BLOGSENTRY_WHERE, BlogsEntryModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<", true,
-				false, BlogsEntry::getDisplayDate),
+				true, BlogsEntry::getDisplayDate),
 			new FinderColumn<>(
 				"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=", true,
 				true, BlogsEntry::getStatus));
@@ -9418,13 +9418,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_U_LtD, null,
 				_finderPathWithPaginationCountByG_U_LtD,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getUserId),
+					true, BlogsEntry::getUserId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
 					true, true, BlogsEntry::getDisplayDate));
@@ -9484,13 +9484,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_U_NotS, null,
 				_finderPathWithPaginationCountByG_U_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getUserId),
+					true, BlogsEntry::getUserId),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9524,13 +9524,13 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByG_D_S,
 			_finderPathWithoutPaginationFindByG_D_S, _finderPathCountByG_D_S,
 			_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getGroupId),
+				true, BlogsEntry::getGroupId),
 			new FinderColumn<>(
 				"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "=", true,
-				false, BlogsEntry::getDisplayDate),
+				true, BlogsEntry::getDisplayDate),
 			new FinderColumn<>(
 				"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=", true,
 				true, BlogsEntry::getStatus));
@@ -9557,13 +9557,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_GtD_S, null,
 				_finderPathWithPaginationCountByG_GtD_S,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, ">",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=",
 					true, true, BlogsEntry::getStatus));
@@ -9590,13 +9590,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_LtD_S, null,
 				_finderPathWithPaginationCountByG_LtD_S,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=",
 					true, true, BlogsEntry::getStatus));
@@ -9623,13 +9623,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_LtD_NotS, null,
 				_finderPathWithPaginationCountByG_LtD_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9663,13 +9663,13 @@ public class BlogsEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByC_U_S,
 			_finderPathWithoutPaginationFindByC_U_S, _finderPathCountByC_U_S,
 			_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getCompanyId),
+				true, BlogsEntry::getCompanyId),
 			new FinderColumn<>(
 				"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
-				false, BlogsEntry::getUserId),
+				true, BlogsEntry::getUserId),
 			new FinderColumn<>(
 				"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=", true,
 				true, BlogsEntry::getStatus));
@@ -9696,13 +9696,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByC_U_NotS, null,
 				_finderPathWithPaginationCountByC_U_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=",
-					true, false, BlogsEntry::getCompanyId),
+					true, true, BlogsEntry::getCompanyId),
 				new FinderColumn<>(
 					"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getUserId),
+					true, BlogsEntry::getUserId),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9729,13 +9729,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByC_LtD_S, null,
 				_finderPathWithPaginationCountByC_LtD_S,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=",
-					true, false, BlogsEntry::getCompanyId),
+					true, true, BlogsEntry::getCompanyId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=",
 					true, true, BlogsEntry::getStatus));
@@ -9762,13 +9762,13 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByC_LtD_NotS, null,
 				_finderPathWithPaginationCountByC_LtD_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "companyId", FinderColumn.Type.LONG, "=",
-					true, false, BlogsEntry::getCompanyId),
+					true, true, BlogsEntry::getCompanyId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9796,16 +9796,16 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_U_LtD_S, null,
 				_finderPathWithPaginationCountByG_U_LtD_S,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getUserId),
+					true, BlogsEntry::getUserId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "=",
 					true, true, BlogsEntry::getStatus));
@@ -9833,16 +9833,16 @@ public class BlogsEntryPersistenceImpl
 				this, _finderPathWithPaginationFindByG_U_LtD_NotS, null,
 				_finderPathWithPaginationCountByG_U_LtD_NotS,
 				_SQL_SELECT_BLOGSENTRY_WHERE, _SQL_COUNT_BLOGSENTRY_WHERE,
-				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				BlogsEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getGroupId),
+					true, BlogsEntry::getGroupId),
 				new FinderColumn<>(
 					"blogsEntry.", "userId", FinderColumn.Type.LONG, "=", true,
-					false, BlogsEntry::getUserId),
+					true, BlogsEntry::getUserId),
 				new FinderColumn<>(
 					"blogsEntry.", "displayDate", FinderColumn.Type.DATE, "<",
-					true, false, BlogsEntry::getDisplayDate),
+					true, true, BlogsEntry::getDisplayDate),
 				new FinderColumn<>(
 					"blogsEntry.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, BlogsEntry::getStatus));
@@ -9854,10 +9854,10 @@ public class BlogsEntryPersistenceImpl
 			BlogsEntry::getExternalReferenceCode, BlogsEntry::getGroupId);
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_G, _SQL_SELECT_BLOGSENTRY_WHERE,
+			this, _finderPathFetchByERC_G, _SQL_SELECT_BLOGSENTRY_WHERE, "",
 			new FinderColumn<>(
 				"blogsEntry.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				BlogsEntry::getExternalReferenceCode),
 			new FinderColumn<>(
 				"blogsEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
@@ -9958,4 +9958,4 @@ public class BlogsEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-910346168
+// LIFERAY-SERVICE-BUILDER-HASH:264637554

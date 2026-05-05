@@ -1703,7 +1703,7 @@ public class ObjectFolderPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_OBJECTFOLDER_WHERE, _SQL_COUNT_OBJECTFOLDER_WHERE,
-			ObjectFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ObjectFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"objectFolder.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, ObjectFolder::getUuid));
@@ -1733,10 +1733,10 @@ public class ObjectFolderPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_OBJECTFOLDER_WHERE,
 				_SQL_COUNT_OBJECTFOLDER_WHERE,
-				ObjectFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				ObjectFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"objectFolder.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, ObjectFolder::getUuid),
+					true, true, ObjectFolder::getUuid),
 				new FinderColumn<>(
 					"objectFolder.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, ObjectFolder::getCompanyId));
@@ -1765,7 +1765,7 @@ public class ObjectFolderPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_OBJECTFOLDER_WHERE,
 				_SQL_COUNT_OBJECTFOLDER_WHERE,
-				ObjectFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				ObjectFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"objectFolder.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, ObjectFolder::getCompanyId));
@@ -1777,10 +1777,10 @@ public class ObjectFolderPersistenceImpl
 			ObjectFolder::getCompanyId, ObjectFolder::getName);
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByC_N, _SQL_SELECT_OBJECTFOLDER_WHERE,
+			this, _finderPathFetchByC_N, _SQL_SELECT_OBJECTFOLDER_WHERE, "",
 			new FinderColumn<>(
 				"objectFolder.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, ObjectFolder::getCompanyId),
+				true, ObjectFolder::getCompanyId),
 			new FinderColumn<>(
 				"objectFolder.", "name", FinderColumn.Type.STRING, "=", true,
 				true, ObjectFolder::getName));
@@ -1792,10 +1792,10 @@ public class ObjectFolderPersistenceImpl
 			ObjectFolder::getExternalReferenceCode, ObjectFolder::getCompanyId);
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_C, _SQL_SELECT_OBJECTFOLDER_WHERE,
+			this, _finderPathFetchByERC_C, _SQL_SELECT_OBJECTFOLDER_WHERE, "",
 			new FinderColumn<>(
 				"objectFolder.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				ObjectFolder::getExternalReferenceCode),
 			new FinderColumn<>(
 				"objectFolder.", "companyId", FinderColumn.Type.LONG, "=", true,
@@ -1893,4 +1893,4 @@ public class ObjectFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:69245222
+// LIFERAY-SERVICE-BUILDER-HASH:-156922595

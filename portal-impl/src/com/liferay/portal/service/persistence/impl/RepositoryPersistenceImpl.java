@@ -1408,7 +1408,7 @@ public class RepositoryPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_REPOSITORY_WHERE, _SQL_COUNT_REPOSITORY_WHERE,
-			RepositoryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			RepositoryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"repository.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, Repository::getUuid));
@@ -1420,10 +1420,10 @@ public class RepositoryPersistenceImpl
 			Repository::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_REPOSITORY_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_REPOSITORY_WHERE, "",
 			new FinderColumn<>(
 				"repository.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, Repository::getUuid),
+				true, Repository::getUuid),
 			new FinderColumn<>(
 				"repository.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, Repository::getGroupId));
@@ -1453,10 +1453,10 @@ public class RepositoryPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_REPOSITORY_WHERE,
 				_SQL_COUNT_REPOSITORY_WHERE, RepositoryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"repository.", "uuid", FinderColumn.Type.STRING, "=", true,
-					false, Repository::getUuid),
+					true, Repository::getUuid),
 				new FinderColumn<>(
 					"repository.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, Repository::getCompanyId));
@@ -1485,7 +1485,7 @@ public class RepositoryPersistenceImpl
 				_finderPathWithoutPaginationFindByGroupId,
 				_finderPathCountByGroupId, _SQL_SELECT_REPOSITORY_WHERE,
 				_SQL_COUNT_REPOSITORY_WHERE, RepositoryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"repository.", "groupId", FinderColumn.Type.LONG, "=", true,
 					true, Repository::getGroupId));
@@ -1514,7 +1514,7 @@ public class RepositoryPersistenceImpl
 				_finderPathWithoutPaginationFindByPortletId,
 				_finderPathCountByPortletId, _SQL_SELECT_REPOSITORY_WHERE,
 				_SQL_COUNT_REPOSITORY_WHERE, RepositoryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"repository.", "portletId", FinderColumn.Type.STRING, "=",
 					true, true, Repository::getPortletId));
@@ -1530,13 +1530,13 @@ public class RepositoryPersistenceImpl
 			Repository::getPortletId);
 
 		_uniquePersistenceFinderByG_N_P = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_N_P, _SQL_SELECT_REPOSITORY_WHERE,
+			this, _finderPathFetchByG_N_P, _SQL_SELECT_REPOSITORY_WHERE, "",
 			new FinderColumn<>(
 				"repository.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, Repository::getGroupId),
+				true, Repository::getGroupId),
 			new FinderColumn<>(
 				"repository.", "name", FinderColumn.Type.STRING, "=", true,
-				false, Repository::getName),
+				true, Repository::getName),
 			new FinderColumn<>(
 				"repository.", "portletId", FinderColumn.Type.STRING, "=", true,
 				true, Repository::getPortletId));
@@ -1548,10 +1548,10 @@ public class RepositoryPersistenceImpl
 			Repository::getExternalReferenceCode, Repository::getGroupId);
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_G, _SQL_SELECT_REPOSITORY_WHERE,
+			this, _finderPathFetchByERC_G, _SQL_SELECT_REPOSITORY_WHERE, "",
 			new FinderColumn<>(
 				"repository.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				Repository::getExternalReferenceCode),
 			new FinderColumn<>(
 				"repository.", "groupId", FinderColumn.Type.LONG, "=", true,
@@ -1593,4 +1593,4 @@ public class RepositoryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:283613350
+// LIFERAY-SERVICE-BUILDER-HASH:-652909291

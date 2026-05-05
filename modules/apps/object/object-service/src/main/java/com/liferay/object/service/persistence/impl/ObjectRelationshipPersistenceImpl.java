@@ -3619,7 +3619,7 @@ public class ObjectRelationshipPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 			_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
-			ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"objectRelationship.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, ObjectRelationship::getUuid));
@@ -3650,9 +3650,10 @@ public class ObjectRelationshipPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, ObjectRelationship::getUuid),
+					"=", true, true, ObjectRelationship::getUuid),
 				new FinderColumn<>(
 					"objectRelationship.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, ObjectRelationship::getCompanyId));
@@ -3683,6 +3684,7 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, ObjectRelationship::getCompanyId));
@@ -3713,6 +3715,7 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -3744,6 +3747,7 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -3758,7 +3762,7 @@ public class ObjectRelationshipPersistenceImpl
 		_uniquePersistenceFinderByObjectFieldId2 =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByObjectFieldId2,
-				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
+				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE, "",
 				new FinderColumn<>(
 					"objectRelationship.", "objectFieldId2",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -3794,6 +3798,7 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "parameterObjectFieldId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -3823,10 +3828,10 @@ public class ObjectRelationshipPersistenceImpl
 			_finderPathWithoutPaginationFindByC_U, _finderPathCountByC_U,
 			_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 			_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
-			ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"objectRelationship.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, ObjectRelationship::getCompanyId),
+				true, true, ObjectRelationship::getCompanyId),
 			new FinderColumn<>(
 				"objectRelationship.", "userId", FinderColumn.Type.LONG, "=",
 				true, true, ObjectRelationship::getUserId));
@@ -3857,9 +3862,10 @@ public class ObjectRelationshipPersistenceImpl
 				_finderPathCountByODI1_E, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "edge", FinderColumn.Type.BOOLEAN,
@@ -3891,9 +3897,10 @@ public class ObjectRelationshipPersistenceImpl
 				_finderPathCountByODI1_N, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "name", FinderColumn.Type.STRING,
@@ -3925,9 +3932,10 @@ public class ObjectRelationshipPersistenceImpl
 				_finderPathCountByODI1_R, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
@@ -3959,9 +3967,10 @@ public class ObjectRelationshipPersistenceImpl
 				_finderPathCountByODI2_E, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId2),
 				new FinderColumn<>(
 					"objectRelationship.", "edge", FinderColumn.Type.BOOLEAN,
@@ -3993,9 +4002,10 @@ public class ObjectRelationshipPersistenceImpl
 				_finderPathCountByODI2_R, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId2),
 				new FinderColumn<>(
 					"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
@@ -4009,9 +4019,10 @@ public class ObjectRelationshipPersistenceImpl
 
 		_uniquePersistenceFinderByDTN_R = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByDTN_R, _SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
+			"",
 			new FinderColumn<>(
 				"objectRelationship.", "dbTableName", FinderColumn.Type.STRING,
-				"=", true, false, ObjectRelationship::getDBTableName),
+				"=", true, true, ObjectRelationship::getDBTableName),
 			new FinderColumn<>(
 				"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
 				"=", true, true, ObjectRelationship::isReverse));
@@ -4031,14 +4042,14 @@ public class ObjectRelationshipPersistenceImpl
 
 		_uniquePersistenceFinderByERC_C_ODI1 = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_C_ODI1,
-			_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
+			_SQL_SELECT_OBJECTRELATIONSHIP_WHERE, "",
 			new FinderColumn<>(
 				"objectRelationship.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				ObjectRelationship::getExternalReferenceCode),
 			new FinderColumn<>(
 				"objectRelationship.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, ObjectRelationship::getCompanyId),
+				true, true, ObjectRelationship::getCompanyId),
 			new FinderColumn<>(
 				"objectRelationship.", "objectDefinitionId1",
 				FinderColumn.Type.LONG, "=", true, true,
@@ -4086,13 +4097,14 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId2),
 				new FinderColumn<>(
 					"objectRelationship.", "type", FinderColumn.Type.STRING,
@@ -4134,13 +4146,14 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "deletionType",
-					FinderColumn.Type.STRING, "=", true, false,
+					FinderColumn.Type.STRING, "=", true, true,
 					ObjectRelationship::getDeletionType),
 				new FinderColumn<>(
 					"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
@@ -4179,13 +4192,14 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
-					"=", true, false, ObjectRelationship::isReverse),
+					"=", true, true, ObjectRelationship::isReverse),
 				new FinderColumn<>(
 					"objectRelationship.", "type", FinderColumn.Type.STRING,
 					"=", true, true, ObjectRelationship::getType));
@@ -4223,13 +4237,14 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId2),
 				new FinderColumn<>(
 					"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
-					"=", true, false, ObjectRelationship::isReverse),
+					"=", true, true, ObjectRelationship::isReverse),
 				new FinderColumn<>(
 					"objectRelationship.", "type", FinderColumn.Type.STRING,
 					"=", true, true, ObjectRelationship::getType));
@@ -4277,17 +4292,18 @@ public class ObjectRelationshipPersistenceImpl
 				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
 				_SQL_COUNT_OBJECTRELATIONSHIP_WHERE,
 				ObjectRelationshipModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId2),
 				new FinderColumn<>(
 					"objectRelationship.", "name", FinderColumn.Type.STRING,
-					"=", true, false, ObjectRelationship::getName),
+					"=", true, true, ObjectRelationship::getName),
 				new FinderColumn<>(
 					"objectRelationship.", "type", FinderColumn.Type.STRING,
 					"=", true, true, ObjectRelationship::getType));
@@ -4311,21 +4327,21 @@ public class ObjectRelationshipPersistenceImpl
 		_uniquePersistenceFinderByODI1_ODI2_N_R_T =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByODI1_ODI2_N_R_T,
-				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE,
+				_SQL_SELECT_OBJECTRELATIONSHIP_WHERE, "",
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId1",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId1),
 				new FinderColumn<>(
 					"objectRelationship.", "objectDefinitionId2",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectRelationship::getObjectDefinitionId2),
 				new FinderColumn<>(
 					"objectRelationship.", "name", FinderColumn.Type.STRING,
-					"=", true, false, ObjectRelationship::getName),
+					"=", true, true, ObjectRelationship::getName),
 				new FinderColumn<>(
 					"objectRelationship.", "reverse", FinderColumn.Type.BOOLEAN,
-					"=", true, false, ObjectRelationship::isReverse),
+					"=", true, true, ObjectRelationship::isReverse),
 				new FinderColumn<>(
 					"objectRelationship.", "type", FinderColumn.Type.STRING,
 					"=", true, true, ObjectRelationship::getType));
@@ -4399,4 +4415,4 @@ public class ObjectRelationshipPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1185709704
+// LIFERAY-SERVICE-BUILDER-HASH:387606981

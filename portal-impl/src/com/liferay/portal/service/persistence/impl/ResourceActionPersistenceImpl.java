@@ -492,7 +492,7 @@ public class ResourceActionPersistenceImpl
 			this, _finderPathWithPaginationFindByName,
 			_finderPathWithoutPaginationFindByName, _finderPathCountByName,
 			_SQL_SELECT_RESOURCEACTION_WHERE, _SQL_COUNT_RESOURCEACTION_WHERE,
-			ResourceActionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ResourceActionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"resourceAction.", "name", FinderColumn.Type.STRING, "=", true,
 				true, ResourceAction::getName));
@@ -504,10 +504,10 @@ public class ResourceActionPersistenceImpl
 			ResourceAction::getActionId);
 
 		_uniquePersistenceFinderByN_A = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByN_A, _SQL_SELECT_RESOURCEACTION_WHERE,
+			this, _finderPathFetchByN_A, _SQL_SELECT_RESOURCEACTION_WHERE, "",
 			new FinderColumn<>(
 				"resourceAction.", "name", FinderColumn.Type.STRING, "=", true,
-				false, ResourceAction::getName),
+				true, ResourceAction::getName),
 			new FinderColumn<>(
 				"resourceAction.", "actionId", FinderColumn.Type.STRING, "=",
 				true, true, ResourceAction::getActionId));
@@ -545,4 +545,4 @@ public class ResourceActionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1152182733
+// LIFERAY-SERVICE-BUILDER-HASH:41254810

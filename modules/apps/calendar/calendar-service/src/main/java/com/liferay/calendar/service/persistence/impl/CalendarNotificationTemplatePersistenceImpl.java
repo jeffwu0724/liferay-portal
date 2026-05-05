@@ -1151,7 +1151,7 @@ public class CalendarNotificationTemplatePersistenceImpl
 			_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
 			_SQL_COUNT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
 			CalendarNotificationTemplateModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"calendarNotificationTemplate.", "uuid",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -1166,10 +1166,10 @@ public class CalendarNotificationTemplatePersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
+			_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE, "",
 			new FinderColumn<>(
 				"calendarNotificationTemplate.", "uuid",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				CalendarNotificationTemplate::getUuid),
 			new FinderColumn<>(
 				"calendarNotificationTemplate.", "groupId",
@@ -1203,10 +1203,10 @@ public class CalendarNotificationTemplatePersistenceImpl
 				_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
 				_SQL_COUNT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
 				CalendarNotificationTemplateModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"calendarNotificationTemplate.", "uuid",
-					FinderColumn.Type.STRING, "=", true, false,
+					FinderColumn.Type.STRING, "=", true, true,
 					CalendarNotificationTemplate::getUuid),
 				new FinderColumn<>(
 					"calendarNotificationTemplate.", "companyId",
@@ -1239,7 +1239,7 @@ public class CalendarNotificationTemplatePersistenceImpl
 				_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
 				_SQL_COUNT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
 				CalendarNotificationTemplateModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"calendarNotificationTemplate.", "calendarId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -1260,14 +1260,14 @@ public class CalendarNotificationTemplatePersistenceImpl
 
 		_uniquePersistenceFinderByC_NT_NTT = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_NT_NTT,
-			_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE,
+			_SQL_SELECT_CALENDARNOTIFICATIONTEMPLATE_WHERE, "",
 			new FinderColumn<>(
 				"calendarNotificationTemplate.", "calendarId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				CalendarNotificationTemplate::getCalendarId),
 			new FinderColumn<>(
 				"calendarNotificationTemplate.", "notificationType",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				CalendarNotificationTemplate::getNotificationType),
 			new FinderColumn<>(
 				"calendarNotificationTemplate.", "notificationTemplateType",
@@ -1347,4 +1347,4 @@ public class CalendarNotificationTemplatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1849559285
+// LIFERAY-SERVICE-BUILDER-HASH:128719303

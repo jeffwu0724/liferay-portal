@@ -612,6 +612,7 @@ public class RegionLocalizationPersistenceImpl
 				_SQL_SELECT_REGIONLOCALIZATION_WHERE,
 				_SQL_COUNT_REGIONLOCALIZATION_WHERE,
 				RegionLocalizationModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"regionLocalization.", "regionId", FinderColumn.Type.LONG,
 					"=", true, true, RegionLocalization::getRegionId));
@@ -625,10 +626,10 @@ public class RegionLocalizationPersistenceImpl
 		_uniquePersistenceFinderByRegionId_LanguageId =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByRegionId_LanguageId,
-				_SQL_SELECT_REGIONLOCALIZATION_WHERE,
+				_SQL_SELECT_REGIONLOCALIZATION_WHERE, "",
 				new FinderColumn<>(
 					"regionLocalization.", "regionId", FinderColumn.Type.LONG,
-					"=", true, false, RegionLocalization::getRegionId),
+					"=", true, true, RegionLocalization::getRegionId),
 				new FinderColumn<>(
 					"regionLocalization.", "languageId",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -667,4 +668,4 @@ public class RegionLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1759523085
+// LIFERAY-SERVICE-BUILDER-HASH:-246652422

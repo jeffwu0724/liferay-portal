@@ -3522,7 +3522,7 @@ public class CommerceTermEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_COMMERCETERMENTRY_WHERE,
 			_SQL_COUNT_COMMERCETERMENTRY_WHERE,
-			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commerceTermEntry.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, CommerceTermEntry::getUuid));
@@ -3553,9 +3553,10 @@ public class CommerceTermEntryPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_COMMERCETERMENTRY_WHERE,
 				_SQL_COUNT_COMMERCETERMENTRY_WHERE,
 				CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"commerceTermEntry.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, CommerceTermEntry::getUuid),
+					true, true, CommerceTermEntry::getUuid),
 				new FinderColumn<>(
 					"commerceTermEntry.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, CommerceTermEntry::getCompanyId));
@@ -3584,10 +3585,10 @@ public class CommerceTermEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByC_A, _finderPathCountByC_A,
 			_SQL_SELECT_COMMERCETERMENTRY_WHERE,
 			_SQL_COUNT_COMMERCETERMENTRY_WHERE,
-			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commerceTermEntry.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, CommerceTermEntry::getCompanyId),
+				true, true, CommerceTermEntry::getCompanyId),
 			new FinderColumn<>(
 				"commerceTermEntry.", "active", FinderColumn.Type.BOOLEAN, "=",
 				true, true, CommerceTermEntry::isActive));
@@ -3600,9 +3601,10 @@ public class CommerceTermEntryPersistenceImpl
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_N, _SQL_SELECT_COMMERCETERMENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"commerceTermEntry.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, CommerceTermEntry::getCompanyId),
+				true, true, CommerceTermEntry::getCompanyId),
 			new FinderColumn<>(
 				"commerceTermEntry.", "name", FinderColumn.Type.STRING, "=",
 				true, true, CommerceTermEntry::getName));
@@ -3628,9 +3630,10 @@ public class CommerceTermEntryPersistenceImpl
 				_SQL_SELECT_COMMERCETERMENTRY_WHERE,
 				_SQL_COUNT_COMMERCETERMENTRY_WHERE,
 				CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"commerceTermEntry.", "companyId", FinderColumn.Type.LONG,
-					"=", true, false, CommerceTermEntry::getCompanyId),
+					"=", true, true, CommerceTermEntry::getCompanyId),
 				new FinderColumn<>(
 					"commerceTermEntry.", "type", FinderColumn.Type.STRING,
 					"LIKE", true, true, CommerceTermEntry::getType));
@@ -3654,10 +3657,10 @@ public class CommerceTermEntryPersistenceImpl
 			_finderPathWithPaginationCountByLtD_S,
 			_SQL_SELECT_COMMERCETERMENTRY_WHERE,
 			_SQL_COUNT_COMMERCETERMENTRY_WHERE,
-			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commerceTermEntry.", "displayDate", FinderColumn.Type.DATE,
-				"<", true, false, CommerceTermEntry::getDisplayDate),
+				"<", true, true, CommerceTermEntry::getDisplayDate),
 			new FinderColumn<>(
 				"commerceTermEntry.", "status", FinderColumn.Type.INTEGER, "=",
 				true, true, CommerceTermEntry::getStatus));
@@ -3681,10 +3684,10 @@ public class CommerceTermEntryPersistenceImpl
 			_finderPathWithPaginationCountByLtE_S,
 			_SQL_SELECT_COMMERCETERMENTRY_WHERE,
 			_SQL_COUNT_COMMERCETERMENTRY_WHERE,
-			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commerceTermEntry.", "expirationDate", FinderColumn.Type.DATE,
-				"<", true, false, CommerceTermEntry::getExpirationDate),
+				"<", true, true, CommerceTermEntry::getExpirationDate),
 			new FinderColumn<>(
 				"commerceTermEntry.", "status", FinderColumn.Type.INTEGER, "=",
 				true, true, CommerceTermEntry::getStatus));
@@ -3713,12 +3716,13 @@ public class CommerceTermEntryPersistenceImpl
 				_SQL_SELECT_COMMERCETERMENTRY_WHERE,
 				_SQL_COUNT_COMMERCETERMENTRY_WHERE,
 				CommerceTermEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"commerceTermEntry.", "companyId", FinderColumn.Type.LONG,
-					"=", true, false, CommerceTermEntry::getCompanyId),
+					"=", true, true, CommerceTermEntry::getCompanyId),
 				new FinderColumn<>(
 					"commerceTermEntry.", "active", FinderColumn.Type.BOOLEAN,
-					"=", true, false, CommerceTermEntry::isActive),
+					"=", true, true, CommerceTermEntry::isActive),
 				new FinderColumn<>(
 					"commerceTermEntry.", "type", FinderColumn.Type.STRING,
 					"LIKE", true, true, CommerceTermEntry::getType));
@@ -3735,12 +3739,13 @@ public class CommerceTermEntryPersistenceImpl
 
 		_uniquePersistenceFinderByC_P_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_P_T, _SQL_SELECT_COMMERCETERMENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"commerceTermEntry.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, CommerceTermEntry::getCompanyId),
+				true, true, CommerceTermEntry::getCompanyId),
 			new FinderColumn<>(
 				"commerceTermEntry.", "priority", FinderColumn.Type.DOUBLE, "=",
-				true, false, CommerceTermEntry::getPriority),
+				true, true, CommerceTermEntry::getPriority),
 			new FinderColumn<>(
 				"commerceTermEntry.", "type", FinderColumn.Type.STRING, "=",
 				true, true, CommerceTermEntry::getType));
@@ -3754,9 +3759,10 @@ public class CommerceTermEntryPersistenceImpl
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_C, _SQL_SELECT_COMMERCETERMENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"commerceTermEntry.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				CommerceTermEntry::getExternalReferenceCode),
 			new FinderColumn<>(
 				"commerceTermEntry.", "companyId", FinderColumn.Type.LONG, "=",
@@ -3858,4 +3864,4 @@ public class CommerceTermEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1072089913
+// LIFERAY-SERVICE-BUILDER-HASH:602296844

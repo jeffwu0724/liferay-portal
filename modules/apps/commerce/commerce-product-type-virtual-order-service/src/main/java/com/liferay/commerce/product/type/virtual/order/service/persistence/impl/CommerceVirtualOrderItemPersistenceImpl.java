@@ -834,7 +834,7 @@ public class CommerceVirtualOrderItemPersistenceImpl
 			_SQL_SELECT_COMMERCEVIRTUALORDERITEM_WHERE,
 			_SQL_COUNT_COMMERCEVIRTUALORDERITEM_WHERE,
 			CommerceVirtualOrderItemModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commerceVirtualOrderItem.", "uuid", FinderColumn.Type.STRING,
 				"=", true, true, CommerceVirtualOrderItem::getUuid));
@@ -848,10 +848,10 @@ public class CommerceVirtualOrderItemPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_COMMERCEVIRTUALORDERITEM_WHERE,
+			_SQL_SELECT_COMMERCEVIRTUALORDERITEM_WHERE, "",
 			new FinderColumn<>(
 				"commerceVirtualOrderItem.", "uuid", FinderColumn.Type.STRING,
-				"=", true, false, CommerceVirtualOrderItem::getUuid),
+				"=", true, true, CommerceVirtualOrderItem::getUuid),
 			new FinderColumn<>(
 				"commerceVirtualOrderItem.", "groupId", FinderColumn.Type.LONG,
 				"=", true, true, CommerceVirtualOrderItem::getGroupId));
@@ -883,10 +883,10 @@ public class CommerceVirtualOrderItemPersistenceImpl
 				_SQL_SELECT_COMMERCEVIRTUALORDERITEM_WHERE,
 				_SQL_COUNT_COMMERCEVIRTUALORDERITEM_WHERE,
 				CommerceVirtualOrderItemModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"commerceVirtualOrderItem.", "uuid",
-					FinderColumn.Type.STRING, "=", true, false,
+					FinderColumn.Type.STRING, "=", true, true,
 					CommerceVirtualOrderItem::getUuid),
 				new FinderColumn<>(
 					"commerceVirtualOrderItem.", "companyId",
@@ -902,7 +902,7 @@ public class CommerceVirtualOrderItemPersistenceImpl
 		_uniquePersistenceFinderByCommerceOrderItemId =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByCommerceOrderItemId,
-				_SQL_SELECT_COMMERCEVIRTUALORDERITEM_WHERE,
+				_SQL_SELECT_COMMERCEVIRTUALORDERITEM_WHERE, "",
 				new FinderColumn<>(
 					"commerceVirtualOrderItem.", "commerceOrderItemId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -977,4 +977,4 @@ public class CommerceVirtualOrderItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-171496259
+// LIFERAY-SERVICE-BUILDER-HASH:1638353163

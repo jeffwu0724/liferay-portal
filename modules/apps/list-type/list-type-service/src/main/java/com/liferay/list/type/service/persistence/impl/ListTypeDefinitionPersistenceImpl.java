@@ -1670,7 +1670,7 @@ public class ListTypeDefinitionPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_LISTTYPEDEFINITION_WHERE,
 			_SQL_COUNT_LISTTYPEDEFINITION_WHERE,
-			ListTypeDefinitionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ListTypeDefinitionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"listTypeDefinition.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, ListTypeDefinition::getUuid));
@@ -1701,9 +1701,10 @@ public class ListTypeDefinitionPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_LISTTYPEDEFINITION_WHERE,
 				_SQL_COUNT_LISTTYPEDEFINITION_WHERE,
 				ListTypeDefinitionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"listTypeDefinition.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, ListTypeDefinition::getUuid),
+					"=", true, true, ListTypeDefinition::getUuid),
 				new FinderColumn<>(
 					"listTypeDefinition.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, ListTypeDefinition::getCompanyId));
@@ -1732,10 +1733,10 @@ public class ListTypeDefinitionPersistenceImpl
 			_finderPathWithoutPaginationFindByC_U, _finderPathCountByC_U,
 			_SQL_SELECT_LISTTYPEDEFINITION_WHERE,
 			_SQL_COUNT_LISTTYPEDEFINITION_WHERE,
-			ListTypeDefinitionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ListTypeDefinitionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"listTypeDefinition.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, ListTypeDefinition::getCompanyId),
+				true, true, ListTypeDefinition::getCompanyId),
 			new FinderColumn<>(
 				"listTypeDefinition.", "userId", FinderColumn.Type.LONG, "=",
 				true, true, ListTypeDefinition::getUserId));
@@ -1749,9 +1750,10 @@ public class ListTypeDefinitionPersistenceImpl
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_C, _SQL_SELECT_LISTTYPEDEFINITION_WHERE,
+			"",
 			new FinderColumn<>(
 				"listTypeDefinition.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				ListTypeDefinition::getExternalReferenceCode),
 			new FinderColumn<>(
 				"listTypeDefinition.", "companyId", FinderColumn.Type.LONG, "=",
@@ -1849,4 +1851,4 @@ public class ListTypeDefinitionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2072887201
+// LIFERAY-SERVICE-BUILDER-HASH:1148326044

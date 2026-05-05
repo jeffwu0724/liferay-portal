@@ -1911,7 +1911,7 @@ public class DDMFormInstancePersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_DDMFORMINSTANCE_WHERE, _SQL_COUNT_DDMFORMINSTANCE_WHERE,
-			DDMFormInstanceModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMFormInstanceModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmFormInstance.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, DDMFormInstance::getUuid));
@@ -1924,9 +1924,10 @@ public class DDMFormInstancePersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_DDMFORMINSTANCE_WHERE,
+			"",
 			new FinderColumn<>(
 				"ddmFormInstance.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, DDMFormInstance::getUuid),
+				true, DDMFormInstance::getUuid),
 			new FinderColumn<>(
 				"ddmFormInstance.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, DDMFormInstance::getGroupId));
@@ -1957,9 +1958,10 @@ public class DDMFormInstancePersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_DDMFORMINSTANCE_WHERE,
 				_SQL_COUNT_DDMFORMINSTANCE_WHERE,
 				DDMFormInstanceModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"ddmFormInstance.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, DDMFormInstance::getUuid),
+					true, true, DDMFormInstance::getUuid),
 				new FinderColumn<>(
 					"ddmFormInstance.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, DDMFormInstance::getCompanyId));
@@ -1994,7 +1996,7 @@ public class DDMFormInstancePersistenceImpl
 
 		_uniquePersistenceFinderByStructureId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByStructureId,
-			_SQL_SELECT_DDMFORMINSTANCE_WHERE,
+			_SQL_SELECT_DDMFORMINSTANCE_WHERE, "",
 			new FinderColumn<>(
 				"ddmFormInstance.", "structureId", FinderColumn.Type.LONG, "=",
 				true, true, DDMFormInstance::getStructureId));
@@ -2094,4 +2096,4 @@ public class DDMFormInstancePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1567977418
+// LIFERAY-SERVICE-BUILDER-HASH:-1232189552

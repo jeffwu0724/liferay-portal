@@ -2646,7 +2646,7 @@ public class TemplateEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_TEMPLATEENTRY_WHERE, _SQL_COUNT_TEMPLATEENTRY_WHERE,
-			TemplateEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			TemplateEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"templateEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, TemplateEntry::getUuid));
@@ -2658,10 +2658,10 @@ public class TemplateEntryPersistenceImpl
 			TemplateEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_TEMPLATEENTRY_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_TEMPLATEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"templateEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, TemplateEntry::getUuid),
+				true, TemplateEntry::getUuid),
 			new FinderColumn<>(
 				"templateEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, TemplateEntry::getGroupId));
@@ -2691,10 +2691,10 @@ public class TemplateEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_TEMPLATEENTRY_WHERE,
 				_SQL_COUNT_TEMPLATEENTRY_WHERE,
-				TemplateEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				TemplateEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"templateEntry.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, TemplateEntry::getUuid),
+					true, true, TemplateEntry::getUuid),
 				new FinderColumn<>(
 					"templateEntry.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, TemplateEntry::getCompanyId));
@@ -2729,7 +2729,7 @@ public class TemplateEntryPersistenceImpl
 
 		_uniquePersistenceFinderByDDMTemplateId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByDDMTemplateId,
-			_SQL_SELECT_TEMPLATEENTRY_WHERE,
+			_SQL_SELECT_TEMPLATEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"templateEntry.", "ddmTemplateId", FinderColumn.Type.LONG, "=",
 				true, true, TemplateEntry::getDDMTemplateId));
@@ -2759,10 +2759,10 @@ public class TemplateEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByG_IICN,
 				_finderPathCountByG_IICN, _SQL_SELECT_TEMPLATEENTRY_WHERE,
 				_SQL_COUNT_TEMPLATEENTRY_WHERE,
-				TemplateEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				TemplateEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"templateEntry.", "groupId", FinderColumn.Type.LONG, "=",
-					true, false, TemplateEntry::getGroupId),
+					true, true, TemplateEntry::getGroupId),
 				new FinderColumn<>(
 					"templateEntry.", "infoItemClassName",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -2820,10 +2820,10 @@ public class TemplateEntryPersistenceImpl
 			TemplateEntry::getExternalReferenceCode, TemplateEntry::getGroupId);
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_G, _SQL_SELECT_TEMPLATEENTRY_WHERE,
+			this, _finderPathFetchByERC_G, _SQL_SELECT_TEMPLATEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"templateEntry.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				TemplateEntry::getExternalReferenceCode),
 			new FinderColumn<>(
 				"templateEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
@@ -2901,4 +2901,4 @@ public class TemplateEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2121961785
+// LIFERAY-SERVICE-BUILDER-HASH:-411233655

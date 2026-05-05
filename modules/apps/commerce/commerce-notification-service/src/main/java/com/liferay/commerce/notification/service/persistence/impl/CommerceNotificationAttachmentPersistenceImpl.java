@@ -934,7 +934,7 @@ public class CommerceNotificationAttachmentPersistenceImpl
 			_SQL_SELECT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
 			_SQL_COUNT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
 			CommerceNotificationAttachmentModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commerceNotificationAttachment.", "uuid",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -949,10 +949,10 @@ public class CommerceNotificationAttachmentPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
+			_SQL_SELECT_COMMERCENOTIFICATIONATTACHMENT_WHERE, "",
 			new FinderColumn<>(
 				"commerceNotificationAttachment.", "uuid",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				CommerceNotificationAttachment::getUuid),
 			new FinderColumn<>(
 				"commerceNotificationAttachment.", "groupId",
@@ -986,10 +986,10 @@ public class CommerceNotificationAttachmentPersistenceImpl
 				_SQL_SELECT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
 				_SQL_COUNT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
 				CommerceNotificationAttachmentModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"commerceNotificationAttachment.", "uuid",
-					FinderColumn.Type.STRING, "=", true, false,
+					FinderColumn.Type.STRING, "=", true, true,
 					CommerceNotificationAttachment::getUuid),
 				new FinderColumn<>(
 					"commerceNotificationAttachment.", "companyId",
@@ -1028,7 +1028,7 @@ public class CommerceNotificationAttachmentPersistenceImpl
 				_SQL_SELECT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
 				_SQL_COUNT_COMMERCENOTIFICATIONATTACHMENT_WHERE,
 				CommerceNotificationAttachmentModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"commerceNotificationAttachment.",
 					"commerceNotificationQueueEntryId", FinderColumn.Type.LONG,
@@ -1111,4 +1111,4 @@ public class CommerceNotificationAttachmentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-279620431
+// LIFERAY-SERVICE-BUILDER-HASH:-967075445

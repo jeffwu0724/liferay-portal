@@ -1607,7 +1607,7 @@ public class RedirectEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_REDIRECTENTRY_WHERE, _SQL_COUNT_REDIRECTENTRY_WHERE,
-			RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"redirectEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, RedirectEntry::getUuid));
@@ -1619,10 +1619,10 @@ public class RedirectEntryPersistenceImpl
 			RedirectEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_REDIRECTENTRY_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_REDIRECTENTRY_WHERE, "",
 			new FinderColumn<>(
 				"redirectEntry.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, RedirectEntry::getUuid),
+				true, RedirectEntry::getUuid),
 			new FinderColumn<>(
 				"redirectEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, RedirectEntry::getGroupId));
@@ -1652,10 +1652,10 @@ public class RedirectEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_REDIRECTENTRY_WHERE,
 				_SQL_COUNT_REDIRECTENTRY_WHERE,
-				RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"redirectEntry.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, RedirectEntry::getUuid),
+					true, true, RedirectEntry::getUuid),
 				new FinderColumn<>(
 					"redirectEntry.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, RedirectEntry::getCompanyId));
@@ -1684,7 +1684,7 @@ public class RedirectEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByGroupId,
 				_finderPathCountByGroupId, _SQL_SELECT_REDIRECTENTRY_WHERE,
 				_SQL_COUNT_REDIRECTENTRY_WHERE,
-				RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"redirectEntry.", "groupId", FinderColumn.Type.LONG, "=",
 					true, true, RedirectEntry::getGroupId));
@@ -1712,10 +1712,10 @@ public class RedirectEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByG_D,
 			_finderPathWithoutPaginationFindByG_D, _finderPathCountByG_D,
 			_SQL_SELECT_REDIRECTENTRY_WHERE, _SQL_COUNT_REDIRECTENTRY_WHERE,
-			RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			RedirectEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"redirectEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, RedirectEntry::getGroupId),
+				true, RedirectEntry::getGroupId),
 			new FinderColumn<>(
 				"redirectEntry.", "destinationURL", FinderColumn.Type.STRING,
 				"=", true, true, RedirectEntry::getDestinationURL));
@@ -1727,10 +1727,10 @@ public class RedirectEntryPersistenceImpl
 			RedirectEntry::getGroupId, RedirectEntry::getSourceURL);
 
 		_uniquePersistenceFinderByG_S = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_S, _SQL_SELECT_REDIRECTENTRY_WHERE,
+			this, _finderPathFetchByG_S, _SQL_SELECT_REDIRECTENTRY_WHERE, "",
 			new FinderColumn<>(
 				"redirectEntry.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, RedirectEntry::getGroupId),
+				true, RedirectEntry::getGroupId),
 			new FinderColumn<>(
 				"redirectEntry.", "sourceURL", FinderColumn.Type.STRING, "=",
 				true, true, RedirectEntry::getSourceURL));
@@ -1827,4 +1827,4 @@ public class RedirectEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2068848180
+// LIFERAY-SERVICE-BUILDER-HASH:1333039940

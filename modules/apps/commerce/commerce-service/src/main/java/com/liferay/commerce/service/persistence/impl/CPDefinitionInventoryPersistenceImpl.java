@@ -947,6 +947,7 @@ public class CPDefinitionInventoryPersistenceImpl
 			_SQL_SELECT_CPDEFINITIONINVENTORY_WHERE,
 			_SQL_COUNT_CPDEFINITIONINVENTORY_WHERE,
 			CPDefinitionInventoryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpDefinitionInventory.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, CPDefinitionInventory::getUuid));
@@ -959,10 +960,10 @@ public class CPDefinitionInventoryPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_CPDEFINITIONINVENTORY_WHERE,
+			_SQL_SELECT_CPDEFINITIONINVENTORY_WHERE, "",
 			new FinderColumn<>(
 				"cpDefinitionInventory.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, CPDefinitionInventory::getUuid),
+				true, true, CPDefinitionInventory::getUuid),
 			new FinderColumn<>(
 				"cpDefinitionInventory.", "groupId", FinderColumn.Type.LONG,
 				"=", true, true, CPDefinitionInventory::getGroupId));
@@ -994,10 +995,10 @@ public class CPDefinitionInventoryPersistenceImpl
 				_SQL_SELECT_CPDEFINITIONINVENTORY_WHERE,
 				_SQL_COUNT_CPDEFINITIONINVENTORY_WHERE,
 				CPDefinitionInventoryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpDefinitionInventory.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, CPDefinitionInventory::getUuid),
+					"=", true, true, CPDefinitionInventory::getUuid),
 				new FinderColumn<>(
 					"cpDefinitionInventory.", "companyId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -1012,7 +1013,7 @@ public class CPDefinitionInventoryPersistenceImpl
 		_uniquePersistenceFinderByCPDefinitionId =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByCPDefinitionId,
-				_SQL_SELECT_CPDEFINITIONINVENTORY_WHERE,
+				_SQL_SELECT_CPDEFINITIONINVENTORY_WHERE, "",
 				new FinderColumn<>(
 					"cpDefinitionInventory.", "CPDefinitionId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -1090,4 +1091,4 @@ public class CPDefinitionInventoryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1514671470
+// LIFERAY-SERVICE-BUILDER-HASH:-1903621132

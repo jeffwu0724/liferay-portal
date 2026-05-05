@@ -1026,7 +1026,7 @@ public class PushNotificationsDevicePersistenceImpl
 
 		_uniquePersistenceFinderByToken = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByToken,
-			_SQL_SELECT_PUSHNOTIFICATIONSDEVICE_WHERE,
+			_SQL_SELECT_PUSHNOTIFICATIONSDEVICE_WHERE, "",
 			new FinderColumn<>(
 				"pushNotificationsDevice.", "token", FinderColumn.Type.STRING,
 				"=", true, true, PushNotificationsDevice::getToken));
@@ -1121,4 +1121,4 @@ public class PushNotificationsDevicePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1557472705
+// LIFERAY-SERVICE-BUILDER-HASH:908366979

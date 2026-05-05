@@ -1499,7 +1499,7 @@ public class ExpandoColumnPersistenceImpl
 				_finderPathWithoutPaginationFindByTableId,
 				_finderPathCountByTableId, _SQL_SELECT_EXPANDOCOLUMN_WHERE,
 				_SQL_COUNT_EXPANDOCOLUMN_WHERE,
-				ExpandoColumnModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				ExpandoColumnModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"expandoColumn.", "tableId", FinderColumn.Type.LONG, "=",
 					true, true, ExpandoColumn::getTableId));
@@ -1593,4 +1593,4 @@ public class ExpandoColumnPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:160189785
+// LIFERAY-SERVICE-BUILDER-HASH:1722009559

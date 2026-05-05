@@ -555,7 +555,7 @@ public class SharepointOAuth2TokenEntryPersistenceImpl
 				_SQL_SELECT_SHAREPOINTOAUTH2TOKENENTRY_WHERE,
 				_SQL_COUNT_SHAREPOINTOAUTH2TOKENENTRY_WHERE,
 				SharepointOAuth2TokenEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"sharepointOAuth2TokenEntry.", "userId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -570,10 +570,10 @@ public class SharepointOAuth2TokenEntryPersistenceImpl
 
 		_uniquePersistenceFinderByU_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByU_C,
-			_SQL_SELECT_SHAREPOINTOAUTH2TOKENENTRY_WHERE,
+			_SQL_SELECT_SHAREPOINTOAUTH2TOKENENTRY_WHERE, "",
 			new FinderColumn<>(
 				"sharepointOAuth2TokenEntry.", "userId", FinderColumn.Type.LONG,
-				"=", true, false, SharepointOAuth2TokenEntry::getUserId),
+				"=", true, true, SharepointOAuth2TokenEntry::getUserId),
 			new FinderColumn<>(
 				"sharepointOAuth2TokenEntry.", "configurationPid",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -645,4 +645,4 @@ public class SharepointOAuth2TokenEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:741087564
+// LIFERAY-SERVICE-BUILDER-HASH:553892421

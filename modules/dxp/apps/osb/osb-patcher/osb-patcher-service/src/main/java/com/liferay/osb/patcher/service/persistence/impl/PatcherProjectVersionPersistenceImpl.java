@@ -2089,7 +2089,7 @@ public class PatcherProjectVersionPersistenceImpl
 				_SQL_SELECT_PATCHERPROJECTVERSION_WHERE,
 				_SQL_COUNT_PATCHERPROJECTVERSION_WHERE,
 				PatcherProjectVersionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"patcherProjectVersion.", "patcherProductVersionId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -2127,7 +2127,7 @@ public class PatcherProjectVersionPersistenceImpl
 				_SQL_SELECT_PATCHERPROJECTVERSION_WHERE,
 				_SQL_COUNT_PATCHERPROJECTVERSION_WHERE,
 				PatcherProjectVersionModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"patcherProjectVersion.", "rootPatcherProjectVersionId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -2140,7 +2140,7 @@ public class PatcherProjectVersionPersistenceImpl
 
 		_uniquePersistenceFinderByCommittish = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByCommittish,
-			_SQL_SELECT_PATCHERPROJECTVERSION_WHERE,
+			_SQL_SELECT_PATCHERPROJECTVERSION_WHERE, "",
 			new FinderColumn<>(
 				"patcherProjectVersion.", "committish",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -2153,7 +2153,7 @@ public class PatcherProjectVersionPersistenceImpl
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByName,
-			_SQL_SELECT_PATCHERPROJECTVERSION_WHERE,
+			_SQL_SELECT_PATCHERPROJECTVERSION_WHERE, "",
 			new FinderColumn<>(
 				"patcherProjectVersion.", "name", FinderColumn.Type.STRING, "=",
 				true, true, PatcherProjectVersion::getName));
@@ -2192,9 +2192,10 @@ public class PatcherProjectVersionPersistenceImpl
 			_SQL_SELECT_PATCHERPROJECTVERSION_WHERE,
 			_SQL_COUNT_PATCHERPROJECTVERSION_WHERE,
 			PatcherProjectVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"patcherProjectVersion.", "patcherProductVersionId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				PatcherProjectVersion::getPatcherProductVersionId),
 			new FinderColumn<>(
 				"patcherProjectVersion.", "rootPatcherProjectVersionId",
@@ -2226,9 +2227,10 @@ public class PatcherProjectVersionPersistenceImpl
 			_SQL_SELECT_PATCHERPROJECTVERSION_WHERE,
 			_SQL_COUNT_PATCHERPROJECTVERSION_WHERE,
 			PatcherProjectVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"patcherProjectVersion.", "patcherProductVersionId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				PatcherProjectVersion::getPatcherProductVersionId),
 			new FinderColumn<>(
 				"patcherProjectVersion.", "repositoryName",
@@ -2326,4 +2328,4 @@ public class PatcherProjectVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2084397754
+// LIFERAY-SERVICE-BUILDER-HASH:1332198582

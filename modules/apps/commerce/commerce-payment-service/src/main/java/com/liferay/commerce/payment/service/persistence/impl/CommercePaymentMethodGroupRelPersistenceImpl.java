@@ -1183,7 +1183,7 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 				_SQL_SELECT_COMMERCEPAYMENTMETHODGROUPREL_WHERE,
 				_SQL_COUNT_COMMERCEPAYMENTMETHODGROUPREL_WHERE,
 				CommercePaymentMethodGroupRelModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"commercePaymentMethodGroupRel.", "groupId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -1214,10 +1214,10 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 			_SQL_SELECT_COMMERCEPAYMENTMETHODGROUPREL_WHERE,
 			_SQL_COUNT_COMMERCEPAYMENTMETHODGROUPREL_WHERE,
 			CommercePaymentMethodGroupRelModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"commercePaymentMethodGroupRel.", "groupId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				CommercePaymentMethodGroupRel::getGroupId),
 			new FinderColumn<>(
 				"commercePaymentMethodGroupRel.", "active",
@@ -1233,10 +1233,10 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 
 		_uniquePersistenceFinderByG_P = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_P,
-			_SQL_SELECT_COMMERCEPAYMENTMETHODGROUPREL_WHERE,
+			_SQL_SELECT_COMMERCEPAYMENTMETHODGROUPREL_WHERE, "",
 			new FinderColumn<>(
 				"commercePaymentMethodGroupRel.", "groupId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				CommercePaymentMethodGroupRel::getGroupId),
 			new FinderColumn<>(
 				"commercePaymentMethodGroupRel.", "paymentIntegrationKey",
@@ -1342,4 +1342,4 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:780208483
+// LIFERAY-SERVICE-BUILDER-HASH:-1806007987

@@ -532,7 +532,7 @@ public class LocalizedEntryLocalizationPersistenceImpl
 				_SQL_SELECT_LOCALIZEDENTRYLOCALIZATION_WHERE,
 				_SQL_COUNT_LOCALIZEDENTRYLOCALIZATION_WHERE,
 				LocalizedEntryLocalizationModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"localizedEntryLocalization.", "localizedEntryId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -548,10 +548,10 @@ public class LocalizedEntryLocalizationPersistenceImpl
 		_uniquePersistenceFinderByLocalizedEntryId_LanguageId =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByLocalizedEntryId_LanguageId,
-				_SQL_SELECT_LOCALIZEDENTRYLOCALIZATION_WHERE,
+				_SQL_SELECT_LOCALIZEDENTRYLOCALIZATION_WHERE, "",
 				new FinderColumn<>(
 					"localizedEntryLocalization.", "localizedEntryId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					LocalizedEntryLocalization::getLocalizedEntryId),
 				new FinderColumn<>(
 					"localizedEntryLocalization.", "languageId",
@@ -597,4 +597,4 @@ public class LocalizedEntryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:346914861
+// LIFERAY-SERVICE-BUILDER-HASH:-592044630

@@ -3120,6 +3120,7 @@ public class CPAttachmentFileEntryPersistenceImpl
 			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 			_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 			CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, CPAttachmentFileEntry::getUuid));
@@ -3132,10 +3133,10 @@ public class CPAttachmentFileEntryPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
+			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, CPAttachmentFileEntry::getUuid),
+				true, true, CPAttachmentFileEntry::getUuid),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "groupId", FinderColumn.Type.LONG,
 				"=", true, true, CPAttachmentFileEntry::getGroupId));
@@ -3167,10 +3168,10 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, CPAttachmentFileEntry::getUuid),
+					"=", true, true, CPAttachmentFileEntry::getUuid),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "companyId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -3202,7 +3203,7 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "fileEntryId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -3233,9 +3234,10 @@ public class CPAttachmentFileEntryPersistenceImpl
 			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 			_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 			CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getClassNameId),
+				"=", true, true, CPAttachmentFileEntry::getClassNameId),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
 				"=", true, true, CPAttachmentFileEntry::getClassPK));
@@ -3260,9 +3262,10 @@ public class CPAttachmentFileEntryPersistenceImpl
 			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 			_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 			CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "displayDate", FinderColumn.Type.DATE,
-				"<", true, false, CPAttachmentFileEntry::getDisplayDate),
+				"<", true, true, CPAttachmentFileEntry::getDisplayDate),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "status", FinderColumn.Type.INTEGER,
 				"=", true, true, CPAttachmentFileEntry::getStatus));
@@ -3296,12 +3299,13 @@ public class CPAttachmentFileEntryPersistenceImpl
 			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 			_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 			CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "groupId", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getGroupId),
+				"=", true, true, CPAttachmentFileEntry::getGroupId),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getClassNameId),
+				"=", true, true, CPAttachmentFileEntry::getClassNameId),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "fileEntryId", FinderColumn.Type.LONG,
 				"=", true, true, CPAttachmentFileEntry::getFileEntryId));
@@ -3335,12 +3339,13 @@ public class CPAttachmentFileEntryPersistenceImpl
 			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 			_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 			CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getClassNameId),
+				"=", true, true, CPAttachmentFileEntry::getClassNameId),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getClassPK),
+				"=", true, true, CPAttachmentFileEntry::getClassPK),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "fileEntryId", FinderColumn.Type.LONG,
 				"=", true, true, CPAttachmentFileEntry::getFileEntryId));
@@ -3376,12 +3381,13 @@ public class CPAttachmentFileEntryPersistenceImpl
 			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 			_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 			CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getClassNameId),
+				"=", true, true, CPAttachmentFileEntry::getClassNameId),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-				"=", true, false, CPAttachmentFileEntry::getClassPK),
+				"=", true, true, CPAttachmentFileEntry::getClassPK),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "cdnURL", FinderColumn.Type.STRING,
 				"=", true, true, CPAttachmentFileEntry::getCDNURL));
@@ -3413,17 +3419,17 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classNameId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					CPAttachmentFileEntry::getClassNameId),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-					"=", true, false, CPAttachmentFileEntry::getClassPK),
+					"=", true, true, CPAttachmentFileEntry::getClassPK),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "displayDate",
-					FinderColumn.Type.DATE, "<", true, false,
+					FinderColumn.Type.DATE, "<", true, true,
 					CPAttachmentFileEntry::getDisplayDate),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "status",
@@ -3464,17 +3470,17 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classNameId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					CPAttachmentFileEntry::getClassNameId),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-					"=", true, false, CPAttachmentFileEntry::getClassPK),
+					"=", true, true, CPAttachmentFileEntry::getClassPK),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "type", FinderColumn.Type.INTEGER,
-					"=", true, false, CPAttachmentFileEntry::getType),
+					"=", true, true, CPAttachmentFileEntry::getType),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "status",
 					FinderColumn.Type.INTEGER, "=", true, true,
@@ -3505,17 +3511,17 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classNameId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					CPAttachmentFileEntry::getClassNameId),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-					"=", true, false, CPAttachmentFileEntry::getClassPK),
+					"=", true, true, CPAttachmentFileEntry::getClassPK),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "type", FinderColumn.Type.INTEGER,
-					"=", true, false, CPAttachmentFileEntry::getType),
+					"=", true, true, CPAttachmentFileEntry::getType),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "status",
 					FinderColumn.Type.INTEGER, "!=", true, true,
@@ -3566,21 +3572,21 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classNameId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					CPAttachmentFileEntry::getClassNameId),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-					"=", true, false, CPAttachmentFileEntry::getClassPK),
+					"=", true, true, CPAttachmentFileEntry::getClassPK),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "galleryEnabled",
-					FinderColumn.Type.BOOLEAN, "=", true, false,
+					FinderColumn.Type.BOOLEAN, "=", true, true,
 					CPAttachmentFileEntry::isGalleryEnabled),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "type", FinderColumn.Type.INTEGER,
-					"=", true, false, CPAttachmentFileEntry::getType),
+					"=", true, true, CPAttachmentFileEntry::getType),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "status",
 					FinderColumn.Type.INTEGER, "=", true, true,
@@ -3618,21 +3624,21 @@ public class CPAttachmentFileEntryPersistenceImpl
 				_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
 				_SQL_COUNT_CPATTACHMENTFILEENTRY_WHERE,
 				CPAttachmentFileEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classNameId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					CPAttachmentFileEntry::getClassNameId),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "classPK", FinderColumn.Type.LONG,
-					"=", true, false, CPAttachmentFileEntry::getClassPK),
+					"=", true, true, CPAttachmentFileEntry::getClassPK),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "galleryEnabled",
-					FinderColumn.Type.BOOLEAN, "=", true, false,
+					FinderColumn.Type.BOOLEAN, "=", true, true,
 					CPAttachmentFileEntry::isGalleryEnabled),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "type", FinderColumn.Type.INTEGER,
-					"=", true, false, CPAttachmentFileEntry::getType),
+					"=", true, true, CPAttachmentFileEntry::getType),
 				new FinderColumn<>(
 					"cpAttachmentFileEntry.", "status",
 					FinderColumn.Type.INTEGER, "!=", true, true,
@@ -3647,10 +3653,10 @@ public class CPAttachmentFileEntryPersistenceImpl
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_C,
-			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE,
+			_SQL_SELECT_CPATTACHMENTFILEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				CPAttachmentFileEntry::getExternalReferenceCode),
 			new FinderColumn<>(
 				"cpAttachmentFileEntry.", "companyId", FinderColumn.Type.LONG,
@@ -3728,4 +3734,4 @@ public class CPAttachmentFileEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1536799527
+// LIFERAY-SERVICE-BUILDER-HASH:1452180795

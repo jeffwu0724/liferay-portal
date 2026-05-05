@@ -4647,6 +4647,7 @@ public class LayoutUtilityPageEntryPersistenceImpl
 			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
 			_SQL_COUNT_LAYOUTUTILITYPAGEENTRY_WHERE,
 			LayoutUtilityPageEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "uuid", FinderColumn.Type.STRING,
 				"=", true, true, LayoutUtilityPageEntry::getUuid));
@@ -4660,10 +4661,10 @@ public class LayoutUtilityPageEntryPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
+			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "uuid", FinderColumn.Type.STRING,
-				"=", true, false, LayoutUtilityPageEntry::getUuid),
+				"=", true, true, LayoutUtilityPageEntry::getUuid),
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "groupId", FinderColumn.Type.LONG,
 				"=", true, true, LayoutUtilityPageEntry::getGroupId));
@@ -4695,10 +4696,10 @@ public class LayoutUtilityPageEntryPersistenceImpl
 				_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
 				_SQL_COUNT_LAYOUTUTILITYPAGEENTRY_WHERE,
 				LayoutUtilityPageEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"layoutUtilityPageEntry.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, LayoutUtilityPageEntry::getUuid),
+					"=", true, true, LayoutUtilityPageEntry::getUuid),
 				new FinderColumn<>(
 					"layoutUtilityPageEntry.", "companyId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -4730,7 +4731,7 @@ public class LayoutUtilityPageEntryPersistenceImpl
 				_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
 				_SQL_COUNT_LAYOUTUTILITYPAGEENTRY_WHERE,
 				LayoutUtilityPageEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"layoutUtilityPageEntry.", "groupId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -4743,7 +4744,7 @@ public class LayoutUtilityPageEntryPersistenceImpl
 
 		_uniquePersistenceFinderByPlid = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByPlid,
-			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
+			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "plid", FinderColumn.Type.LONG, "=",
 				true, true, LayoutUtilityPageEntry::getPlid));
@@ -4806,12 +4807,13 @@ public class LayoutUtilityPageEntryPersistenceImpl
 			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
 			_SQL_COUNT_LAYOUTUTILITYPAGEENTRY_WHERE,
 			LayoutUtilityPageEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			"",
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "groupId", FinderColumn.Type.LONG,
-				"=", true, false, LayoutUtilityPageEntry::getGroupId),
+				"=", true, true, LayoutUtilityPageEntry::getGroupId),
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "defaultLayoutUtilityPageEntry",
-				FinderColumn.Type.BOOLEAN, "=", true, false,
+				FinderColumn.Type.BOOLEAN, "=", true, true,
 				LayoutUtilityPageEntry::isDefaultLayoutUtilityPageEntry),
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "type", FinderColumn.Type.STRING,
@@ -4829,13 +4831,13 @@ public class LayoutUtilityPageEntryPersistenceImpl
 
 		_uniquePersistenceFinderByG_N_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_N_T,
-			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
+			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "groupId", FinderColumn.Type.LONG,
-				"=", true, false, LayoutUtilityPageEntry::getGroupId),
+				"=", true, true, LayoutUtilityPageEntry::getGroupId),
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "name", FinderColumn.Type.STRING,
-				"=", true, false, LayoutUtilityPageEntry::getName),
+				"=", true, true, LayoutUtilityPageEntry::getName),
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "type", FinderColumn.Type.STRING,
 				"=", true, true, LayoutUtilityPageEntry::getType));
@@ -4866,10 +4868,10 @@ public class LayoutUtilityPageEntryPersistenceImpl
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_G,
-			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE,
+			_SQL_SELECT_LAYOUTUTILITYPAGEENTRY_WHERE, "",
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				LayoutUtilityPageEntry::getExternalReferenceCode),
 			new FinderColumn<>(
 				"layoutUtilityPageEntry.", "groupId", FinderColumn.Type.LONG,
@@ -4972,4 +4974,4 @@ public class LayoutUtilityPageEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-131595109
+// LIFERAY-SERVICE-BUILDER-HASH:-1825952186

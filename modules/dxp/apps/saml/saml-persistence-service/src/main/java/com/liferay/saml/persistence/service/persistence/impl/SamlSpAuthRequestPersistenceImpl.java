@@ -539,6 +539,7 @@ public class SamlSpAuthRequestPersistenceImpl
 				_SQL_SELECT_SAMLSPAUTHREQUEST_WHERE,
 				_SQL_COUNT_SAMLSPAUTHREQUEST_WHERE,
 				SamlSpAuthRequestModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"samlSpAuthRequest.", "createDate", FinderColumn.Type.DATE,
 					"<", true, true, SamlSpAuthRequest::getCreateDate));
@@ -552,10 +553,10 @@ public class SamlSpAuthRequestPersistenceImpl
 
 		_uniquePersistenceFinderBySIEI_SSARK = new UniquePersistenceFinder<>(
 			this, _finderPathFetchBySIEI_SSARK,
-			_SQL_SELECT_SAMLSPAUTHREQUEST_WHERE,
+			_SQL_SELECT_SAMLSPAUTHREQUEST_WHERE, "",
 			new FinderColumn<>(
 				"samlSpAuthRequest.", "samlIdpEntityId",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				SamlSpAuthRequest::getSamlIdpEntityId),
 			new FinderColumn<>(
 				"samlSpAuthRequest.", "samlSpAuthRequestKey",
@@ -628,4 +629,4 @@ public class SamlSpAuthRequestPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:477689208
+// LIFERAY-SERVICE-BUILDER-HASH:-1901562487

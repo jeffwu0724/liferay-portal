@@ -342,7 +342,7 @@ public class RenameFinderColumnEntryPersistenceImpl
 		_uniquePersistenceFinderByColumnToRename =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByColumnToRename,
-				_SQL_SELECT_RENAMEFINDERCOLUMNENTRY_WHERE,
+				_SQL_SELECT_RENAMEFINDERCOLUMNENTRY_WHERE, "",
 				new FinderColumn<>(
 					"renameFinderColumnEntry.", "columnToRename",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -384,4 +384,4 @@ public class RenameFinderColumnEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1114503638
+// LIFERAY-SERVICE-BUILDER-HASH:-701311336

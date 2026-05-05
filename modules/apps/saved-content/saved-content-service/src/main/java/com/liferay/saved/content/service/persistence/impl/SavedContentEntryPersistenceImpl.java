@@ -3640,7 +3640,7 @@ public class SavedContentEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 			_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
-			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, SavedContentEntry::getUuid));
@@ -3653,9 +3653,10 @@ public class SavedContentEntryPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"savedContentEntry.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, SavedContentEntry::getUuid),
+				true, true, SavedContentEntry::getUuid),
 			new FinderColumn<>(
 				"savedContentEntry.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, SavedContentEntry::getGroupId));
@@ -3686,9 +3687,10 @@ public class SavedContentEntryPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 				_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
 				SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"savedContentEntry.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, SavedContentEntry::getUuid),
+					true, true, SavedContentEntry::getUuid),
 				new FinderColumn<>(
 					"savedContentEntry.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, SavedContentEntry::getCompanyId));
@@ -3718,6 +3720,7 @@ public class SavedContentEntryPersistenceImpl
 				_finderPathCountByGroupId, _SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 				_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
 				SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"savedContentEntry.", "groupId", FinderColumn.Type.LONG,
 					"=", true, true, SavedContentEntry::getGroupId));
@@ -3746,6 +3749,7 @@ public class SavedContentEntryPersistenceImpl
 				_finderPathCountByUserId, _SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 				_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
 				SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"savedContentEntry.", "userId", FinderColumn.Type.LONG, "=",
 					true, true, SavedContentEntry::getUserId));
@@ -3774,10 +3778,10 @@ public class SavedContentEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByG_U, _finderPathCountByG_U,
 			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 			_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
-			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getGroupId),
+				true, true, SavedContentEntry::getGroupId),
 			new FinderColumn<>(
 				"savedContentEntry.", "userId", FinderColumn.Type.LONG, "=",
 				true, true, SavedContentEntry::getUserId));
@@ -3806,10 +3810,10 @@ public class SavedContentEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByG_CN, _finderPathCountByG_CN,
 			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 			_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
-			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getGroupId),
+				true, true, SavedContentEntry::getGroupId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classNameId", FinderColumn.Type.LONG,
 				"=", true, true, SavedContentEntry::getClassNameId));
@@ -3838,10 +3842,10 @@ public class SavedContentEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByU_C, _finderPathCountByU_C,
 			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 			_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
-			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "userId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getUserId),
+				true, true, SavedContentEntry::getUserId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classNameId", FinderColumn.Type.LONG,
 				"=", true, true, SavedContentEntry::getClassNameId));
@@ -3874,13 +3878,13 @@ public class SavedContentEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByG_C_C, _finderPathCountByG_C_C,
 			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 			_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
-			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getGroupId),
+				true, true, SavedContentEntry::getGroupId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, SavedContentEntry::getClassNameId),
+				"=", true, true, SavedContentEntry::getClassNameId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classPK", FinderColumn.Type.LONG, "=",
 				true, true, SavedContentEntry::getClassPK));
@@ -3913,13 +3917,13 @@ public class SavedContentEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByC_C_C, _finderPathCountByC_C_C,
 			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
 			_SQL_COUNT_SAVEDCONTENTENTRY_WHERE,
-			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SavedContentEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getCompanyId),
+				true, true, SavedContentEntry::getCompanyId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, SavedContentEntry::getClassNameId),
+				"=", true, true, SavedContentEntry::getClassNameId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classPK", FinderColumn.Type.LONG, "=",
 				true, true, SavedContentEntry::getClassPK));
@@ -3936,16 +3940,16 @@ public class SavedContentEntryPersistenceImpl
 
 		_uniquePersistenceFinderByG_U_C_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_U_C_C,
-			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE,
+			_SQL_SELECT_SAVEDCONTENTENTRY_WHERE, "",
 			new FinderColumn<>(
 				"savedContentEntry.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getGroupId),
+				true, true, SavedContentEntry::getGroupId),
 			new FinderColumn<>(
 				"savedContentEntry.", "userId", FinderColumn.Type.LONG, "=",
-				true, false, SavedContentEntry::getUserId),
+				true, true, SavedContentEntry::getUserId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, SavedContentEntry::getClassNameId),
+				"=", true, true, SavedContentEntry::getClassNameId),
 			new FinderColumn<>(
 				"savedContentEntry.", "classPK", FinderColumn.Type.LONG, "=",
 				true, true, SavedContentEntry::getClassPK));
@@ -4094,4 +4098,4 @@ public class SavedContentEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:124743964
+// LIFERAY-SERVICE-BUILDER-HASH:1529770952

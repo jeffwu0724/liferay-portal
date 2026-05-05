@@ -601,7 +601,7 @@ public class UserIdMapperPersistenceImpl
 				_finderPathWithoutPaginationFindByUserId,
 				_finderPathCountByUserId, _SQL_SELECT_USERIDMAPPER_WHERE,
 				_SQL_COUNT_USERIDMAPPER_WHERE,
-				UserIdMapperModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				UserIdMapperModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"userIdMapper.", "userId", FinderColumn.Type.LONG, "=",
 					true, true, UserIdMapper::getUserId));
@@ -613,10 +613,10 @@ public class UserIdMapperPersistenceImpl
 			UserIdMapper::getType);
 
 		_uniquePersistenceFinderByU_T = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByU_T, _SQL_SELECT_USERIDMAPPER_WHERE,
+			this, _finderPathFetchByU_T, _SQL_SELECT_USERIDMAPPER_WHERE, "",
 			new FinderColumn<>(
 				"userIdMapper.", "userId", FinderColumn.Type.LONG, "=", true,
-				false, UserIdMapper::getUserId),
+				true, UserIdMapper::getUserId),
 			new FinderColumn<>(
 				"userIdMapper.", "type", FinderColumn.Type.STRING, "=", true,
 				true, UserIdMapper::getType));
@@ -628,10 +628,10 @@ public class UserIdMapperPersistenceImpl
 			UserIdMapper::getType, UserIdMapper::getExternalUserId);
 
 		_uniquePersistenceFinderByT_E = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByT_E, _SQL_SELECT_USERIDMAPPER_WHERE,
+			this, _finderPathFetchByT_E, _SQL_SELECT_USERIDMAPPER_WHERE, "",
 			new FinderColumn<>(
 				"userIdMapper.", "type", FinderColumn.Type.STRING, "=", true,
-				false, UserIdMapper::getType),
+				true, UserIdMapper::getType),
 			new FinderColumn<>(
 				"userIdMapper.", "externalUserId", FinderColumn.Type.STRING,
 				"=", true, true, UserIdMapper::getExternalUserId));
@@ -672,4 +672,4 @@ public class UserIdMapperPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:144115905
+// LIFERAY-SERVICE-BUILDER-HASH:597663995

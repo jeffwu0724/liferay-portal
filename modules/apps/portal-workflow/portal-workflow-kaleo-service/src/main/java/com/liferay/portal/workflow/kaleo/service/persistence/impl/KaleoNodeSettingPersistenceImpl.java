@@ -641,6 +641,7 @@ public class KaleoNodeSettingPersistenceImpl
 				_SQL_SELECT_KALEONODESETTING_WHERE,
 				_SQL_COUNT_KALEONODESETTING_WHERE,
 				KaleoNodeSettingModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"kaleoNodeSetting.", "kaleoNodeId", FinderColumn.Type.LONG,
 					"=", true, true, KaleoNodeSetting::getKaleoNodeId));
@@ -653,9 +654,10 @@ public class KaleoNodeSettingPersistenceImpl
 
 		_uniquePersistenceFinderByKNI_N = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByKNI_N, _SQL_SELECT_KALEONODESETTING_WHERE,
+			"",
 			new FinderColumn<>(
 				"kaleoNodeSetting.", "kaleoNodeId", FinderColumn.Type.LONG, "=",
-				true, false, KaleoNodeSetting::getKaleoNodeId),
+				true, true, KaleoNodeSetting::getKaleoNodeId),
 			new FinderColumn<>(
 				"kaleoNodeSetting.", "name", FinderColumn.Type.STRING, "=",
 				true, true, KaleoNodeSetting::getName));
@@ -729,4 +731,4 @@ public class KaleoNodeSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1219406444
+// LIFERAY-SERVICE-BUILDER-HASH:-1131249215

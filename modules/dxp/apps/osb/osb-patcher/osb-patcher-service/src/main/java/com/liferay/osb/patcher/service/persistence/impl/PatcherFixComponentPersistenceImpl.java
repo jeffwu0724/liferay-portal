@@ -371,6 +371,7 @@ public class PatcherFixComponentPersistenceImpl
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByName, _SQL_SELECT_PATCHERFIXCOMPONENT_WHERE,
+			"",
 			new FinderColumn<>(
 				"patcherFixComponent.", "name", FinderColumn.Type.STRING, "=",
 				true, true, PatcherFixComponent::getName));
@@ -438,4 +439,4 @@ public class PatcherFixComponentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2061297823
+// LIFERAY-SERVICE-BUILDER-HASH:-1284229665

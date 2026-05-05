@@ -1174,7 +1174,7 @@ public class SiteFriendlyURLPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_SITEFRIENDLYURL_WHERE, _SQL_COUNT_SITEFRIENDLYURL_WHERE,
-			SiteFriendlyURLModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SiteFriendlyURLModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"siteFriendlyURL.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, SiteFriendlyURL::getUuid));
@@ -1187,9 +1187,10 @@ public class SiteFriendlyURLPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_SITEFRIENDLYURL_WHERE,
+			"",
 			new FinderColumn<>(
 				"siteFriendlyURL.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, SiteFriendlyURL::getUuid),
+				true, SiteFriendlyURL::getUuid),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, SiteFriendlyURL::getGroupId));
@@ -1220,9 +1221,10 @@ public class SiteFriendlyURLPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_SITEFRIENDLYURL_WHERE,
 				_SQL_COUNT_SITEFRIENDLYURL_WHERE,
 				SiteFriendlyURLModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"siteFriendlyURL.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, SiteFriendlyURL::getUuid),
+					true, true, SiteFriendlyURL::getUuid),
 				new FinderColumn<>(
 					"siteFriendlyURL.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, SiteFriendlyURL::getCompanyId));
@@ -1250,10 +1252,10 @@ public class SiteFriendlyURLPersistenceImpl
 			this, _finderPathWithPaginationFindByG_C,
 			_finderPathWithoutPaginationFindByG_C, _finderPathCountByG_C,
 			_SQL_SELECT_SITEFRIENDLYURL_WHERE, _SQL_COUNT_SITEFRIENDLYURL_WHERE,
-			SiteFriendlyURLModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			SiteFriendlyURLModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"siteFriendlyURL.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SiteFriendlyURL::getGroupId),
+				true, true, SiteFriendlyURL::getGroupId),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "companyId", FinderColumn.Type.LONG, "=",
 				true, true, SiteFriendlyURL::getCompanyId));
@@ -1265,10 +1267,10 @@ public class SiteFriendlyURLPersistenceImpl
 			SiteFriendlyURL::getCompanyId, SiteFriendlyURL::getFriendlyURL);
 
 		_uniquePersistenceFinderByC_F = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByC_F, _SQL_SELECT_SITEFRIENDLYURL_WHERE,
+			this, _finderPathFetchByC_F, _SQL_SELECT_SITEFRIENDLYURL_WHERE, "",
 			new FinderColumn<>(
 				"siteFriendlyURL.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, SiteFriendlyURL::getCompanyId),
+				true, true, SiteFriendlyURL::getCompanyId),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "friendlyURL", FinderColumn.Type.STRING,
 				"=", true, true, SiteFriendlyURL::getFriendlyURL));
@@ -1285,12 +1287,13 @@ public class SiteFriendlyURLPersistenceImpl
 
 		_uniquePersistenceFinderByG_C_L = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_C_L, _SQL_SELECT_SITEFRIENDLYURL_WHERE,
+			"",
 			new FinderColumn<>(
 				"siteFriendlyURL.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, SiteFriendlyURL::getGroupId),
+				true, true, SiteFriendlyURL::getGroupId),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, SiteFriendlyURL::getCompanyId),
+				true, true, SiteFriendlyURL::getCompanyId),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "languageId", FinderColumn.Type.STRING, "=",
 				true, true, SiteFriendlyURL::getLanguageId));
@@ -1307,12 +1310,13 @@ public class SiteFriendlyURLPersistenceImpl
 
 		_uniquePersistenceFinderByC_F_L = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_F_L, _SQL_SELECT_SITEFRIENDLYURL_WHERE,
+			"",
 			new FinderColumn<>(
 				"siteFriendlyURL.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, SiteFriendlyURL::getCompanyId),
+				true, true, SiteFriendlyURL::getCompanyId),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "friendlyURL", FinderColumn.Type.STRING,
-				"=", true, false, SiteFriendlyURL::getFriendlyURL),
+				"=", true, true, SiteFriendlyURL::getFriendlyURL),
 			new FinderColumn<>(
 				"siteFriendlyURL.", "languageId", FinderColumn.Type.STRING, "=",
 				true, true, SiteFriendlyURL::getLanguageId));
@@ -1386,4 +1390,4 @@ public class SiteFriendlyURLPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2092095747
+// LIFERAY-SERVICE-BUILDER-HASH:-2086678245

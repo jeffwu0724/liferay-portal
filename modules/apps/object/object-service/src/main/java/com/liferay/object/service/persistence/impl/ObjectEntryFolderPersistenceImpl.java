@@ -2269,7 +2269,7 @@ public class ObjectEntryFolderPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
 			_SQL_COUNT_OBJECTENTRYFOLDER_WHERE,
-			ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"objectEntryFolder.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, ObjectEntryFolder::getUuid));
@@ -2282,9 +2282,10 @@ public class ObjectEntryFolderPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
+			"",
 			new FinderColumn<>(
 				"objectEntryFolder.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, ObjectEntryFolder::getUuid),
+				true, true, ObjectEntryFolder::getUuid),
 			new FinderColumn<>(
 				"objectEntryFolder.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, ObjectEntryFolder::getGroupId));
@@ -2315,9 +2316,10 @@ public class ObjectEntryFolderPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
 				_SQL_COUNT_OBJECTENTRYFOLDER_WHERE,
 				ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectEntryFolder.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, ObjectEntryFolder::getUuid),
+					true, true, ObjectEntryFolder::getUuid),
 				new FinderColumn<>(
 					"objectEntryFolder.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, ObjectEntryFolder::getCompanyId));
@@ -2334,14 +2336,14 @@ public class ObjectEntryFolderPersistenceImpl
 
 		_uniquePersistenceFinderByERC_G_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_G_C,
-			_SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
+			_SQL_SELECT_OBJECTENTRYFOLDER_WHERE, "",
 			new FinderColumn<>(
 				"objectEntryFolder.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				ObjectEntryFolder::getExternalReferenceCode),
 			new FinderColumn<>(
 				"objectEntryFolder.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, ObjectEntryFolder::getGroupId),
+				true, true, ObjectEntryFolder::getGroupId),
 			new FinderColumn<>(
 				"objectEntryFolder.", "companyId", FinderColumn.Type.LONG, "=",
 				true, true, ObjectEntryFolder::getCompanyId));
@@ -2377,13 +2379,13 @@ public class ObjectEntryFolderPersistenceImpl
 			_finderPathWithoutPaginationFindByG_C_P, _finderPathCountByG_C_P,
 			_SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
 			_SQL_COUNT_OBJECTENTRYFOLDER_WHERE,
-			ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"objectEntryFolder.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, ObjectEntryFolder::getGroupId),
+				true, true, ObjectEntryFolder::getGroupId),
 			new FinderColumn<>(
 				"objectEntryFolder.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, ObjectEntryFolder::getCompanyId),
+				true, true, ObjectEntryFolder::getCompanyId),
 			new FinderColumn<>(
 				"objectEntryFolder.", "parentObjectEntryFolderId",
 				FinderColumn.Type.LONG, "=", true, true,
@@ -2413,12 +2415,13 @@ public class ObjectEntryFolderPersistenceImpl
 				_SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
 				_SQL_COUNT_OBJECTENTRYFOLDER_WHERE,
 				ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectEntryFolder.", "groupId", FinderColumn.Type.LONG,
-					"=", true, false, ObjectEntryFolder::getGroupId),
+					"=", true, true, ObjectEntryFolder::getGroupId),
 				new FinderColumn<>(
 					"objectEntryFolder.", "companyId", FinderColumn.Type.LONG,
-					"=", true, false, ObjectEntryFolder::getCompanyId),
+					"=", true, true, ObjectEntryFolder::getCompanyId),
 				new FinderColumn<>(
 					"objectEntryFolder.", "treePath", FinderColumn.Type.STRING,
 					"LIKE", true, true, ObjectEntryFolder::getTreePath));
@@ -2457,19 +2460,20 @@ public class ObjectEntryFolderPersistenceImpl
 				_SQL_SELECT_OBJECTENTRYFOLDER_WHERE,
 				_SQL_COUNT_OBJECTENTRYFOLDER_WHERE,
 				ObjectEntryFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"objectEntryFolder.", "groupId", FinderColumn.Type.LONG,
-					"=", true, false, ObjectEntryFolder::getGroupId),
+					"=", true, true, ObjectEntryFolder::getGroupId),
 				new FinderColumn<>(
 					"objectEntryFolder.", "companyId", FinderColumn.Type.LONG,
-					"=", true, false, ObjectEntryFolder::getCompanyId),
+					"=", true, true, ObjectEntryFolder::getCompanyId),
 				new FinderColumn<>(
 					"objectEntryFolder.", "parentObjectEntryFolderId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					ObjectEntryFolder::getParentObjectEntryFolderId),
 				new FinderColumn<>(
 					"objectEntryFolder.", "name", FinderColumn.Type.STRING, "=",
-					true, false, ObjectEntryFolder::getName),
+					true, true, ObjectEntryFolder::getName),
 				new FinderColumn<>(
 					"objectEntryFolder.", "status", FinderColumn.Type.INTEGER,
 					"!=", true, true, ObjectEntryFolder::getStatus));
@@ -2566,4 +2570,4 @@ public class ObjectEntryFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-656590827
+// LIFERAY-SERVICE-BUILDER-HASH:1836275541

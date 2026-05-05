@@ -1729,7 +1729,7 @@ public class DDMStructureLayoutPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
 			_SQL_COUNT_DDMSTRUCTURELAYOUT_WHERE,
-			DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmStructureLayout.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, DDMStructureLayout::getUuid));
@@ -1742,10 +1742,10 @@ public class DDMStructureLayoutPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
+			_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE, "",
 			new FinderColumn<>(
 				"ddmStructureLayout.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, DDMStructureLayout::getUuid),
+				true, true, DDMStructureLayout::getUuid),
 			new FinderColumn<>(
 				"ddmStructureLayout.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, DDMStructureLayout::getGroupId));
@@ -1776,9 +1776,10 @@ public class DDMStructureLayoutPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
 				_SQL_COUNT_DDMSTRUCTURELAYOUT_WHERE,
 				DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"ddmStructureLayout.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, DDMStructureLayout::getUuid),
+					"=", true, true, DDMStructureLayout::getUuid),
 				new FinderColumn<>(
 					"ddmStructureLayout.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, DDMStructureLayout::getCompanyId));
@@ -1808,6 +1809,7 @@ public class DDMStructureLayoutPersistenceImpl
 				_finderPathCountByGroupId, _SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
 				_SQL_COUNT_DDMSTRUCTURELAYOUT_WHERE,
 				DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"ddmStructureLayout.", "groupId", FinderColumn.Type.LONG,
 					"=", true, true, DDMStructureLayout::getGroupId));
@@ -1838,6 +1840,7 @@ public class DDMStructureLayoutPersistenceImpl
 				_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
 				_SQL_COUNT_DDMSTRUCTURELAYOUT_WHERE,
 				DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"ddmStructureLayout.", "structureLayoutKey",
 					FinderColumn.Type.STRING, "=", true, true,
@@ -1852,7 +1855,7 @@ public class DDMStructureLayoutPersistenceImpl
 		_uniquePersistenceFinderByStructureVersionId =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByStructureVersionId,
-				_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
+				_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE, "",
 				new FinderColumn<>(
 					"ddmStructureLayout.", "structureVersionId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -1882,10 +1885,10 @@ public class DDMStructureLayoutPersistenceImpl
 			_finderPathWithoutPaginationFindByG_C, _finderPathCountByG_C,
 			_SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
 			_SQL_COUNT_DDMSTRUCTURELAYOUT_WHERE,
-			DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmStructureLayout.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, DDMStructureLayout::getGroupId),
+				true, true, DDMStructureLayout::getGroupId),
 			new FinderColumn<>(
 				"ddmStructureLayout.", "classNameId", FinderColumn.Type.LONG,
 				"=", true, true, DDMStructureLayout::getClassNameId));
@@ -1903,12 +1906,13 @@ public class DDMStructureLayoutPersistenceImpl
 
 		_uniquePersistenceFinderByG_C_S = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_C_S, _SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
+			"",
 			new FinderColumn<>(
 				"ddmStructureLayout.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, DDMStructureLayout::getGroupId),
+				true, true, DDMStructureLayout::getGroupId),
 			new FinderColumn<>(
 				"ddmStructureLayout.", "classNameId", FinderColumn.Type.LONG,
-				"=", true, false, DDMStructureLayout::getClassNameId),
+				"=", true, true, DDMStructureLayout::getClassNameId),
 			new FinderColumn<>(
 				"ddmStructureLayout.", "structureLayoutKey",
 				FinderColumn.Type.STRING, "=", true, true,
@@ -1947,12 +1951,13 @@ public class DDMStructureLayoutPersistenceImpl
 				_finderPathCountByG_C_SV, _SQL_SELECT_DDMSTRUCTURELAYOUT_WHERE,
 				_SQL_COUNT_DDMSTRUCTURELAYOUT_WHERE,
 				DDMStructureLayoutModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"ddmStructureLayout.", "groupId", FinderColumn.Type.LONG,
-					"=", true, false, DDMStructureLayout::getGroupId),
+					"=", true, true, DDMStructureLayout::getGroupId),
 				new FinderColumn<>(
 					"ddmStructureLayout.", "classNameId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					DDMStructureLayout::getClassNameId),
 				new FinderColumn<>(
 					"ddmStructureLayout.", "structureVersionId",
@@ -2031,4 +2036,4 @@ public class DDMStructureLayoutPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-512388813
+// LIFERAY-SERVICE-BUILDER-HASH:1192850312

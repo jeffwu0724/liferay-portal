@@ -1112,7 +1112,7 @@ public class TranslationEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_TRANSLATIONENTRY_WHERE,
 			_SQL_COUNT_TRANSLATIONENTRY_WHERE,
-			TranslationEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			TranslationEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"translationEntry.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, TranslationEntry::getUuid));
@@ -1125,9 +1125,10 @@ public class TranslationEntryPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_TRANSLATIONENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"translationEntry.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, TranslationEntry::getUuid),
+				true, true, TranslationEntry::getUuid),
 			new FinderColumn<>(
 				"translationEntry.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, TranslationEntry::getGroupId));
@@ -1158,9 +1159,10 @@ public class TranslationEntryPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_TRANSLATIONENTRY_WHERE,
 				_SQL_COUNT_TRANSLATIONENTRY_WHERE,
 				TranslationEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"translationEntry.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, TranslationEntry::getUuid),
+					true, true, TranslationEntry::getUuid),
 				new FinderColumn<>(
 					"translationEntry.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, TranslationEntry::getCompanyId));
@@ -1189,10 +1191,10 @@ public class TranslationEntryPersistenceImpl
 			_finderPathWithoutPaginationFindByC_C, _finderPathCountByC_C,
 			_SQL_SELECT_TRANSLATIONENTRY_WHERE,
 			_SQL_COUNT_TRANSLATIONENTRY_WHERE,
-			TranslationEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			TranslationEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"translationEntry.", "classNameId", FinderColumn.Type.LONG, "=",
-				true, false, TranslationEntry::getClassNameId),
+				true, true, TranslationEntry::getClassNameId),
 			new FinderColumn<>(
 				"translationEntry.", "classPK", FinderColumn.Type.LONG, "=",
 				true, true, TranslationEntry::getClassPK));
@@ -1209,12 +1211,13 @@ public class TranslationEntryPersistenceImpl
 
 		_uniquePersistenceFinderByC_C_L = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_C_L, _SQL_SELECT_TRANSLATIONENTRY_WHERE,
+			"",
 			new FinderColumn<>(
 				"translationEntry.", "classNameId", FinderColumn.Type.LONG, "=",
-				true, false, TranslationEntry::getClassNameId),
+				true, true, TranslationEntry::getClassNameId),
 			new FinderColumn<>(
 				"translationEntry.", "classPK", FinderColumn.Type.LONG, "=",
-				true, false, TranslationEntry::getClassPK),
+				true, true, TranslationEntry::getClassPK),
 			new FinderColumn<>(
 				"translationEntry.", "languageId", FinderColumn.Type.STRING,
 				"=", true, true, TranslationEntry::getLanguageId));
@@ -1291,4 +1294,4 @@ public class TranslationEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:573119959
+// LIFERAY-SERVICE-BUILDER-HASH:217890566

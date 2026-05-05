@@ -893,7 +893,7 @@ public class PLOEntryPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_PLOENTRY_WHERE,
 				_SQL_COUNT_PLOENTRY_WHERE, PLOEntryModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ploEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
 					true, PLOEntry::getCompanyId));
@@ -921,10 +921,10 @@ public class PLOEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByC_K,
 			_finderPathWithoutPaginationFindByC_K, _finderPathCountByC_K,
 			_SQL_SELECT_PLOENTRY_WHERE, _SQL_COUNT_PLOENTRY_WHERE,
-			PLOEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			PLOEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ploEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, PLOEntry::getCompanyId),
+				true, PLOEntry::getCompanyId),
 			new FinderColumn<>(
 				"ploEntry.", "key", FinderColumn.Type.STRING, "=", true, true,
 				PLOEntry::getKey));
@@ -952,10 +952,10 @@ public class PLOEntryPersistenceImpl
 			this, _finderPathWithPaginationFindByC_L,
 			_finderPathWithoutPaginationFindByC_L, _finderPathCountByC_L,
 			_SQL_SELECT_PLOENTRY_WHERE, _SQL_COUNT_PLOENTRY_WHERE,
-			PLOEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			PLOEntryModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ploEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, PLOEntry::getCompanyId),
+				true, PLOEntry::getCompanyId),
 			new FinderColumn<>(
 				"ploEntry.", "languageId", FinderColumn.Type.STRING, "=", true,
 				true, PLOEntry::getLanguageId));
@@ -970,12 +970,12 @@ public class PLOEntryPersistenceImpl
 			PLOEntry::getCompanyId, PLOEntry::getKey, PLOEntry::getLanguageId);
 
 		_uniquePersistenceFinderByC_K_L = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByC_K_L, _SQL_SELECT_PLOENTRY_WHERE,
+			this, _finderPathFetchByC_K_L, _SQL_SELECT_PLOENTRY_WHERE, "",
 			new FinderColumn<>(
 				"ploEntry.", "companyId", FinderColumn.Type.LONG, "=", true,
-				false, PLOEntry::getCompanyId),
+				true, PLOEntry::getCompanyId),
 			new FinderColumn<>(
-				"ploEntry.", "key", FinderColumn.Type.STRING, "=", true, false,
+				"ploEntry.", "key", FinderColumn.Type.STRING, "=", true, true,
 				PLOEntry::getKey),
 			new FinderColumn<>(
 				"ploEntry.", "languageId", FinderColumn.Type.STRING, "=", true,
@@ -1050,4 +1050,4 @@ public class PLOEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1735432807
+// LIFERAY-SERVICE-BUILDER-HASH:1564330379

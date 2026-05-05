@@ -1134,7 +1134,7 @@ public class KaleoTaskFormPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_KALEOTASKFORM_WHERE,
 				_SQL_COUNT_KALEOTASKFORM_WHERE,
-				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"kaleoTaskForm.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, KaleoTaskForm::getCompanyId));
@@ -1168,7 +1168,7 @@ public class KaleoTaskFormPersistenceImpl
 				_finderPathWithoutPaginationFindByKaleoDefinitionVersionId,
 				_finderPathCountByKaleoDefinitionVersionId,
 				_SQL_SELECT_KALEOTASKFORM_WHERE, _SQL_COUNT_KALEOTASKFORM_WHERE,
-				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"kaleoTaskForm.", "kaleoDefinitionVersionId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -1198,7 +1198,7 @@ public class KaleoTaskFormPersistenceImpl
 				_finderPathWithoutPaginationFindByKaleoNodeId,
 				_finderPathCountByKaleoNodeId, _SQL_SELECT_KALEOTASKFORM_WHERE,
 				_SQL_COUNT_KALEOTASKFORM_WHERE,
-				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"kaleoTaskForm.", "kaleoNodeId", FinderColumn.Type.LONG,
 					"=", true, true, KaleoTaskForm::getKaleoNodeId));
@@ -1227,7 +1227,7 @@ public class KaleoTaskFormPersistenceImpl
 				_finderPathWithoutPaginationFindByKaleoTaskId,
 				_finderPathCountByKaleoTaskId, _SQL_SELECT_KALEOTASKFORM_WHERE,
 				_SQL_COUNT_KALEOTASKFORM_WHERE,
-				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				KaleoTaskFormModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"kaleoTaskForm.", "kaleoTaskId", FinderColumn.Type.LONG,
 					"=", true, true, KaleoTaskForm::getKaleoTaskId));
@@ -1240,10 +1240,10 @@ public class KaleoTaskFormPersistenceImpl
 
 		_uniquePersistenceFinderByFormUuid_KTI = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByFormUuid_KTI,
-			_SQL_SELECT_KALEOTASKFORM_WHERE,
+			_SQL_SELECT_KALEOTASKFORM_WHERE, "",
 			new FinderColumn<>(
 				"kaleoTaskForm.", "kaleoTaskId", FinderColumn.Type.LONG, "=",
-				true, false, KaleoTaskForm::getKaleoTaskId),
+				true, true, KaleoTaskForm::getKaleoTaskId),
 			new FinderColumn<>(
 				"kaleoTaskForm.", "formUuid", FinderColumn.Type.STRING, "=",
 				true, true, KaleoTaskForm::getFormUuid));
@@ -1317,4 +1317,4 @@ public class KaleoTaskFormPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:126286550
+// LIFERAY-SERVICE-BUILDER-HASH:1569432145

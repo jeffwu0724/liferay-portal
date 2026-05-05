@@ -2154,7 +2154,7 @@ public class KBFolderPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_KBFOLDER_WHERE, _SQL_COUNT_KBFOLDER_WHERE,
-			KBFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			KBFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"kbFolder.", "uuid", FinderColumn.Type.STRING, "=", true, true,
 				KBFolder::getUuid));
@@ -2166,9 +2166,9 @@ public class KBFolderPersistenceImpl
 			KBFolder::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_KBFOLDER_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_KBFOLDER_WHERE, "",
 			new FinderColumn<>(
-				"kbFolder.", "uuid", FinderColumn.Type.STRING, "=", true, false,
+				"kbFolder.", "uuid", FinderColumn.Type.STRING, "=", true, true,
 				KBFolder::getUuid),
 			new FinderColumn<>(
 				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true, true,
@@ -2199,10 +2199,10 @@ public class KBFolderPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_KBFOLDER_WHERE,
 				_SQL_COUNT_KBFOLDER_WHERE, KBFolderModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"kbFolder.", "uuid", FinderColumn.Type.STRING, "=", true,
-					false, KBFolder::getUuid),
+					true, KBFolder::getUuid),
 				new FinderColumn<>(
 					"kbFolder.", "companyId", FinderColumn.Type.LONG, "=", true,
 					true, KBFolder::getCompanyId));
@@ -2231,7 +2231,7 @@ public class KBFolderPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_KBFOLDER_WHERE,
 				_SQL_COUNT_KBFOLDER_WHERE, KBFolderModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"kbFolder.", "companyId", FinderColumn.Type.LONG, "=", true,
 					true, KBFolder::getCompanyId));
@@ -2259,10 +2259,10 @@ public class KBFolderPersistenceImpl
 			this, _finderPathWithPaginationFindByG_P,
 			_finderPathWithoutPaginationFindByG_P, _finderPathCountByG_P,
 			_SQL_SELECT_KBFOLDER_WHERE, _SQL_COUNT_KBFOLDER_WHERE,
-			KBFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			KBFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
-				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, KBFolder::getGroupId),
+				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true, true,
+				KBFolder::getGroupId),
 			new FinderColumn<>(
 				"kbFolder.", "parentKBFolderId", FinderColumn.Type.LONG, "=",
 				true, true, KBFolder::getParentKBFolderId));
@@ -2278,13 +2278,13 @@ public class KBFolderPersistenceImpl
 			KBFolder::getName);
 
 		_uniquePersistenceFinderByG_P_N = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_P_N, _SQL_SELECT_KBFOLDER_WHERE,
+			this, _finderPathFetchByG_P_N, _SQL_SELECT_KBFOLDER_WHERE, "",
 			new FinderColumn<>(
-				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, KBFolder::getGroupId),
+				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true, true,
+				KBFolder::getGroupId),
 			new FinderColumn<>(
 				"kbFolder.", "parentKBFolderId", FinderColumn.Type.LONG, "=",
-				true, false, KBFolder::getParentKBFolderId),
+				true, true, KBFolder::getParentKBFolderId),
 			new FinderColumn<>(
 				"kbFolder.", "name", FinderColumn.Type.STRING, "=", true, true,
 				KBFolder::getName));
@@ -2300,13 +2300,13 @@ public class KBFolderPersistenceImpl
 			KBFolder::getUrlTitle);
 
 		_uniquePersistenceFinderByG_P_UT = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_P_UT, _SQL_SELECT_KBFOLDER_WHERE,
+			this, _finderPathFetchByG_P_UT, _SQL_SELECT_KBFOLDER_WHERE, "",
 			new FinderColumn<>(
-				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, KBFolder::getGroupId),
+				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true, true,
+				KBFolder::getGroupId),
 			new FinderColumn<>(
 				"kbFolder.", "parentKBFolderId", FinderColumn.Type.LONG, "=",
-				true, false, KBFolder::getParentKBFolderId),
+				true, true, KBFolder::getParentKBFolderId),
 			new FinderColumn<>(
 				"kbFolder.", "urlTitle", FinderColumn.Type.STRING, "=", true,
 				true, KBFolder::getUrlTitle));
@@ -2340,13 +2340,13 @@ public class KBFolderPersistenceImpl
 			this, _finderPathWithPaginationFindByG_P_S,
 			_finderPathWithoutPaginationFindByG_P_S, _finderPathCountByG_P_S,
 			_SQL_SELECT_KBFOLDER_WHERE, _SQL_COUNT_KBFOLDER_WHERE,
-			KBFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			KBFolderModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
-				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, KBFolder::getGroupId),
+				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true, true,
+				KBFolder::getGroupId),
 			new FinderColumn<>(
 				"kbFolder.", "parentKBFolderId", FinderColumn.Type.LONG, "=",
-				true, false, KBFolder::getParentKBFolderId),
+				true, true, KBFolder::getParentKBFolderId),
 			new FinderColumn<>(
 				"kbFolder.", "status", FinderColumn.Type.INTEGER, "=", true,
 				true, KBFolder::getStatus));
@@ -2358,10 +2358,10 @@ public class KBFolderPersistenceImpl
 			KBFolder::getExternalReferenceCode, KBFolder::getGroupId);
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_G, _SQL_SELECT_KBFOLDER_WHERE,
+			this, _finderPathFetchByERC_G, _SQL_SELECT_KBFOLDER_WHERE, "",
 			new FinderColumn<>(
 				"kbFolder.", "externalReferenceCode", FinderColumn.Type.STRING,
-				"=", true, false, KBFolder::getExternalReferenceCode),
+				"=", true, true, KBFolder::getExternalReferenceCode),
 			new FinderColumn<>(
 				"kbFolder.", "groupId", FinderColumn.Type.LONG, "=", true, true,
 				KBFolder::getGroupId));
@@ -2461,4 +2461,4 @@ public class KBFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-311434525
+// LIFERAY-SERVICE-BUILDER-HASH:-265500773

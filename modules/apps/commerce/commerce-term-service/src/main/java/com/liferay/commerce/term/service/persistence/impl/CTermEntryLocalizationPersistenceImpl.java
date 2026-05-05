@@ -588,7 +588,7 @@ public class CTermEntryLocalizationPersistenceImpl
 				_SQL_SELECT_CTERMENTRYLOCALIZATION_WHERE,
 				_SQL_COUNT_CTERMENTRYLOCALIZATION_WHERE,
 				CTermEntryLocalizationModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"cTermEntryLocalization.", "commerceTermEntryId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -606,10 +606,10 @@ public class CTermEntryLocalizationPersistenceImpl
 		_uniquePersistenceFinderByCommerceTermEntryId_LanguageId =
 			new UniquePersistenceFinder<>(
 				this, _finderPathFetchByCommerceTermEntryId_LanguageId,
-				_SQL_SELECT_CTERMENTRYLOCALIZATION_WHERE,
+				_SQL_SELECT_CTERMENTRYLOCALIZATION_WHERE, "",
 				new FinderColumn<>(
 					"cTermEntryLocalization.", "commerceTermEntryId",
-					FinderColumn.Type.LONG, "=", true, false,
+					FinderColumn.Type.LONG, "=", true, true,
 					CTermEntryLocalization::getCommerceTermEntryId),
 				new FinderColumn<>(
 					"cTermEntryLocalization.", "languageId",
@@ -682,4 +682,4 @@ public class CTermEntryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1485117503
+// LIFERAY-SERVICE-BUILDER-HASH:2107263516

@@ -2703,7 +2703,7 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 			_SQL_COUNT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 			OAuthClientASLocalMetadataModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "uuid", FinderColumn.Type.STRING,
 				"=", true, true, OAuthClientASLocalMetadata::getUuid));
@@ -2735,10 +2735,10 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 				_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 				_SQL_COUNT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 				OAuthClientASLocalMetadataModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"oAuthClientASLocalMetadata.", "uuid",
-					FinderColumn.Type.STRING, "=", true, false,
+					FinderColumn.Type.STRING, "=", true, true,
 					OAuthClientASLocalMetadata::getUuid),
 				new FinderColumn<>(
 					"oAuthClientASLocalMetadata.", "companyId",
@@ -2771,7 +2771,7 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 				_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 				_SQL_COUNT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 				OAuthClientASLocalMetadataModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"oAuthClientASLocalMetadata.", "companyId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -2802,7 +2802,7 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 				_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 				_SQL_COUNT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 				OAuthClientASLocalMetadataModelImpl.ORDER_BY_JPQL,
-				_ENTITY_ALIAS_PREFIX,
+				_ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"oAuthClientASLocalMetadata.", "userId",
 					FinderColumn.Type.LONG, "=", true, true,
@@ -2817,10 +2817,10 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 
 		_uniquePersistenceFinderByC_I = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_I,
-			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
+			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE, "",
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "companyId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				OAuthClientASLocalMetadata::getCompanyId),
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "issuer",
@@ -2852,10 +2852,10 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 			_SQL_COUNT_OAUTHCLIENTASLOCALMETADATA_WHERE,
 			OAuthClientASLocalMetadataModelImpl.ORDER_BY_JPQL,
-			_ENTITY_ALIAS_PREFIX,
+			_ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "companyId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				OAuthClientASLocalMetadata::getCompanyId),
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "localWellKnownEnabled",
@@ -2871,10 +2871,10 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 
 		_uniquePersistenceFinderByC_LWKURI = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_LWKURI,
-			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
+			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE, "",
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "companyId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				OAuthClientASLocalMetadata::getCompanyId),
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "localWellKnownURI",
@@ -2890,10 +2890,10 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 
 		_uniquePersistenceFinderByC_O = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_O,
-			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
+			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE, "",
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "companyId",
-				FinderColumn.Type.LONG, "=", true, false,
+				FinderColumn.Type.LONG, "=", true, true,
 				OAuthClientASLocalMetadata::getCompanyId),
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "oAuthASLocalWellKnownURI",
@@ -2909,10 +2909,10 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 
 		_uniquePersistenceFinderByERC_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByERC_C,
-			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE,
+			_SQL_SELECT_OAUTHCLIENTASLOCALMETADATA_WHERE, "",
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				OAuthClientASLocalMetadata::getExternalReferenceCode),
 			new FinderColumn<>(
 				"oAuthClientASLocalMetadata.", "companyId",
@@ -3016,4 +3016,4 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1465693976
+// LIFERAY-SERVICE-BUILDER-HASH:-932699666

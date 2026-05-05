@@ -314,7 +314,7 @@ public class ClassNamePersistenceImpl
 			false, ClassName::getValue);
 
 		_uniquePersistenceFinderByValue = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByValue, _SQL_SELECT_CLASSNAME_WHERE,
+			this, _finderPathFetchByValue, _SQL_SELECT_CLASSNAME_WHERE, "",
 			new FinderColumn<>(
 				"className.", "value", FinderColumn.Type.STRING, "=", true,
 				true, ClassName::getValue));
@@ -349,4 +349,4 @@ public class ClassNamePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-90318642
+// LIFERAY-SERVICE-BUILDER-HASH:-1774523632

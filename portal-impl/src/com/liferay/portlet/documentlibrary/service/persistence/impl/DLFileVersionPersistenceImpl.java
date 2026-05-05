@@ -3644,7 +3644,7 @@ public class DLFileVersionPersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_DLFILEVERSION_WHERE, _SQL_COUNT_DLFILEVERSION_WHERE,
-			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"dlFileVersion.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, DLFileVersion::getUuid));
@@ -3656,10 +3656,10 @@ public class DLFileVersionPersistenceImpl
 			DLFileVersion::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_DLFILEVERSION_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_DLFILEVERSION_WHERE, "",
 			new FinderColumn<>(
 				"dlFileVersion.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, DLFileVersion::getUuid),
+				true, DLFileVersion::getUuid),
 			new FinderColumn<>(
 				"dlFileVersion.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, DLFileVersion::getGroupId));
@@ -3689,10 +3689,10 @@ public class DLFileVersionPersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_DLFILEVERSION_WHERE,
 				_SQL_COUNT_DLFILEVERSION_WHERE,
-				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"dlFileVersion.", "uuid", FinderColumn.Type.STRING, "=",
-					true, false, DLFileVersion::getUuid),
+					true, true, DLFileVersion::getUuid),
 				new FinderColumn<>(
 					"dlFileVersion.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, DLFileVersion::getCompanyId));
@@ -3721,7 +3721,7 @@ public class DLFileVersionPersistenceImpl
 				_finderPathWithoutPaginationFindByCompanyId,
 				_finderPathCountByCompanyId, _SQL_SELECT_DLFILEVERSION_WHERE,
 				_SQL_COUNT_DLFILEVERSION_WHERE,
-				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"dlFileVersion.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, DLFileVersion::getCompanyId));
@@ -3750,7 +3750,7 @@ public class DLFileVersionPersistenceImpl
 				_finderPathWithoutPaginationFindByFileEntryId,
 				_finderPathCountByFileEntryId, _SQL_SELECT_DLFILEVERSION_WHERE,
 				_SQL_COUNT_DLFILEVERSION_WHERE,
-				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"dlFileVersion.", "fileEntryId", FinderColumn.Type.LONG,
 					"=", true, true, DLFileVersion::getFileEntryId));
@@ -3779,7 +3779,7 @@ public class DLFileVersionPersistenceImpl
 				_finderPathWithoutPaginationFindByMimeType,
 				_finderPathCountByMimeType, _SQL_SELECT_DLFILEVERSION_WHERE,
 				_SQL_COUNT_DLFILEVERSION_WHERE,
-				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"dlFileVersion.", "mimeType", FinderColumn.Type.STRING, "=",
 					true, true, DLFileVersion::getMimeType));
@@ -3807,10 +3807,10 @@ public class DLFileVersionPersistenceImpl
 			this, _finderPathWithPaginationFindByC_SU,
 			_finderPathWithoutPaginationFindByC_SU, _finderPathCountByC_SU,
 			_SQL_SELECT_DLFILEVERSION_WHERE, _SQL_COUNT_DLFILEVERSION_WHERE,
-			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"dlFileVersion.", "companyId", FinderColumn.Type.LONG, "=",
-				true, false, DLFileVersion::getCompanyId),
+				true, true, DLFileVersion::getCompanyId),
 			new FinderColumn<>(
 				"dlFileVersion.", "storeUUID", FinderColumn.Type.STRING, "=",
 				true, true, DLFileVersion::getStoreUUID));
@@ -3834,10 +3834,10 @@ public class DLFileVersionPersistenceImpl
 				this, _finderPathWithPaginationFindByC_NotS, null,
 				_finderPathWithPaginationCountByC_NotS,
 				_SQL_SELECT_DLFILEVERSION_WHERE, _SQL_COUNT_DLFILEVERSION_WHERE,
-				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"dlFileVersion.", "companyId", FinderColumn.Type.LONG, "=",
-					true, false, DLFileVersion::getCompanyId),
+					true, true, DLFileVersion::getCompanyId),
 				new FinderColumn<>(
 					"dlFileVersion.", "status", FinderColumn.Type.INTEGER, "!=",
 					true, true, DLFileVersion::getStatus));
@@ -3849,10 +3849,10 @@ public class DLFileVersionPersistenceImpl
 			DLFileVersion::getFileEntryId, DLFileVersion::getVersion);
 
 		_uniquePersistenceFinderByF_V = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByF_V, _SQL_SELECT_DLFILEVERSION_WHERE,
+			this, _finderPathFetchByF_V, _SQL_SELECT_DLFILEVERSION_WHERE, "",
 			new FinderColumn<>(
 				"dlFileVersion.", "fileEntryId", FinderColumn.Type.LONG, "=",
-				true, false, DLFileVersion::getFileEntryId),
+				true, true, DLFileVersion::getFileEntryId),
 			new FinderColumn<>(
 				"dlFileVersion.", "version", FinderColumn.Type.STRING, "=",
 				true, true, DLFileVersion::getVersion));
@@ -3899,10 +3899,10 @@ public class DLFileVersionPersistenceImpl
 			this, _finderPathWithPaginationFindByLtD_S, null,
 			_finderPathWithPaginationCountByLtD_S,
 			_SQL_SELECT_DLFILEVERSION_WHERE, _SQL_COUNT_DLFILEVERSION_WHERE,
-			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"dlFileVersion.", "displayDate", FinderColumn.Type.DATE, "<",
-				true, false, DLFileVersion::getDisplayDate),
+				true, true, DLFileVersion::getDisplayDate),
 			new FinderColumn<>(
 				"dlFileVersion.", "status", FinderColumn.Type.INTEGER, "=",
 				true, true, DLFileVersion::getStatus));
@@ -3936,13 +3936,13 @@ public class DLFileVersionPersistenceImpl
 			this, _finderPathWithPaginationFindByG_F_S,
 			_finderPathWithoutPaginationFindByG_F_S, _finderPathCountByG_F_S,
 			_SQL_SELECT_DLFILEVERSION_WHERE, _SQL_COUNT_DLFILEVERSION_WHERE,
-			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"dlFileVersion.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, DLFileVersion::getGroupId),
+				true, DLFileVersion::getGroupId),
 			new FinderColumn<>(
 				"dlFileVersion.", "folderId", FinderColumn.Type.LONG, "=", true,
-				false, DLFileVersion::getFolderId),
+				true, DLFileVersion::getFolderId),
 			new FinderColumn<>(
 				"dlFileVersion.", "status", FinderColumn.Type.INTEGER, "=",
 				true, true, DLFileVersion::getStatus));
@@ -4012,16 +4012,16 @@ public class DLFileVersionPersistenceImpl
 				_finderPathWithoutPaginationFindByG_F_T_V,
 				_finderPathCountByG_F_T_V, _SQL_SELECT_DLFILEVERSION_WHERE,
 				_SQL_COUNT_DLFILEVERSION_WHERE,
-				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DLFileVersionModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"dlFileVersion.", "groupId", FinderColumn.Type.LONG, "=",
-					true, false, DLFileVersion::getGroupId),
+					true, true, DLFileVersion::getGroupId),
 				new FinderColumn<>(
 					"dlFileVersion.", "folderId", FinderColumn.Type.LONG, "=",
-					true, false, DLFileVersion::getFolderId),
+					true, true, DLFileVersion::getFolderId),
 				new FinderColumn<>(
 					"dlFileVersion.", "title", FinderColumn.Type.STRING, "=",
-					true, false, DLFileVersion::getTitle),
+					true, true, DLFileVersion::getTitle),
 				new FinderColumn<>(
 					"dlFileVersion.", "version", FinderColumn.Type.STRING, "=",
 					true, true, DLFileVersion::getVersion));
@@ -4070,4 +4070,4 @@ public class DLFileVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1123741764
+// LIFERAY-SERVICE-BUILDER-HASH:-1257188835

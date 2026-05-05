@@ -1194,7 +1194,7 @@ public class LayoutLocalizationPersistenceImpl
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_LAYOUTLOCALIZATION_WHERE,
 			_SQL_COUNT_LAYOUTLOCALIZATION_WHERE,
-			LayoutLocalizationModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			LayoutLocalizationModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"layoutLocalization.", "uuid", FinderColumn.Type.STRING, "=",
 				true, true, LayoutLocalization::getUuid));
@@ -1207,10 +1207,10 @@ public class LayoutLocalizationPersistenceImpl
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G,
-			_SQL_SELECT_LAYOUTLOCALIZATION_WHERE,
+			_SQL_SELECT_LAYOUTLOCALIZATION_WHERE, "",
 			new FinderColumn<>(
 				"layoutLocalization.", "uuid", FinderColumn.Type.STRING, "=",
-				true, false, LayoutLocalization::getUuid),
+				true, true, LayoutLocalization::getUuid),
 			new FinderColumn<>(
 				"layoutLocalization.", "groupId", FinderColumn.Type.LONG, "=",
 				true, true, LayoutLocalization::getGroupId));
@@ -1241,9 +1241,10 @@ public class LayoutLocalizationPersistenceImpl
 				_finderPathCountByUuid_C, _SQL_SELECT_LAYOUTLOCALIZATION_WHERE,
 				_SQL_COUNT_LAYOUTLOCALIZATION_WHERE,
 				LayoutLocalizationModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				"",
 				new FinderColumn<>(
 					"layoutLocalization.", "uuid", FinderColumn.Type.STRING,
-					"=", true, false, LayoutLocalization::getUuid),
+					"=", true, true, LayoutLocalization::getUuid),
 				new FinderColumn<>(
 					"layoutLocalization.", "companyId", FinderColumn.Type.LONG,
 					"=", true, true, LayoutLocalization::getCompanyId));
@@ -1269,7 +1270,7 @@ public class LayoutLocalizationPersistenceImpl
 			_finderPathWithoutPaginationFindByPlid, _finderPathCountByPlid,
 			_SQL_SELECT_LAYOUTLOCALIZATION_WHERE,
 			_SQL_COUNT_LAYOUTLOCALIZATION_WHERE,
-			LayoutLocalizationModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			LayoutLocalizationModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"layoutLocalization.", "plid", FinderColumn.Type.LONG, "=",
 				true, true, LayoutLocalization::getPlid));
@@ -1282,9 +1283,10 @@ public class LayoutLocalizationPersistenceImpl
 
 		_uniquePersistenceFinderByL_P = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByL_P, _SQL_SELECT_LAYOUTLOCALIZATION_WHERE,
+			"",
 			new FinderColumn<>(
 				"layoutLocalization.", "languageId", FinderColumn.Type.STRING,
-				"=", true, false, LayoutLocalization::getLanguageId),
+				"=", true, true, LayoutLocalization::getLanguageId),
 			new FinderColumn<>(
 				"layoutLocalization.", "plid", FinderColumn.Type.LONG, "=",
 				true, true, LayoutLocalization::getPlid));
@@ -1301,12 +1303,13 @@ public class LayoutLocalizationPersistenceImpl
 
 		_uniquePersistenceFinderByG_L_P = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_L_P, _SQL_SELECT_LAYOUTLOCALIZATION_WHERE,
+			"",
 			new FinderColumn<>(
 				"layoutLocalization.", "groupId", FinderColumn.Type.LONG, "=",
-				true, false, LayoutLocalization::getGroupId),
+				true, true, LayoutLocalization::getGroupId),
 			new FinderColumn<>(
 				"layoutLocalization.", "languageId", FinderColumn.Type.STRING,
-				"=", true, false, LayoutLocalization::getLanguageId),
+				"=", true, true, LayoutLocalization::getLanguageId),
 			new FinderColumn<>(
 				"layoutLocalization.", "plid", FinderColumn.Type.LONG, "=",
 				true, true, LayoutLocalization::getPlid));
@@ -1383,4 +1386,4 @@ public class LayoutLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1521863280
+// LIFERAY-SERVICE-BUILDER-HASH:-91360931
