@@ -5983,7 +5983,7 @@ public class DDMTemplatePersistenceImpl
 			this, _finderPathWithPaginationFindByUuid,
 			_finderPathWithoutPaginationFindByUuid, _finderPathCountByUuid,
 			_SQL_SELECT_DDMTEMPLATE_WHERE, _SQL_COUNT_DDMTEMPLATE_WHERE,
-			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "uuid", FinderColumn.Type.STRING, "=", true,
 				true, DDMTemplate::getUuid));
@@ -5991,14 +5991,15 @@ public class DDMTemplatePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false, DDMTemplate::getUuid,
+			new String[] {"uuid_", "groupId"}, false,
+			convertNullExtractor(DDMTemplate::getUuid),
 			DDMTemplate::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByUUID_G, _SQL_SELECT_DDMTEMPLATE_WHERE,
+			this, _finderPathFetchByUUID_G, _SQL_SELECT_DDMTEMPLATE_WHERE, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "uuid", FinderColumn.Type.STRING, "=", true,
-				false, DDMTemplate::getUuid),
+				true, DDMTemplate::getUuid),
 			new FinderColumn<>(
 				"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=", true,
 				true, DDMTemplate::getGroupId));
@@ -6028,10 +6029,10 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByUuid_C,
 				_finderPathCountByUuid_C, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "uuid", FinderColumn.Type.STRING, "=", true,
-					false, DDMTemplate::getUuid),
+					true, DDMTemplate::getUuid),
 				new FinderColumn<>(
 					"ddmTemplate.", "companyId", FinderColumn.Type.LONG, "=",
 					true, true, DDMTemplate::getCompanyId));
@@ -6060,7 +6061,7 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByGroupId,
 				_finderPathCountByGroupId, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=",
 					true, true, DDMTemplate::getGroupId));
@@ -6089,7 +6090,7 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByClassPK,
 				_finderPathCountByClassPK, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "classPK", FinderColumn.Type.LONG, "=",
 					true, true, DDMTemplate::getClassPK));
@@ -6118,7 +6119,7 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByTemplateKey,
 				_finderPathCountByTemplateKey, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "templateKey", FinderColumn.Type.STRING,
 					"=", true, true, DDMTemplate::getTemplateKey));
@@ -6145,7 +6146,7 @@ public class DDMTemplatePersistenceImpl
 			this, _finderPathWithPaginationFindByType,
 			_finderPathWithoutPaginationFindByType, _finderPathCountByType,
 			_SQL_SELECT_DDMTEMPLATE_WHERE, _SQL_COUNT_DDMTEMPLATE_WHERE,
-			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "type", FinderColumn.Type.STRING, "=", true,
 				true, DDMTemplate::getType));
@@ -6174,7 +6175,7 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByLanguage,
 				_finderPathCountByLanguage, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "language", FinderColumn.Type.STRING, "=",
 					true, true, DDMTemplate::getLanguage));
@@ -6186,6 +6187,7 @@ public class DDMTemplatePersistenceImpl
 
 		_uniquePersistenceFinderBySmallImageId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchBySmallImageId, _SQL_SELECT_DDMTEMPLATE_WHERE,
+			"",
 			new FinderColumn<>(
 				"ddmTemplate.", "smallImageId", FinderColumn.Type.LONG, "=",
 				true, true, DDMTemplate::getSmallImageId));
@@ -6213,10 +6215,10 @@ public class DDMTemplatePersistenceImpl
 			this, _finderPathWithPaginationFindByG_C,
 			_finderPathWithoutPaginationFindByG_C, _finderPathCountByG_C,
 			_SQL_SELECT_DDMTEMPLATE_WHERE, _SQL_COUNT_DDMTEMPLATE_WHERE,
-			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, DDMTemplate::getGroupId),
+				true, DDMTemplate::getGroupId),
 			new FinderColumn<>(
 				"ddmTemplate.", "classNameId", FinderColumn.Type.LONG, "=",
 				true, true, DDMTemplate::getClassNameId));
@@ -6283,16 +6285,16 @@ public class DDMTemplatePersistenceImpl
 			},
 			new String[] {"groupId", "classNameId", "templateKey"}, false,
 			DDMTemplate::getGroupId, DDMTemplate::getClassNameId,
-			DDMTemplate::getTemplateKey);
+			convertNullExtractor(DDMTemplate::getTemplateKey));
 
 		_uniquePersistenceFinderByG_C_T = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByG_C_T, _SQL_SELECT_DDMTEMPLATE_WHERE,
+			this, _finderPathFetchByG_C_T, _SQL_SELECT_DDMTEMPLATE_WHERE, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=", true,
-				false, DDMTemplate::getGroupId),
+				true, DDMTemplate::getGroupId),
 			new FinderColumn<>(
 				"ddmTemplate.", "classNameId", FinderColumn.Type.LONG, "=",
-				true, false, DDMTemplate::getClassNameId),
+				true, true, DDMTemplate::getClassNameId),
 			new FinderColumn<>(
 				"ddmTemplate.", "templateKey", FinderColumn.Type.STRING, "=",
 				true, true, DDMTemplate::getTemplateKey));
@@ -6326,13 +6328,13 @@ public class DDMTemplatePersistenceImpl
 			this, _finderPathWithPaginationFindByC_C_T,
 			_finderPathWithoutPaginationFindByC_C_T, _finderPathCountByC_C_T,
 			_SQL_SELECT_DDMTEMPLATE_WHERE, _SQL_COUNT_DDMTEMPLATE_WHERE,
-			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+			DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "classNameId", FinderColumn.Type.LONG, "=",
-				true, false, DDMTemplate::getClassNameId),
+				true, true, DDMTemplate::getClassNameId),
 			new FinderColumn<>(
 				"ddmTemplate.", "classPK", FinderColumn.Type.LONG, "=", true,
-				false, DDMTemplate::getClassPK),
+				true, DDMTemplate::getClassPK),
 			new FinderColumn<>(
 				"ddmTemplate.", "type", FinderColumn.Type.STRING, "=", true,
 				true, DDMTemplate::getType));
@@ -6369,16 +6371,16 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByG_C_C_T,
 				_finderPathCountByG_C_C_T, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=",
-					true, false, DDMTemplate::getGroupId),
+					true, true, DDMTemplate::getGroupId),
 				new FinderColumn<>(
 					"ddmTemplate.", "classNameId", FinderColumn.Type.LONG, "=",
-					true, false, DDMTemplate::getClassNameId),
+					true, true, DDMTemplate::getClassNameId),
 				new FinderColumn<>(
 					"ddmTemplate.", "classPK", FinderColumn.Type.LONG, "=",
-					true, false, DDMTemplate::getClassPK),
+					true, true, DDMTemplate::getClassPK),
 				new FinderColumn<>(
 					"ddmTemplate.", "type", FinderColumn.Type.STRING, "=", true,
 					true, DDMTemplate::getType));
@@ -6426,19 +6428,19 @@ public class DDMTemplatePersistenceImpl
 				_finderPathWithoutPaginationFindByG_C_C_T_M,
 				_finderPathCountByG_C_C_T_M, _SQL_SELECT_DDMTEMPLATE_WHERE,
 				_SQL_COUNT_DDMTEMPLATE_WHERE,
-				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX,
+				DDMTemplateModelImpl.ORDER_BY_JPQL, _ENTITY_ALIAS_PREFIX, "",
 				new FinderColumn<>(
 					"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=",
-					true, false, DDMTemplate::getGroupId),
+					true, true, DDMTemplate::getGroupId),
 				new FinderColumn<>(
 					"ddmTemplate.", "classNameId", FinderColumn.Type.LONG, "=",
-					true, false, DDMTemplate::getClassNameId),
+					true, true, DDMTemplate::getClassNameId),
 				new FinderColumn<>(
 					"ddmTemplate.", "classPK", FinderColumn.Type.LONG, "=",
-					true, false, DDMTemplate::getClassPK),
+					true, true, DDMTemplate::getClassPK),
 				new FinderColumn<>(
 					"ddmTemplate.", "type", FinderColumn.Type.STRING, "=", true,
-					false, DDMTemplate::getType),
+					true, DDMTemplate::getType),
 				new FinderColumn<>(
 					"ddmTemplate.", "mode", FinderColumn.Type.STRING, "=", true,
 					true, DDMTemplate::getMode));
@@ -6447,13 +6449,14 @@ public class DDMTemplatePersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"externalReferenceCode", "groupId"}, false,
-			DDMTemplate::getExternalReferenceCode, DDMTemplate::getGroupId);
+			convertNullExtractor(DDMTemplate::getExternalReferenceCode),
+			DDMTemplate::getGroupId);
 
 		_uniquePersistenceFinderByERC_G = new UniquePersistenceFinder<>(
-			this, _finderPathFetchByERC_G, _SQL_SELECT_DDMTEMPLATE_WHERE,
+			this, _finderPathFetchByERC_G, _SQL_SELECT_DDMTEMPLATE_WHERE, "",
 			new FinderColumn<>(
 				"ddmTemplate.", "externalReferenceCode",
-				FinderColumn.Type.STRING, "=", true, false,
+				FinderColumn.Type.STRING, "=", true, true,
 				DDMTemplate::getExternalReferenceCode),
 			new FinderColumn<>(
 				"ddmTemplate.", "groupId", FinderColumn.Type.LONG, "=", true,
@@ -6554,4 +6557,4 @@ public class DDMTemplatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1071464610
+// LIFERAY-SERVICE-BUILDER-HASH:1048967096
