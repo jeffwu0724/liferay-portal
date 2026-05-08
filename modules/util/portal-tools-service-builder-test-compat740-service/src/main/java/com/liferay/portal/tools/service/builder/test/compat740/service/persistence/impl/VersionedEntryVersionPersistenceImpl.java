@@ -852,7 +852,8 @@ public class VersionedEntryVersionPersistenceImpl
 		_finderPathFetchByVersionedEntryId_Version = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByVersionedEntryId_Version",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"versionedEntryId", "version"}, false,
+			new String[] {"versionedEntryId", "version"},
+			new boolean[] {false, false}, false,
 			VersionedEntryVersion::getVersionedEntryId,
 			VersionedEntryVersion::getVersion);
 
@@ -1002,4 +1003,4 @@ public class VersionedEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1288724504
+// LIFERAY-SERVICE-BUILDER-HASH:-1317888613

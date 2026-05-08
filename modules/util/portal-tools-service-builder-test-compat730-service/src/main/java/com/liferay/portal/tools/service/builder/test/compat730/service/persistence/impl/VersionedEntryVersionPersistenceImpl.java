@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchVersionedEntryVersionException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.VersionedEntryVersion;
@@ -36,9 +37,11 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -2612,7 +2615,7 @@ public class VersionedEntryVersionPersistenceImpl
 
 			if (!checkColumn || (columnBitmask == 0)) {
 				return _getValue(
-					versionedEntryVersionModelImpl, columnNames, original);
+					versionedEntryVersionModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -2641,7 +2644,7 @@ public class VersionedEntryVersionPersistenceImpl
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
 				return _getValue(
-					versionedEntryVersionModelImpl, columnNames, original);
+					versionedEntryVersionModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -2649,23 +2652,36 @@ public class VersionedEntryVersionPersistenceImpl
 
 		private static Object[] _getValue(
 			VersionedEntryVersionModelImpl versionedEntryVersionModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
+					value =
 						versionedEntryVersionModelImpl.getColumnOriginalValue(
 							columnName);
 				}
 				else {
-					arguments[i] =
-						versionedEntryVersionModelImpl.getColumnValue(
-							columnName);
+					value = versionedEntryVersionModelImpl.getColumnValue(
+						columnName);
 				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -2688,4 +2704,4 @@ public class VersionedEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:593640325
+// LIFERAY-SERVICE-BUILDER-HASH:-1557982806

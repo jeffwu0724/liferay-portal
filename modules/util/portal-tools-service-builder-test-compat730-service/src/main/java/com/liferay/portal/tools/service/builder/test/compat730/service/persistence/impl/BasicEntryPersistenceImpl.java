@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchBasicEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.BasicEntry;
@@ -1878,7 +1879,7 @@ public class BasicEntryPersistenceImpl
 			long columnBitmask = basicEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(basicEntryModelImpl, columnNames, original);
+				return _getValue(basicEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1905,29 +1906,42 @@ public class BasicEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(basicEntryModelImpl, columnNames, original);
+				return _getValue(basicEntryModelImpl, finderPath, original);
 			}
 
 			return null;
 		}
 
 		private static Object[] _getValue(
-			BasicEntryModelImpl basicEntryModelImpl, String[] columnNames,
+			BasicEntryModelImpl basicEntryModelImpl, FinderPath finderPath,
 			boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] = basicEntryModelImpl.getColumnOriginalValue(
+					value = basicEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
 				else {
-					arguments[i] = basicEntryModelImpl.getColumnValue(
-						columnName);
+					value = basicEntryModelImpl.getColumnValue(columnName);
 				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1950,4 +1964,4 @@ public class BasicEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1518074141
+// LIFERAY-SERVICE-BUILDER-HASH:-2107584144

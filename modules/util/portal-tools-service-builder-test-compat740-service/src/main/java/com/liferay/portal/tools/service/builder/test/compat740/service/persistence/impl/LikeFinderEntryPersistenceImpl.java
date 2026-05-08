@@ -549,7 +549,8 @@ public class LikeFinderEntryPersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"ownerId", "ownerType", "portletId"}, false,
+			new String[] {"ownerId", "ownerType", "portletId"},
+			new boolean[] {false, false, false}, false,
 			LikeFinderEntry::getOwnerId, LikeFinderEntry::getOwnerType,
 			convertNullFunction(LikeFinderEntry::getPortletId));
 
@@ -673,4 +674,4 @@ public class LikeFinderEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:947449606
+// LIFERAY-SERVICE-BUILDER-HASH:-1554420790

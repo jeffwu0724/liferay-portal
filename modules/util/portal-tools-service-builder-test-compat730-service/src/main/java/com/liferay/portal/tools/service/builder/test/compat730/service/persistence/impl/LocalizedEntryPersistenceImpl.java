@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchLocalizedEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.LocalizedEntry;
@@ -34,9 +35,11 @@ import com.liferay.portal.tools.service.builder.test.compat730.service.persisten
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -676,8 +679,7 @@ public class LocalizedEntryPersistenceImpl
 			long columnBitmask = localizedEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(
-					localizedEntryModelImpl, columnNames, original);
+				return _getValue(localizedEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -696,8 +698,7 @@ public class LocalizedEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(
-					localizedEntryModelImpl, columnNames, original);
+				return _getValue(localizedEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -705,22 +706,34 @@ public class LocalizedEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			LocalizedEntryModelImpl localizedEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						localizedEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = localizedEntryModelImpl.getColumnValue(
+					value = localizedEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = localizedEntryModelImpl.getColumnValue(columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -732,4 +745,4 @@ public class LocalizedEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-278525012
+// LIFERAY-SERVICE-BUILDER-HASH:523810719

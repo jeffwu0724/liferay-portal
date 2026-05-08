@@ -49,6 +49,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -2551,7 +2552,7 @@ public class ERCVersionedEntryPersistenceImpl
 
 			if (!checkColumn || (columnBitmask == 0)) {
 				return _getValue(
-					ercVersionedEntryModelImpl, columnNames, original);
+					ercVersionedEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -2571,7 +2572,7 @@ public class ERCVersionedEntryPersistenceImpl
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
 				return _getValue(
-					ercVersionedEntryModelImpl, columnNames, original);
+					ercVersionedEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -2579,22 +2580,35 @@ public class ERCVersionedEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			ERCVersionedEntryModelImpl ercVersionedEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						ercVersionedEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = ercVersionedEntryModelImpl.getColumnValue(
+					value = ercVersionedEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = ercVersionedEntryModelImpl.getColumnValue(
+						columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -2606,4 +2620,4 @@ public class ERCVersionedEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1792637837
+// LIFERAY-SERVICE-BUILDER-HASH:-1386362156

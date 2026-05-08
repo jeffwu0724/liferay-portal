@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchLocalizedEntryLocalizationException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.LocalizedEntryLocalization;
@@ -36,6 +37,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1591,7 +1593,7 @@ public class LocalizedEntryLocalizationPersistenceImpl
 
 			if (!checkColumn || (columnBitmask == 0)) {
 				return _getValue(
-					localizedEntryLocalizationModelImpl, columnNames, original);
+					localizedEntryLocalizationModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1612,7 +1614,7 @@ public class LocalizedEntryLocalizationPersistenceImpl
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
 				return _getValue(
-					localizedEntryLocalizationModelImpl, columnNames, original);
+					localizedEntryLocalizationModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -1621,23 +1623,36 @@ public class LocalizedEntryLocalizationPersistenceImpl
 		private static Object[] _getValue(
 			LocalizedEntryLocalizationModelImpl
 				localizedEntryLocalizationModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
+					value =
 						localizedEntryLocalizationModelImpl.
 							getColumnOriginalValue(columnName);
 				}
 				else {
-					arguments[i] =
-						localizedEntryLocalizationModelImpl.getColumnValue(
-							columnName);
+					value = localizedEntryLocalizationModelImpl.getColumnValue(
+						columnName);
 				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1649,4 +1664,4 @@ public class LocalizedEntryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:777684927
+// LIFERAY-SERVICE-BUILDER-HASH:-43579064

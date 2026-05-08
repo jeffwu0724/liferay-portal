@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchCacheDisabledEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.CacheDisabledEntry;
 import com.liferay.portal.tools.service.builder.test.compat730.model.impl.CacheDisabledEntryImpl;
@@ -34,6 +35,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -957,7 +959,7 @@ public class CacheDisabledEntryPersistenceImpl
 
 			if (!checkColumn || (columnBitmask == 0)) {
 				return _getValue(
-					cacheDisabledEntryModelImpl, columnNames, original);
+					cacheDisabledEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -978,7 +980,7 @@ public class CacheDisabledEntryPersistenceImpl
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
 				return _getValue(
-					cacheDisabledEntryModelImpl, columnNames, original);
+					cacheDisabledEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -986,22 +988,35 @@ public class CacheDisabledEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			CacheDisabledEntryModelImpl cacheDisabledEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						cacheDisabledEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = cacheDisabledEntryModelImpl.getColumnValue(
+					value = cacheDisabledEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = cacheDisabledEntryModelImpl.getColumnValue(
+						columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1013,4 +1028,4 @@ public class CacheDisabledEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-156588167
+// LIFERAY-SERVICE-BUILDER-HASH:-392687333

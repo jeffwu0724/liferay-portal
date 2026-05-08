@@ -8,10 +8,12 @@ package com.liferay.portal.tools.service.builder.test.compat740.service.persiste
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.compat740.model.ManyColumnsEntryTable;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.ManyColumnsEntryImpl;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.ManyColumnsEntryModelImpl;
 
+import java.util.Date;
 import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +55,7 @@ public class ManyColumnsEntryModelArgumentsResolver
 		if (!checkColumn ||
 			_hasModifiedColumns(manyColumnsEntryModelImpl, columnNames)) {
 
-			return _getValue(manyColumnsEntryModelImpl, columnNames, original);
+			return _getValue(manyColumnsEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -71,21 +73,34 @@ public class ManyColumnsEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ManyColumnsEntryModelImpl manyColumnsEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = manyColumnsEntryModelImpl.getColumnOriginalValue(
+				value = manyColumnsEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = manyColumnsEntryModelImpl.getColumnValue(
-					columnName);
+				value = manyColumnsEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -113,4 +128,4 @@ public class ManyColumnsEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1538498600
+// LIFERAY-SERVICE-BUILDER-HASH:2087381591

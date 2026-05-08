@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchMappingEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.MappingEntry;
@@ -40,9 +41,11 @@ import com.liferay.portal.tools.service.builder.test.compat730.service.persisten
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1035,7 +1038,7 @@ public class MappingEntryPersistenceImpl
 			long columnBitmask = mappingEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(mappingEntryModelImpl, columnNames, original);
+				return _getValue(mappingEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1054,29 +1057,42 @@ public class MappingEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(mappingEntryModelImpl, columnNames, original);
+				return _getValue(mappingEntryModelImpl, finderPath, original);
 			}
 
 			return null;
 		}
 
 		private static Object[] _getValue(
-			MappingEntryModelImpl mappingEntryModelImpl, String[] columnNames,
+			MappingEntryModelImpl mappingEntryModelImpl, FinderPath finderPath,
 			boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] = mappingEntryModelImpl.getColumnOriginalValue(
+					value = mappingEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
 				else {
-					arguments[i] = mappingEntryModelImpl.getColumnValue(
-						columnName);
+					value = mappingEntryModelImpl.getColumnValue(columnName);
 				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1088,4 +1104,4 @@ public class MappingEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-170594142
+// LIFERAY-SERVICE-BUILDER-HASH:380581339

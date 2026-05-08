@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchTreeEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.TreeEntry;
@@ -40,6 +41,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1013,7 +1015,7 @@ public class TreeEntryPersistenceImpl
 			long columnBitmask = treeEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(treeEntryModelImpl, columnNames, original);
+				return _getValue(treeEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1032,29 +1034,42 @@ public class TreeEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(treeEntryModelImpl, columnNames, original);
+				return _getValue(treeEntryModelImpl, finderPath, original);
 			}
 
 			return null;
 		}
 
 		private static Object[] _getValue(
-			TreeEntryModelImpl treeEntryModelImpl, String[] columnNames,
+			TreeEntryModelImpl treeEntryModelImpl, FinderPath finderPath,
 			boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] = treeEntryModelImpl.getColumnOriginalValue(
+					value = treeEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
 				else {
-					arguments[i] = treeEntryModelImpl.getColumnValue(
-						columnName);
+					value = treeEntryModelImpl.getColumnValue(columnName);
 				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1066,4 +1081,4 @@ public class TreeEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-748911666
+// LIFERAY-SERVICE-BUILDER-HASH:1452214019

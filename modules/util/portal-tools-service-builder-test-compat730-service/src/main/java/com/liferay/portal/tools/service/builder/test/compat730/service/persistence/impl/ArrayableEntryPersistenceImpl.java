@@ -42,10 +42,12 @@ import java.lang.reflect.InvocationHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1556,8 +1558,7 @@ public class ArrayableEntryPersistenceImpl
 			long columnBitmask = arrayableEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(
-					arrayableEntryModelImpl, columnNames, original);
+				return _getValue(arrayableEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1584,8 +1585,7 @@ public class ArrayableEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(
-					arrayableEntryModelImpl, columnNames, original);
+				return _getValue(arrayableEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -1593,22 +1593,34 @@ public class ArrayableEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			ArrayableEntryModelImpl arrayableEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						arrayableEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = arrayableEntryModelImpl.getColumnValue(
+					value = arrayableEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = arrayableEntryModelImpl.getColumnValue(columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1633,4 +1645,4 @@ public class ArrayableEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-953826933
+// LIFERAY-SERVICE-BUILDER-HASH:-1473274127

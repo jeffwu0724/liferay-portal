@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchMVCCEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.MVCCEntry;
@@ -37,6 +38,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1482,7 +1484,7 @@ public class MVCCEntryPersistenceImpl
 			long columnBitmask = mvccEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(mvccEntryModelImpl, columnNames, original);
+				return _getValue(mvccEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1501,29 +1503,42 @@ public class MVCCEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(mvccEntryModelImpl, columnNames, original);
+				return _getValue(mvccEntryModelImpl, finderPath, original);
 			}
 
 			return null;
 		}
 
 		private static Object[] _getValue(
-			MVCCEntryModelImpl mvccEntryModelImpl, String[] columnNames,
+			MVCCEntryModelImpl mvccEntryModelImpl, FinderPath finderPath,
 			boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] = mvccEntryModelImpl.getColumnOriginalValue(
+					value = mvccEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
 				else {
-					arguments[i] = mvccEntryModelImpl.getColumnValue(
-						columnName);
+					value = mvccEntryModelImpl.getColumnValue(columnName);
 				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1535,4 +1550,4 @@ public class MVCCEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1114936179
+// LIFERAY-SERVICE-BUILDER-HASH:1534519474

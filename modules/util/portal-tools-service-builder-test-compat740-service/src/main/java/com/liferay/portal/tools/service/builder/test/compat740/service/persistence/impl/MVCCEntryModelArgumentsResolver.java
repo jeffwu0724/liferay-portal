@@ -8,11 +8,14 @@ package com.liferay.portal.tools.service.builder.test.compat740.service.persiste
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.compat740.model.MVCCEntryTable;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.MVCCEntryImpl;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.MVCCEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class MVCCEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = mvccEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(mvccEntryModelImpl, columnNames, original);
+			return _getValue(mvccEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class MVCCEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(mvccEntryModelImpl, columnNames, original);
+			return _getValue(mvccEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class MVCCEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		MVCCEntryModelImpl mvccEntryModelImpl, String[] columnNames,
+		MVCCEntryModelImpl mvccEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = mvccEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = mvccEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = mvccEntryModelImpl.getColumnValue(columnName);
+				value = mvccEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class MVCCEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-611195907
+// LIFERAY-SERVICE-BUILDER-HASH:-364536597

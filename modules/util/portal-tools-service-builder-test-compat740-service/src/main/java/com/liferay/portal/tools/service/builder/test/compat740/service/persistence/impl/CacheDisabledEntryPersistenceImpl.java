@@ -333,7 +333,8 @@ public class CacheDisabledEntryPersistenceImpl
 	public void activate() {
 		_finderPathFetchByName = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByName",
-			new String[] {String.class.getName()}, new String[] {"name"}, false,
+			new String[] {String.class.getName()}, new String[] {"name"},
+			new boolean[] {false}, false,
 			convertNullFunction(CacheDisabledEntry::getName));
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
@@ -400,4 +401,4 @@ public class CacheDisabledEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1339464665
+// LIFERAY-SERVICE-BUILDER-HASH:1883535429

@@ -49,6 +49,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -2530,7 +2531,7 @@ public class ERCGroupEntryPersistenceImpl
 			long columnBitmask = ercGroupEntryModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(ercGroupEntryModelImpl, columnNames, original);
+				return _getValue(ercGroupEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -2549,30 +2550,42 @@ public class ERCGroupEntryPersistenceImpl
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(ercGroupEntryModelImpl, columnNames, original);
+				return _getValue(ercGroupEntryModelImpl, finderPath, original);
 			}
 
 			return null;
 		}
 
 		private static Object[] _getValue(
-			ERCGroupEntryModelImpl ercGroupEntryModelImpl, String[] columnNames,
-			boolean original) {
+			ERCGroupEntryModelImpl ercGroupEntryModelImpl,
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						ercGroupEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = ercGroupEntryModelImpl.getColumnValue(
+					value = ercGroupEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = ercGroupEntryModelImpl.getColumnValue(columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -2584,4 +2597,4 @@ public class ERCGroupEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1335354339
+// LIFERAY-SERVICE-BUILDER-HASH:-1574583004

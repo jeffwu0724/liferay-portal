@@ -552,7 +552,8 @@ public class LocalizedEntryLocalizationPersistenceImpl
 		_finderPathFetchByLocalizedEntryId_LanguageId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByLocalizedEntryId_LanguageId",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"localizedEntryId", "languageId"}, false,
+			new String[] {"localizedEntryId", "languageId"},
+			new boolean[] {false, false}, false,
 			LocalizedEntryLocalization::getLocalizedEntryId,
 			convertNullFunction(LocalizedEntryLocalization::getLanguageId));
 
@@ -635,4 +636,4 @@ public class LocalizedEntryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1433986445
+// LIFERAY-SERVICE-BUILDER-HASH:297523721

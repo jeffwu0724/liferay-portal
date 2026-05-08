@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchConvertNullEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.ConvertNullEntry;
 import com.liferay.portal.tools.service.builder.test.compat730.model.impl.ConvertNullEntryImpl;
@@ -34,6 +35,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -951,7 +953,7 @@ public class ConvertNullEntryPersistenceImpl
 
 			if (!checkColumn || (columnBitmask == 0)) {
 				return _getValue(
-					convertNullEntryModelImpl, columnNames, original);
+					convertNullEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -971,7 +973,7 @@ public class ConvertNullEntryPersistenceImpl
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
 				return _getValue(
-					convertNullEntryModelImpl, columnNames, original);
+					convertNullEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -979,22 +981,35 @@ public class ConvertNullEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			ConvertNullEntryModelImpl convertNullEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						convertNullEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = convertNullEntryModelImpl.getColumnValue(
+					value = convertNullEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = convertNullEntryModelImpl.getColumnValue(
+						columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1006,4 +1021,4 @@ public class ConvertNullEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:211354863
+// LIFERAY-SERVICE-BUILDER-HASH:-1576166419

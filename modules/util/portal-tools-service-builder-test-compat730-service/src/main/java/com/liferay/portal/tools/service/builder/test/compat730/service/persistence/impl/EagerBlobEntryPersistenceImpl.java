@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchEagerBlobEntryException;
@@ -37,6 +38,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1554,8 +1556,7 @@ public class EagerBlobEntryPersistenceImpl
 			if (!checkColumn ||
 				_hasModifiedColumns(eagerBlobEntryModelImpl, columnNames)) {
 
-				return _getValue(
-					eagerBlobEntryModelImpl, columnNames, original);
+				return _getValue(eagerBlobEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -1563,22 +1564,34 @@ public class EagerBlobEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			EagerBlobEntryModelImpl eagerBlobEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						eagerBlobEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = eagerBlobEntryModelImpl.getColumnValue(
+					value = eagerBlobEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = eagerBlobEntryModelImpl.getColumnValue(columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1608,4 +1621,4 @@ public class EagerBlobEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1032518395
+// LIFERAY-SERVICE-BUILDER-HASH:-1957443197

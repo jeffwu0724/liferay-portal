@@ -38,6 +38,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1702,7 +1703,7 @@ public class LikeFinderEntryPersistenceImpl
 
 			if (!checkColumn || (columnBitmask == 0)) {
 				return _getValue(
-					likeFinderEntryModelImpl, columnNames, original);
+					likeFinderEntryModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -1722,7 +1723,7 @@ public class LikeFinderEntryPersistenceImpl
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
 				return _getValue(
-					likeFinderEntryModelImpl, columnNames, original);
+					likeFinderEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -1730,22 +1731,34 @@ public class LikeFinderEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			LikeFinderEntryModelImpl likeFinderEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						likeFinderEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = likeFinderEntryModelImpl.getColumnValue(
+					value = likeFinderEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = likeFinderEntryModelImpl.getColumnValue(columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -1757,4 +1770,4 @@ public class LikeFinderEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:930417527
+// LIFERAY-SERVICE-BUILDER-HASH:949783921

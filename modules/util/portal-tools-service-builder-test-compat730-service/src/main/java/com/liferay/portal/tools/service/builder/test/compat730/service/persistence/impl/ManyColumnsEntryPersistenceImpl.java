@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 import com.liferay.portal.tools.service.builder.test.compat730.exception.NoSuchManyColumnsEntryException;
 import com.liferay.portal.tools.service.builder.test.compat730.model.ManyColumnsEntry;
@@ -32,6 +33,7 @@ import com.liferay.portal.tools.service.builder.test.compat730.service.persisten
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -672,7 +674,7 @@ public class ManyColumnsEntryPersistenceImpl
 				_hasModifiedColumns(manyColumnsEntryModelImpl, columnNames)) {
 
 				return _getValue(
-					manyColumnsEntryModelImpl, columnNames, original);
+					manyColumnsEntryModelImpl, finderPath, original);
 			}
 
 			return null;
@@ -680,22 +682,35 @@ public class ManyColumnsEntryPersistenceImpl
 
 		private static Object[] _getValue(
 			ManyColumnsEntryModelImpl manyColumnsEntryModelImpl,
-			String[] columnNames, boolean original) {
+			FinderPath finderPath, boolean original) {
+
+			String[] columnNames = finderPath.getColumnNames();
 
 			Object[] arguments = new Object[columnNames.length];
 
 			for (int i = 0; i < arguments.length; i++) {
 				String columnName = columnNames[i];
 
+				Object value;
+
 				if (original) {
-					arguments[i] =
-						manyColumnsEntryModelImpl.getColumnOriginalValue(
-							columnName);
-				}
-				else {
-					arguments[i] = manyColumnsEntryModelImpl.getColumnValue(
+					value = manyColumnsEntryModelImpl.getColumnOriginalValue(
 						columnName);
 				}
+				else {
+					value = manyColumnsEntryModelImpl.getColumnValue(
+						columnName);
+				}
+
+				if (value instanceof Date date) {
+					value = date.getTime();
+				}
+				else if (finderPath.isCaseInsensitive(i)) {
+					value = Objects.toString(
+						StringUtil.toLowerCase((String)value), "");
+				}
+
+				arguments[i] = value;
 			}
 
 			return arguments;
@@ -725,4 +740,4 @@ public class ManyColumnsEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1972722641
+// LIFERAY-SERVICE-BUILDER-HASH:1944986437

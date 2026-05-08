@@ -8,11 +8,14 @@ package com.liferay.portal.tools.service.builder.test.compat740.service.persiste
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.compat740.model.CTEntryTable;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.CTEntryImpl;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.CTEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class CTEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = ctEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(ctEntryModelImpl, columnNames, original);
+			return _getValue(ctEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class CTEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(ctEntryModelImpl, columnNames, original);
+			return _getValue(ctEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class CTEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		CTEntryModelImpl ctEntryModelImpl, String[] columnNames,
+		CTEntryModelImpl ctEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = ctEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = ctEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = ctEntryModelImpl.getColumnValue(columnName);
+				value = ctEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class CTEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1447935421
+// LIFERAY-SERVICE-BUILDER-HASH:1267350859

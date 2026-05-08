@@ -8,11 +8,14 @@ package com.liferay.portal.tools.service.builder.test.compat740.service.persiste
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.compat740.model.CacheDisabledEntryTable;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.CacheDisabledEntryImpl;
 import com.liferay.portal.tools.service.builder.test.compat740.model.impl.CacheDisabledEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,8 +57,7 @@ public class CacheDisabledEntryModelArgumentsResolver
 		long columnBitmask = cacheDisabledEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				cacheDisabledEntryModelImpl, columnNames, original);
+			return _getValue(cacheDisabledEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,8 +76,7 @@ public class CacheDisabledEntryModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				cacheDisabledEntryModelImpl, columnNames, original);
+			return _getValue(cacheDisabledEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +94,34 @@ public class CacheDisabledEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CacheDisabledEntryModelImpl cacheDisabledEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					cacheDisabledEntryModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = cacheDisabledEntryModelImpl.getColumnValue(
+				value = cacheDisabledEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = cacheDisabledEntryModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +131,4 @@ public class CacheDisabledEntryModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1708661011
+// LIFERAY-SERVICE-BUILDER-HASH:762728439
