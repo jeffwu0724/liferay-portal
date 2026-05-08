@@ -8,11 +8,14 @@ package com.liferay.portal.workflow.metrics.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.metrics.model.WorkflowMetricsSLADefinitionVersionTable;
 import com.liferay.portal.workflow.metrics.model.impl.WorkflowMetricsSLADefinitionVersionImpl;
 import com.liferay.portal.workflow.metrics.model.impl.WorkflowMetricsSLADefinitionVersionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,7 +60,7 @@ public class WorkflowMetricsSLADefinitionVersionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				workflowMetricsSLADefinitionVersionModelImpl, columnNames,
+				workflowMetricsSLADefinitionVersionModelImpl, finderPath,
 				original);
 		}
 
@@ -87,7 +90,7 @@ public class WorkflowMetricsSLADefinitionVersionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				workflowMetricsSLADefinitionVersionModelImpl, columnNames,
+				workflowMetricsSLADefinitionVersionModelImpl, finderPath,
 				original);
 		}
 
@@ -107,23 +110,37 @@ public class WorkflowMetricsSLADefinitionVersionModelArgumentsResolver
 	private static Object[] _getValue(
 		WorkflowMetricsSLADefinitionVersionModelImpl
 			workflowMetricsSLADefinitionVersionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					workflowMetricsSLADefinitionVersionModelImpl.
 						getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] =
+				value =
 					workflowMetricsSLADefinitionVersionModelImpl.getColumnValue(
 						columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -145,4 +162,4 @@ public class WorkflowMetricsSLADefinitionVersionModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:810571204
+// LIFERAY-SERVICE-BUILDER-HASH:-591806284

@@ -1155,8 +1155,8 @@ public class KaleoProcessPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(KaleoProcess::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(KaleoProcess::getUuid),
 			KaleoProcess::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1233,7 +1233,7 @@ public class KaleoProcessPersistenceImpl
 		_finderPathFetchByDDLRecordSetId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByDDLRecordSetId",
 			new String[] {Long.class.getName()},
-			new String[] {"DDLRecordSetId"}, false,
+			new String[] {"DDLRecordSetId"}, new boolean[] {false}, false,
 			KaleoProcess::getDDLRecordSetId);
 
 		_uniquePersistenceFinderByDDLRecordSetId =
@@ -1336,4 +1336,4 @@ public class KaleoProcessPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-225294074
+// LIFERAY-SERVICE-BUILDER-HASH:2086530301

@@ -1483,7 +1483,8 @@ public class DDMFormInstanceRecordVersionPersistenceImpl
 		_finderPathFetchByF_V = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByF_V",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"formInstanceRecordId", "version"}, false,
+			new String[] {"formInstanceRecordId", "version"},
+			new boolean[] {false, false}, false,
 			DDMFormInstanceRecordVersion::getFormInstanceRecordId,
 			convertNullFunction(DDMFormInstanceRecordVersion::getVersion));
 
@@ -1665,4 +1666,4 @@ public class DDMFormInstanceRecordVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:98200628
+// LIFERAY-SERVICE-BUILDER-HASH:1912797242

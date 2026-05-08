@@ -951,7 +951,8 @@ public class ObjectFieldSettingPersistenceImpl
 		_finderPathFetchByOFI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByOFI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"objectFieldId", "name"}, false,
+			new String[] {"objectFieldId", "name"},
+			new boolean[] {false, false}, false,
 			ObjectFieldSetting::getObjectFieldId,
 			convertNullFunction(ObjectFieldSetting::getName));
 
@@ -1034,4 +1035,4 @@ public class ObjectFieldSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1680073266
+// LIFERAY-SERVICE-BUILDER-HASH:-300366497

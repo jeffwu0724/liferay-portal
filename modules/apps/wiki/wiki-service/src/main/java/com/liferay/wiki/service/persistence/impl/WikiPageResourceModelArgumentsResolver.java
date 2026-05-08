@@ -8,11 +8,14 @@ package com.liferay.wiki.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.wiki.model.WikiPageResourceTable;
 import com.liferay.wiki.model.impl.WikiPageResourceImpl;
 import com.liferay.wiki.model.impl.WikiPageResourceModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class WikiPageResourceModelArgumentsResolver
 		long columnBitmask = wikiPageResourceModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(wikiPageResourceModelImpl, columnNames, original);
+			return _getValue(wikiPageResourceModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class WikiPageResourceModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(wikiPageResourceModelImpl, columnNames, original);
+			return _getValue(wikiPageResourceModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -91,21 +94,34 @@ public class WikiPageResourceModelArgumentsResolver
 
 	private static Object[] _getValue(
 		WikiPageResourceModelImpl wikiPageResourceModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = wikiPageResourceModelImpl.getColumnOriginalValue(
+				value = wikiPageResourceModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = wikiPageResourceModelImpl.getColumnValue(
-					columnName);
+				value = wikiPageResourceModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +131,4 @@ public class WikiPageResourceModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1138335351
+// LIFERAY-SERVICE-BUILDER-HASH:1934377605

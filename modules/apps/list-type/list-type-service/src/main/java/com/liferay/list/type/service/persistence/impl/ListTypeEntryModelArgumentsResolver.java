@@ -11,8 +11,11 @@ import com.liferay.list.type.model.impl.ListTypeEntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class ListTypeEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = listTypeEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(listTypeEntryModelImpl, columnNames, original);
+			return _getValue(listTypeEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class ListTypeEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(listTypeEntryModelImpl, columnNames, original);
+			return _getValue(listTypeEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,22 +92,35 @@ public class ListTypeEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		ListTypeEntryModelImpl listTypeEntryModelImpl, String[] columnNames,
+		ListTypeEntryModelImpl listTypeEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = listTypeEntryModelImpl.getColumnOriginalValue(
+				value = listTypeEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = listTypeEntryModelImpl.getColumnValue(
-					columnName);
+				value = listTypeEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -114,4 +130,4 @@ public class ListTypeEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1535578820
+// LIFERAY-SERVICE-BUILDER-HASH:-1532143916

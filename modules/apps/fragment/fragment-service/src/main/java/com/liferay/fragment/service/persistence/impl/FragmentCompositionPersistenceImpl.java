@@ -2212,8 +2212,8 @@ public class FragmentCompositionPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(FragmentComposition::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(FragmentComposition::getUuid),
 			FragmentComposition::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2361,7 +2361,8 @@ public class FragmentCompositionPersistenceImpl
 		_finderPathFetchByG_FCK = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_FCK",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "fragmentCompositionKey"}, false,
+			new String[] {"groupId", "fragmentCompositionKey"},
+			new boolean[] {false, false}, false,
 			FragmentComposition::getGroupId,
 			convertNullFunction(
 				FragmentComposition::getFragmentCompositionKey));
@@ -2503,7 +2504,8 @@ public class FragmentCompositionPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(FragmentComposition::getExternalReferenceCode),
 			FragmentComposition::getGroupId);
 
@@ -2590,4 +2592,4 @@ public class FragmentCompositionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2112663924
+// LIFERAY-SERVICE-BUILDER-HASH:807439603

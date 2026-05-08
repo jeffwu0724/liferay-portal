@@ -8,11 +8,14 @@ package com.liferay.sharepoint.rest.oauth2.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.sharepoint.rest.oauth2.model.SharepointOAuth2TokenEntryTable;
 import com.liferay.sharepoint.rest.oauth2.model.impl.SharepointOAuth2TokenEntryImpl;
 import com.liferay.sharepoint.rest.oauth2.model.impl.SharepointOAuth2TokenEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,7 +60,7 @@ public class SharepointOAuth2TokenEntryModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				sharepointOAuth2TokenEntryModelImpl, columnNames, original);
+				sharepointOAuth2TokenEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -78,7 +81,7 @@ public class SharepointOAuth2TokenEntryModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				sharepointOAuth2TokenEntryModelImpl, columnNames, original);
+				sharepointOAuth2TokenEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,23 +99,36 @@ public class SharepointOAuth2TokenEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		SharepointOAuth2TokenEntryModelImpl sharepointOAuth2TokenEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					sharepointOAuth2TokenEntryModelImpl.getColumnOriginalValue(
 						columnName);
 			}
 			else {
-				arguments[i] =
-					sharepointOAuth2TokenEntryModelImpl.getColumnValue(
-						columnName);
+				value = sharepointOAuth2TokenEntryModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -122,4 +138,4 @@ public class SharepointOAuth2TokenEntryModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-381416851
+// LIFERAY-SERVICE-BUILDER-HASH:1453922267

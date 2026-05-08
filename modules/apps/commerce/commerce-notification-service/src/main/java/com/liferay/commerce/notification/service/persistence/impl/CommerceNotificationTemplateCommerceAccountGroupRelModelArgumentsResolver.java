@@ -11,8 +11,11 @@ import com.liferay.commerce.notification.model.impl.CommerceNotificationTemplate
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -62,7 +65,7 @@ public class
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
 				commerceNotificationTemplateCommerceAccountGroupRelModelImpl,
-				columnNames, original);
+				finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -91,7 +94,7 @@ public class
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
 				commerceNotificationTemplateCommerceAccountGroupRelModelImpl,
-				columnNames, original);
+				finderPath, original);
 		}
 
 		return null;
@@ -112,23 +115,37 @@ public class
 	private static Object[] _getValue(
 		CommerceNotificationTemplateCommerceAccountGroupRelModelImpl
 			commerceNotificationTemplateCommerceAccountGroupRelModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					commerceNotificationTemplateCommerceAccountGroupRelModelImpl.
 						getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] =
+				value =
 					commerceNotificationTemplateCommerceAccountGroupRelModelImpl.
 						getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -150,4 +167,4 @@ public class
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1389614150
+// LIFERAY-SERVICE-BUILDER-HASH:742692416

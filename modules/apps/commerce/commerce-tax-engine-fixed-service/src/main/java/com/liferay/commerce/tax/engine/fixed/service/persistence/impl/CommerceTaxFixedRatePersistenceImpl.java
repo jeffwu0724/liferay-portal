@@ -755,7 +755,8 @@ public class CommerceTaxFixedRatePersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"CPTaxCategoryId", "commerceTaxMethodId"}, false,
+			new String[] {"CPTaxCategoryId", "commerceTaxMethodId"},
+			new boolean[] {false, false}, false,
 			CommerceTaxFixedRate::getCPTaxCategoryId,
 			CommerceTaxFixedRate::getCommerceTaxMethodId);
 
@@ -837,4 +838,4 @@ public class CommerceTaxFixedRatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1108571772
+// LIFERAY-SERVICE-BUILDER-HASH:1589867878

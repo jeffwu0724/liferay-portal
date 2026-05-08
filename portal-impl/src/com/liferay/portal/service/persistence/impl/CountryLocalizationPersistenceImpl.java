@@ -620,7 +620,8 @@ public class CountryLocalizationPersistenceImpl
 		_finderPathFetchByCountryId_LanguageId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCountryId_LanguageId",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"countryId", "languageId"}, false,
+			new String[] {"countryId", "languageId"},
+			new boolean[] {false, false}, false,
 			CountryLocalization::getCountryId,
 			convertNullFunction(CountryLocalization::getLanguageId));
 
@@ -669,4 +670,4 @@ public class CountryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:292757949
+// LIFERAY-SERVICE-BUILDER-HASH:184316389

@@ -11,8 +11,11 @@ import com.liferay.commerce.order.rule.model.impl.COREntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class COREntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = corEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(corEntryModelImpl, columnNames, original);
+			return _getValue(corEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -79,7 +82,7 @@ public class COREntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(corEntryModelImpl, columnNames, original);
+			return _getValue(corEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,21 +99,34 @@ public class COREntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		COREntryModelImpl corEntryModelImpl, String[] columnNames,
+		COREntryModelImpl corEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = corEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = corEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = corEntryModelImpl.getColumnValue(columnName);
+				value = corEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -130,4 +146,4 @@ public class COREntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1441473413
+// LIFERAY-SERVICE-BUILDER-HASH:-1151496557

@@ -805,7 +805,8 @@ public class SamlSpSessionPersistenceImpl
 		_finderPathFetchByJSessionId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByJSessionId",
 			new String[] {String.class.getName()}, new String[] {"jSessionId"},
-			false, convertNullFunction(SamlSpSession::getJSessionId));
+			new boolean[] {false}, false,
+			convertNullFunction(SamlSpSession::getJSessionId));
 
 		_uniquePersistenceFinderByJSessionId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByJSessionId, _SQL_SELECT_SAMLSPSESSION_WHERE,
@@ -817,7 +818,7 @@ public class SamlSpSessionPersistenceImpl
 		_finderPathFetchBySamlSpSessionKey = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchBySamlSpSessionKey",
 			new String[] {String.class.getName()},
-			new String[] {"samlSpSessionKey"}, false,
+			new String[] {"samlSpSessionKey"}, new boolean[] {false}, false,
 			convertNullFunction(SamlSpSession::getSamlSpSessionKey));
 
 		_uniquePersistenceFinderBySamlSpSessionKey =
@@ -929,4 +930,4 @@ public class SamlSpSessionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1954576257
+// LIFERAY-SERVICE-BUILDER-HASH:-632759918

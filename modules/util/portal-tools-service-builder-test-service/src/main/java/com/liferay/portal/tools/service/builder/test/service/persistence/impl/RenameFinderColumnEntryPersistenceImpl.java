@@ -336,7 +336,7 @@ public class RenameFinderColumnEntryPersistenceImpl
 		_finderPathFetchByColumnToRename = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByColumnToRename",
 			new String[] {String.class.getName()},
-			new String[] {"columnToRename"}, false,
+			new String[] {"columnToRename"}, new boolean[] {false}, false,
 			convertNullFunction(RenameFinderColumnEntry::getColumnToRename));
 
 		_uniquePersistenceFinderByColumnToRename =
@@ -384,4 +384,4 @@ public class RenameFinderColumnEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1932960312
+// LIFERAY-SERVICE-BUILDER-HASH:1757136760

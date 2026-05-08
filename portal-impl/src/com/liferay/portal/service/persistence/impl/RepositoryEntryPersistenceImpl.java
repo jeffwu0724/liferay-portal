@@ -1090,8 +1090,8 @@ public class RepositoryEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(RepositoryEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(RepositoryEntry::getUuid),
 			RepositoryEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1172,7 +1172,8 @@ public class RepositoryEntryPersistenceImpl
 		_finderPathFetchByR_M = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByR_M",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"repositoryId", "mappedId"}, false,
+			new String[] {"repositoryId", "mappedId"},
+			new boolean[] {false, false}, false,
 			RepositoryEntry::getRepositoryId,
 			convertNullFunction(RepositoryEntry::getMappedId));
 
@@ -1221,4 +1222,4 @@ public class RepositoryEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1176539041
+// LIFERAY-SERVICE-BUILDER-HASH:927493958

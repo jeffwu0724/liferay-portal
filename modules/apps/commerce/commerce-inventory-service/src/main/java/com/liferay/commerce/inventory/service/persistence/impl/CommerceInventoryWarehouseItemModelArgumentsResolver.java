@@ -11,8 +11,11 @@ import com.liferay.commerce.inventory.model.impl.CommerceInventoryWarehouseItemM
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,7 +60,7 @@ public class CommerceInventoryWarehouseItemModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				commerceInventoryWarehouseItemModelImpl, columnNames, original);
+				commerceInventoryWarehouseItemModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -78,7 +81,7 @@ public class CommerceInventoryWarehouseItemModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				commerceInventoryWarehouseItemModelImpl, columnNames, original);
+				commerceInventoryWarehouseItemModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,23 +100,36 @@ public class CommerceInventoryWarehouseItemModelArgumentsResolver
 	private static Object[] _getValue(
 		CommerceInventoryWarehouseItemModelImpl
 			commerceInventoryWarehouseItemModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					commerceInventoryWarehouseItemModelImpl.
 						getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] =
-					commerceInventoryWarehouseItemModelImpl.getColumnValue(
-						columnName);
+				value = commerceInventoryWarehouseItemModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -123,4 +139,4 @@ public class CommerceInventoryWarehouseItemModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-300071636
+// LIFERAY-SERVICE-BUILDER-HASH:971696020

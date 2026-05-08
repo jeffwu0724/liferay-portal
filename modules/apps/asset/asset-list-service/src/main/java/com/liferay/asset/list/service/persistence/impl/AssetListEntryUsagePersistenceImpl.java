@@ -2055,8 +2055,8 @@ public class AssetListEntryUsagePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(AssetListEntryUsage::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(AssetListEntryUsage::getUuid),
 			AssetListEntryUsage::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2353,7 +2353,8 @@ public class AssetListEntryUsagePersistenceImpl
 				"groupId", "classNameId", "containerKey", "containerType",
 				"key_", "plid"
 			},
-			false, AssetListEntryUsage::getGroupId,
+			new boolean[] {false, false, false, false, false, false}, false,
+			AssetListEntryUsage::getGroupId,
 			AssetListEntryUsage::getClassNameId,
 			convertNullFunction(AssetListEntryUsage::getContainerKey),
 			AssetListEntryUsage::getContainerType,
@@ -2455,4 +2456,4 @@ public class AssetListEntryUsagePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1617664097
+// LIFERAY-SERVICE-BUILDER-HASH:975620578

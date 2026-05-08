@@ -773,7 +773,7 @@ public class NotificationRecipientPersistenceImpl
 		_finderPathFetchByClassPK = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByClassPK",
 			new String[] {Long.class.getName()}, new String[] {"classPK"},
-			false, NotificationRecipient::getClassPK);
+			new boolean[] {false}, false, NotificationRecipient::getClassPK);
 
 		_uniquePersistenceFinderByClassPK = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByClassPK,
@@ -851,4 +851,4 @@ public class NotificationRecipientPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1319520371
+// LIFERAY-SERVICE-BUILDER-HASH:1621130122

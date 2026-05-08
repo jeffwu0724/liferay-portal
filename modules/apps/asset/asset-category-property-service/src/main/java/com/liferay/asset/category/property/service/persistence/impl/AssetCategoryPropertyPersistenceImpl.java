@@ -1248,8 +1248,8 @@ public class AssetCategoryPropertyPersistenceImpl
 		_finderPathFetchByCA_K = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCA_K",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"categoryId", "key_"}, false,
-			AssetCategoryProperty::getCategoryId,
+			new String[] {"categoryId", "key_"}, new boolean[] {false, false},
+			false, AssetCategoryProperty::getCategoryId,
 			convertNullFunction(AssetCategoryProperty::getKey));
 
 		_uniquePersistenceFinderByCA_K = new UniquePersistenceFinder<>(
@@ -1265,7 +1265,8 @@ public class AssetCategoryPropertyPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				AssetCategoryProperty::getExternalReferenceCode),
 			AssetCategoryProperty::getCompanyId);
@@ -1353,4 +1354,4 @@ public class AssetCategoryPropertyPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:656202417
+// LIFERAY-SERVICE-BUILDER-HASH:-1525173414

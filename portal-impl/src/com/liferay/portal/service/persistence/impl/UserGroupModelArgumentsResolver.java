@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.UserGroupTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.UserGroupImpl;
 import com.liferay.portal.model.impl.UserGroupModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -51,7 +54,7 @@ public class UserGroupModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = userGroupModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(userGroupModelImpl, columnNames, original);
+			return _getValue(userGroupModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -78,7 +81,7 @@ public class UserGroupModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(userGroupModelImpl, columnNames, original);
+			return _getValue(userGroupModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -95,21 +98,34 @@ public class UserGroupModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		UserGroupModelImpl userGroupModelImpl, String[] columnNames,
+		UserGroupModelImpl userGroupModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = userGroupModelImpl.getColumnOriginalValue(
-					columnName);
+				value = userGroupModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = userGroupModelImpl.getColumnValue(columnName);
+				value = userGroupModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -129,4 +145,4 @@ public class UserGroupModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1226374505
+// LIFERAY-SERVICE-BUILDER-HASH:350819345

@@ -1094,7 +1094,8 @@ public class SegmentsEntryRelPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"segmentsEntryId", "classNameId", "classPK"}, false,
+			new String[] {"segmentsEntryId", "classNameId", "classPK"},
+			new boolean[] {false, false, false}, false,
 			SegmentsEntryRel::getSegmentsEntryId,
 			SegmentsEntryRel::getClassNameId, SegmentsEntryRel::getClassPK);
 
@@ -1180,4 +1181,4 @@ public class SegmentsEntryRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1995971730
+// LIFERAY-SERVICE-BUILDER-HASH:-1784296243

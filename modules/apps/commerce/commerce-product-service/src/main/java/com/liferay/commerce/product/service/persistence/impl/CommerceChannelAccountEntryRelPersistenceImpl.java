@@ -2068,7 +2068,8 @@ public class CommerceChannelAccountEntryRelPersistenceImpl
 				"accountEntryId", "classNameId", "classPK", "commerceChannelId",
 				"type_"
 			},
-			false, CommerceChannelAccountEntryRel::getAccountEntryId,
+			new boolean[] {false, false, false, false, false}, false,
+			CommerceChannelAccountEntryRel::getAccountEntryId,
 			CommerceChannelAccountEntryRel::getClassNameId,
 			CommerceChannelAccountEntryRel::getClassPK,
 			CommerceChannelAccountEntryRel::getCommerceChannelId,
@@ -2173,4 +2174,4 @@ public class CommerceChannelAccountEntryRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1049184289
+// LIFERAY-SERVICE-BUILDER-HASH:136969915

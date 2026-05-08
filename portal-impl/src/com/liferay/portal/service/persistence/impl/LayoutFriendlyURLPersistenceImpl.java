@@ -2631,8 +2631,8 @@ public class LayoutFriendlyURLPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(LayoutFriendlyURL::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutFriendlyURL::getUuid),
 			LayoutFriendlyURL::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2847,12 +2847,12 @@ public class LayoutFriendlyURLPersistenceImpl
 		_finderPathFetchByP_L = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByP_L",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"plid", "languageId"}, false,
-			LayoutFriendlyURL::getPlid,
+			new String[] {"plid", "languageId"}, new boolean[] {false, false},
+			false, LayoutFriendlyURL::getPlid,
 			convertNullFunction(LayoutFriendlyURL::getLanguageId));
 
 		_finderPathCountByP_L = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_L",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_L",
 			new String[] {Long.class.getName(), String.class.getName()},
 			new String[] {"plid", "languageId"}, false);
 
@@ -2912,8 +2912,8 @@ public class LayoutFriendlyURLPersistenceImpl
 			new String[] {
 				"groupId", "privateLayout", "friendlyURL", "languageId"
 			},
-			false, LayoutFriendlyURL::getGroupId,
-			LayoutFriendlyURL::isPrivateLayout,
+			new boolean[] {false, false, false, false}, false,
+			LayoutFriendlyURL::getGroupId, LayoutFriendlyURL::isPrivateLayout,
 			convertNullFunction(LayoutFriendlyURL::getFriendlyURL),
 			convertNullFunction(LayoutFriendlyURL::getLanguageId));
 
@@ -2970,4 +2970,4 @@ public class LayoutFriendlyURLPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2090194511
+// LIFERAY-SERVICE-BUILDER-HASH:532170951

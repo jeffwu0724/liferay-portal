@@ -11,8 +11,11 @@ import com.liferay.commerce.product.model.impl.CPDefinitionLinkModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class CPDefinitionLinkModelArgumentsResolver
 		long columnBitmask = cpDefinitionLinkModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(cpDefinitionLinkModelImpl, columnNames, original);
+			return _getValue(cpDefinitionLinkModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -81,7 +84,7 @@ public class CPDefinitionLinkModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(cpDefinitionLinkModelImpl, columnNames, original);
+			return _getValue(cpDefinitionLinkModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -99,21 +102,34 @@ public class CPDefinitionLinkModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CPDefinitionLinkModelImpl cpDefinitionLinkModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = cpDefinitionLinkModelImpl.getColumnOriginalValue(
+				value = cpDefinitionLinkModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = cpDefinitionLinkModelImpl.getColumnValue(
-					columnName);
+				value = cpDefinitionLinkModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -134,4 +150,4 @@ public class CPDefinitionLinkModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1137402498
+// LIFERAY-SERVICE-BUILDER-HASH:-1464911380

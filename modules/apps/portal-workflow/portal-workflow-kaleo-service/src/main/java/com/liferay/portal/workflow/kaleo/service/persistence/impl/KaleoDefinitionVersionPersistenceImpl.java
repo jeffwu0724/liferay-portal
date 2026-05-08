@@ -885,7 +885,8 @@ public class KaleoDefinitionVersionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"companyId", "name", "version"}, false,
+			new String[] {"companyId", "name", "version"},
+			new boolean[] {false, false, false}, false,
 			KaleoDefinitionVersion::getCompanyId,
 			convertNullFunction(KaleoDefinitionVersion::getName),
 			convertNullFunction(KaleoDefinitionVersion::getVersion));
@@ -972,4 +973,4 @@ public class KaleoDefinitionVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1188127050
+// LIFERAY-SERVICE-BUILDER-HASH:-1865598539

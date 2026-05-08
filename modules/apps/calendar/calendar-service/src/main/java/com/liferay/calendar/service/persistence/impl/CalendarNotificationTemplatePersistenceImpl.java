@@ -1160,8 +1160,8 @@ public class CalendarNotificationTemplatePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CalendarNotificationTemplate::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CalendarNotificationTemplate::getUuid),
 			CalendarNotificationTemplate::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1254,7 +1254,8 @@ public class CalendarNotificationTemplatePersistenceImpl
 			new String[] {
 				"calendarId", "notificationType", "notificationTemplateType"
 			},
-			false, CalendarNotificationTemplate::getCalendarId,
+			new boolean[] {false, false, false}, false,
+			CalendarNotificationTemplate::getCalendarId,
 			convertNullFunction(
 				CalendarNotificationTemplate::getNotificationType),
 			convertNullFunction(
@@ -1349,4 +1350,4 @@ public class CalendarNotificationTemplatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-310380057
+// LIFERAY-SERVICE-BUILDER-HASH:996324688

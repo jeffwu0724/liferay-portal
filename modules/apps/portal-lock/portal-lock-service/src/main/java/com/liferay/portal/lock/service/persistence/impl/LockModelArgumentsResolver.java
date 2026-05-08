@@ -8,11 +8,14 @@ package com.liferay.portal.lock.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.lock.model.LockTable;
 import com.liferay.portal.lock.model.impl.LockImpl;
 import com.liferay.portal.lock.model.impl.LockModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class LockModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = lockModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(lockModelImpl, columnNames, original);
+			return _getValue(lockModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class LockModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(lockModelImpl, columnNames, original);
+			return _getValue(lockModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,19 +91,33 @@ public class LockModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		LockModelImpl lockModelImpl, String[] columnNames, boolean original) {
+		LockModelImpl lockModelImpl, FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = lockModelImpl.getColumnOriginalValue(columnName);
+				value = lockModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = lockModelImpl.getColumnValue(columnName);
+				value = lockModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -110,4 +127,4 @@ public class LockModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:244809993
+// LIFERAY-SERVICE-BUILDER-HASH:-1355327617

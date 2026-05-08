@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.ServiceComponentTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.ServiceComponentImpl;
 import com.liferay.portal.model.impl.ServiceComponentModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class ServiceComponentModelArgumentsResolver
 		long columnBitmask = serviceComponentModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(serviceComponentModelImpl, columnNames, original);
+			return _getValue(serviceComponentModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class ServiceComponentModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(serviceComponentModelImpl, columnNames, original);
+			return _getValue(serviceComponentModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -98,21 +101,34 @@ public class ServiceComponentModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ServiceComponentModelImpl serviceComponentModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = serviceComponentModelImpl.getColumnOriginalValue(
+				value = serviceComponentModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = serviceComponentModelImpl.getColumnValue(
-					columnName);
+				value = serviceComponentModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -135,4 +151,4 @@ public class ServiceComponentModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-434733712
+// LIFERAY-SERVICE-BUILDER-HASH:-2126455584

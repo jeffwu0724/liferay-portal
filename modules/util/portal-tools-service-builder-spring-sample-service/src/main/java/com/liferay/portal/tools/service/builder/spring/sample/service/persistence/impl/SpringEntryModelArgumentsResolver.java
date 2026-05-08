@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.spring.sample.model.SpringEntryTable;
 import com.liferay.portal.tools.service.builder.spring.sample.model.impl.SpringEntryImpl;
 import com.liferay.portal.tools.service.builder.spring.sample.model.impl.SpringEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +55,7 @@ public class SpringEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = springEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(springEntryModelImpl, columnNames, original);
+			return _getValue(springEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class SpringEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(springEntryModelImpl, columnNames, original);
+			return _getValue(springEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class SpringEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		SpringEntryModelImpl springEntryModelImpl, String[] columnNames,
+		SpringEntryModelImpl springEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = springEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = springEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = springEntryModelImpl.getColumnValue(columnName);
+				value = springEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class SpringEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-504051013
+// LIFERAY-SERVICE-BUILDER-HASH:322545873

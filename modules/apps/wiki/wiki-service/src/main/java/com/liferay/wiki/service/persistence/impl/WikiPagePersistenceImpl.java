@@ -8512,8 +8512,9 @@ public class WikiPagePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(WikiPage::getUuid), WikiPage::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(WikiPage::getUuid),
+			WikiPage::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_WIKIPAGE_WHERE, "",
@@ -8897,7 +8898,8 @@ public class WikiPagePersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				Double.class.getName()
 			},
-			new String[] {"resourcePrimKey", "nodeId", "version"}, false,
+			new String[] {"resourcePrimKey", "nodeId", "version"},
+			new boolean[] {false, false, false}, false,
 			WikiPage::getResourcePrimKey, WikiPage::getNodeId,
 			WikiPage::getVersion);
 
@@ -8999,8 +9001,8 @@ public class WikiPagePersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Double.class.getName()
 			},
-			new String[] {"groupId", "externalReferenceCode", "version"}, false,
-			WikiPage::getGroupId,
+			new String[] {"groupId", "externalReferenceCode", "version"},
+			new boolean[] {false, false, false}, false, WikiPage::getGroupId,
 			convertNullFunction(WikiPage::getExternalReferenceCode),
 			WikiPage::getVersion);
 
@@ -9142,9 +9144,9 @@ public class WikiPagePersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Double.class.getName()
 			},
-			new String[] {"nodeId", "title", "version"}, false,
-			WikiPage::getNodeId, convertNullFunction(WikiPage::getTitle),
-			WikiPage::getVersion);
+			new String[] {"nodeId", "title", "version"},
+			new boolean[] {false, true, false}, false, WikiPage::getNodeId,
+			convertCaseFunction(WikiPage::getTitle), WikiPage::getVersion);
 
 		_uniquePersistenceFinderByN_T_V = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByN_T_V, _SQL_SELECT_WIKIPAGE_WHERE, "",
@@ -9844,4 +9846,4 @@ public class WikiPagePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:542242261
+// LIFERAY-SERVICE-BUILDER-HASH:245966968

@@ -1234,7 +1234,8 @@ public class BatchEngineImportTaskPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				BatchEngineImportTask::getExternalReferenceCode),
 			BatchEngineImportTask::getCompanyId);
@@ -1319,4 +1320,4 @@ public class BatchEngineImportTaskPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1516812450
+// LIFERAY-SERVICE-BUILDER-HASH:2127112407

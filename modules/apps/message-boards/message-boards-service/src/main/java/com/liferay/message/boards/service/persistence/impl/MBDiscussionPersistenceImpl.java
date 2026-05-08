@@ -1017,8 +1017,8 @@ public class MBDiscussionPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(MBDiscussion::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(MBDiscussion::getUuid),
 			MBDiscussion::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1066,7 +1066,7 @@ public class MBDiscussionPersistenceImpl
 		_finderPathFetchByThreadId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByThreadId",
 			new String[] {Long.class.getName()}, new String[] {"threadId"},
-			false, MBDiscussion::getThreadId);
+			new boolean[] {false}, false, MBDiscussion::getThreadId);
 
 		_uniquePersistenceFinderByThreadId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByThreadId, _SQL_SELECT_MBDISCUSSION_WHERE,
@@ -1078,8 +1078,9 @@ public class MBDiscussionPersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"classNameId", "classPK"}, false,
-			MBDiscussion::getClassNameId, MBDiscussion::getClassPK);
+			new String[] {"classNameId", "classPK"},
+			new boolean[] {false, false}, false, MBDiscussion::getClassNameId,
+			MBDiscussion::getClassPK);
 
 		_uniquePersistenceFinderByC_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_C, _SQL_SELECT_MBDISCUSSION_WHERE, "",
@@ -1162,4 +1163,4 @@ public class MBDiscussionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1024614122
+// LIFERAY-SERVICE-BUILDER-HASH:-1846817829

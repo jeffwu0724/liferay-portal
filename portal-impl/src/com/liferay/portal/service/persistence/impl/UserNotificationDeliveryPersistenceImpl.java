@@ -575,7 +575,8 @@ public class UserNotificationDeliveryPersistenceImpl
 				"userId", "portletId", "classNameId", "notificationType",
 				"deliveryType"
 			},
-			false, UserNotificationDelivery::getUserId,
+			new boolean[] {false, false, false, false, false}, false,
+			UserNotificationDelivery::getUserId,
 			convertNullFunction(UserNotificationDelivery::getPortletId),
 			UserNotificationDelivery::getClassNameId,
 			UserNotificationDelivery::getNotificationType,
@@ -638,4 +639,4 @@ public class UserNotificationDeliveryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1846825386
+// LIFERAY-SERVICE-BUILDER-HASH:108687900

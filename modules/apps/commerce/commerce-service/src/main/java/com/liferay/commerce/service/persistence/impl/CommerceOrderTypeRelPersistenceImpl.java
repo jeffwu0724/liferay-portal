@@ -1351,7 +1351,8 @@ public class CommerceOrderTypeRelPersistenceImpl
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			new String[] {"classNameId", "classPK", "commerceOrderTypeId"},
-			false, CommerceOrderTypeRel::getClassNameId,
+			new boolean[] {false, false, false}, false,
+			CommerceOrderTypeRel::getClassNameId,
 			CommerceOrderTypeRel::getClassPK,
 			CommerceOrderTypeRel::getCommerceOrderTypeId);
 
@@ -1372,7 +1373,8 @@ public class CommerceOrderTypeRelPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CommerceOrderTypeRel::getExternalReferenceCode),
 			CommerceOrderTypeRel::getCompanyId);
 
@@ -1456,4 +1458,4 @@ public class CommerceOrderTypeRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-321044467
+// LIFERAY-SERVICE-BUILDER-HASH:1389465671

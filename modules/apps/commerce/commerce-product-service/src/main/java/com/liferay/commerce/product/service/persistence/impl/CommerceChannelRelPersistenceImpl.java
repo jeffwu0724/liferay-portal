@@ -879,7 +879,8 @@ public class CommerceChannelRelPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"classNameId", "classPK", "commerceChannelId"}, false,
+			new String[] {"classNameId", "classPK", "commerceChannelId"},
+			new boolean[] {false, false, false}, false,
 			CommerceChannelRel::getClassNameId, CommerceChannelRel::getClassPK,
 			CommerceChannelRel::getCommerceChannelId);
 
@@ -966,4 +967,4 @@ public class CommerceChannelRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1142563430
+// LIFERAY-SERVICE-BUILDER-HASH:-967465001

@@ -1953,7 +1953,8 @@ public class PhonePersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(Phone::getExternalReferenceCode),
 			Phone::getCompanyId);
 
@@ -2002,4 +2003,4 @@ public class PhonePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1011152713
+// LIFERAY-SERVICE-BUILDER-HASH:1681360666

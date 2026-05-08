@@ -1580,7 +1580,8 @@ public class FriendlyURLEntryLocalizationPersistenceImpl
 				FINDER_CLASS_NAME_ENTITY,
 				"fetchByFriendlyURLEntryId_LanguageId",
 				new String[] {Long.class.getName(), String.class.getName()},
-				new String[] {"friendlyURLEntryId", "languageId"}, false,
+				new String[] {"friendlyURLEntryId", "languageId"},
+				new boolean[] {false, false}, false,
 				FriendlyURLEntryLocalization::getFriendlyURLEntryId,
 				convertNullFunction(
 					FriendlyURLEntryLocalization::getLanguageId));
@@ -1766,7 +1767,8 @@ public class FriendlyURLEntryLocalizationPersistenceImpl
 				String.class.getName(), String.class.getName()
 			},
 			new String[] {"groupId", "classNameId", "languageId", "urlTitle"},
-			false, FriendlyURLEntryLocalization::getGroupId,
+			new boolean[] {false, false, false, false}, false,
+			FriendlyURLEntryLocalization::getGroupId,
 			FriendlyURLEntryLocalization::getClassNameId,
 			convertNullFunction(FriendlyURLEntryLocalization::getLanguageId),
 			convertNullFunction(FriendlyURLEntryLocalization::getUrlTitle));
@@ -1906,4 +1908,4 @@ public class FriendlyURLEntryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1478504752
+// LIFERAY-SERVICE-BUILDER-HASH:1245491630

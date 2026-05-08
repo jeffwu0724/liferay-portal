@@ -5384,7 +5384,8 @@ public class FragmentEntryVersionPersistenceImpl
 		_finderPathFetchByFragmentEntryId_Version = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByFragmentEntryId_Version",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"fragmentEntryId", "version"}, false,
+			new String[] {"fragmentEntryId", "version"},
+			new boolean[] {false, false}, false,
 			FragmentEntryVersion::getFragmentEntryId,
 			FragmentEntryVersion::getVersion);
 
@@ -5507,7 +5508,8 @@ public class FragmentEntryVersionPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "version"}, false,
+			new String[] {"uuid_", "groupId", "version"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(FragmentEntryVersion::getUuid),
 			FragmentEntryVersion::getGroupId, FragmentEntryVersion::getVersion);
 
@@ -5936,7 +5938,8 @@ public class FragmentEntryVersionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"groupId", "fragmentEntryKey", "version"}, false,
+			new String[] {"groupId", "fragmentEntryKey", "version"},
+			new boolean[] {false, false, false}, false,
 			FragmentEntryVersion::getGroupId,
 			convertNullFunction(FragmentEntryVersion::getFragmentEntryKey),
 			FragmentEntryVersion::getVersion);
@@ -6580,4 +6583,4 @@ public class FragmentEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-889030252
+// LIFERAY-SERVICE-BUILDER-HASH:-1420457065

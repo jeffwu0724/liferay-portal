@@ -8,11 +8,14 @@ package com.liferay.portal.security.sso.openid.connect.persistence.service.persi
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.sso.openid.connect.persistence.model.OpenIdConnectSessionTable;
 import com.liferay.portal.security.sso.openid.connect.persistence.model.impl.OpenIdConnectSessionImpl;
 import com.liferay.portal.security.sso.openid.connect.persistence.model.impl.OpenIdConnectSessionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class OpenIdConnectSessionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				openIdConnectSessionModelImpl, columnNames, original);
+				openIdConnectSessionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -75,7 +78,7 @@ public class OpenIdConnectSessionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				openIdConnectSessionModelImpl, columnNames, original);
+				openIdConnectSessionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +96,35 @@ public class OpenIdConnectSessionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		OpenIdConnectSessionModelImpl openIdConnectSessionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					openIdConnectSessionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = openIdConnectSessionModelImpl.getColumnValue(
+				value = openIdConnectSessionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = openIdConnectSessionModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +134,4 @@ public class OpenIdConnectSessionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1846734817
+// LIFERAY-SERVICE-BUILDER-HASH:468587367

@@ -1618,8 +1618,8 @@ public class CPInstanceOptionValueRelPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CPInstanceOptionValueRel::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CPInstanceOptionValueRel::getUuid),
 			CPInstanceOptionValueRel::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1778,7 +1778,8 @@ public class CPInstanceOptionValueRelPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByCDOVRI_CII",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"CPDefinitionOptionValueRelId", "CPInstanceId"},
-			false, CPInstanceOptionValueRel::getCPDefinitionOptionValueRelId,
+			new boolean[] {false, false}, false,
+			CPInstanceOptionValueRel::getCPDefinitionOptionValueRelId,
 			CPInstanceOptionValueRel::getCPInstanceId);
 
 		_uniquePersistenceFinderByCDOVRI_CII = new UniquePersistenceFinder<>(
@@ -1802,7 +1803,8 @@ public class CPInstanceOptionValueRelPersistenceImpl
 				"CPDefinitionOptionRelId", "CPDefinitionOptionValueRelId",
 				"CPInstanceId"
 			},
-			false, CPInstanceOptionValueRel::getCPDefinitionOptionRelId,
+			new boolean[] {false, false, false}, false,
+			CPInstanceOptionValueRel::getCPDefinitionOptionRelId,
 			CPInstanceOptionValueRel::getCPDefinitionOptionValueRelId,
 			CPInstanceOptionValueRel::getCPInstanceId);
 
@@ -1895,4 +1897,4 @@ public class CPInstanceOptionValueRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1904246181
+// LIFERAY-SERVICE-BUILDER-HASH:-2143251353

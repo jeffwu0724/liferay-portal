@@ -952,7 +952,8 @@ public class AccountGroupRelPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"accountGroupId", "classNameId", "classPK"}, false,
+			new String[] {"accountGroupId", "classNameId", "classPK"},
+			new boolean[] {false, false, false}, false,
 			AccountGroupRel::getAccountGroupId, AccountGroupRel::getClassNameId,
 			AccountGroupRel::getClassPK);
 
@@ -1035,4 +1036,4 @@ public class AccountGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-125930301
+// LIFERAY-SERVICE-BUILDER-HASH:125176831

@@ -868,7 +868,7 @@ public class CSDiagramSettingPersistenceImpl
 		_finderPathFetchByCPDefinitionId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCPDefinitionId",
 			new String[] {Long.class.getName()},
-			new String[] {"CPDefinitionId"}, false,
+			new String[] {"CPDefinitionId"}, new boolean[] {false}, false,
 			CSDiagramSetting::getCPDefinitionId);
 
 		_uniquePersistenceFinderByCPDefinitionId =
@@ -952,4 +952,4 @@ public class CSDiagramSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:221295714
+// LIFERAY-SERVICE-BUILDER-HASH:-1837495947

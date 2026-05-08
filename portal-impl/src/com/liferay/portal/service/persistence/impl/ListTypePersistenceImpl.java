@@ -1109,8 +1109,9 @@ public class ListTypePersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"companyId", "name", "type_"}, false,
-			ListType::getCompanyId, convertNullFunction(ListType::getName),
+			new String[] {"companyId", "name", "type_"},
+			new boolean[] {false, false, false}, false, ListType::getCompanyId,
+			convertNullFunction(ListType::getName),
 			convertNullFunction(ListType::getType));
 
 		_uniquePersistenceFinderByC_N_T = new UniquePersistenceFinder<>(
@@ -1161,4 +1162,4 @@ public class ListTypePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1121419093
+// LIFERAY-SERVICE-BUILDER-HASH:656202221

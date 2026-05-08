@@ -3596,8 +3596,8 @@ public class CommerceTermEntryPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false,
-			CommerceTermEntry::getCompanyId,
+			new String[] {"companyId", "name"}, new boolean[] {false, false},
+			false, CommerceTermEntry::getCompanyId,
 			convertNullFunction(CommerceTermEntry::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
@@ -3734,7 +3734,8 @@ public class CommerceTermEntryPersistenceImpl
 				Long.class.getName(), Double.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"companyId", "priority", "type_"}, false,
+			new String[] {"companyId", "priority", "type_"},
+			new boolean[] {false, false, false}, false,
 			CommerceTermEntry::getCompanyId, CommerceTermEntry::getPriority,
 			convertNullFunction(CommerceTermEntry::getType));
 
@@ -3754,7 +3755,8 @@ public class CommerceTermEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CommerceTermEntry::getExternalReferenceCode),
 			CommerceTermEntry::getCompanyId);
 
@@ -3865,4 +3867,4 @@ public class CommerceTermEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-776005320
+// LIFERAY-SERVICE-BUILDER-HASH:-2025554403

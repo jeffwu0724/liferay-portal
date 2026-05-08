@@ -1364,8 +1364,8 @@ public class MBBanPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(MBBan::getUuid), MBBan::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(MBBan::getUuid), MBBan::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_MBBAN_WHERE, "",
@@ -1498,8 +1498,8 @@ public class MBBanPersistenceImpl
 		_finderPathFetchByG_B = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_B",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"groupId", "banUserId"}, false, MBBan::getGroupId,
-			MBBan::getBanUserId);
+			new String[] {"groupId", "banUserId"}, new boolean[] {false, false},
+			false, MBBan::getGroupId, MBBan::getBanUserId);
 
 		_uniquePersistenceFinderByG_B = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_B, _SQL_SELECT_MBBAN_WHERE, "",
@@ -1582,4 +1582,4 @@ public class MBBanPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1911229884
+// LIFERAY-SERVICE-BUILDER-HASH:1798737665

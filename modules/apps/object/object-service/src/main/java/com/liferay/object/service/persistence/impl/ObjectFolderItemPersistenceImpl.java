@@ -1134,7 +1134,8 @@ public class ObjectFolderItemPersistenceImpl
 		_finderPathFetchByODI_OFI = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByODI_OFI",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"objectDefinitionId", "objectFolderId"}, false,
+			new String[] {"objectDefinitionId", "objectFolderId"},
+			new boolean[] {false, false}, false,
 			ObjectFolderItem::getObjectDefinitionId,
 			ObjectFolderItem::getObjectFolderId);
 
@@ -1218,4 +1219,4 @@ public class ObjectFolderItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1819433879
+// LIFERAY-SERVICE-BUILDER-HASH:2124615144

@@ -518,8 +518,9 @@ public class PortalPreferencesPersistenceImpl
 		_finderPathFetchByO_O = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByO_O",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"ownerId", "ownerType"}, false,
-			PortalPreferences::getOwnerId, PortalPreferences::getOwnerType);
+			new String[] {"ownerId", "ownerType"}, new boolean[] {false, false},
+			false, PortalPreferences::getOwnerId,
+			PortalPreferences::getOwnerType);
 
 		_uniquePersistenceFinderByO_O = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByO_O, _SQL_SELECT_PORTALPREFERENCES_WHERE,
@@ -564,4 +565,4 @@ public class PortalPreferencesPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-514965449
+// LIFERAY-SERVICE-BUILDER-HASH:3118703

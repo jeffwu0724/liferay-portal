@@ -2082,8 +2082,8 @@ public class TeamPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(Team::getUuid), Team::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(Team::getUuid), Team::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_TEAM_WHERE, "",
@@ -2188,8 +2188,8 @@ public class TeamPersistenceImpl
 		_finderPathFetchByG_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "name"}, false, Team::getGroupId,
-			convertNullFunction(Team::getName));
+			new String[] {"groupId", "name"}, new boolean[] {false, false},
+			false, Team::getGroupId, convertNullFunction(Team::getName));
 
 		_uniquePersistenceFinderByG_N = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_N, _SQL_SELECT_TEAM_WHERE, "",
@@ -2273,4 +2273,4 @@ public class TeamPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:138198719
+// LIFERAY-SERVICE-BUILDER-HASH:1841080580

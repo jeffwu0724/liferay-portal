@@ -4774,4 +4774,4 @@ public class UserNotificationEventPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1927535995
+// LIFERAY-SERVICE-BUILDER-HASH:1814997142

@@ -374,8 +374,8 @@ public class PatcherTicketHintPersistenceImpl
 		_finderPathFetchByPatcherProductVersionId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByPatcherProductVersionId",
 			new String[] {Long.class.getName()},
-			new String[] {"patcherProductVersionId"}, false,
-			PatcherTicketHint::getPatcherProductVersionId);
+			new String[] {"patcherProductVersionId"}, new boolean[] {false},
+			false, PatcherTicketHint::getPatcherProductVersionId);
 
 		_uniquePersistenceFinderByPatcherProductVersionId =
 			new UniquePersistenceFinder<>(
@@ -449,4 +449,4 @@ public class PatcherTicketHintPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1904500822
+// LIFERAY-SERVICE-BUILDER-HASH:-2109044972

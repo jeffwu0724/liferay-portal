@@ -1118,7 +1118,8 @@ public class CommerceVirtualOrderItemFileEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false,
 			convertNullFunction(CommerceVirtualOrderItemFileEntry::getUuid),
 			CommerceVirtualOrderItemFileEntry::getGroupId);
 
@@ -1319,4 +1320,4 @@ public class CommerceVirtualOrderItemFileEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:552973010
+// LIFERAY-SERVICE-BUILDER-HASH:467043934

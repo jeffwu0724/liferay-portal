@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.expando.model.impl.ExpandoTableImpl;
 import com.liferay.portlet.expando.model.impl.ExpandoTableModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +55,7 @@ public class ExpandoTableModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = expandoTableModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(expandoTableModelImpl, columnNames, original);
+			return _getValue(expandoTableModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class ExpandoTableModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(expandoTableModelImpl, columnNames, original);
+			return _getValue(expandoTableModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,35 @@ public class ExpandoTableModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		ExpandoTableModelImpl expandoTableModelImpl, String[] columnNames,
+		ExpandoTableModelImpl expandoTableModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = expandoTableModelImpl.getColumnOriginalValue(
+				value = expandoTableModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = expandoTableModelImpl.getColumnValue(columnName);
+				value = expandoTableModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +129,4 @@ public class ExpandoTableModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1428357331
+// LIFERAY-SERVICE-BUILDER-HASH:321397259

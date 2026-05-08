@@ -3335,8 +3335,9 @@ public class CPInstancePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CPInstance::getUuid), CPInstance::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CPInstance::getUuid),
+			CPInstance::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_CPINSTANCE_WHERE, "",
@@ -3561,8 +3562,8 @@ public class CPInstancePersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"CPDefinitionId", "CPInstanceUuid"}, false,
-			CPInstance::getCPDefinitionId,
+			new String[] {"CPDefinitionId", "CPInstanceUuid"},
+			new boolean[] {false, false}, false, CPInstance::getCPDefinitionId,
 			convertNullFunction(CPInstance::getCPInstanceUuid));
 
 		_uniquePersistenceFinderByC_C = new UniquePersistenceFinder<>(
@@ -3577,8 +3578,8 @@ public class CPInstancePersistenceImpl
 		_finderPathFetchByCPDI_S = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCPDI_S",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"CPDefinitionId", "sku"}, false,
-			CPInstance::getCPDefinitionId,
+			new String[] {"CPDefinitionId", "sku"},
+			new boolean[] {false, false}, false, CPInstance::getCPDefinitionId,
 			convertNullFunction(CPInstance::getSku));
 
 		_uniquePersistenceFinderByCPDI_S = new UniquePersistenceFinder<>(
@@ -3733,7 +3734,8 @@ public class CPInstancePersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CPInstance::getExternalReferenceCode),
 			CPInstance::getCompanyId);
 
@@ -3842,4 +3844,4 @@ public class CPInstancePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1474503288
+// LIFERAY-SERVICE-BUILDER-HASH:379931143

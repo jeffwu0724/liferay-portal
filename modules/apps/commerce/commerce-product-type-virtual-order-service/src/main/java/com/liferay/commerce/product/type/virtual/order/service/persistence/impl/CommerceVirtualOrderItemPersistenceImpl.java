@@ -842,8 +842,8 @@ public class CommerceVirtualOrderItemPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CommerceVirtualOrderItem::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CommerceVirtualOrderItem::getUuid),
 			CommerceVirtualOrderItem::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -896,7 +896,7 @@ public class CommerceVirtualOrderItemPersistenceImpl
 		_finderPathFetchByCommerceOrderItemId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCommerceOrderItemId",
 			new String[] {Long.class.getName()},
-			new String[] {"commerceOrderItemId"}, false,
+			new String[] {"commerceOrderItemId"}, new boolean[] {false}, false,
 			CommerceVirtualOrderItem::getCommerceOrderItemId);
 
 		_uniquePersistenceFinderByCommerceOrderItemId =
@@ -977,4 +977,4 @@ public class CommerceVirtualOrderItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1927941621
+// LIFERAY-SERVICE-BUILDER-HASH:-2017400528

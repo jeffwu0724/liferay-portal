@@ -11,8 +11,11 @@ import com.liferay.batch.planner.model.impl.BatchPlannerMappingModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class BatchPlannerMappingModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				batchPlannerMappingModelImpl, columnNames, original);
+				batchPlannerMappingModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -83,7 +86,7 @@ public class BatchPlannerMappingModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				batchPlannerMappingModelImpl, columnNames, original);
+				batchPlannerMappingModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -101,22 +104,34 @@ public class BatchPlannerMappingModelArgumentsResolver
 
 	private static Object[] _getValue(
 		BatchPlannerMappingModelImpl batchPlannerMappingModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					batchPlannerMappingModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = batchPlannerMappingModelImpl.getColumnValue(
+				value = batchPlannerMappingModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = batchPlannerMappingModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -137,4 +152,4 @@ public class BatchPlannerMappingModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1407321610
+// LIFERAY-SERVICE-BUILDER-HASH:736125668

@@ -791,8 +791,9 @@ public class PortletItemPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(), Long.class.getName()
 			},
-			new String[] {"groupId", "name", "portletId", "classNameId"}, false,
-			PortletItem::getGroupId, convertNullFunction(PortletItem::getName),
+			new String[] {"groupId", "name", "portletId", "classNameId"},
+			new boolean[] {false, true, false, false}, false,
+			PortletItem::getGroupId, convertCaseFunction(PortletItem::getName),
 			convertNullFunction(PortletItem::getPortletId),
 			PortletItem::getClassNameId);
 
@@ -844,4 +845,4 @@ public class PortletItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1537840325
+// LIFERAY-SERVICE-BUILDER-HASH:-1806898284

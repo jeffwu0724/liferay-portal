@@ -11,8 +11,11 @@ import com.liferay.oauth2.provider.model.impl.OAuth2ApplicationModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class OAuth2ApplicationModelArgumentsResolver
 		long columnBitmask = oAuth2ApplicationModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(oAuth2ApplicationModelImpl, columnNames, original);
+			return _getValue(oAuth2ApplicationModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class OAuth2ApplicationModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(oAuth2ApplicationModelImpl, columnNames, original);
+			return _getValue(oAuth2ApplicationModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -91,22 +94,34 @@ public class OAuth2ApplicationModelArgumentsResolver
 
 	private static Object[] _getValue(
 		OAuth2ApplicationModelImpl oAuth2ApplicationModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					oAuth2ApplicationModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = oAuth2ApplicationModelImpl.getColumnValue(
+				value = oAuth2ApplicationModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = oAuth2ApplicationModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -116,4 +131,4 @@ public class OAuth2ApplicationModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:699710199
+// LIFERAY-SERVICE-BUILDER-HASH:-1575599995

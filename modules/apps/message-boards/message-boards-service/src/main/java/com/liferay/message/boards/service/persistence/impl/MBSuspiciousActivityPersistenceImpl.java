@@ -1358,8 +1358,8 @@ public class MBSuspiciousActivityPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(MBSuspiciousActivity::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(MBSuspiciousActivity::getUuid),
 			MBSuspiciousActivity::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1474,8 +1474,8 @@ public class MBSuspiciousActivityPersistenceImpl
 		_finderPathFetchByU_M = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByU_M",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"userId", "messageId"}, false,
-			MBSuspiciousActivity::getUserId,
+			new String[] {"userId", "messageId"}, new boolean[] {false, false},
+			false, MBSuspiciousActivity::getUserId,
 			MBSuspiciousActivity::getMessageId);
 
 		_uniquePersistenceFinderByU_M = new UniquePersistenceFinder<>(
@@ -1491,8 +1491,9 @@ public class MBSuspiciousActivityPersistenceImpl
 		_finderPathFetchByU_T = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByU_T",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"userId", "threadId"}, false,
-			MBSuspiciousActivity::getUserId, MBSuspiciousActivity::getThreadId);
+			new String[] {"userId", "threadId"}, new boolean[] {false, false},
+			false, MBSuspiciousActivity::getUserId,
+			MBSuspiciousActivity::getThreadId);
 
 		_uniquePersistenceFinderByU_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByU_T, _SQL_SELECT_MBSUSPICIOUSACTIVITY_WHERE,
@@ -1576,4 +1577,4 @@ public class MBSuspiciousActivityPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1524713740
+// LIFERAY-SERVICE-BUILDER-HASH:325443709

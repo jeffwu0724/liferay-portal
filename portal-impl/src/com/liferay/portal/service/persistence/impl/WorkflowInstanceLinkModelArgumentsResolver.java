@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.WorkflowInstanceLinkTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.WorkflowInstanceLinkImpl;
 import com.liferay.portal.model.impl.WorkflowInstanceLinkModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,7 +57,7 @@ public class WorkflowInstanceLinkModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				workflowInstanceLinkModelImpl, columnNames, original);
+				workflowInstanceLinkModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -82,7 +85,7 @@ public class WorkflowInstanceLinkModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				workflowInstanceLinkModelImpl, columnNames, original);
+				workflowInstanceLinkModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -100,22 +103,35 @@ public class WorkflowInstanceLinkModelArgumentsResolver
 
 	private static Object[] _getValue(
 		WorkflowInstanceLinkModelImpl workflowInstanceLinkModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					workflowInstanceLinkModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = workflowInstanceLinkModelImpl.getColumnValue(
+				value = workflowInstanceLinkModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = workflowInstanceLinkModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -136,4 +152,4 @@ public class WorkflowInstanceLinkModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1254446220
+// LIFERAY-SERVICE-BUILDER-HASH:407521968

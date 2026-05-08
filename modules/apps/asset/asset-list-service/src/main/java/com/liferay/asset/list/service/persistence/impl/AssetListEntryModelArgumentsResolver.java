@@ -11,8 +11,11 @@ import com.liferay.asset.list.model.impl.AssetListEntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class AssetListEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = assetListEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(assetListEntryModelImpl, columnNames, original);
+			return _getValue(assetListEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class AssetListEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(assetListEntryModelImpl, columnNames, original);
+			return _getValue(assetListEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,22 +92,35 @@ public class AssetListEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		AssetListEntryModelImpl assetListEntryModelImpl, String[] columnNames,
+		AssetListEntryModelImpl assetListEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = assetListEntryModelImpl.getColumnOriginalValue(
+				value = assetListEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = assetListEntryModelImpl.getColumnValue(
-					columnName);
+				value = assetListEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -114,4 +130,4 @@ public class AssetListEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-777492663
+// LIFERAY-SERVICE-BUILDER-HASH:-1419382117

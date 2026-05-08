@@ -1940,7 +1940,8 @@ public class CommerceInventoryReplenishmentItemPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				CommerceInventoryReplenishmentItem::getExternalReferenceCode),
 			CommerceInventoryReplenishmentItem::getCompanyId);
@@ -2029,4 +2030,4 @@ public class CommerceInventoryReplenishmentItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1769890878
+// LIFERAY-SERVICE-BUILDER-HASH:-21808511

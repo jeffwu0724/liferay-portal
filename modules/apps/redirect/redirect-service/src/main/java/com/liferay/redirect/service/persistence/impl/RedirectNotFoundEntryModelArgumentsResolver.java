@@ -8,11 +8,14 @@ package com.liferay.redirect.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.redirect.model.RedirectNotFoundEntryTable;
 import com.liferay.redirect.model.impl.RedirectNotFoundEntryImpl;
 import com.liferay.redirect.model.impl.RedirectNotFoundEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class RedirectNotFoundEntryModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				redirectNotFoundEntryModelImpl, columnNames, original);
+				redirectNotFoundEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -75,7 +78,7 @@ public class RedirectNotFoundEntryModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				redirectNotFoundEntryModelImpl, columnNames, original);
+				redirectNotFoundEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +96,35 @@ public class RedirectNotFoundEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		RedirectNotFoundEntryModelImpl redirectNotFoundEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					redirectNotFoundEntryModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = redirectNotFoundEntryModelImpl.getColumnValue(
+				value = redirectNotFoundEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = redirectNotFoundEntryModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +134,4 @@ public class RedirectNotFoundEntryModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:457384465
+// LIFERAY-SERVICE-BUILDER-HASH:1386686545

@@ -1184,8 +1184,8 @@ public class CommerceTaxCategoryMappingPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CommerceTaxCategoryMapping::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CommerceTaxCategoryMapping::getUuid),
 			CommerceTaxCategoryMapping::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1271,7 +1271,8 @@ public class CommerceTaxCategoryMappingPersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"commerceTaxMethodId", "CPTaxCategoryId"}, false,
+			new String[] {"commerceTaxMethodId", "CPTaxCategoryId"},
+			new boolean[] {false, false}, false,
 			CommerceTaxCategoryMapping::getCommerceTaxMethodId,
 			CommerceTaxCategoryMapping::getCPTaxCategoryId);
 
@@ -1290,7 +1291,8 @@ public class CommerceTaxCategoryMappingPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				CommerceTaxCategoryMapping::getExternalReferenceCode),
 			CommerceTaxCategoryMapping::getCompanyId);
@@ -1376,4 +1378,4 @@ public class CommerceTaxCategoryMappingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-487183552
+// LIFERAY-SERVICE-BUILDER-HASH:-1559757897

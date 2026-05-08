@@ -819,7 +819,8 @@ public class DDMTemplateVersionPersistenceImpl
 		_finderPathFetchByT_V = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByT_V",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"templateId", "version"}, false,
+			new String[] {"templateId", "version"},
+			new boolean[] {false, false}, false,
 			DDMTemplateVersion::getTemplateId,
 			convertNullFunction(DDMTemplateVersion::getVersion));
 
@@ -934,4 +935,4 @@ public class DDMTemplateVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-582737269
+// LIFERAY-SERVICE-BUILDER-HASH:-498508752

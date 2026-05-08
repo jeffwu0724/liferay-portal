@@ -1232,8 +1232,8 @@ public class MBThreadFlagPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(MBThreadFlag::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(MBThreadFlag::getUuid),
 			MBThreadFlag::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1338,8 +1338,8 @@ public class MBThreadFlagPersistenceImpl
 		_finderPathFetchByU_T = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByU_T",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"userId", "threadId"}, false, MBThreadFlag::getUserId,
-			MBThreadFlag::getThreadId);
+			new String[] {"userId", "threadId"}, new boolean[] {false, false},
+			false, MBThreadFlag::getUserId, MBThreadFlag::getThreadId);
 
 		_uniquePersistenceFinderByU_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByU_T, _SQL_SELECT_MBTHREADFLAG_WHERE, "",
@@ -1422,4 +1422,4 @@ public class MBThreadFlagPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-787268046
+// LIFERAY-SERVICE-BUILDER-HASH:-1558982049

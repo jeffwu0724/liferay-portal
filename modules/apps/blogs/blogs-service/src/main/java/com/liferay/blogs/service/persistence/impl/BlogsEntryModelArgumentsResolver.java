@@ -11,8 +11,11 @@ import com.liferay.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class BlogsEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = blogsEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(blogsEntryModelImpl, columnNames, original);
+			return _getValue(blogsEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class BlogsEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(blogsEntryModelImpl, columnNames, original);
+			return _getValue(blogsEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,21 +100,34 @@ public class BlogsEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		BlogsEntryModelImpl blogsEntryModelImpl, String[] columnNames,
+		BlogsEntryModelImpl blogsEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = blogsEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = blogsEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = blogsEntryModelImpl.getColumnValue(columnName);
+				value = blogsEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -134,4 +150,4 @@ public class BlogsEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:530228957
+// LIFERAY-SERVICE-BUILDER-HASH:3346977

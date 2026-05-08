@@ -8,11 +8,14 @@ package com.liferay.saml.persistence.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.saml.persistence.model.SamlPeerBindingTable;
 import com.liferay.saml.persistence.model.impl.SamlPeerBindingImpl;
 import com.liferay.saml.persistence.model.impl.SamlPeerBindingModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class SamlPeerBindingModelArgumentsResolver
 		long columnBitmask = samlPeerBindingModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(samlPeerBindingModelImpl, columnNames, original);
+			return _getValue(samlPeerBindingModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class SamlPeerBindingModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(samlPeerBindingModelImpl, columnNames, original);
+			return _getValue(samlPeerBindingModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -90,22 +93,35 @@ public class SamlPeerBindingModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		SamlPeerBindingModelImpl samlPeerBindingModelImpl, String[] columnNames,
-		boolean original) {
+		SamlPeerBindingModelImpl samlPeerBindingModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = samlPeerBindingModelImpl.getColumnOriginalValue(
+				value = samlPeerBindingModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = samlPeerBindingModelImpl.getColumnValue(
-					columnName);
+				value = samlPeerBindingModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +131,4 @@ public class SamlPeerBindingModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:714809506
+// LIFERAY-SERVICE-BUILDER-HASH:-1814550448

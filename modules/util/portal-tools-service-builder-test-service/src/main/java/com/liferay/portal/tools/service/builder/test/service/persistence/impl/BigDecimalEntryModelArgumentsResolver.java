@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.model.BigDecimalEntryTable;
 import com.liferay.portal.tools.service.builder.test.model.impl.BigDecimalEntryImpl;
 import com.liferay.portal.tools.service.builder.test.model.impl.BigDecimalEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class BigDecimalEntryModelArgumentsResolver
 		long columnBitmask = bigDecimalEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(bigDecimalEntryModelImpl, columnNames, original);
+			return _getValue(bigDecimalEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class BigDecimalEntryModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(bigDecimalEntryModelImpl, columnNames, original);
+			return _getValue(bigDecimalEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,22 +100,35 @@ public class BigDecimalEntryModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		BigDecimalEntryModelImpl bigDecimalEntryModelImpl, String[] columnNames,
-		boolean original) {
+		BigDecimalEntryModelImpl bigDecimalEntryModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = bigDecimalEntryModelImpl.getColumnOriginalValue(
+				value = bigDecimalEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = bigDecimalEntryModelImpl.getColumnValue(
-					columnName);
+				value = bigDecimalEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -133,4 +149,4 @@ public class BigDecimalEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1421702646
+// LIFERAY-SERVICE-BUILDER-HASH:-640014278

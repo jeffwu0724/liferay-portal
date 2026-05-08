@@ -753,7 +753,7 @@ public class ObjectStateFlowPersistenceImpl
 		_finderPathFetchByObjectFieldId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByObjectFieldId",
 			new String[] {Long.class.getName()}, new String[] {"objectFieldId"},
-			false, ObjectStateFlow::getObjectFieldId);
+			new boolean[] {false}, false, ObjectStateFlow::getObjectFieldId);
 
 		_uniquePersistenceFinderByObjectFieldId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByObjectFieldId,
@@ -831,4 +831,4 @@ public class ObjectStateFlowPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1153071614
+// LIFERAY-SERVICE-BUILDER-HASH:810296907

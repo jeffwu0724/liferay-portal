@@ -880,7 +880,8 @@ public class FaroChannelPersistenceImpl
 		_finderPathFetchByC_W = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_W",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"channelId", "workspaceGroupId"}, false,
+			new String[] {"channelId", "workspaceGroupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(FaroChannel::getChannelId),
 			FaroChannel::getWorkspaceGroupId);
 
@@ -959,4 +960,4 @@ public class FaroChannelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-496194662
+// LIFERAY-SERVICE-BUILDER-HASH:1412520847

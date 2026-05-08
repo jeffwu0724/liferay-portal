@@ -11,8 +11,11 @@ import com.liferay.commerce.notification.model.impl.CommerceNotificationQueueEnt
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -58,7 +61,7 @@ public class CommerceNotificationQueueEntryModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				commerceNotificationQueueEntryModelImpl, columnNames, original);
+				commerceNotificationQueueEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -87,7 +90,7 @@ public class CommerceNotificationQueueEntryModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				commerceNotificationQueueEntryModelImpl, columnNames, original);
+				commerceNotificationQueueEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -106,23 +109,36 @@ public class CommerceNotificationQueueEntryModelArgumentsResolver
 	private static Object[] _getValue(
 		CommerceNotificationQueueEntryModelImpl
 			commerceNotificationQueueEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					commerceNotificationQueueEntryModelImpl.
 						getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] =
-					commerceNotificationQueueEntryModelImpl.getColumnValue(
-						columnName);
+				value = commerceNotificationQueueEntryModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -144,4 +160,4 @@ public class CommerceNotificationQueueEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1189942869
+// LIFERAY-SERVICE-BUILDER-HASH:1962030797

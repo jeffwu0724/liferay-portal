@@ -1819,7 +1819,7 @@ public class ObjectValidationRulePersistenceImpl
 			new String[] {
 				"externalReferenceCode", "companyId", "objectDefinitionId"
 			},
-			false,
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(ObjectValidationRule::getExternalReferenceCode),
 			ObjectValidationRule::getCompanyId,
 			ObjectValidationRule::getObjectDefinitionId);
@@ -1908,4 +1908,4 @@ public class ObjectValidationRulePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1524159359
+// LIFERAY-SERVICE-BUILDER-HASH:839983970

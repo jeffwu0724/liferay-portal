@@ -1732,8 +1732,8 @@ public class ClientExtensionEntryRelPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(ClientExtensionEntryRel::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(ClientExtensionEntryRel::getUuid),
 			ClientExtensionEntryRel::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1929,7 +1929,8 @@ public class ClientExtensionEntryRelPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				ClientExtensionEntryRel::getExternalReferenceCode),
 			ClientExtensionEntryRel::getGroupId);
@@ -2017,4 +2018,4 @@ public class ClientExtensionEntryRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1872225466
+// LIFERAY-SERVICE-BUILDER-HASH:1184831241

@@ -2494,8 +2494,8 @@ public class LayoutClassedModelUsagePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(LayoutClassedModelUsage::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutClassedModelUsage::getUuid),
 			LayoutClassedModelUsage::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2921,6 +2921,7 @@ public class LayoutClassedModelUsagePersistenceImpl
 				"groupId", "classExternalReferenceCode", "classNameId",
 				"classPK", "containerKey", "containerType", "plid"
 			},
+			new boolean[] {false, false, false, false, false, false, false},
 			false, LayoutClassedModelUsage::getGroupId,
 			convertNullFunction(
 				LayoutClassedModelUsage::getClassExternalReferenceCode),
@@ -3034,4 +3035,4 @@ public class LayoutClassedModelUsagePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-536767206
+// LIFERAY-SERVICE-BUILDER-HASH:1109379762

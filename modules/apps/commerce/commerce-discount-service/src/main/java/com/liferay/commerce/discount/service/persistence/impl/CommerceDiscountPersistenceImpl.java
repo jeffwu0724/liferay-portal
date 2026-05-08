@@ -3583,9 +3583,10 @@ public class CommerceDiscountPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"companyId", "couponCode", "active_"}, false,
+			new String[] {"companyId", "couponCode", "active_"},
+			new boolean[] {false, true, false}, false,
 			CommerceDiscount::getCompanyId,
-			convertNullFunction(CommerceDiscount::getCouponCode),
+			convertCaseFunction(CommerceDiscount::getCouponCode),
 			CommerceDiscount::isActive);
 
 		_uniquePersistenceFinderByC_C_A = new UniquePersistenceFinder<>(
@@ -3652,7 +3653,8 @@ public class CommerceDiscountPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CommerceDiscount::getExternalReferenceCode),
 			CommerceDiscount::getCompanyId);
 
@@ -3759,4 +3761,4 @@ public class CommerceDiscountPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1512064328
+// LIFERAY-SERVICE-BUILDER-HASH:820157541

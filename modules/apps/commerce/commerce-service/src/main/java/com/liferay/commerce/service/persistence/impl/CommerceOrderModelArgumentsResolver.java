@@ -11,8 +11,10 @@ import com.liferay.commerce.model.impl.CommerceOrderModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +57,7 @@ public class CommerceOrderModelArgumentsResolver implements ArgumentsResolver {
 			_hasModifiedColumns(commerceOrderModelImpl, columnNames) ||
 			_hasModifiedColumns(commerceOrderModelImpl, _ORDER_BY_COLUMNS)) {
 
-			return _getValue(commerceOrderModelImpl, columnNames, original);
+			return _getValue(commerceOrderModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -72,22 +74,35 @@ public class CommerceOrderModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		CommerceOrderModelImpl commerceOrderModelImpl, String[] columnNames,
+		CommerceOrderModelImpl commerceOrderModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = commerceOrderModelImpl.getColumnOriginalValue(
+				value = commerceOrderModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = commerceOrderModelImpl.getColumnValue(
-					columnName);
+				value = commerceOrderModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -123,4 +138,4 @@ public class CommerceOrderModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:564820770
+// LIFERAY-SERVICE-BUILDER-HASH:-16560071

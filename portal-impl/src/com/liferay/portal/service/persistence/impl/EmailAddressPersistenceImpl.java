@@ -1982,7 +1982,8 @@ public class EmailAddressPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(EmailAddress::getExternalReferenceCode),
 			EmailAddress::getCompanyId);
 
@@ -2032,4 +2033,4 @@ public class EmailAddressPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1851609456
+// LIFERAY-SERVICE-BUILDER-HASH:2064429529

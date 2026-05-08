@@ -5521,7 +5521,8 @@ public class FragmentEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "head"}, false,
+			new String[] {"uuid_", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(FragmentEntry::getUuid),
 			FragmentEntry::getGroupId, FragmentEntry::isHead);
 
@@ -5917,7 +5918,8 @@ public class FragmentEntryPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"groupId", "fragmentEntryKey", "head"}, false,
+			new String[] {"groupId", "fragmentEntryKey", "head"},
+			new boolean[] {false, false, false}, false,
 			FragmentEntry::getGroupId,
 			convertNullFunction(FragmentEntry::getFragmentEntryKey),
 			FragmentEntry::isHead);
@@ -6432,7 +6434,8 @@ public class FragmentEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"externalReferenceCode", "groupId", "head"}, false,
+			new String[] {"externalReferenceCode", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(FragmentEntry::getExternalReferenceCode),
 			FragmentEntry::getGroupId, FragmentEntry::isHead);
 
@@ -6452,8 +6455,8 @@ public class FragmentEntryPersistenceImpl
 
 		_finderPathFetchByHeadId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByHeadId",
-			new String[] {Long.class.getName()}, new String[] {"headId"}, false,
-			FragmentEntry::getHeadId);
+			new String[] {Long.class.getName()}, new String[] {"headId"},
+			new boolean[] {false}, false, FragmentEntry::getHeadId);
 
 		_uniquePersistenceFinderByHeadId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByHeadId, _SQL_SELECT_FRAGMENTENTRY_WHERE, "",
@@ -6533,4 +6536,4 @@ public class FragmentEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:346670309
+// LIFERAY-SERVICE-BUILDER-HASH:-631483615

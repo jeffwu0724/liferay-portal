@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.social.model.impl.SocialActivityLimitImpl;
 import com.liferay.portlet.social.model.impl.SocialActivityLimitModelImpl;
 import com.liferay.social.kernel.model.SocialActivityLimitTable;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,7 +57,7 @@ public class SocialActivityLimitModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				socialActivityLimitModelImpl, columnNames, original);
+				socialActivityLimitModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,7 +77,7 @@ public class SocialActivityLimitModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				socialActivityLimitModelImpl, columnNames, original);
+				socialActivityLimitModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +95,34 @@ public class SocialActivityLimitModelArgumentsResolver
 
 	private static Object[] _getValue(
 		SocialActivityLimitModelImpl socialActivityLimitModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					socialActivityLimitModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = socialActivityLimitModelImpl.getColumnValue(
+				value = socialActivityLimitModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = socialActivityLimitModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +132,4 @@ public class SocialActivityLimitModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-866187617
+// LIFERAY-SERVICE-BUILDER-HASH:-1515204985

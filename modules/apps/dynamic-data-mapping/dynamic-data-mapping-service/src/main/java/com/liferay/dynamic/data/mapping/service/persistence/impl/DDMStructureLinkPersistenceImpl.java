@@ -831,7 +831,8 @@ public class DDMStructureLinkPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"classNameId", "classPK", "structureId"}, false,
+			new String[] {"classNameId", "classPK", "structureId"},
+			new boolean[] {false, false, false}, false,
 			DDMStructureLink::getClassNameId, DDMStructureLink::getClassPK,
 			DDMStructureLink::getStructureId);
 
@@ -917,4 +918,4 @@ public class DDMStructureLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2120812387
+// LIFERAY-SERVICE-BUILDER-HASH:1323855320

@@ -1205,8 +1205,8 @@ public class DepotEntryPinPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(DepotEntryPin::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(DepotEntryPin::getUuid),
 			DepotEntryPin::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1311,8 +1311,9 @@ public class DepotEntryPinPersistenceImpl
 		_finderPathFetchByU_D = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByU_D",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"userId", "depotEntryId"}, false,
-			DepotEntryPin::getUserId, DepotEntryPin::getDepotEntryId);
+			new String[] {"userId", "depotEntryId"},
+			new boolean[] {false, false}, false, DepotEntryPin::getUserId,
+			DepotEntryPin::getDepotEntryId);
 
 		_uniquePersistenceFinderByU_D = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByU_D, _SQL_SELECT_DEPOTENTRYPIN_WHERE, "",
@@ -1395,4 +1396,4 @@ public class DepotEntryPinPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:331341549
+// LIFERAY-SERVICE-BUILDER-HASH:1101775004

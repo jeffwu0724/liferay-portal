@@ -311,7 +311,8 @@ public class ClassNamePersistenceImpl
 		_finderPathFetchByValue = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByValue",
 			new String[] {String.class.getName()}, new String[] {"value"},
-			false, convertNullFunction(ClassName::getValue));
+			new boolean[] {false}, false,
+			convertNullFunction(ClassName::getValue));
 
 		_uniquePersistenceFinderByValue = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByValue, _SQL_SELECT_CLASSNAME_WHERE, "",
@@ -349,4 +350,4 @@ public class ClassNamePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1126675556
+// LIFERAY-SERVICE-BUILDER-HASH:-956472840

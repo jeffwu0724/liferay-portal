@@ -11,8 +11,11 @@ import com.liferay.marketplace.model.impl.ModuleModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class ModuleModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = moduleModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(moduleModelImpl, columnNames, original);
+			return _getValue(moduleModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class ModuleModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(moduleModelImpl, columnNames, original);
+			return _getValue(moduleModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class ModuleModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		ModuleModelImpl moduleModelImpl, String[] columnNames,
+		ModuleModelImpl moduleModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = moduleModelImpl.getColumnOriginalValue(
-					columnName);
+				value = moduleModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = moduleModelImpl.getColumnValue(columnName);
+				value = moduleModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class ModuleModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1477136553
+// LIFERAY-SERVICE-BUILDER-HASH:-967140851

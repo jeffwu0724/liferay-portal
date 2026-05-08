@@ -11,8 +11,10 @@ import com.liferay.commerce.model.impl.CommerceOrderItemModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,7 +59,7 @@ public class CommerceOrderItemModelArgumentsResolver
 			_hasModifiedColumns(
 				commerceOrderItemModelImpl, _ORDER_BY_COLUMNS)) {
 
-			return _getValue(commerceOrderItemModelImpl, columnNames, original);
+			return _getValue(commerceOrderItemModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -75,22 +77,34 @@ public class CommerceOrderItemModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CommerceOrderItemModelImpl commerceOrderItemModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					commerceOrderItemModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = commerceOrderItemModelImpl.getColumnValue(
+				value = commerceOrderItemModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = commerceOrderItemModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -128,4 +142,4 @@ public class CommerceOrderItemModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1254077521
+// LIFERAY-SERVICE-BUILDER-HASH:-1482171572

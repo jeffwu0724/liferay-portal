@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.CountryLocalizationTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.CountryLocalizationImpl;
 import com.liferay.portal.model.impl.CountryLocalizationModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,7 +57,7 @@ public class CountryLocalizationModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				countryLocalizationModelImpl, columnNames, original);
+				countryLocalizationModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,7 +77,7 @@ public class CountryLocalizationModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				countryLocalizationModelImpl, columnNames, original);
+				countryLocalizationModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +95,34 @@ public class CountryLocalizationModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CountryLocalizationModelImpl countryLocalizationModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					countryLocalizationModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = countryLocalizationModelImpl.getColumnValue(
+				value = countryLocalizationModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = countryLocalizationModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +132,4 @@ public class CountryLocalizationModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1020982142
+// LIFERAY-SERVICE-BUILDER-HASH:-1382766766

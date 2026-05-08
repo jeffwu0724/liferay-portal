@@ -845,7 +845,8 @@ public class DDMDataProviderInstanceLinkPersistenceImpl
 		_finderPathFetchByD_S = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByD_S",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"dataProviderInstanceId", "structureId"}, false,
+			new String[] {"dataProviderInstanceId", "structureId"},
+			new boolean[] {false, false}, false,
 			DDMDataProviderInstanceLink::getDataProviderInstanceId,
 			DDMDataProviderInstanceLink::getStructureId);
 
@@ -931,4 +932,4 @@ public class DDMDataProviderInstanceLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2025964726
+// LIFERAY-SERVICE-BUILDER-HASH:2064639348

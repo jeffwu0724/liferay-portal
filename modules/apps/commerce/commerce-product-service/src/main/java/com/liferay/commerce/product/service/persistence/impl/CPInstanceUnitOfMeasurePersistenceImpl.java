@@ -1846,8 +1846,8 @@ public class CPInstanceUnitOfMeasurePersistenceImpl
 		_finderPathFetchByC_K = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"CPInstanceId", "key_"}, false,
-			CPInstanceUnitOfMeasure::getCPInstanceId,
+			new String[] {"CPInstanceId", "key_"}, new boolean[] {false, false},
+			false, CPInstanceUnitOfMeasure::getCPInstanceId,
 			convertNullFunction(CPInstanceUnitOfMeasure::getKey));
 
 		_uniquePersistenceFinderByC_K = new UniquePersistenceFinder<>(
@@ -2013,4 +2013,4 @@ public class CPInstanceUnitOfMeasurePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:141820682
+// LIFERAY-SERVICE-BUILDER-HASH:-2102935272

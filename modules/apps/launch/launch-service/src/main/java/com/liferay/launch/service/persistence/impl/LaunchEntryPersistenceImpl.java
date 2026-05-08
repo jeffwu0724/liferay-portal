@@ -1114,7 +1114,8 @@ public class LaunchEntryPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"classNameId", "classPK", "classVersion"}, false,
+			new String[] {"classNameId", "classPK", "classVersion"},
+			new boolean[] {false, false, false}, false,
 			LaunchEntry::getClassNameId, LaunchEntry::getClassPK,
 			convertNullFunction(LaunchEntry::getClassVersion));
 
@@ -1133,7 +1134,8 @@ public class LaunchEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(LaunchEntry::getExternalReferenceCode),
 			LaunchEntry::getCompanyId);
 
@@ -1216,4 +1218,4 @@ public class LaunchEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:702787360
+// LIFERAY-SERVICE-BUILDER-HASH:-1725992553

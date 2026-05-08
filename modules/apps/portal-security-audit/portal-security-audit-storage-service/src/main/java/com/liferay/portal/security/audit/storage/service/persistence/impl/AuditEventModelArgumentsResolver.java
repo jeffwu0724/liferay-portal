@@ -8,11 +8,14 @@ package com.liferay.portal.security.audit.storage.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.audit.storage.model.AuditEventTable;
 import com.liferay.portal.security.audit.storage.model.impl.AuditEventImpl;
 import com.liferay.portal.security.audit.storage.model.impl.AuditEventModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class AuditEventModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = auditEventModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(auditEventModelImpl, columnNames, original);
+			return _getValue(auditEventModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class AuditEventModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(auditEventModelImpl, columnNames, original);
+			return _getValue(auditEventModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,21 +100,34 @@ public class AuditEventModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		AuditEventModelImpl auditEventModelImpl, String[] columnNames,
+		AuditEventModelImpl auditEventModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = auditEventModelImpl.getColumnOriginalValue(
-					columnName);
+				value = auditEventModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = auditEventModelImpl.getColumnValue(columnName);
+				value = auditEventModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -132,4 +148,4 @@ public class AuditEventModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2115959039
+// LIFERAY-SERVICE-BUILDER-HASH:-1578311543

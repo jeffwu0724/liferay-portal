@@ -1737,8 +1737,8 @@ public class DDMStructureLayoutPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(DDMStructureLayout::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(DDMStructureLayout::getUuid),
 			DDMStructureLayout::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1850,7 +1850,7 @@ public class DDMStructureLayoutPersistenceImpl
 		_finderPathFetchByStructureVersionId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByStructureVersionId",
 			new String[] {Long.class.getName()},
-			new String[] {"structureVersionId"}, false,
+			new String[] {"structureVersionId"}, new boolean[] {false}, false,
 			DDMStructureLayout::getStructureVersionId);
 
 		_uniquePersistenceFinderByStructureVersionId =
@@ -1901,8 +1901,8 @@ public class DDMStructureLayoutPersistenceImpl
 				String.class.getName()
 			},
 			new String[] {"groupId", "classNameId", "structureLayoutKey"},
-			false, DDMStructureLayout::getGroupId,
-			DDMStructureLayout::getClassNameId,
+			new boolean[] {false, false, false}, false,
+			DDMStructureLayout::getGroupId, DDMStructureLayout::getClassNameId,
 			convertNullFunction(DDMStructureLayout::getStructureLayoutKey));
 
 		_uniquePersistenceFinderByG_C_S = new UniquePersistenceFinder<>(
@@ -2037,4 +2037,4 @@ public class DDMStructureLayoutPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2087660862
+// LIFERAY-SERVICE-BUILDER-HASH:-1710715980

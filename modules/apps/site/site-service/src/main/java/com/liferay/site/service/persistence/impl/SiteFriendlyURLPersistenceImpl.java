@@ -1182,8 +1182,8 @@ public class SiteFriendlyURLPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(SiteFriendlyURL::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(SiteFriendlyURL::getUuid),
 			SiteFriendlyURL::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1264,8 +1264,8 @@ public class SiteFriendlyURLPersistenceImpl
 		_finderPathFetchByC_F = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_F",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "friendlyURL"}, false,
-			SiteFriendlyURL::getCompanyId,
+			new String[] {"companyId", "friendlyURL"},
+			new boolean[] {false, false}, false, SiteFriendlyURL::getCompanyId,
 			convertNullFunction(SiteFriendlyURL::getFriendlyURL));
 
 		_uniquePersistenceFinderByC_F = new UniquePersistenceFinder<>(
@@ -1283,7 +1283,8 @@ public class SiteFriendlyURLPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "companyId", "languageId"}, false,
+			new String[] {"groupId", "companyId", "languageId"},
+			new boolean[] {false, false, false}, false,
 			SiteFriendlyURL::getGroupId, SiteFriendlyURL::getCompanyId,
 			convertNullFunction(SiteFriendlyURL::getLanguageId));
 
@@ -1306,7 +1307,8 @@ public class SiteFriendlyURLPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"companyId", "friendlyURL", "languageId"}, false,
+			new String[] {"companyId", "friendlyURL", "languageId"},
+			new boolean[] {false, false, false}, false,
 			SiteFriendlyURL::getCompanyId,
 			convertNullFunction(SiteFriendlyURL::getFriendlyURL),
 			convertNullFunction(SiteFriendlyURL::getLanguageId));
@@ -1393,4 +1395,4 @@ public class SiteFriendlyURLPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-582808926
+// LIFERAY-SERVICE-BUILDER-HASH:809354904

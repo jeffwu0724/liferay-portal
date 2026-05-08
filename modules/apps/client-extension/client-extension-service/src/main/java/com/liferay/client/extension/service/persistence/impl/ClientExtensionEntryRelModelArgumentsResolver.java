@@ -11,8 +11,11 @@ import com.liferay.client.extension.model.impl.ClientExtensionEntryRelModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -56,7 +59,7 @@ public class ClientExtensionEntryRelModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				clientExtensionEntryRelModelImpl, columnNames, original);
+				clientExtensionEntryRelModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -77,7 +80,7 @@ public class ClientExtensionEntryRelModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				clientExtensionEntryRelModelImpl, columnNames, original);
+				clientExtensionEntryRelModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -95,22 +98,35 @@ public class ClientExtensionEntryRelModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ClientExtensionEntryRelModelImpl clientExtensionEntryRelModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					clientExtensionEntryRelModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = clientExtensionEntryRelModelImpl.getColumnValue(
+				value = clientExtensionEntryRelModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = clientExtensionEntryRelModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -120,4 +136,4 @@ public class ClientExtensionEntryRelModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:305583481
+// LIFERAY-SERVICE-BUILDER-HASH:-136029879

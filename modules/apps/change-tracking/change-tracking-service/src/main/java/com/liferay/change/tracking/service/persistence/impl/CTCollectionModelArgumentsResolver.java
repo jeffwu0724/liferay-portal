@@ -11,8 +11,11 @@ import com.liferay.change.tracking.model.impl.CTCollectionModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class CTCollectionModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = ctCollectionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(ctCollectionModelImpl, columnNames, original);
+			return _getValue(ctCollectionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class CTCollectionModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(ctCollectionModelImpl, columnNames, original);
+			return _getValue(ctCollectionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,21 +100,35 @@ public class CTCollectionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		CTCollectionModelImpl ctCollectionModelImpl, String[] columnNames,
+		CTCollectionModelImpl ctCollectionModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = ctCollectionModelImpl.getColumnOriginalValue(
+				value = ctCollectionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = ctCollectionModelImpl.getColumnValue(columnName);
+				value = ctCollectionModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -132,4 +149,4 @@ public class CTCollectionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1279944380
+// LIFERAY-SERVICE-BUILDER-HASH:-1278905044

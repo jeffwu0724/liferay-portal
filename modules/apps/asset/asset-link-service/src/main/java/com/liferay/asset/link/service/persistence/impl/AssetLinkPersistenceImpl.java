@@ -1416,8 +1416,9 @@ public class AssetLinkPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"entryId1", "entryId2", "type_"}, false,
-			AssetLink::getEntryId1, AssetLink::getEntryId2, AssetLink::getType);
+			new String[] {"entryId1", "entryId2", "type_"},
+			new boolean[] {false, false, false}, false, AssetLink::getEntryId1,
+			AssetLink::getEntryId2, AssetLink::getType);
 
 		_uniquePersistenceFinderByE_E_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByE_E_T, _SQL_SELECT_ASSETLINK_WHERE, "",
@@ -1503,4 +1504,4 @@ public class AssetLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:251975200
+// LIFERAY-SERVICE-BUILDER-HASH:403906553

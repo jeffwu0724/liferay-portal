@@ -11,8 +11,11 @@ import com.liferay.layout.page.template.model.impl.LayoutPageTemplateStructureMo
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,7 +60,7 @@ public class LayoutPageTemplateStructureModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				layoutPageTemplateStructureModelImpl, columnNames, original);
+				layoutPageTemplateStructureModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -78,7 +81,7 @@ public class LayoutPageTemplateStructureModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				layoutPageTemplateStructureModelImpl, columnNames, original);
+				layoutPageTemplateStructureModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,23 +100,36 @@ public class LayoutPageTemplateStructureModelArgumentsResolver
 	private static Object[] _getValue(
 		LayoutPageTemplateStructureModelImpl
 			layoutPageTemplateStructureModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					layoutPageTemplateStructureModelImpl.getColumnOriginalValue(
 						columnName);
 			}
 			else {
-				arguments[i] =
-					layoutPageTemplateStructureModelImpl.getColumnValue(
-						columnName);
+				value = layoutPageTemplateStructureModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -123,4 +139,4 @@ public class LayoutPageTemplateStructureModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:14277052
+// LIFERAY-SERVICE-BUILDER-HASH:-89924292

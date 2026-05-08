@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class AssetVocabularyModelArgumentsResolver
 		long columnBitmask = assetVocabularyModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(assetVocabularyModelImpl, columnNames, original);
+			return _getValue(assetVocabularyModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class AssetVocabularyModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(assetVocabularyModelImpl, columnNames, original);
+			return _getValue(assetVocabularyModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,22 +100,35 @@ public class AssetVocabularyModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		AssetVocabularyModelImpl assetVocabularyModelImpl, String[] columnNames,
-		boolean original) {
+		AssetVocabularyModelImpl assetVocabularyModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = assetVocabularyModelImpl.getColumnOriginalValue(
+				value = assetVocabularyModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = assetVocabularyModelImpl.getColumnValue(
-					columnName);
+				value = assetVocabularyModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -133,4 +149,4 @@ public class AssetVocabularyModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1091505639
+// LIFERAY-SERVICE-BUILDER-HASH:1545749245

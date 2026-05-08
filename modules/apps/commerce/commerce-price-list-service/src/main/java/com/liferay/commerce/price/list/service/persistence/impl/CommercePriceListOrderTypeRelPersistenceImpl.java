@@ -1113,7 +1113,8 @@ public class CommercePriceListOrderTypeRelPersistenceImpl
 		_finderPathFetchByCPI_COTI = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCPI_COTI",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"commercePriceListId", "commerceOrderTypeId"}, false,
+			new String[] {"commercePriceListId", "commerceOrderTypeId"},
+			new boolean[] {false, false}, false,
 			CommercePriceListOrderTypeRel::getCommercePriceListId,
 			CommercePriceListOrderTypeRel::getCommerceOrderTypeId);
 
@@ -1203,4 +1204,4 @@ public class CommercePriceListOrderTypeRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:59380855
+// LIFERAY-SERVICE-BUILDER-HASH:1157907746

@@ -2182,8 +2182,8 @@ public class KaleoDefinitionPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(KaleoDefinition::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(KaleoDefinition::getUuid),
 			KaleoDefinition::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2293,8 +2293,8 @@ public class KaleoDefinitionPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false,
-			KaleoDefinition::getCompanyId,
+			new String[] {"companyId", "name"}, new boolean[] {false, false},
+			false, KaleoDefinition::getCompanyId,
 			convertNullFunction(KaleoDefinition::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
@@ -2383,7 +2383,8 @@ public class KaleoDefinitionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"companyId", "name", "version"}, false,
+			new String[] {"companyId", "name", "version"},
+			new boolean[] {false, false, false}, false,
 			KaleoDefinition::getCompanyId,
 			convertNullFunction(KaleoDefinition::getName),
 			KaleoDefinition::getVersion);
@@ -2407,7 +2408,8 @@ public class KaleoDefinitionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"companyId", "name", "active_"}, false,
+			new String[] {"companyId", "name", "active_"},
+			new boolean[] {false, false, false}, false,
 			KaleoDefinition::getCompanyId,
 			convertNullFunction(KaleoDefinition::getName),
 			KaleoDefinition::isActive);
@@ -2475,7 +2477,8 @@ public class KaleoDefinitionPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(KaleoDefinition::getExternalReferenceCode),
 			KaleoDefinition::getCompanyId);
 
@@ -2562,4 +2565,4 @@ public class KaleoDefinitionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1773773637
+// LIFERAY-SERVICE-BUILDER-HASH:-423016940

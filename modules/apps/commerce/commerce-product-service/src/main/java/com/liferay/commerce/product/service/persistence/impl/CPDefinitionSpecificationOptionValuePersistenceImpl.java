@@ -2378,7 +2378,8 @@ public class CPDefinitionSpecificationOptionValuePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false,
 			convertNullFunction(CPDefinitionSpecificationOptionValue::getUuid),
 			CPDefinitionSpecificationOptionValue::getGroupId);
 
@@ -2571,7 +2572,7 @@ public class CPDefinitionSpecificationOptionValuePersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_CSOVI",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"CPDSpecificationOptionValueId", "CPDefinitionId"},
-			false,
+			new boolean[] {false, false}, false,
 			CPDefinitionSpecificationOptionValue::
 				getCPDefinitionSpecificationOptionValueId,
 			CPDefinitionSpecificationOptionValue::getCPDefinitionId);
@@ -2665,7 +2666,8 @@ public class CPDefinitionSpecificationOptionValuePersistenceImpl
 		_finderPathFetchByC_K = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"CPDefinitionId", "key_"}, false,
+			new String[] {"CPDefinitionId", "key_"},
+			new boolean[] {false, false}, false,
 			CPDefinitionSpecificationOptionValue::getCPDefinitionId,
 			convertNullFunction(CPDefinitionSpecificationOptionValue::getKey));
 
@@ -2684,7 +2686,8 @@ public class CPDefinitionSpecificationOptionValuePersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				CPDefinitionSpecificationOptionValue::getExternalReferenceCode),
 			CPDefinitionSpecificationOptionValue::getCompanyId);
@@ -2778,4 +2781,4 @@ public class CPDefinitionSpecificationOptionValuePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-607619816
+// LIFERAY-SERVICE-BUILDER-HASH:-1781195809

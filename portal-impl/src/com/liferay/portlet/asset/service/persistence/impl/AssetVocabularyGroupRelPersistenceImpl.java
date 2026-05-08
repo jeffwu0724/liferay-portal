@@ -1233,8 +1233,8 @@ public class AssetVocabularyGroupRelPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(AssetVocabularyGroupRel::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(AssetVocabularyGroupRel::getUuid),
 			AssetVocabularyGroupRel::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1351,7 +1351,8 @@ public class AssetVocabularyGroupRelPersistenceImpl
 		_finderPathFetchByG_V = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_V",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"groupId", "vocabularyId"}, false,
+			new String[] {"groupId", "vocabularyId"},
+			new boolean[] {false, false}, false,
 			AssetVocabularyGroupRel::getGroupId,
 			AssetVocabularyGroupRel::getVocabularyId);
 
@@ -1403,4 +1404,4 @@ public class AssetVocabularyGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-86993052
+// LIFERAY-SERVICE-BUILDER-HASH:-441571647

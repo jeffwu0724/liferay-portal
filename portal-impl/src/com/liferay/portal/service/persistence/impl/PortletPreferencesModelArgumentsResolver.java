@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.PortletPreferencesTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.PortletPreferencesImpl;
 import com.liferay.portal.model.impl.PortletPreferencesModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,8 +56,7 @@ public class PortletPreferencesModelArgumentsResolver
 		long columnBitmask = portletPreferencesModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				portletPreferencesModelImpl, columnNames, original);
+			return _getValue(portletPreferencesModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,8 +75,7 @@ public class PortletPreferencesModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				portletPreferencesModelImpl, columnNames, original);
+			return _getValue(portletPreferencesModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +93,34 @@ public class PortletPreferencesModelArgumentsResolver
 
 	private static Object[] _getValue(
 		PortletPreferencesModelImpl portletPreferencesModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					portletPreferencesModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = portletPreferencesModelImpl.getColumnValue(
+				value = portletPreferencesModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = portletPreferencesModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +130,4 @@ public class PortletPreferencesModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:141238374
+// LIFERAY-SERVICE-BUILDER-HASH:-1235906164

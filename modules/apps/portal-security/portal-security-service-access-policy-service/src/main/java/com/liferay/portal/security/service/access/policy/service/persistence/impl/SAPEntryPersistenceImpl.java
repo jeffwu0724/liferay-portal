@@ -1986,8 +1986,9 @@ public class SAPEntryPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false, SAPEntry::getCompanyId,
-			convertNullFunction(SAPEntry::getName));
+			new String[] {"companyId", "name"}, new boolean[] {false, true},
+			false, SAPEntry::getCompanyId,
+			convertCaseFunction(SAPEntry::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_N, _SQL_SELECT_SAPENTRY_WHERE, "",
@@ -2090,4 +2091,4 @@ public class SAPEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1040275703
+// LIFERAY-SERVICE-BUILDER-HASH:-88598791

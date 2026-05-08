@@ -1615,8 +1615,8 @@ public class RedirectEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(RedirectEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(RedirectEntry::getUuid),
 			RedirectEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1724,8 +1724,8 @@ public class RedirectEntryPersistenceImpl
 		_finderPathFetchByG_S = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_S",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "sourceURL"}, false,
-			RedirectEntry::getGroupId,
+			new String[] {"groupId", "sourceURL"}, new boolean[] {false, false},
+			false, RedirectEntry::getGroupId,
 			convertNullFunction(RedirectEntry::getSourceURL));
 
 		_uniquePersistenceFinderByG_S = new UniquePersistenceFinder<>(
@@ -1829,4 +1829,4 @@ public class RedirectEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-356313224
+// LIFERAY-SERVICE-BUILDER-HASH:-672740180

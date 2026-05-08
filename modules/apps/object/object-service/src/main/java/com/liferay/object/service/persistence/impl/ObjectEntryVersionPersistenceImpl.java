@@ -1490,7 +1490,8 @@ public class ObjectEntryVersionPersistenceImpl
 		_finderPathFetchByOEI_V = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByOEI_V",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"objectEntryId", "version"}, false,
+			new String[] {"objectEntryId", "version"},
+			new boolean[] {false, false}, false,
 			ObjectEntryVersion::getObjectEntryId,
 			ObjectEntryVersion::getVersion);
 
@@ -1605,4 +1606,4 @@ public class ObjectEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1968589398
+// LIFERAY-SERVICE-BUILDER-HASH:-291905141

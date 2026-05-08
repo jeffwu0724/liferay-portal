@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.ResourcePermissionTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.ResourcePermissionImpl;
 import com.liferay.portal.model.impl.ResourcePermissionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,8 +56,7 @@ public class ResourcePermissionModelArgumentsResolver
 		long columnBitmask = resourcePermissionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				resourcePermissionModelImpl, columnNames, original);
+			return _getValue(resourcePermissionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,8 +75,7 @@ public class ResourcePermissionModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				resourcePermissionModelImpl, columnNames, original);
+			return _getValue(resourcePermissionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +93,34 @@ public class ResourcePermissionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ResourcePermissionModelImpl resourcePermissionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					resourcePermissionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = resourcePermissionModelImpl.getColumnValue(
+				value = resourcePermissionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = resourcePermissionModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +130,4 @@ public class ResourcePermissionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1568746040
+// LIFERAY-SERVICE-BUILDER-HASH:759768174

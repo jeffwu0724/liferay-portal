@@ -11,8 +11,11 @@ import com.liferay.document.library.model.impl.DLFileVersionPreviewModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class DLFileVersionPreviewModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				dlFileVersionPreviewModelImpl, columnNames, original);
+				dlFileVersionPreviewModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -83,7 +86,7 @@ public class DLFileVersionPreviewModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				dlFileVersionPreviewModelImpl, columnNames, original);
+				dlFileVersionPreviewModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -101,22 +104,35 @@ public class DLFileVersionPreviewModelArgumentsResolver
 
 	private static Object[] _getValue(
 		DLFileVersionPreviewModelImpl dlFileVersionPreviewModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					dlFileVersionPreviewModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = dlFileVersionPreviewModelImpl.getColumnValue(
+				value = dlFileVersionPreviewModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = dlFileVersionPreviewModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -134,4 +150,4 @@ public class DLFileVersionPreviewModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1758182335
+// LIFERAY-SERVICE-BUILDER-HASH:1585141355

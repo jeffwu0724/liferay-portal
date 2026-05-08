@@ -943,8 +943,8 @@ public class ReadingTimeEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(ReadingTimeEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(ReadingTimeEntry::getUuid),
 			ReadingTimeEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -996,7 +996,8 @@ public class ReadingTimeEntryPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"groupId", "classNameId", "classPK"}, false,
+			new String[] {"groupId", "classNameId", "classPK"},
+			new boolean[] {false, false, false}, false,
 			ReadingTimeEntry::getGroupId, ReadingTimeEntry::getClassNameId,
 			ReadingTimeEntry::getClassPK);
 
@@ -1085,4 +1086,4 @@ public class ReadingTimeEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1144328769
+// LIFERAY-SERVICE-BUILDER-HASH:1471514686

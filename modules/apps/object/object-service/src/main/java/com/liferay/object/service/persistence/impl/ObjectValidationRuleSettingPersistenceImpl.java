@@ -1293,7 +1293,7 @@ public class ObjectValidationRuleSettingPersistenceImpl
 		_finderPathFetchByN_V = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByN_V",
 			new String[] {String.class.getName(), String.class.getName()},
-			new String[] {"name", "value"}, false,
+			new String[] {"name", "value"}, new boolean[] {false, false}, false,
 			convertNullFunction(ObjectValidationRuleSetting::getName),
 			convertNullFunction(ObjectValidationRuleSetting::getValue));
 
@@ -1315,7 +1315,8 @@ public class ObjectValidationRuleSettingPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"objectValidationRuleId", "name", "value"}, false,
+			new String[] {"objectValidationRuleId", "name", "value"},
+			new boolean[] {false, false, false}, false,
 			ObjectValidationRuleSetting::getObjectValidationRuleId,
 			convertNullFunction(ObjectValidationRuleSetting::getName),
 			convertNullFunction(ObjectValidationRuleSetting::getValue));
@@ -1406,4 +1407,4 @@ public class ObjectValidationRuleSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1591295528
+// LIFERAY-SERVICE-BUILDER-HASH:-1662649124

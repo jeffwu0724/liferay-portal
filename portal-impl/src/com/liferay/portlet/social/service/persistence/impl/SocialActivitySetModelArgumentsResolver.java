@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.social.model.impl.SocialActivitySetImpl;
 import com.liferay.portlet.social.model.impl.SocialActivitySetModelImpl;
 import com.liferay.social.kernel.model.SocialActivitySetTable;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class SocialActivitySetModelArgumentsResolver
 		long columnBitmask = socialActivitySetModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(socialActivitySetModelImpl, columnNames, original);
+			return _getValue(socialActivitySetModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class SocialActivitySetModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(socialActivitySetModelImpl, columnNames, original);
+			return _getValue(socialActivitySetModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -98,22 +101,34 @@ public class SocialActivitySetModelArgumentsResolver
 
 	private static Object[] _getValue(
 		SocialActivitySetModelImpl socialActivitySetModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					socialActivitySetModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = socialActivitySetModelImpl.getColumnValue(
+				value = socialActivitySetModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = socialActivitySetModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -134,4 +149,4 @@ public class SocialActivitySetModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2009998936
+// LIFERAY-SERVICE-BUILDER-HASH:451960282

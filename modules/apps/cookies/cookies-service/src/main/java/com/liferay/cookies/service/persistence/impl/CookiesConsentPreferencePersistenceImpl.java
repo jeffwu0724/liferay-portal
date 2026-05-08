@@ -925,7 +925,8 @@ public class CookiesConsentPreferencePersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"userId", "domain", "name"}, false,
+			new String[] {"userId", "domain", "name"},
+			new boolean[] {false, false, false}, false,
 			CookiesConsentPreference::getUserId,
 			convertNullFunction(CookiesConsentPreference::getDomain),
 			convertNullFunction(CookiesConsentPreference::getName));
@@ -1009,4 +1010,4 @@ public class CookiesConsentPreferencePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1209786025
+// LIFERAY-SERVICE-BUILDER-HASH:-165052060

@@ -11,8 +11,11 @@ import com.liferay.osb.faro.model.impl.FaroProjectModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class FaroProjectModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = faroProjectModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(faroProjectModelImpl, columnNames, original);
+			return _getValue(faroProjectModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class FaroProjectModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(faroProjectModelImpl, columnNames, original);
+			return _getValue(faroProjectModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,21 +92,34 @@ public class FaroProjectModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		FaroProjectModelImpl faroProjectModelImpl, String[] columnNames,
+		FaroProjectModelImpl faroProjectModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = faroProjectModelImpl.getColumnOriginalValue(
-					columnName);
+				value = faroProjectModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = faroProjectModelImpl.getColumnValue(columnName);
+				value = faroProjectModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -113,4 +129,4 @@ public class FaroProjectModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:139978294
+// LIFERAY-SERVICE-BUILDER-HASH:-1401000978

@@ -1099,8 +1099,8 @@ public class MBMailingListPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(MBMailingList::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(MBMailingList::getUuid),
 			MBMailingList::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1177,8 +1177,9 @@ public class MBMailingListPersistenceImpl
 		_finderPathFetchByG_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"groupId", "categoryId"}, false,
-			MBMailingList::getGroupId, MBMailingList::getCategoryId);
+			new String[] {"groupId", "categoryId"},
+			new boolean[] {false, false}, false, MBMailingList::getGroupId,
+			MBMailingList::getCategoryId);
 
 		_uniquePersistenceFinderByG_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_C, _SQL_SELECT_MBMAILINGLIST_WHERE, "",
@@ -1261,4 +1262,4 @@ public class MBMailingListPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:131314089
+// LIFERAY-SERVICE-BUILDER-HASH:889439464

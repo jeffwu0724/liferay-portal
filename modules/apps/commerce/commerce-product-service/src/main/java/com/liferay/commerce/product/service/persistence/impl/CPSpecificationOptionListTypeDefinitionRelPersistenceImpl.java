@@ -927,7 +927,7 @@ public class CPSpecificationOptionListTypeDefinitionRelPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_L",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"CPSpecificationOptionId", "listTypeDefinitionId"},
-			false,
+			new boolean[] {false, false}, false,
 			CPSpecificationOptionListTypeDefinitionRel::
 				getCPSpecificationOptionId,
 			CPSpecificationOptionListTypeDefinitionRel::
@@ -1024,4 +1024,4 @@ public class CPSpecificationOptionListTypeDefinitionRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-930198730
+// LIFERAY-SERVICE-BUILDER-HASH:-2132661198

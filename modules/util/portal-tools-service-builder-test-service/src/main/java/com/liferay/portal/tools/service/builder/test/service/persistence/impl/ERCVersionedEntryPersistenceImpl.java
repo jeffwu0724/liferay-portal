@@ -1681,7 +1681,8 @@ public class ERCVersionedEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "head"}, false,
+			new String[] {"uuid_", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(ERCVersionedEntry::getUuid),
 			ERCVersionedEntry::getGroupId, ERCVersionedEntry::isHead);
 
@@ -1815,7 +1816,8 @@ public class ERCVersionedEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"externalReferenceCode", "groupId", "head"}, false,
+			new String[] {"externalReferenceCode", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(ERCVersionedEntry::getExternalReferenceCode),
 			ERCVersionedEntry::getGroupId, ERCVersionedEntry::isHead);
 
@@ -1835,8 +1837,8 @@ public class ERCVersionedEntryPersistenceImpl
 
 		_finderPathFetchByHeadId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByHeadId",
-			new String[] {Long.class.getName()}, new String[] {"headId"}, false,
-			ERCVersionedEntry::getHeadId);
+			new String[] {Long.class.getName()}, new String[] {"headId"},
+			new boolean[] {false}, false, ERCVersionedEntry::getHeadId);
 
 		_uniquePersistenceFinderByHeadId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByHeadId, _SQL_SELECT_ERCVERSIONEDENTRY_WHERE,
@@ -1887,4 +1889,4 @@ public class ERCVersionedEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1037991642
+// LIFERAY-SERVICE-BUILDER-HASH:-1649862806

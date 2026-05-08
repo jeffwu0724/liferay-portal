@@ -1295,7 +1295,8 @@ public class SocialActivityCounterPersistenceImpl
 				"groupId", "classNameId", "classPK", "name", "ownerType",
 				"startPeriod"
 			},
-			false, SocialActivityCounter::getGroupId,
+			new boolean[] {false, false, false, false, false, false}, false,
+			SocialActivityCounter::getGroupId,
 			SocialActivityCounter::getClassNameId,
 			SocialActivityCounter::getClassPK,
 			convertNullFunction(SocialActivityCounter::getName),
@@ -1337,7 +1338,8 @@ public class SocialActivityCounterPersistenceImpl
 				"groupId", "classNameId", "classPK", "name", "ownerType",
 				"endPeriod"
 			},
-			false, SocialActivityCounter::getGroupId,
+			new boolean[] {false, false, false, false, false, false}, false,
+			SocialActivityCounter::getGroupId,
 			SocialActivityCounter::getClassNameId,
 			SocialActivityCounter::getClassPK,
 			convertNullFunction(SocialActivityCounter::getName),
@@ -1404,4 +1406,4 @@ public class SocialActivityCounterPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1762316728
+// LIFERAY-SERVICE-BUILDER-HASH:-635326086

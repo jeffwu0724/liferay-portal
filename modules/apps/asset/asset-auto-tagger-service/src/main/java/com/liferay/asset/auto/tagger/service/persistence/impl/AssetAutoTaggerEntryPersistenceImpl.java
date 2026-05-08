@@ -849,7 +849,8 @@ public class AssetAutoTaggerEntryPersistenceImpl
 		_finderPathFetchByA_A = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByA_A",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"assetEntryId", "assetTagId"}, false,
+			new String[] {"assetEntryId", "assetTagId"},
+			new boolean[] {false, false}, false,
 			AssetAutoTaggerEntry::getAssetEntryId,
 			AssetAutoTaggerEntry::getAssetTagId);
 
@@ -932,4 +933,4 @@ public class AssetAutoTaggerEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-443438222
+// LIFERAY-SERVICE-BUILDER-HASH:-615520934

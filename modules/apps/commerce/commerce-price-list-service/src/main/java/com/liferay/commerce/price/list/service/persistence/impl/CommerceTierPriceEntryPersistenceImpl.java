@@ -2366,7 +2366,8 @@ public class CommerceTierPriceEntryPersistenceImpl
 		_finderPathFetchByC_M = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_M",
 			new String[] {Long.class.getName(), BigDecimal.class.getName()},
-			new String[] {"commercePriceEntryId", "minQuantity"}, false,
+			new String[] {"commercePriceEntryId", "minQuantity"},
+			new boolean[] {false, false}, false,
 			CommerceTierPriceEntry::getCommercePriceEntryId,
 			CommerceTierPriceEntry::getMinQuantity);
 
@@ -2548,7 +2549,8 @@ public class CommerceTierPriceEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				CommerceTierPriceEntry::getExternalReferenceCode),
 			CommerceTierPriceEntry::getCompanyId);
@@ -2636,4 +2638,4 @@ public class CommerceTierPriceEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1313627794
+// LIFERAY-SERVICE-BUILDER-HASH:-670091217

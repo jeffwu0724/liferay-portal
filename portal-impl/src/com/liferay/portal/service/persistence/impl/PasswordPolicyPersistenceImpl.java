@@ -1606,8 +1606,8 @@ public class PasswordPolicyPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false,
-			PasswordPolicy::getCompanyId,
+			new String[] {"companyId", "name"}, new boolean[] {false, false},
+			false, PasswordPolicy::getCompanyId,
 			convertNullFunction(PasswordPolicy::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
@@ -1678,4 +1678,4 @@ public class PasswordPolicyPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1918008140
+// LIFERAY-SERVICE-BUILDER-HASH:-611891941

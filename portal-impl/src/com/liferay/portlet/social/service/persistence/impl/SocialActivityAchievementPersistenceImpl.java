@@ -1437,7 +1437,8 @@ public class SocialActivityAchievementPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "userId", "name"}, false,
+			new String[] {"groupId", "userId", "name"},
+			new boolean[] {false, false, false}, false,
 			SocialActivityAchievement::getGroupId,
 			SocialActivityAchievement::getUserId,
 			convertNullFunction(SocialActivityAchievement::getName));
@@ -1532,4 +1533,4 @@ public class SocialActivityAchievementPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:71795934
+// LIFERAY-SERVICE-BUILDER-HASH:-1161992533

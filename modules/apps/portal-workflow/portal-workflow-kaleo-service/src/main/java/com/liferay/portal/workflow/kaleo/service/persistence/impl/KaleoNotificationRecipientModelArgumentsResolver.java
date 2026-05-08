@@ -8,11 +8,14 @@ package com.liferay.portal.workflow.kaleo.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipientTable;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,7 +60,7 @@ public class KaleoNotificationRecipientModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				kaleoNotificationRecipientModelImpl, columnNames, original);
+				kaleoNotificationRecipientModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -86,7 +89,7 @@ public class KaleoNotificationRecipientModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				kaleoNotificationRecipientModelImpl, columnNames, original);
+				kaleoNotificationRecipientModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -104,23 +107,36 @@ public class KaleoNotificationRecipientModelArgumentsResolver
 
 	private static Object[] _getValue(
 		KaleoNotificationRecipientModelImpl kaleoNotificationRecipientModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					kaleoNotificationRecipientModelImpl.getColumnOriginalValue(
 						columnName);
 			}
 			else {
-				arguments[i] =
-					kaleoNotificationRecipientModelImpl.getColumnValue(
-						columnName);
+				value = kaleoNotificationRecipientModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -138,4 +154,4 @@ public class KaleoNotificationRecipientModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1036725004
+// LIFERAY-SERVICE-BUILDER-HASH:1772872258

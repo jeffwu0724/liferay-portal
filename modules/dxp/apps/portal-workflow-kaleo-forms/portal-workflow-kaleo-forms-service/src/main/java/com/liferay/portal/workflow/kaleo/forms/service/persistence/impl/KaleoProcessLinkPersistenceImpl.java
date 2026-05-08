@@ -533,7 +533,8 @@ public class KaleoProcessLinkPersistenceImpl
 		_finderPathFetchByKPI_WTN = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKPI_WTN",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"kaleoProcessId", "workflowTaskName"}, false,
+			new String[] {"kaleoProcessId", "workflowTaskName"},
+			new boolean[] {false, false}, false,
 			KaleoProcessLink::getKaleoProcessId,
 			convertNullFunction(KaleoProcessLink::getWorkflowTaskName));
 
@@ -614,4 +615,4 @@ public class KaleoProcessLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-211972039
+// LIFERAY-SERVICE-BUILDER-HASH:346569903

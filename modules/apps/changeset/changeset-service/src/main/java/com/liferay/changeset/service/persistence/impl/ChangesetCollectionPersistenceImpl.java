@@ -1078,8 +1078,8 @@ public class ChangesetCollectionPersistenceImpl
 		_finderPathFetchByG_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "name"}, false,
-			ChangesetCollection::getGroupId,
+			new String[] {"groupId", "name"}, new boolean[] {false, false},
+			false, ChangesetCollection::getGroupId,
 			convertNullFunction(ChangesetCollection::getName));
 
 		_uniquePersistenceFinderByG_N = new UniquePersistenceFinder<>(
@@ -1191,4 +1191,4 @@ public class ChangesetCollectionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1824092729
+// LIFERAY-SERVICE-BUILDER-HASH:-953616033

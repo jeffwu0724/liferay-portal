@@ -1072,8 +1072,8 @@ public class JournalArticleResourcePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(JournalArticleResource::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(JournalArticleResource::getUuid),
 			JournalArticleResource::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1157,8 +1157,8 @@ public class JournalArticleResourcePersistenceImpl
 		_finderPathFetchByG_A = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_A",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "articleId"}, false,
-			JournalArticleResource::getGroupId,
+			new String[] {"groupId", "articleId"}, new boolean[] {false, false},
+			false, JournalArticleResource::getGroupId,
 			convertNullFunction(JournalArticleResource::getArticleId));
 
 		_uniquePersistenceFinderByG_A = new UniquePersistenceFinder<>(
@@ -1244,4 +1244,4 @@ public class JournalArticleResourcePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1733445787
+// LIFERAY-SERVICE-BUILDER-HASH:815143096

@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.ClassNameTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.ClassNameImpl;
 import com.liferay.portal.model.impl.ClassNameModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -51,7 +54,7 @@ public class ClassNameModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = classNameModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(classNameModelImpl, columnNames, original);
+			return _getValue(classNameModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -70,7 +73,7 @@ public class ClassNameModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(classNameModelImpl, columnNames, original);
+			return _getValue(classNameModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -87,21 +90,34 @@ public class ClassNameModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		ClassNameModelImpl classNameModelImpl, String[] columnNames,
+		ClassNameModelImpl classNameModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = classNameModelImpl.getColumnOriginalValue(
-					columnName);
+				value = classNameModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = classNameModelImpl.getColumnValue(columnName);
+				value = classNameModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -111,4 +127,4 @@ public class ClassNameModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:893835643
+// LIFERAY-SERVICE-BUILDER-HASH:255716037

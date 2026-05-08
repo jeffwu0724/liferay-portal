@@ -1350,7 +1350,8 @@ public class CommerceWishListItemPersistenceImpl
 				Long.class.getName()
 			},
 			new String[] {"commerceWishListId", "CPInstanceUuid", "CProductId"},
-			false, CommerceWishListItem::getCommerceWishListId,
+			new boolean[] {false, false, false}, false,
+			CommerceWishListItem::getCommerceWishListId,
 			convertNullFunction(CommerceWishListItem::getCPInstanceUuid),
 			CommerceWishListItem::getCProductId);
 
@@ -1435,4 +1436,4 @@ public class CommerceWishListItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1539216070
+// LIFERAY-SERVICE-BUILDER-HASH:-374499226

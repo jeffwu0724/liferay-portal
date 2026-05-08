@@ -5065,8 +5065,8 @@ public class CountryPersistenceImpl
 		_finderPathFetchByC_A2 = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_A2",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "a2"}, false, Country::getCompanyId,
-			convertNullFunction(Country::getA2));
+			new String[] {"companyId", "a2"}, new boolean[] {false, false},
+			false, Country::getCompanyId, convertNullFunction(Country::getA2));
 
 		_uniquePersistenceFinderByC_A2 = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_A2, _SQL_SELECT_COUNTRY_WHERE, "",
@@ -5080,8 +5080,8 @@ public class CountryPersistenceImpl
 		_finderPathFetchByC_A3 = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_A3",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "a3"}, false, Country::getCompanyId,
-			convertNullFunction(Country::getA3));
+			new String[] {"companyId", "a3"}, new boolean[] {false, false},
+			false, Country::getCompanyId, convertNullFunction(Country::getA3));
 
 		_uniquePersistenceFinderByC_A3 = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_A3, _SQL_SELECT_COUNTRY_WHERE, "",
@@ -5128,7 +5128,8 @@ public class CountryPersistenceImpl
 		_finderPathFetchByC_Name = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_Name",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false, Country::getCompanyId,
+			new String[] {"companyId", "name"}, new boolean[] {false, false},
+			false, Country::getCompanyId,
 			convertNullFunction(Country::getName));
 
 		_uniquePersistenceFinderByC_Name = new UniquePersistenceFinder<>(
@@ -5143,7 +5144,8 @@ public class CountryPersistenceImpl
 		_finderPathFetchByC_Number = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_Number",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "number_"}, false, Country::getCompanyId,
+			new String[] {"companyId", "number_"}, new boolean[] {false, false},
+			false, Country::getCompanyId,
 			convertNullFunction(Country::getNumber));
 
 		_uniquePersistenceFinderByC_Number = new UniquePersistenceFinder<>(
@@ -5470,4 +5472,4 @@ public class CountryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1579141576
+// LIFERAY-SERVICE-BUILDER-HASH:153762774

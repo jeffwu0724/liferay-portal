@@ -2373,7 +2373,8 @@ public class SocialRelationPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"userId1", "userId2", "type_"}, false,
+			new String[] {"userId1", "userId2", "type_"},
+			new boolean[] {false, false, false}, false,
 			SocialRelation::getUserId1, SocialRelation::getUserId2,
 			SocialRelation::getType);
 
@@ -2426,4 +2427,4 @@ public class SocialRelationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1562539335
+// LIFERAY-SERVICE-BUILDER-HASH:-398101838

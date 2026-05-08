@@ -2364,8 +2364,8 @@ public class LVEntryVersionPersistenceImpl
 		_finderPathFetchByLvEntryId_Version = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByLvEntryId_Version",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"lvEntryId", "version"}, false,
-			LVEntryVersion::getLvEntryId, LVEntryVersion::getVersion);
+			new String[] {"lvEntryId", "version"}, new boolean[] {false, false},
+			false, LVEntryVersion::getLvEntryId, LVEntryVersion::getVersion);
 
 		_uniquePersistenceFinderByLvEntryId_Version =
 			new UniquePersistenceFinder<>(
@@ -2478,7 +2478,8 @@ public class LVEntryVersionPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "version"}, false,
+			new String[] {"uuid_", "groupId", "version"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(LVEntryVersion::getUuid),
 			LVEntryVersion::getGroupId, LVEntryVersion::getVersion);
 
@@ -2672,7 +2673,8 @@ public class LVEntryVersionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"groupId", "uniqueGroupKey", "version"}, false,
+			new String[] {"groupId", "uniqueGroupKey", "version"},
+			new boolean[] {false, false, false}, false,
 			LVEntryVersion::getGroupId,
 			convertNullFunction(LVEntryVersion::getUniqueGroupKey),
 			LVEntryVersion::getVersion);
@@ -2746,4 +2748,4 @@ public class LVEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1131505401
+// LIFERAY-SERVICE-BUILDER-HASH:399440536

@@ -816,8 +816,8 @@ public class AnnouncementsDeliveryPersistenceImpl
 		_finderPathFetchByU_T = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByU_T",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"userId", "type_"}, false,
-			AnnouncementsDelivery::getUserId,
+			new String[] {"userId", "type_"}, new boolean[] {false, false},
+			false, AnnouncementsDelivery::getUserId,
 			convertNullFunction(AnnouncementsDelivery::getType));
 
 		_uniquePersistenceFinderByU_T = new UniquePersistenceFinder<>(
@@ -866,4 +866,4 @@ public class AnnouncementsDeliveryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2027542458
+// LIFERAY-SERVICE-BUILDER-HASH:678227968

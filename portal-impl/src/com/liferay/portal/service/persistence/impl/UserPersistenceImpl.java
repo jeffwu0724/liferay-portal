@@ -4878,7 +4878,7 @@ public class UserPersistenceImpl
 		_finderPathFetchByContactId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByContactId",
 			new String[] {Long.class.getName()}, new String[] {"contactId"},
-			false, User::getContactId);
+			new boolean[] {false}, false, User::getContactId);
 
 		_uniquePersistenceFinderByContactId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByContactId, _SQL_SELECT_USER_WHERE, "",
@@ -4973,8 +4973,8 @@ public class UserPersistenceImpl
 		_finderPathFetchByC_U = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_U",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"companyId", "userId"}, false, User::getCompanyId,
-			User::getUserId);
+			new String[] {"companyId", "userId"}, new boolean[] {false, false},
+			false, User::getCompanyId, User::getUserId);
 
 		_uniquePersistenceFinderByC_U = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_U, _SQL_SELECT_USER_WHERE, "",
@@ -5050,7 +5050,8 @@ public class UserPersistenceImpl
 		_finderPathFetchByC_SN = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_SN",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "screenName"}, false, User::getCompanyId,
+			new String[] {"companyId", "screenName"},
+			new boolean[] {false, false}, false, User::getCompanyId,
 			convertNullFunction(User::getScreenName));
 
 		_uniquePersistenceFinderByC_SN = new UniquePersistenceFinder<>(
@@ -5065,8 +5066,9 @@ public class UserPersistenceImpl
 		_finderPathFetchByC_EA = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_EA",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "emailAddress"}, false,
-			User::getCompanyId, convertNullFunction(User::getEmailAddress));
+			new String[] {"companyId", "emailAddress"},
+			new boolean[] {false, false}, false, User::getCompanyId,
+			convertNullFunction(User::getEmailAddress));
 
 		_uniquePersistenceFinderByC_EA = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_EA, _SQL_SELECT_USER_WHERE, "",
@@ -5253,7 +5255,8 @@ public class UserPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(User::getExternalReferenceCode),
 			User::getCompanyId);
 
@@ -5337,4 +5340,4 @@ public class UserPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1746141490
+// LIFERAY-SERVICE-BUILDER-HASH:1023376082

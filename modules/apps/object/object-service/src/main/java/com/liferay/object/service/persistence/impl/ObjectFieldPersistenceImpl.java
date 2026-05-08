@@ -3330,7 +3330,8 @@ public class ObjectFieldPersistenceImpl
 		_finderPathFetchByODI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByODI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"objectDefinitionId", "name"}, false,
+			new String[] {"objectDefinitionId", "name"},
+			new boolean[] {false, false}, false,
 			ObjectField::getObjectDefinitionId,
 			convertNullFunction(ObjectField::getName));
 
@@ -3383,7 +3384,8 @@ public class ObjectFieldPersistenceImpl
 			new String[] {
 				"externalReferenceCode", "companyId", "objectDefinitionId"
 			},
-			false, convertNullFunction(ObjectField::getExternalReferenceCode),
+			new boolean[] {false, false, false}, false,
+			convertNullFunction(ObjectField::getExternalReferenceCode),
 			ObjectField::getCompanyId, ObjectField::getObjectDefinitionId);
 
 		_uniquePersistenceFinderByERC_C_ODI = new UniquePersistenceFinder<>(
@@ -3555,4 +3557,4 @@ public class ObjectFieldPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:967358882
+// LIFERAY-SERVICE-BUILDER-HASH:785489413

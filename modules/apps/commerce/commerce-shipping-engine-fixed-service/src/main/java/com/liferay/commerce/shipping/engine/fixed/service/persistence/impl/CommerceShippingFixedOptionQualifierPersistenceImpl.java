@@ -883,7 +883,8 @@ public class CommerceShippingFixedOptionQualifierPersistenceImpl
 			new String[] {
 				"classNameId", "classPK", "commerceShippingFixedOptionId"
 			},
-			false, CommerceShippingFixedOptionQualifier::getClassNameId,
+			new boolean[] {false, false, false}, false,
+			CommerceShippingFixedOptionQualifier::getClassNameId,
 			CommerceShippingFixedOptionQualifier::getClassPK,
 			CommerceShippingFixedOptionQualifier::
 				getCommerceShippingFixedOptionId);
@@ -979,4 +980,4 @@ public class CommerceShippingFixedOptionQualifierPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1796933731
+// LIFERAY-SERVICE-BUILDER-HASH:1107337184

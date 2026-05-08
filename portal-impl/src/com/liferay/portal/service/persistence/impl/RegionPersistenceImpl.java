@@ -1414,8 +1414,9 @@ public class RegionPersistenceImpl
 		_finderPathFetchByC_R = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_R",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"countryId", "regionCode"}, false,
-			Region::getCountryId, convertNullFunction(Region::getRegionCode));
+			new String[] {"countryId", "regionCode"},
+			new boolean[] {false, false}, false, Region::getCountryId,
+			convertNullFunction(Region::getRegionCode));
 
 		_uniquePersistenceFinderByC_R = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_R, _SQL_SELECT_REGION_WHERE, "",
@@ -1465,4 +1466,4 @@ public class RegionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:985385260
+// LIFERAY-SERVICE-BUILDER-HASH:-1495711582

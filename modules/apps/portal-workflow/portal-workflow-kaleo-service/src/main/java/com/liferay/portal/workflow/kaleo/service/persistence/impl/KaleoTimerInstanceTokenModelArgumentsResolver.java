@@ -8,11 +8,14 @@ package com.liferay.portal.workflow.kaleo.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceTokenTable;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoTimerInstanceTokenImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoTimerInstanceTokenModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -56,7 +59,7 @@ public class KaleoTimerInstanceTokenModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				kaleoTimerInstanceTokenModelImpl, columnNames, original);
+				kaleoTimerInstanceTokenModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -85,7 +88,7 @@ public class KaleoTimerInstanceTokenModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				kaleoTimerInstanceTokenModelImpl, columnNames, original);
+				kaleoTimerInstanceTokenModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -103,22 +106,35 @@ public class KaleoTimerInstanceTokenModelArgumentsResolver
 
 	private static Object[] _getValue(
 		KaleoTimerInstanceTokenModelImpl kaleoTimerInstanceTokenModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					kaleoTimerInstanceTokenModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = kaleoTimerInstanceTokenModelImpl.getColumnValue(
+				value = kaleoTimerInstanceTokenModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = kaleoTimerInstanceTokenModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -136,4 +152,4 @@ public class KaleoTimerInstanceTokenModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2053999015
+// LIFERAY-SERVICE-BUILDER-HASH:-2036093273

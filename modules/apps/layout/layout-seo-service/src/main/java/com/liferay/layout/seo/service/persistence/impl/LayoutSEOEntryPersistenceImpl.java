@@ -957,8 +957,8 @@ public class LayoutSEOEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(LayoutSEOEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutSEOEntry::getUuid),
 			LayoutSEOEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1010,7 +1010,8 @@ public class LayoutSEOEntryPersistenceImpl
 				Long.class.getName(), Boolean.class.getName(),
 				Long.class.getName()
 			},
-			new String[] {"groupId", "privateLayout", "layoutId"}, false,
+			new String[] {"groupId", "privateLayout", "layoutId"},
+			new boolean[] {false, false, false}, false,
 			LayoutSEOEntry::getGroupId, LayoutSEOEntry::isPrivateLayout,
 			LayoutSEOEntry::getLayoutId);
 
@@ -1098,4 +1099,4 @@ public class LayoutSEOEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1181082866
+// LIFERAY-SERVICE-BUILDER-HASH:1165637745

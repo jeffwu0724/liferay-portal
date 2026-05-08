@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.LayoutRevisionTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.LayoutRevisionImpl;
 import com.liferay.portal.model.impl.LayoutRevisionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +55,7 @@ public class LayoutRevisionModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = layoutRevisionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(layoutRevisionModelImpl, columnNames, original);
+			return _getValue(layoutRevisionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -79,7 +82,7 @@ public class LayoutRevisionModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(layoutRevisionModelImpl, columnNames, original);
+			return _getValue(layoutRevisionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,22 +99,35 @@ public class LayoutRevisionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		LayoutRevisionModelImpl layoutRevisionModelImpl, String[] columnNames,
+		LayoutRevisionModelImpl layoutRevisionModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = layoutRevisionModelImpl.getColumnOriginalValue(
+				value = layoutRevisionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = layoutRevisionModelImpl.getColumnValue(
-					columnName);
+				value = layoutRevisionModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -132,4 +148,4 @@ public class LayoutRevisionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1506961099
+// LIFERAY-SERVICE-BUILDER-HASH:-619073707

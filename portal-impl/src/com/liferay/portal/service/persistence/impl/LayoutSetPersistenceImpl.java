@@ -1194,8 +1194,9 @@ public class LayoutSetPersistenceImpl
 		_finderPathFetchByG_P = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_P",
 			new String[] {Long.class.getName(), Boolean.class.getName()},
-			new String[] {"groupId", "privateLayout"}, false,
-			LayoutSet::getGroupId, LayoutSet::isPrivateLayout);
+			new String[] {"groupId", "privateLayout"},
+			new boolean[] {false, false}, false, LayoutSet::getGroupId,
+			LayoutSet::isPrivateLayout);
 
 		_uniquePersistenceFinderByG_P = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_P, _SQL_SELECT_LAYOUTSET_WHERE, "",
@@ -1305,4 +1306,4 @@ public class LayoutSetPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1586629684
+// LIFERAY-SERVICE-BUILDER-HASH:1236854868

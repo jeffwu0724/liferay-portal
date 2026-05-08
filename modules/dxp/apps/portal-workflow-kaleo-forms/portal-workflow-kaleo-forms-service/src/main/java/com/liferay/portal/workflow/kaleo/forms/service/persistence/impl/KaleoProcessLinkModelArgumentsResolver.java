@@ -8,11 +8,14 @@ package com.liferay.portal.workflow.kaleo.forms.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.forms.model.KaleoProcessLinkTable;
 import com.liferay.portal.workflow.kaleo.forms.model.impl.KaleoProcessLinkImpl;
 import com.liferay.portal.workflow.kaleo.forms.model.impl.KaleoProcessLinkModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class KaleoProcessLinkModelArgumentsResolver
 		long columnBitmask = kaleoProcessLinkModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(kaleoProcessLinkModelImpl, columnNames, original);
+			return _getValue(kaleoProcessLinkModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class KaleoProcessLinkModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(kaleoProcessLinkModelImpl, columnNames, original);
+			return _getValue(kaleoProcessLinkModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -91,21 +94,34 @@ public class KaleoProcessLinkModelArgumentsResolver
 
 	private static Object[] _getValue(
 		KaleoProcessLinkModelImpl kaleoProcessLinkModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = kaleoProcessLinkModelImpl.getColumnOriginalValue(
+				value = kaleoProcessLinkModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = kaleoProcessLinkModelImpl.getColumnValue(
-					columnName);
+				value = kaleoProcessLinkModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +131,4 @@ public class KaleoProcessLinkModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:702231338
+// LIFERAY-SERVICE-BUILDER-HASH:-1438258016

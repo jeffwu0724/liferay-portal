@@ -11,8 +11,11 @@ import com.liferay.osb.faro.model.impl.FaroUserModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class FaroUserModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = faroUserModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(faroUserModelImpl, columnNames, original);
+			return _getValue(faroUserModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class FaroUserModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(faroUserModelImpl, columnNames, original);
+			return _getValue(faroUserModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class FaroUserModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		FaroUserModelImpl faroUserModelImpl, String[] columnNames,
+		FaroUserModelImpl faroUserModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = faroUserModelImpl.getColumnOriginalValue(
-					columnName);
+				value = faroUserModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = faroUserModelImpl.getColumnValue(columnName);
+				value = faroUserModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class FaroUserModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1572449890
+// LIFERAY-SERVICE-BUILDER-HASH:-1694378792

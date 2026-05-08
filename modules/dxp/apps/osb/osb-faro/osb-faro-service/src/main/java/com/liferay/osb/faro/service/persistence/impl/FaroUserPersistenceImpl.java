@@ -1487,7 +1487,8 @@ public class FaroUserPersistenceImpl
 
 		_finderPathFetchByKey = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
-			new String[] {String.class.getName()}, new String[] {"key_"}, false,
+			new String[] {String.class.getName()}, new String[] {"key_"},
+			new boolean[] {false}, false,
 			convertNullFunction(FaroUser::getKey));
 
 		_uniquePersistenceFinderByKey = new UniquePersistenceFinder<>(
@@ -1499,7 +1500,8 @@ public class FaroUserPersistenceImpl
 		_finderPathFetchByG_L = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_L",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"groupId", "liveUserId"}, false, FaroUser::getGroupId,
+			new String[] {"groupId", "liveUserId"},
+			new boolean[] {false, false}, false, FaroUser::getGroupId,
 			FaroUser::getLiveUserId);
 
 		_uniquePersistenceFinderByG_L = new UniquePersistenceFinder<>(
@@ -1545,8 +1547,8 @@ public class FaroUserPersistenceImpl
 		_finderPathFetchByG_E = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_E",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "emailAddress"}, false,
-			FaroUser::getGroupId,
+			new String[] {"groupId", "emailAddress"},
+			new boolean[] {false, false}, false, FaroUser::getGroupId,
 			convertNullFunction(FaroUser::getEmailAddress));
 
 		_uniquePersistenceFinderByG_E = new UniquePersistenceFinder<>(
@@ -1720,4 +1722,4 @@ public class FaroUserPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:928056396
+// LIFERAY-SERVICE-BUILDER-HASH:681278636

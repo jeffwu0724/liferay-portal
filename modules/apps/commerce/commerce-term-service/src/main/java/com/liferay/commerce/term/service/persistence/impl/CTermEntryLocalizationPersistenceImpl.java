@@ -599,7 +599,8 @@ public class CTermEntryLocalizationPersistenceImpl
 				FINDER_CLASS_NAME_ENTITY,
 				"fetchByCommerceTermEntryId_LanguageId",
 				new String[] {Long.class.getName(), String.class.getName()},
-				new String[] {"commerceTermEntryId", "languageId"}, false,
+				new String[] {"commerceTermEntryId", "languageId"},
+				new boolean[] {false, false}, false,
 				CTermEntryLocalization::getCommerceTermEntryId,
 				convertNullFunction(CTermEntryLocalization::getLanguageId));
 
@@ -682,4 +683,4 @@ public class CTermEntryLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-120827281
+// LIFERAY-SERVICE-BUILDER-HASH:-358319259

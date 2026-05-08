@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.social.model.impl.SocialActivityCounterImpl;
 import com.liferay.portlet.social.model.impl.SocialActivityCounterModelImpl;
 import com.liferay.social.kernel.model.SocialActivityCounterTable;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,7 +57,7 @@ public class SocialActivityCounterModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				socialActivityCounterModelImpl, columnNames, original);
+				socialActivityCounterModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,7 +77,7 @@ public class SocialActivityCounterModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				socialActivityCounterModelImpl, columnNames, original);
+				socialActivityCounterModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +95,35 @@ public class SocialActivityCounterModelArgumentsResolver
 
 	private static Object[] _getValue(
 		SocialActivityCounterModelImpl socialActivityCounterModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					socialActivityCounterModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = socialActivityCounterModelImpl.getColumnValue(
+				value = socialActivityCounterModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = socialActivityCounterModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +133,4 @@ public class SocialActivityCounterModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1529567421
+// LIFERAY-SERVICE-BUILDER-HASH:-1193944723

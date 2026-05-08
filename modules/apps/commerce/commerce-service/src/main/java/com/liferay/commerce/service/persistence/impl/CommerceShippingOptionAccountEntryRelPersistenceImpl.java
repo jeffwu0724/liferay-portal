@@ -1023,7 +1023,8 @@ public class CommerceShippingOptionAccountEntryRelPersistenceImpl
 		_finderPathFetchByA_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByA_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"accountEntryId", "commerceChannelId"}, false,
+			new String[] {"accountEntryId", "commerceChannelId"},
+			new boolean[] {false, false}, false,
 			CommerceShippingOptionAccountEntryRel::getAccountEntryId,
 			CommerceShippingOptionAccountEntryRel::getCommerceChannelId);
 
@@ -1112,4 +1113,4 @@ public class CommerceShippingOptionAccountEntryRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1519279696
+// LIFERAY-SERVICE-BUILDER-HASH:758666258

@@ -2040,8 +2040,8 @@ public class ExpandoValuePersistenceImpl
 		_finderPathFetchByC_R = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_R",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"columnId", "rowId_"}, false,
-			ExpandoValue::getColumnId, ExpandoValue::getRowId);
+			new String[] {"columnId", "rowId_"}, new boolean[] {false, false},
+			false, ExpandoValue::getColumnId, ExpandoValue::getRowId);
 
 		_uniquePersistenceFinderByC_R = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_R, _SQL_SELECT_EXPANDOVALUE_WHERE, "",
@@ -2088,7 +2088,8 @@ public class ExpandoValuePersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"tableId", "columnId", "classPK"}, false,
+			new String[] {"tableId", "columnId", "classPK"},
+			new boolean[] {false, false, false}, false,
 			ExpandoValue::getTableId, ExpandoValue::getColumnId,
 			ExpandoValue::getClassPK);
 
@@ -2180,4 +2181,4 @@ public class ExpandoValuePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1713705016
+// LIFERAY-SERVICE-BUILDER-HASH:329006412

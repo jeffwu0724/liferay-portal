@@ -1445,7 +1445,7 @@ public class ModulePersistenceImpl
 				String.class.getName()
 			},
 			new String[] {"appId", "bundleSymbolicName", "bundleVersion"},
-			false, Module::getAppId,
+			new boolean[] {false, false, false}, false, Module::getAppId,
 			convertNullFunction(Module::getBundleSymbolicName),
 			convertNullFunction(Module::getBundleVersion));
 
@@ -1530,4 +1530,4 @@ public class ModulePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:196483448
+// LIFERAY-SERVICE-BUILDER-HASH:322582874

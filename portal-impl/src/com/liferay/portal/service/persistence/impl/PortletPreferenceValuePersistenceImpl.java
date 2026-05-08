@@ -1293,7 +1293,8 @@ public class PortletPreferenceValuePersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"portletPreferencesId", "index_", "name"}, false,
+			new String[] {"portletPreferencesId", "index_", "name"},
+			new boolean[] {false, false, false}, false,
 			PortletPreferenceValue::getPortletPreferencesId,
 			PortletPreferenceValue::getIndex,
 			convertNullFunction(PortletPreferenceValue::getName));
@@ -1394,4 +1395,4 @@ public class PortletPreferenceValuePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1358349961
+// LIFERAY-SERVICE-BUILDER-HASH:1316294952

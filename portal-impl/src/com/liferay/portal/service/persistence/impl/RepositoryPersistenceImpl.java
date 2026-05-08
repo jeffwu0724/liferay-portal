@@ -1416,8 +1416,9 @@ public class RepositoryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(Repository::getUuid), Repository::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(Repository::getUuid),
+			Repository::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_REPOSITORY_WHERE, "",
@@ -1525,8 +1526,9 @@ public class RepositoryPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "name", "portletId"}, false,
-			Repository::getGroupId, convertNullFunction(Repository::getName),
+			new String[] {"groupId", "name", "portletId"},
+			new boolean[] {false, false, false}, false, Repository::getGroupId,
+			convertNullFunction(Repository::getName),
 			convertNullFunction(Repository::getPortletId));
 
 		_uniquePersistenceFinderByG_N_P = new UniquePersistenceFinder<>(
@@ -1544,7 +1546,8 @@ public class RepositoryPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(Repository::getExternalReferenceCode),
 			Repository::getGroupId);
 
@@ -1594,4 +1597,4 @@ public class RepositoryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1703214420
+// LIFERAY-SERVICE-BUILDER-HASH:-992828327

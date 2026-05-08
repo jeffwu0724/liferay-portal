@@ -2328,7 +2328,8 @@ public class ClientExtensionEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(ClientExtensionEntry::getExternalReferenceCode),
 			ClientExtensionEntry::getCompanyId);
 
@@ -2439,4 +2440,4 @@ public class ClientExtensionEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-613274063
+// LIFERAY-SERVICE-BUILDER-HASH:-1387153443

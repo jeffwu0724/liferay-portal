@@ -11,8 +11,11 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMStructureVersionModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class DDMStructureVersionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				ddmStructureVersionModelImpl, columnNames, original);
+				ddmStructureVersionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -75,7 +78,7 @@ public class DDMStructureVersionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				ddmStructureVersionModelImpl, columnNames, original);
+				ddmStructureVersionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +96,34 @@ public class DDMStructureVersionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		DDMStructureVersionModelImpl ddmStructureVersionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					ddmStructureVersionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = ddmStructureVersionModelImpl.getColumnValue(
+				value = ddmStructureVersionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = ddmStructureVersionModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +133,4 @@ public class DDMStructureVersionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1041327740
+// LIFERAY-SERVICE-BUILDER-HASH:-887450052

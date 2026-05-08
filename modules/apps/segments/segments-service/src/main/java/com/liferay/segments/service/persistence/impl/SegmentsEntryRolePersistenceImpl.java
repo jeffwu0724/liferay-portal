@@ -839,7 +839,8 @@ public class SegmentsEntryRolePersistenceImpl
 		_finderPathFetchByS_R = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByS_R",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"segmentsEntryId", "roleId"}, false,
+			new String[] {"segmentsEntryId", "roleId"},
+			new boolean[] {false, false}, false,
 			SegmentsEntryRole::getSegmentsEntryId,
 			SegmentsEntryRole::getRoleId);
 
@@ -922,4 +923,4 @@ public class SegmentsEntryRolePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-939062719
+// LIFERAY-SERVICE-BUILDER-HASH:958625249

@@ -1860,8 +1860,8 @@ public class CommerceShipmentItemPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CommerceShipmentItem::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CommerceShipmentItem::getUuid),
 			CommerceShipmentItem::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2049,7 +2049,8 @@ public class CommerceShipmentItemPersistenceImpl
 				"commerceShipmentId", "commerceOrderItemId",
 				"commerceInventoryWarehouseId"
 			},
-			false, CommerceShipmentItem::getCommerceShipmentId,
+			new boolean[] {false, false, false}, false,
+			CommerceShipmentItem::getCommerceShipmentId,
 			CommerceShipmentItem::getCommerceOrderItemId,
 			CommerceShipmentItem::getCommerceInventoryWarehouseId);
 
@@ -2116,7 +2117,8 @@ public class CommerceShipmentItemPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CommerceShipmentItem::getExternalReferenceCode),
 			CommerceShipmentItem::getCompanyId);
 
@@ -2200,4 +2202,4 @@ public class CommerceShipmentItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-953835568
+// LIFERAY-SERVICE-BUILDER-HASH:-2129286227

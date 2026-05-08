@@ -2360,7 +2360,8 @@ public class CommercePaymentEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CommercePaymentEntry::getExternalReferenceCode),
 			CommercePaymentEntry::getCompanyId);
 
@@ -2468,4 +2469,4 @@ public class CommercePaymentEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1790118727
+// LIFERAY-SERVICE-BUILDER-HASH:2143039594

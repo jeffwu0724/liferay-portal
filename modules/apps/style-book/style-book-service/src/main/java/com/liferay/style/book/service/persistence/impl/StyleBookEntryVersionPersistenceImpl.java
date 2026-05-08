@@ -4123,7 +4123,8 @@ public class StyleBookEntryVersionPersistenceImpl
 		_finderPathFetchByStyleBookEntryId_Version = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByStyleBookEntryId_Version",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"styleBookEntryId", "version"}, false,
+			new String[] {"styleBookEntryId", "version"},
+			new boolean[] {false, false}, false,
 			StyleBookEntryVersion::getStyleBookEntryId,
 			StyleBookEntryVersion::getVersion);
 
@@ -4246,7 +4247,8 @@ public class StyleBookEntryVersionPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "version"}, false,
+			new String[] {"uuid_", "groupId", "version"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(StyleBookEntryVersion::getUuid),
 			StyleBookEntryVersion::getGroupId,
 			StyleBookEntryVersion::getVersion);
@@ -4696,7 +4698,8 @@ public class StyleBookEntryVersionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"groupId", "styleBookEntryKey", "version"}, false,
+			new String[] {"groupId", "styleBookEntryKey", "version"},
+			new boolean[] {false, false, false}, false,
 			StyleBookEntryVersion::getGroupId,
 			convertNullFunction(StyleBookEntryVersion::getStyleBookEntryKey),
 			StyleBookEntryVersion::getVersion);
@@ -4972,4 +4975,4 @@ public class StyleBookEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1960095693
+// LIFERAY-SERVICE-BUILDER-HASH:83709303

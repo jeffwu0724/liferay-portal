@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.model.DataLimitEntryTable;
 import com.liferay.portal.tools.service.builder.test.model.impl.DataLimitEntryImpl;
 import com.liferay.portal.tools.service.builder.test.model.impl.DataLimitEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +55,7 @@ public class DataLimitEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = dataLimitEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(dataLimitEntryModelImpl, columnNames, original);
+			return _getValue(dataLimitEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class DataLimitEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(dataLimitEntryModelImpl, columnNames, original);
+			return _getValue(dataLimitEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,22 +91,35 @@ public class DataLimitEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		DataLimitEntryModelImpl dataLimitEntryModelImpl, String[] columnNames,
+		DataLimitEntryModelImpl dataLimitEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = dataLimitEntryModelImpl.getColumnOriginalValue(
+				value = dataLimitEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = dataLimitEntryModelImpl.getColumnValue(
-					columnName);
+				value = dataLimitEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -113,4 +129,4 @@ public class DataLimitEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:984478770
+// LIFERAY-SERVICE-BUILDER-HASH:1773451176

@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.social.model.impl.SocialRequestImpl;
 import com.liferay.portlet.social.model.impl.SocialRequestModelImpl;
 import com.liferay.social.kernel.model.SocialRequestTable;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +55,7 @@ public class SocialRequestModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = socialRequestModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(socialRequestModelImpl, columnNames, original);
+			return _getValue(socialRequestModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -79,7 +82,7 @@ public class SocialRequestModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(socialRequestModelImpl, columnNames, original);
+			return _getValue(socialRequestModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,22 +99,35 @@ public class SocialRequestModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		SocialRequestModelImpl socialRequestModelImpl, String[] columnNames,
+		SocialRequestModelImpl socialRequestModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = socialRequestModelImpl.getColumnOriginalValue(
+				value = socialRequestModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = socialRequestModelImpl.getColumnValue(
-					columnName);
+				value = socialRequestModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -129,4 +145,4 @@ public class SocialRequestModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1793531221
+// LIFERAY-SERVICE-BUILDER-HASH:-2088471723

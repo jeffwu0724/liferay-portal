@@ -9,11 +9,14 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.model.ERCVersionedEntryVersionTable;
 import com.liferay.portal.tools.service.builder.test.model.impl.ERCVersionedEntryVersionImpl;
 import com.liferay.portal.tools.service.builder.test.model.impl.ERCVersionedEntryVersionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,7 +58,7 @@ public class ERCVersionedEntryVersionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				ercVersionedEntryVersionModelImpl, columnNames, original);
+				ercVersionedEntryVersionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -84,7 +87,7 @@ public class ERCVersionedEntryVersionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				ercVersionedEntryVersionModelImpl, columnNames, original);
+				ercVersionedEntryVersionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -102,22 +105,36 @@ public class ERCVersionedEntryVersionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ERCVersionedEntryVersionModelImpl ercVersionedEntryVersionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					ercVersionedEntryVersionModelImpl.getColumnOriginalValue(
 						columnName);
 			}
 			else {
-				arguments[i] = ercVersionedEntryVersionModelImpl.getColumnValue(
+				value = ercVersionedEntryVersionModelImpl.getColumnValue(
 					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -138,4 +155,4 @@ public class ERCVersionedEntryVersionModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1803761488
+// LIFERAY-SERVICE-BUILDER-HASH:-1861307690

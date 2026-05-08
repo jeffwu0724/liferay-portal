@@ -1744,7 +1744,8 @@ public class ListTypeDefinitionPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(ListTypeDefinition::getExternalReferenceCode),
 			ListTypeDefinition::getCompanyId);
 
@@ -1851,4 +1852,4 @@ public class ListTypeDefinitionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-565296533
+// LIFERAY-SERVICE-BUILDER-HASH:1649053797

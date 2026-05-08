@@ -8,11 +8,14 @@ package com.liferay.portal.reports.engine.console.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.reports.engine.console.model.DefinitionTable;
 import com.liferay.portal.reports.engine.console.model.impl.DefinitionImpl;
 import com.liferay.portal.reports.engine.console.model.impl.DefinitionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class DefinitionModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = definitionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(definitionModelImpl, columnNames, original);
+			return _getValue(definitionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class DefinitionModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(definitionModelImpl, columnNames, original);
+			return _getValue(definitionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,21 +100,34 @@ public class DefinitionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		DefinitionModelImpl definitionModelImpl, String[] columnNames,
+		DefinitionModelImpl definitionModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = definitionModelImpl.getColumnOriginalValue(
-					columnName);
+				value = definitionModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = definitionModelImpl.getColumnValue(columnName);
+				value = definitionModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -132,4 +148,4 @@ public class DefinitionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-859569080
+// LIFERAY-SERVICE-BUILDER-HASH:-898541208

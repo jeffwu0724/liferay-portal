@@ -1185,8 +1185,8 @@ public class DDMFieldPersistenceImpl
 		_finderPathFetchByS_I = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByS_I",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"storageId", "instanceId"}, false,
-			DDMField::getStorageId,
+			new String[] {"storageId", "instanceId"},
+			new boolean[] {false, false}, false, DDMField::getStorageId,
 			convertNullFunction(DDMField::getInstanceId));
 
 		_uniquePersistenceFinderByS_I = new UniquePersistenceFinder<>(
@@ -1267,4 +1267,4 @@ public class DDMFieldPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:274161946
+// LIFERAY-SERVICE-BUILDER-HASH:-1078440422

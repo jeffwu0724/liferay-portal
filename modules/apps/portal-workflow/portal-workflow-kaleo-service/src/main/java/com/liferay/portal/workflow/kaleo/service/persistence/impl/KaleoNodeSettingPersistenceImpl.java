@@ -649,8 +649,8 @@ public class KaleoNodeSettingPersistenceImpl
 		_finderPathFetchByKNI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKNI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"kaleoNodeId", "name"}, false,
-			KaleoNodeSetting::getKaleoNodeId,
+			new String[] {"kaleoNodeId", "name"}, new boolean[] {false, false},
+			false, KaleoNodeSetting::getKaleoNodeId,
 			convertNullFunction(KaleoNodeSetting::getName));
 
 		_uniquePersistenceFinderByKNI_N = new UniquePersistenceFinder<>(
@@ -732,4 +732,4 @@ public class KaleoNodeSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1062928378
+// LIFERAY-SERVICE-BUILDER-HASH:-285789620

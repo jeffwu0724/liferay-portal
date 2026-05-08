@@ -1627,8 +1627,8 @@ public class CPMeasurementUnitPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CPMeasurementUnit::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CPMeasurementUnit::getUuid),
 			CPMeasurementUnit::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1709,9 +1709,9 @@ public class CPMeasurementUnitPersistenceImpl
 		_finderPathFetchByC_K = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "key_"}, false,
-			CPMeasurementUnit::getCompanyId,
-			convertNullFunction(CPMeasurementUnit::getKey));
+			new String[] {"companyId", "key_"}, new boolean[] {false, true},
+			false, CPMeasurementUnit::getCompanyId,
+			convertCaseFunction(CPMeasurementUnit::getKey));
 
 		_uniquePersistenceFinderByC_K = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_K, _SQL_SELECT_CPMEASUREMENTUNIT_WHERE,
@@ -1799,7 +1799,8 @@ public class CPMeasurementUnitPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CPMeasurementUnit::getExternalReferenceCode),
 			CPMeasurementUnit::getCompanyId);
 
@@ -1886,4 +1887,4 @@ public class CPMeasurementUnitPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1540616569
+// LIFERAY-SERVICE-BUILDER-HASH:1712051065

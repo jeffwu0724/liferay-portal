@@ -1773,8 +1773,8 @@ public class ObjectFolderPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false,
-			ObjectFolder::getCompanyId,
+			new String[] {"companyId", "name"}, new boolean[] {false, false},
+			false, ObjectFolder::getCompanyId,
 			convertNullFunction(ObjectFolder::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
@@ -1789,7 +1789,8 @@ public class ObjectFolderPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(ObjectFolder::getExternalReferenceCode),
 			ObjectFolder::getCompanyId);
 
@@ -1895,4 +1896,4 @@ public class ObjectFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1708363651
+// LIFERAY-SERVICE-BUILDER-HASH:59168672

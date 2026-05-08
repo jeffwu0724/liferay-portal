@@ -613,7 +613,8 @@ public class DDMTemplateLinkPersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"classNameId", "classPK"}, false,
+			new String[] {"classNameId", "classPK"},
+			new boolean[] {false, false}, false,
 			DDMTemplateLink::getClassNameId, DDMTemplateLink::getClassPK);
 
 		_uniquePersistenceFinderByC_C = new UniquePersistenceFinder<>(
@@ -694,4 +695,4 @@ public class DDMTemplateLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1104110816
+// LIFERAY-SERVICE-BUILDER-HASH:403256732

@@ -840,7 +840,7 @@ public class CommerceDiscountCommerceAccountGroupRelPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByCDI_CAGI",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"commerceDiscountId", "commerceAccountGroupId"},
-			false,
+			new boolean[] {false, false}, false,
 			CommerceDiscountCommerceAccountGroupRel::getCommerceDiscountId,
 			CommerceDiscountCommerceAccountGroupRel::getCommerceAccountGroupId);
 
@@ -931,4 +931,4 @@ public class CommerceDiscountCommerceAccountGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1005618401
+// LIFERAY-SERVICE-BUILDER-HASH:-834412133

@@ -11,8 +11,11 @@ import com.liferay.osb.patcher.model.impl.PatcherBuildRelModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class PatcherBuildRelModelArgumentsResolver
 		long columnBitmask = patcherBuildRelModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(patcherBuildRelModelImpl, columnNames, original);
+			return _getValue(patcherBuildRelModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class PatcherBuildRelModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(patcherBuildRelModelImpl, columnNames, original);
+			return _getValue(patcherBuildRelModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -90,22 +93,35 @@ public class PatcherBuildRelModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		PatcherBuildRelModelImpl patcherBuildRelModelImpl, String[] columnNames,
-		boolean original) {
+		PatcherBuildRelModelImpl patcherBuildRelModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = patcherBuildRelModelImpl.getColumnOriginalValue(
+				value = patcherBuildRelModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = patcherBuildRelModelImpl.getColumnValue(
-					columnName);
+				value = patcherBuildRelModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +131,4 @@ public class PatcherBuildRelModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-345367227
+// LIFERAY-SERVICE-BUILDER-HASH:-1012446277

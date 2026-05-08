@@ -2171,7 +2171,8 @@ public class JournalContentSearchPersistenceImpl
 			new String[] {
 				"groupId", "privateLayout", "layoutId", "portletId", "articleId"
 			},
-			false, JournalContentSearch::getGroupId,
+			new boolean[] {false, false, false, false, false}, false,
+			JournalContentSearch::getGroupId,
 			JournalContentSearch::isPrivateLayout,
 			JournalContentSearch::getLayoutId,
 			convertNullFunction(JournalContentSearch::getPortletId),
@@ -2266,4 +2267,4 @@ public class JournalContentSearchPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-190994184
+// LIFERAY-SERVICE-BUILDER-HASH:480745371

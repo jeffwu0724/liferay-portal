@@ -11,8 +11,11 @@ import com.liferay.launch.model.impl.LaunchSetModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class LaunchSetModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = launchSetModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(launchSetModelImpl, columnNames, original);
+			return _getValue(launchSetModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -79,7 +82,7 @@ public class LaunchSetModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(launchSetModelImpl, columnNames, original);
+			return _getValue(launchSetModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,21 +99,34 @@ public class LaunchSetModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		LaunchSetModelImpl launchSetModelImpl, String[] columnNames,
+		LaunchSetModelImpl launchSetModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = launchSetModelImpl.getColumnOriginalValue(
-					columnName);
+				value = launchSetModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = launchSetModelImpl.getColumnValue(columnName);
+				value = launchSetModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -131,4 +147,4 @@ public class LaunchSetModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-601605485
+// LIFERAY-SERVICE-BUILDER-HASH:1357754507

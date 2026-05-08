@@ -2811,8 +2811,8 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 		_finderPathFetchByC_I = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_I",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "issuer"}, false,
-			OAuthClientASLocalMetadata::getCompanyId,
+			new String[] {"companyId", "issuer"}, new boolean[] {false, false},
+			false, OAuthClientASLocalMetadata::getCompanyId,
 			convertNullFunction(OAuthClientASLocalMetadata::getIssuer));
 
 		_uniquePersistenceFinderByC_I = new UniquePersistenceFinder<>(
@@ -2865,7 +2865,8 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 		_finderPathFetchByC_LWKURI = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_LWKURI",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "localWellKnownURI"}, false,
+			new String[] {"companyId", "localWellKnownURI"},
+			new boolean[] {false, false}, false,
 			OAuthClientASLocalMetadata::getCompanyId,
 			convertNullFunction(
 				OAuthClientASLocalMetadata::getLocalWellKnownURI));
@@ -2885,7 +2886,8 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 		_finderPathFetchByC_O = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_O",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "oAuthASLocalWellKnownURI"}, false,
+			new String[] {"companyId", "oAuthASLocalWellKnownURI"},
+			new boolean[] {false, false}, false,
 			OAuthClientASLocalMetadata::getCompanyId,
 			convertNullFunction(
 				OAuthClientASLocalMetadata::getOAuthASLocalWellKnownURI));
@@ -2905,7 +2907,8 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				OAuthClientASLocalMetadata::getExternalReferenceCode),
 			OAuthClientASLocalMetadata::getCompanyId);
@@ -3019,4 +3022,4 @@ public class OAuthClientASLocalMetadataPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1795632828
+// LIFERAY-SERVICE-BUILDER-HASH:-75899840

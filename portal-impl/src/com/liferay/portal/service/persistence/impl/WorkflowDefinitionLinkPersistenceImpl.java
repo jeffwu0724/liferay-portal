@@ -2367,8 +2367,8 @@ public class WorkflowDefinitionLinkPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(WorkflowDefinitionLink::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(WorkflowDefinitionLink::getUuid),
 			WorkflowDefinitionLink::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2747,7 +2747,8 @@ public class WorkflowDefinitionLinkPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				WorkflowDefinitionLink::getExternalReferenceCode),
 			WorkflowDefinitionLink::getGroupId);
@@ -2799,4 +2800,4 @@ public class WorkflowDefinitionLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1696284035
+// LIFERAY-SERVICE-BUILDER-HASH:67842196

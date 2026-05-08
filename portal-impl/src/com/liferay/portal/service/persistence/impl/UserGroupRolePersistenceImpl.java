@@ -1372,7 +1372,8 @@ public class UserGroupRolePersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"userId", "groupId", "roleId"}, false,
+			new String[] {"userId", "groupId", "roleId"},
+			new boolean[] {false, false, false}, false,
 			UserGroupRole::getUserId, UserGroupRole::getGroupId,
 			UserGroupRole::getRoleId);
 
@@ -1421,4 +1422,4 @@ public class UserGroupRolePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1829286875
+// LIFERAY-SERVICE-BUILDER-HASH:20331397

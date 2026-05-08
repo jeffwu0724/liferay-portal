@@ -11,8 +11,11 @@ import com.liferay.notification.model.impl.NotificationRecipientModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class NotificationRecipientModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				notificationRecipientModelImpl, columnNames, original);
+				notificationRecipientModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -75,7 +78,7 @@ public class NotificationRecipientModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				notificationRecipientModelImpl, columnNames, original);
+				notificationRecipientModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +96,35 @@ public class NotificationRecipientModelArgumentsResolver
 
 	private static Object[] _getValue(
 		NotificationRecipientModelImpl notificationRecipientModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					notificationRecipientModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = notificationRecipientModelImpl.getColumnValue(
+				value = notificationRecipientModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = notificationRecipientModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +134,4 @@ public class NotificationRecipientModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-574022081
+// LIFERAY-SERVICE-BUILDER-HASH:-1163069087

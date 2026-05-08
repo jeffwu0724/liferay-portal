@@ -4273,7 +4273,8 @@ public class StyleBookEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "head"}, false,
+			new String[] {"uuid_", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(StyleBookEntry::getUuid),
 			StyleBookEntry::getGroupId, StyleBookEntry::isHead);
 
@@ -4678,7 +4679,8 @@ public class StyleBookEntryPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"groupId", "styleBookEntryKey", "head"}, false,
+			new String[] {"groupId", "styleBookEntryKey", "head"},
+			new boolean[] {false, false, false}, false,
 			StyleBookEntry::getGroupId,
 			convertNullFunction(StyleBookEntry::getStyleBookEntryKey),
 			StyleBookEntry::isHead);
@@ -4906,7 +4908,8 @@ public class StyleBookEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"externalReferenceCode", "groupId", "head"}, false,
+			new String[] {"externalReferenceCode", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(StyleBookEntry::getExternalReferenceCode),
 			StyleBookEntry::getGroupId, StyleBookEntry::isHead);
 
@@ -4926,8 +4929,8 @@ public class StyleBookEntryPersistenceImpl
 
 		_finderPathFetchByHeadId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByHeadId",
-			new String[] {Long.class.getName()}, new String[] {"headId"}, false,
-			StyleBookEntry::getHeadId);
+			new String[] {Long.class.getName()}, new String[] {"headId"},
+			new boolean[] {false}, false, StyleBookEntry::getHeadId);
 
 		_uniquePersistenceFinderByHeadId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByHeadId, _SQL_SELECT_STYLEBOOKENTRY_WHERE,
@@ -5008,4 +5011,4 @@ public class StyleBookEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1087600945
+// LIFERAY-SERVICE-BUILDER-HASH:1949971584

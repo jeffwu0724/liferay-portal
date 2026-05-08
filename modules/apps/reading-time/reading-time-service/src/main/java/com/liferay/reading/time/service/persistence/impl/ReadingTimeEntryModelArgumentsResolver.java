@@ -8,11 +8,14 @@ package com.liferay.reading.time.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.reading.time.model.ReadingTimeEntryTable;
 import com.liferay.reading.time.model.impl.ReadingTimeEntryImpl;
 import com.liferay.reading.time.model.impl.ReadingTimeEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class ReadingTimeEntryModelArgumentsResolver
 		long columnBitmask = readingTimeEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(readingTimeEntryModelImpl, columnNames, original);
+			return _getValue(readingTimeEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -81,7 +84,7 @@ public class ReadingTimeEntryModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(readingTimeEntryModelImpl, columnNames, original);
+			return _getValue(readingTimeEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -99,21 +102,34 @@ public class ReadingTimeEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ReadingTimeEntryModelImpl readingTimeEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = readingTimeEntryModelImpl.getColumnOriginalValue(
+				value = readingTimeEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = readingTimeEntryModelImpl.getColumnValue(
-					columnName);
+				value = readingTimeEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -134,4 +150,4 @@ public class ReadingTimeEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1711906052
+// LIFERAY-SERVICE-BUILDER-HASH:-635424266

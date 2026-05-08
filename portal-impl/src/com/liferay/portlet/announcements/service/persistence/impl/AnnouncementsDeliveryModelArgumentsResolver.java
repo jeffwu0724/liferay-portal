@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.announcements.model.impl.AnnouncementsDeliveryImpl;
 import com.liferay.portlet.announcements.model.impl.AnnouncementsDeliveryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,7 +57,7 @@ public class AnnouncementsDeliveryModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				announcementsDeliveryModelImpl, columnNames, original);
+				announcementsDeliveryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,7 +77,7 @@ public class AnnouncementsDeliveryModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				announcementsDeliveryModelImpl, columnNames, original);
+				announcementsDeliveryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +95,35 @@ public class AnnouncementsDeliveryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		AnnouncementsDeliveryModelImpl announcementsDeliveryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					announcementsDeliveryModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = announcementsDeliveryModelImpl.getColumnValue(
+				value = announcementsDeliveryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = announcementsDeliveryModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +133,4 @@ public class AnnouncementsDeliveryModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:502942962
+// LIFERAY-SERVICE-BUILDER-HASH:-304565372

@@ -1508,7 +1508,8 @@ public class ERCVersionedEntryVersionPersistenceImpl
 		_finderPathFetchByErcVersionedEntryId_Version = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByErcVersionedEntryId_Version",
 			new String[] {Long.class.getName(), Integer.class.getName()},
-			new String[] {"ercVersionedEntryId", "version"}, false,
+			new String[] {"ercVersionedEntryId", "version"},
+			new boolean[] {false, false}, false,
 			ERCVersionedEntryVersion::getErcVersionedEntryId,
 			ERCVersionedEntryVersion::getVersion);
 
@@ -1634,7 +1635,8 @@ public class ERCVersionedEntryVersionPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "version"}, false,
+			new String[] {"uuid_", "groupId", "version"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(ERCVersionedEntryVersion::getUuid),
 			ERCVersionedEntryVersion::getGroupId,
 			ERCVersionedEntryVersion::getVersion);
@@ -1782,4 +1784,4 @@ public class ERCVersionedEntryVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1427932710
+// LIFERAY-SERVICE-BUILDER-HASH:1955140219

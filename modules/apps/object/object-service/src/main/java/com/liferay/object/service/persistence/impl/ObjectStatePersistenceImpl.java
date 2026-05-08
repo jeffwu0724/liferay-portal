@@ -1118,7 +1118,8 @@ public class ObjectStatePersistenceImpl
 		_finderPathFetchByLTEI_OSFI = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByLTEI_OSFI",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"listTypeEntryId", "objectStateFlowId"}, false,
+			new String[] {"listTypeEntryId", "objectStateFlowId"},
+			new boolean[] {false, false}, false,
 			ObjectState::getListTypeEntryId, ObjectState::getObjectStateFlowId);
 
 		_uniquePersistenceFinderByLTEI_OSFI = new UniquePersistenceFinder<>(
@@ -1200,4 +1201,4 @@ public class ObjectStatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-323203686
+// LIFERAY-SERVICE-BUILDER-HASH:-1303122735

@@ -1246,8 +1246,8 @@ public class JSONStorageEntryPersistenceImpl
 				"classNameId", "classPK", "parentJSONStorageEntryId", "index_",
 				"key_"
 			},
-			false, JSONStorageEntry::getClassNameId,
-			JSONStorageEntry::getClassPK,
+			new boolean[] {false, false, false, false, false}, false,
+			JSONStorageEntry::getClassNameId, JSONStorageEntry::getClassPK,
 			JSONStorageEntry::getParentJSONStorageEntryId,
 			JSONStorageEntry::getIndex,
 			convertNullFunction(JSONStorageEntry::getKey));
@@ -1344,4 +1344,4 @@ public class JSONStorageEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-546804443
+// LIFERAY-SERVICE-BUILDER-HASH:1187590890

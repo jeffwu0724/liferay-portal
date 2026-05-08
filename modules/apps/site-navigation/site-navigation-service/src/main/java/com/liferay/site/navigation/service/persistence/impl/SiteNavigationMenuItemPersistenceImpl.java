@@ -2069,8 +2069,8 @@ public class SiteNavigationMenuItemPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(SiteNavigationMenuItem::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(SiteNavigationMenuItem::getUuid),
 			SiteNavigationMenuItem::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2328,7 +2328,8 @@ public class SiteNavigationMenuItemPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				SiteNavigationMenuItem::getExternalReferenceCode),
 			SiteNavigationMenuItem::getGroupId);
@@ -2416,4 +2417,4 @@ public class SiteNavigationMenuItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-196753777
+// LIFERAY-SERVICE-BUILDER-HASH:-193227297

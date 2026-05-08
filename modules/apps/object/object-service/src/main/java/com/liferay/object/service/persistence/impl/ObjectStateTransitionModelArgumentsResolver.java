@@ -11,8 +11,11 @@ import com.liferay.object.model.impl.ObjectStateTransitionModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class ObjectStateTransitionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				objectStateTransitionModelImpl, columnNames, original);
+				objectStateTransitionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -75,7 +78,7 @@ public class ObjectStateTransitionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				objectStateTransitionModelImpl, columnNames, original);
+				objectStateTransitionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +96,35 @@ public class ObjectStateTransitionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ObjectStateTransitionModelImpl objectStateTransitionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					objectStateTransitionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = objectStateTransitionModelImpl.getColumnValue(
+				value = objectStateTransitionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = objectStateTransitionModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +134,4 @@ public class ObjectStateTransitionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1163524185
+// LIFERAY-SERVICE-BUILDER-HASH:-901822829

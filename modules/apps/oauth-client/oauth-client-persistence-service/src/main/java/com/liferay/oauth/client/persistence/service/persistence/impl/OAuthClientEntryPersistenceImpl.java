@@ -2639,7 +2639,8 @@ public class OAuthClientEntryPersistenceImpl
 				String.class.getName()
 			},
 			new String[] {"companyId", "authServerWellKnownURI", "clientId"},
-			false, OAuthClientEntry::getCompanyId,
+			new boolean[] {false, false, false}, false,
+			OAuthClientEntry::getCompanyId,
 			convertNullFunction(OAuthClientEntry::getAuthServerWellKnownURI),
 			convertNullFunction(OAuthClientEntry::getClientId));
 
@@ -2660,7 +2661,8 @@ public class OAuthClientEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(OAuthClientEntry::getExternalReferenceCode),
 			OAuthClientEntry::getCompanyId);
 
@@ -2767,4 +2769,4 @@ public class OAuthClientEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-855774998
+// LIFERAY-SERVICE-BUILDER-HASH:333448480

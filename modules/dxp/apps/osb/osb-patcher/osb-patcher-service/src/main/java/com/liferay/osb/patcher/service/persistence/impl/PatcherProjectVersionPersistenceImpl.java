@@ -2136,7 +2136,8 @@ public class PatcherProjectVersionPersistenceImpl
 		_finderPathFetchByCommittish = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCommittish",
 			new String[] {String.class.getName()}, new String[] {"committish"},
-			false, convertNullFunction(PatcherProjectVersion::getCommittish));
+			new boolean[] {false}, false,
+			convertNullFunction(PatcherProjectVersion::getCommittish));
 
 		_uniquePersistenceFinderByCommittish = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByCommittish,
@@ -2148,7 +2149,8 @@ public class PatcherProjectVersionPersistenceImpl
 
 		_finderPathFetchByName = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByName",
-			new String[] {String.class.getName()}, new String[] {"name"}, false,
+			new String[] {String.class.getName()}, new String[] {"name"},
+			new boolean[] {false}, false,
 			convertNullFunction(PatcherProjectVersion::getName));
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
@@ -2328,4 +2330,4 @@ public class PatcherProjectVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1572328606
+// LIFERAY-SERVICE-BUILDER-HASH:1824400510

@@ -1429,8 +1429,8 @@ public class LockPersistenceImpl
 		_finderPathFetchByC_K = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
 			new String[] {String.class.getName(), String.class.getName()},
-			new String[] {"className", "key_"}, false,
-			convertNullFunction(Lock::getClassName),
+			new String[] {"className", "key_"}, new boolean[] {false, false},
+			false, convertNullFunction(Lock::getClassName),
 			convertNullFunction(Lock::getKey));
 
 		_uniquePersistenceFinderByC_K = new UniquePersistenceFinder<>(
@@ -1551,4 +1551,4 @@ public class LockPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:907496562
+// LIFERAY-SERVICE-BUILDER-HASH:1952481315

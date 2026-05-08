@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryTypeModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class DLFileEntryTypeModelArgumentsResolver
 		long columnBitmask = dlFileEntryTypeModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(dlFileEntryTypeModelImpl, columnNames, original);
+			return _getValue(dlFileEntryTypeModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class DLFileEntryTypeModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(dlFileEntryTypeModelImpl, columnNames, original);
+			return _getValue(dlFileEntryTypeModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,22 +92,35 @@ public class DLFileEntryTypeModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		DLFileEntryTypeModelImpl dlFileEntryTypeModelImpl, String[] columnNames,
-		boolean original) {
+		DLFileEntryTypeModelImpl dlFileEntryTypeModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = dlFileEntryTypeModelImpl.getColumnOriginalValue(
+				value = dlFileEntryTypeModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = dlFileEntryTypeModelImpl.getColumnValue(
-					columnName);
+				value = dlFileEntryTypeModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -114,4 +130,4 @@ public class DLFileEntryTypeModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:830367150
+// LIFERAY-SERVICE-BUILDER-HASH:288013408

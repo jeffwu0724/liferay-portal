@@ -11,8 +11,11 @@ import com.liferay.commerce.tax.model.impl.CommerceTaxMethodModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class CommerceTaxMethodModelArgumentsResolver
 		long columnBitmask = commerceTaxMethodModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(commerceTaxMethodModelImpl, columnNames, original);
+			return _getValue(commerceTaxMethodModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -81,7 +84,7 @@ public class CommerceTaxMethodModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(commerceTaxMethodModelImpl, columnNames, original);
+			return _getValue(commerceTaxMethodModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -99,22 +102,34 @@ public class CommerceTaxMethodModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CommerceTaxMethodModelImpl commerceTaxMethodModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					commerceTaxMethodModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = commerceTaxMethodModelImpl.getColumnValue(
+				value = commerceTaxMethodModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = commerceTaxMethodModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -135,4 +150,4 @@ public class CommerceTaxMethodModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1238120258
+// LIFERAY-SERVICE-BUILDER-HASH:-340640612

@@ -5530,8 +5530,8 @@ public class OrganizationPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false,
-			Organization::getCompanyId,
+			new String[] {"companyId", "name"}, new boolean[] {false, false},
+			false, Organization::getCompanyId,
 			convertNullFunction(Organization::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
@@ -5646,7 +5646,8 @@ public class OrganizationPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(Organization::getExternalReferenceCode),
 			Organization::getCompanyId);
 
@@ -5734,4 +5735,4 @@ public class OrganizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:441237619
+// LIFERAY-SERVICE-BUILDER-HASH:-2005466299

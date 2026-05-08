@@ -1398,7 +1398,8 @@ public class CTSContentPersistenceImpl
 			new String[] {
 				"companyId", "repositoryId", "path_", "version", "storeType"
 			},
-			false, CTSContent::getCompanyId, CTSContent::getRepositoryId,
+			new boolean[] {false, false, false, false, false}, false,
+			CTSContent::getCompanyId, CTSContent::getRepositoryId,
 			convertNullFunction(CTSContent::getPath),
 			convertNullFunction(CTSContent::getVersion),
 			convertNullFunction(CTSContent::getStoreType));
@@ -1493,4 +1494,4 @@ public class CTSContentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:261988824
+// LIFERAY-SERVICE-BUILDER-HASH:-619346466

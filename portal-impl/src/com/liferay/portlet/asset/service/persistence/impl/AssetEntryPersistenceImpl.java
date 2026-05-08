@@ -2768,8 +2768,8 @@ public class AssetEntryPersistenceImpl
 		_finderPathFetchByG_CU = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_CU",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "classUuid"}, false,
-			AssetEntry::getGroupId,
+			new String[] {"groupId", "classUuid"}, new boolean[] {false, false},
+			false, AssetEntry::getGroupId,
 			convertNullFunction(AssetEntry::getClassUuid));
 
 		_uniquePersistenceFinderByG_CU = new UniquePersistenceFinder<>(
@@ -2815,8 +2815,9 @@ public class AssetEntryPersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"classNameId", "classPK"}, false,
-			AssetEntry::getClassNameId, AssetEntry::getClassPK);
+			new String[] {"classNameId", "classPK"},
+			new boolean[] {false, false}, false, AssetEntry::getClassNameId,
+			AssetEntry::getClassPK);
 
 		_uniquePersistenceFinderByC_C = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_C, _SQL_SELECT_ASSETENTRY_WHERE, "",
@@ -2963,4 +2964,4 @@ public class AssetEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:971217825
+// LIFERAY-SERVICE-BUILDER-HASH:900215329

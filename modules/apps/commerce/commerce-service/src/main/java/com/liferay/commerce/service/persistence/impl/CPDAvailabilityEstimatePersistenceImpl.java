@@ -984,7 +984,8 @@ public class CPDAvailabilityEstimatePersistenceImpl
 		_finderPathFetchByCProductId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCProductId",
 			new String[] {Long.class.getName()}, new String[] {"CProductId"},
-			false, CPDAvailabilityEstimate::getCProductId);
+			new boolean[] {false}, false,
+			CPDAvailabilityEstimate::getCProductId);
 
 		_uniquePersistenceFinderByCProductId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByCProductId,
@@ -1063,4 +1064,4 @@ public class CPDAvailabilityEstimatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-618774214
+// LIFERAY-SERVICE-BUILDER-HASH:1924308273

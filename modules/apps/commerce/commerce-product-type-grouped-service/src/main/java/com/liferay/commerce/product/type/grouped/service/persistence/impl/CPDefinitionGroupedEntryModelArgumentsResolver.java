@@ -11,8 +11,11 @@ import com.liferay.commerce.product.type.grouped.model.impl.CPDefinitionGroupedE
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -56,7 +59,7 @@ public class CPDefinitionGroupedEntryModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				cpDefinitionGroupedEntryModelImpl, columnNames, original);
+				cpDefinitionGroupedEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -85,7 +88,7 @@ public class CPDefinitionGroupedEntryModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				cpDefinitionGroupedEntryModelImpl, columnNames, original);
+				cpDefinitionGroupedEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -103,22 +106,36 @@ public class CPDefinitionGroupedEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CPDefinitionGroupedEntryModelImpl cpDefinitionGroupedEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					cpDefinitionGroupedEntryModelImpl.getColumnOriginalValue(
 						columnName);
 			}
 			else {
-				arguments[i] = cpDefinitionGroupedEntryModelImpl.getColumnValue(
+				value = cpDefinitionGroupedEntryModelImpl.getColumnValue(
 					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -139,4 +156,4 @@ public class CPDefinitionGroupedEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:34124425
+// LIFERAY-SERVICE-BUILDER-HASH:-693767993

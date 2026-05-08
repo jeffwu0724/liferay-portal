@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.TeamTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.TeamImpl;
 import com.liferay.portal.model.impl.TeamModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -50,7 +53,7 @@ public class TeamModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = teamModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(teamModelImpl, columnNames, original);
+			return _getValue(teamModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -77,7 +80,7 @@ public class TeamModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(teamModelImpl, columnNames, original);
+			return _getValue(teamModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -94,19 +97,33 @@ public class TeamModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		TeamModelImpl teamModelImpl, String[] columnNames, boolean original) {
+		TeamModelImpl teamModelImpl, FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = teamModelImpl.getColumnOriginalValue(columnName);
+				value = teamModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = teamModelImpl.getColumnValue(columnName);
+				value = teamModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -126,4 +143,4 @@ public class TeamModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1597984329
+// LIFERAY-SERVICE-BUILDER-HASH:-1672698127

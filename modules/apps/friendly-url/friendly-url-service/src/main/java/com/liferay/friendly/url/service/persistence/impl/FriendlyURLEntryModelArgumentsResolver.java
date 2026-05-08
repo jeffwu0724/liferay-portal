@@ -11,8 +11,11 @@ import com.liferay.friendly.url.model.impl.FriendlyURLEntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class FriendlyURLEntryModelArgumentsResolver
 		long columnBitmask = friendlyURLEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(friendlyURLEntryModelImpl, columnNames, original);
+			return _getValue(friendlyURLEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class FriendlyURLEntryModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(friendlyURLEntryModelImpl, columnNames, original);
+			return _getValue(friendlyURLEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -91,21 +94,34 @@ public class FriendlyURLEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		FriendlyURLEntryModelImpl friendlyURLEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = friendlyURLEntryModelImpl.getColumnOriginalValue(
+				value = friendlyURLEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = friendlyURLEntryModelImpl.getColumnValue(
-					columnName);
+				value = friendlyURLEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +131,4 @@ public class FriendlyURLEntryModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1551026189
+// LIFERAY-SERVICE-BUILDER-HASH:-1063926729

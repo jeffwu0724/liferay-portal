@@ -1919,7 +1919,8 @@ public class KaleoInstancePersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"kaleoInstanceId", "companyId", "userId"}, false,
+			new String[] {"kaleoInstanceId", "companyId", "userId"},
+			new boolean[] {false, false, false}, false,
 			KaleoInstance::getKaleoInstanceId, KaleoInstance::getCompanyId,
 			KaleoInstance::getUserId);
 
@@ -2068,4 +2069,4 @@ public class KaleoInstancePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:102862742
+// LIFERAY-SERVICE-BUILDER-HASH:940174905

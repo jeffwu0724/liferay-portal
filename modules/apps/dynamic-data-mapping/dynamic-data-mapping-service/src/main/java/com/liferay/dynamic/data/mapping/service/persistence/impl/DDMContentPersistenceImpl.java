@@ -1135,8 +1135,9 @@ public class DDMContentPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(DDMContent::getUuid), DDMContent::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(DDMContent::getUuid),
+			DDMContent::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_DDMCONTENT_WHERE, "",
@@ -1310,4 +1311,4 @@ public class DDMContentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:636956856
+// LIFERAY-SERVICE-BUILDER-HASH:-230103725

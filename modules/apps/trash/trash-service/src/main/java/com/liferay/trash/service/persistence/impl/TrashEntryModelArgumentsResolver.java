@@ -8,11 +8,14 @@ package com.liferay.trash.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.trash.model.TrashEntryTable;
 import com.liferay.trash.model.impl.TrashEntryImpl;
 import com.liferay.trash.model.impl.TrashEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class TrashEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = trashEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(trashEntryModelImpl, columnNames, original);
+			return _getValue(trashEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class TrashEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(trashEntryModelImpl, columnNames, original);
+			return _getValue(trashEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,21 +100,34 @@ public class TrashEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		TrashEntryModelImpl trashEntryModelImpl, String[] columnNames,
+		TrashEntryModelImpl trashEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = trashEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = trashEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = trashEntryModelImpl.getColumnValue(columnName);
+				value = trashEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -132,4 +148,4 @@ public class TrashEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-605969141
+// LIFERAY-SERVICE-BUILDER-HASH:1750093693

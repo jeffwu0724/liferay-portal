@@ -1415,7 +1415,8 @@ public class DLFileEntryMetadataPersistenceImpl
 		_finderPathFetchByD_F = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByD_F",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"DDMStructureId", "fileVersionId"}, false,
+			new String[] {"DDMStructureId", "fileVersionId"},
+			new boolean[] {false, false}, false,
 			DLFileEntryMetadata::getDDMStructureId,
 			DLFileEntryMetadata::getFileVersionId);
 
@@ -1433,7 +1434,8 @@ public class DLFileEntryMetadataPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(DLFileEntryMetadata::getExternalReferenceCode),
 			DLFileEntryMetadata::getCompanyId);
 
@@ -1484,4 +1486,4 @@ public class DLFileEntryMetadataPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:189228294
+// LIFERAY-SERVICE-BUILDER-HASH:1842259053

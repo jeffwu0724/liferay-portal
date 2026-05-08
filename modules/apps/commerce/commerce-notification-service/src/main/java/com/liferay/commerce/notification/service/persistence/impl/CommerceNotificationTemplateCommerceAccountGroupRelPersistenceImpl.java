@@ -907,7 +907,7 @@ public class CommerceNotificationTemplateCommerceAccountGroupRelPersistenceImpl
 			new String[] {
 				"commerceNotificationTemplateId", "commerceAccountGroupId"
 			},
-			false,
+			new boolean[] {false, false}, false,
 			CommerceNotificationTemplateCommerceAccountGroupRel::
 				getCommerceNotificationTemplateId,
 			CommerceNotificationTemplateCommerceAccountGroupRel::
@@ -1008,4 +1008,4 @@ public class CommerceNotificationTemplateCommerceAccountGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:286077323
+// LIFERAY-SERVICE-BUILDER-HASH:1564173973

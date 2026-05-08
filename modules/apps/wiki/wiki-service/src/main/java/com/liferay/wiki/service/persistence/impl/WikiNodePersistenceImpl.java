@@ -2136,8 +2136,9 @@ public class WikiNodePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(WikiNode::getUuid), WikiNode::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(WikiNode::getUuid),
+			WikiNode::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_WIKINODE_WHERE, "",
@@ -2242,7 +2243,8 @@ public class WikiNodePersistenceImpl
 		_finderPathFetchByG_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "name"}, false, WikiNode::getGroupId,
+			new String[] {"groupId", "name"}, new boolean[] {false, false},
+			false, WikiNode::getGroupId,
 			convertNullFunction(WikiNode::getName));
 
 		_uniquePersistenceFinderByG_N = new UniquePersistenceFinder<>(
@@ -2319,7 +2321,8 @@ public class WikiNodePersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(WikiNode::getExternalReferenceCode),
 			WikiNode::getGroupId);
 
@@ -2427,4 +2430,4 @@ public class WikiNodePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1700354925
+// LIFERAY-SERVICE-BUILDER-HASH:-2020253164

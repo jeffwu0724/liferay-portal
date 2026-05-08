@@ -1120,8 +1120,8 @@ public class TranslationEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(TranslationEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(TranslationEntry::getUuid),
 			TranslationEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1206,7 +1206,8 @@ public class TranslationEntryPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"classNameId", "classPK", "languageId"}, false,
+			new String[] {"classNameId", "classPK", "languageId"},
+			new boolean[] {false, false, false}, false,
 			TranslationEntry::getClassNameId, TranslationEntry::getClassPK,
 			convertNullFunction(TranslationEntry::getLanguageId));
 
@@ -1295,4 +1296,4 @@ public class TranslationEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1477988993
+// LIFERAY-SERVICE-BUILDER-HASH:901606137

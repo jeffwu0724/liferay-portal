@@ -895,8 +895,8 @@ public class WikiPageResourcePersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(WikiPageResource::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(WikiPageResource::getUuid),
 			WikiPageResource::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -946,8 +946,8 @@ public class WikiPageResourcePersistenceImpl
 		_finderPathFetchByN_T = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByN_T",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"nodeId", "title"}, false,
-			WikiPageResource::getNodeId,
+			new String[] {"nodeId", "title"}, new boolean[] {false, false},
+			false, WikiPageResource::getNodeId,
 			convertNullFunction(WikiPageResource::getTitle));
 
 		_uniquePersistenceFinderByN_T = new UniquePersistenceFinder<>(
@@ -1031,4 +1031,4 @@ public class WikiPageResourcePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-898901749
+// LIFERAY-SERVICE-BUILDER-HASH:-1884329848

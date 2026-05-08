@@ -1722,8 +1722,8 @@ public class AMImageEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(AMImageEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(AMImageEntry::getUuid),
 			AMImageEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1919,7 +1919,8 @@ public class AMImageEntryPersistenceImpl
 		_finderPathFetchByC_F = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_F",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"configurationUuid", "fileVersionId"}, false,
+			new String[] {"configurationUuid", "fileVersionId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(AMImageEntry::getConfigurationUuid),
 			AMImageEntry::getFileVersionId);
 
@@ -2004,4 +2005,4 @@ public class AMImageEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:529237465
+// LIFERAY-SERVICE-BUILDER-HASH:-90405905

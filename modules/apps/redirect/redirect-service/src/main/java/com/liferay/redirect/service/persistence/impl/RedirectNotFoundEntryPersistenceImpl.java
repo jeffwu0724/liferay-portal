@@ -594,8 +594,8 @@ public class RedirectNotFoundEntryPersistenceImpl
 		_finderPathFetchByG_U = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_U",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "url"}, false,
-			RedirectNotFoundEntry::getGroupId,
+			new String[] {"groupId", "url"}, new boolean[] {false, false},
+			false, RedirectNotFoundEntry::getGroupId,
 			convertNullFunction(RedirectNotFoundEntry::getUrl));
 
 		_uniquePersistenceFinderByG_U = new UniquePersistenceFinder<>(
@@ -674,4 +674,4 @@ public class RedirectNotFoundEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1253309086
+// LIFERAY-SERVICE-BUILDER-HASH:8237438

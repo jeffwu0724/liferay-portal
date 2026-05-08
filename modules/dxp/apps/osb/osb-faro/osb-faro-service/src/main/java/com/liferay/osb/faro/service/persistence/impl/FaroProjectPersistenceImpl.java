@@ -809,7 +809,7 @@ public class FaroProjectPersistenceImpl
 		_finderPathFetchByGroupId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByGroupId",
 			new String[] {Long.class.getName()}, new String[] {"groupId"},
-			false, FaroProject::getGroupId);
+			new boolean[] {false}, false, FaroProject::getGroupId);
 
 		_uniquePersistenceFinderByGroupId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByGroupId, _SQL_SELECT_FAROPROJECT_WHERE, "",
@@ -848,7 +848,7 @@ public class FaroProjectPersistenceImpl
 		_finderPathFetchByCorpProjectUuid = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCorpProjectUuid",
 			new String[] {String.class.getName()},
-			new String[] {"corpProjectUuid"}, false,
+			new String[] {"corpProjectUuid"}, new boolean[] {false}, false,
 			convertNullFunction(FaroProject::getCorpProjectUuid));
 
 		_uniquePersistenceFinderByCorpProjectUuid =
@@ -891,7 +891,8 @@ public class FaroProjectPersistenceImpl
 		_finderPathFetchByWeDeployKey = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByWeDeployKey",
 			new String[] {String.class.getName()}, new String[] {"weDeployKey"},
-			false, convertNullFunction(FaroProject::getWeDeployKey));
+			new boolean[] {false}, false,
+			convertNullFunction(FaroProject::getWeDeployKey));
 
 		_uniquePersistenceFinderByWeDeployKey = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByWeDeployKey, _SQL_SELECT_FAROPROJECT_WHERE,
@@ -969,4 +970,4 @@ public class FaroProjectPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:932806899
+// LIFERAY-SERVICE-BUILDER-HASH:-1385644711

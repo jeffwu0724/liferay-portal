@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.LayoutFriendlyURLTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.LayoutFriendlyURLImpl;
 import com.liferay.portal.model.impl.LayoutFriendlyURLModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class LayoutFriendlyURLModelArgumentsResolver
 		long columnBitmask = layoutFriendlyURLModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(layoutFriendlyURLModelImpl, columnNames, original);
+			return _getValue(layoutFriendlyURLModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class LayoutFriendlyURLModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(layoutFriendlyURLModelImpl, columnNames, original);
+			return _getValue(layoutFriendlyURLModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -90,22 +93,34 @@ public class LayoutFriendlyURLModelArgumentsResolver
 
 	private static Object[] _getValue(
 		LayoutFriendlyURLModelImpl layoutFriendlyURLModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					layoutFriendlyURLModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = layoutFriendlyURLModelImpl.getColumnValue(
+				value = layoutFriendlyURLModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = layoutFriendlyURLModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +130,4 @@ public class LayoutFriendlyURLModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:241249352
+// LIFERAY-SERVICE-BUILDER-HASH:1528100660

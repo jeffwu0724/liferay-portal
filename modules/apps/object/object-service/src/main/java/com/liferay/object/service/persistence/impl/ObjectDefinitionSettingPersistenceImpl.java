@@ -1335,7 +1335,8 @@ public class ObjectDefinitionSettingPersistenceImpl
 		_finderPathFetchByODI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByODI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"objectDefinitionId", "name"}, false,
+			new String[] {"objectDefinitionId", "name"},
+			new boolean[] {false, false}, false,
 			ObjectDefinitionSetting::getObjectDefinitionId,
 			convertNullFunction(ObjectDefinitionSetting::getName));
 
@@ -1461,4 +1462,4 @@ public class ObjectDefinitionSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-431796096
+// LIFERAY-SERVICE-BUILDER-HASH:-1560639968

@@ -497,7 +497,8 @@ public class CompanyPersistenceImpl
 		_finderPathFetchByWebId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByWebId",
 			new String[] {String.class.getName()}, new String[] {"webId"},
-			false, convertNullFunction(Company::getWebId));
+			new boolean[] {false}, false,
+			convertNullFunction(Company::getWebId));
 
 		_uniquePersistenceFinderByWebId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByWebId, _SQL_SELECT_COMPANY_WHERE, "",
@@ -569,4 +570,4 @@ public class CompanyPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1046836121
+// LIFERAY-SERVICE-BUILDER-HASH:1210847491

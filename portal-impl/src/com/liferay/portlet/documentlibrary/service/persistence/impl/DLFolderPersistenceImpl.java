@@ -6336,8 +6336,9 @@ public class DLFolderPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(DLFolder::getUuid), DLFolder::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(DLFolder::getUuid),
+			DLFolder::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_DLFOLDER_WHERE, "",
@@ -6529,8 +6530,9 @@ public class DLFolderPersistenceImpl
 		_finderPathFetchByR_M = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByR_M",
 			new String[] {Long.class.getName(), Boolean.class.getName()},
-			new String[] {"repositoryId", "mountPoint"}, false,
-			DLFolder::getRepositoryId, DLFolder::isMountPoint);
+			new String[] {"repositoryId", "mountPoint"},
+			new boolean[] {false, false}, false, DLFolder::getRepositoryId,
+			DLFolder::isMountPoint);
 
 		_uniquePersistenceFinderByR_M = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByR_M, _SQL_SELECT_DLFOLDER_WHERE, "",
@@ -6681,8 +6683,9 @@ public class DLFolderPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "parentFolderId", "name"}, false,
-			DLFolder::getGroupId, DLFolder::getParentFolderId,
+			new String[] {"groupId", "parentFolderId", "name"},
+			new boolean[] {false, false, false}, false, DLFolder::getGroupId,
+			DLFolder::getParentFolderId,
 			convertNullFunction(DLFolder::getName));
 
 		_uniquePersistenceFinderByG_P_N = new UniquePersistenceFinder<>(
@@ -6983,7 +6986,8 @@ public class DLFolderPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(DLFolder::getExternalReferenceCode),
 			DLFolder::getGroupId);
 
@@ -7064,4 +7068,4 @@ public class DLFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1729244938
+// LIFERAY-SERVICE-BUILDER-HASH:-1416222382

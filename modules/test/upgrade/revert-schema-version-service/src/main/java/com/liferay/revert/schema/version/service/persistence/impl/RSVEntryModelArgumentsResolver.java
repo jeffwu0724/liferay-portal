@@ -8,11 +8,14 @@ package com.liferay.revert.schema.version.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.revert.schema.version.model.RSVEntryTable;
 import com.liferay.revert.schema.version.model.impl.RSVEntryImpl;
 import com.liferay.revert.schema.version.model.impl.RSVEntryModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class RSVEntryModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = rsvEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(rsvEntryModelImpl, columnNames, original);
+			return _getValue(rsvEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class RSVEntryModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(rsvEntryModelImpl, columnNames, original);
+			return _getValue(rsvEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class RSVEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		RSVEntryModelImpl rsvEntryModelImpl, String[] columnNames,
+		RSVEntryModelImpl rsvEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = rsvEntryModelImpl.getColumnOriginalValue(
-					columnName);
+				value = rsvEntryModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = rsvEntryModelImpl.getColumnValue(columnName);
+				value = rsvEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class RSVEntryModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1103991880
+// LIFERAY-SERVICE-BUILDER-HASH:-1952577296

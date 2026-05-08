@@ -11,8 +11,11 @@ import com.liferay.commerce.tax.engine.fixed.model.impl.CommerceTaxFixedRateAddr
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -57,7 +60,7 @@ public class CommerceTaxFixedRateAddressRelModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				commerceTaxFixedRateAddressRelModelImpl, columnNames, original);
+				commerceTaxFixedRateAddressRelModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -86,7 +89,7 @@ public class CommerceTaxFixedRateAddressRelModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				commerceTaxFixedRateAddressRelModelImpl, columnNames, original);
+				commerceTaxFixedRateAddressRelModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -105,23 +108,36 @@ public class CommerceTaxFixedRateAddressRelModelArgumentsResolver
 	private static Object[] _getValue(
 		CommerceTaxFixedRateAddressRelModelImpl
 			commerceTaxFixedRateAddressRelModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					commerceTaxFixedRateAddressRelModelImpl.
 						getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] =
-					commerceTaxFixedRateAddressRelModelImpl.getColumnValue(
-						columnName);
+				value = commerceTaxFixedRateAddressRelModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -143,4 +159,4 @@ public class CommerceTaxFixedRateAddressRelModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:890820479
+// LIFERAY-SERVICE-BUILDER-HASH:-95406047

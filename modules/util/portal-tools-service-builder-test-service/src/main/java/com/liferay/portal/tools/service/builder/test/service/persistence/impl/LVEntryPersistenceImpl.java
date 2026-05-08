@@ -3200,7 +3200,8 @@ public class LVEntryPersistenceImpl
 				String.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"uuid_", "groupId", "head"}, false,
+			new String[] {"uuid_", "groupId", "head"},
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(LVEntry::getUuid), LVEntry::getGroupId,
 			LVEntry::isHead);
 
@@ -3305,7 +3306,7 @@ public class LVEntryPersistenceImpl
 			true);
 
 		_finderPathCountByGroupId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByGroupId",
 			new String[] {Long.class.getName()}, new String[] {"groupId"},
 			false);
 
@@ -3329,7 +3330,7 @@ public class LVEntryPersistenceImpl
 			new String[] {"groupId", "head"}, true);
 
 		_finderPathCountByGroupId_Head = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId_Head",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByGroupId_Head",
 			new String[] {Long.class.getName(), Boolean.class.getName()},
 			new String[] {"groupId", "head"}, false);
 
@@ -3375,8 +3376,8 @@ public class LVEntryPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Boolean.class.getName()
 			},
-			new String[] {"groupId", "uniqueGroupKey", "head"}, false,
-			LVEntry::getGroupId,
+			new String[] {"groupId", "uniqueGroupKey", "head"},
+			new boolean[] {false, false, false}, false, LVEntry::getGroupId,
 			convertNullFunction(LVEntry::getUniqueGroupKey), LVEntry::isHead);
 
 		_uniquePersistenceFinderByG_UGK_Head = new UniquePersistenceFinder<>(
@@ -3393,8 +3394,8 @@ public class LVEntryPersistenceImpl
 
 		_finderPathFetchByHeadId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByHeadId",
-			new String[] {Long.class.getName()}, new String[] {"headId"}, false,
-			LVEntry::getHeadId);
+			new String[] {Long.class.getName()}, new String[] {"headId"},
+			new boolean[] {false}, false, LVEntry::getHeadId);
 
 		_uniquePersistenceFinderByHeadId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByHeadId, _SQL_SELECT_LVENTRY_WHERE, "",
@@ -3457,4 +3458,4 @@ public class LVEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1363122237
+// LIFERAY-SERVICE-BUILDER-HASH:-67555697

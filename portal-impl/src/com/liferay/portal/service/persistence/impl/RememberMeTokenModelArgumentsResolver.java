@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.RememberMeTokenTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.RememberMeTokenImpl;
 import com.liferay.portal.model.impl.RememberMeTokenModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,7 +56,7 @@ public class RememberMeTokenModelArgumentsResolver
 		long columnBitmask = rememberMeTokenModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(rememberMeTokenModelImpl, columnNames, original);
+			return _getValue(rememberMeTokenModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class RememberMeTokenModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(rememberMeTokenModelImpl, columnNames, original);
+			return _getValue(rememberMeTokenModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,22 +92,35 @@ public class RememberMeTokenModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		RememberMeTokenModelImpl rememberMeTokenModelImpl, String[] columnNames,
-		boolean original) {
+		RememberMeTokenModelImpl rememberMeTokenModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = rememberMeTokenModelImpl.getColumnOriginalValue(
+				value = rememberMeTokenModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = rememberMeTokenModelImpl.getColumnValue(
-					columnName);
+				value = rememberMeTokenModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -114,4 +130,4 @@ public class RememberMeTokenModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1147539350
+// LIFERAY-SERVICE-BUILDER-HASH:745909966

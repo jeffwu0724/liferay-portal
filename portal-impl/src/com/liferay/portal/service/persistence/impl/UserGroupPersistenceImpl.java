@@ -4124,8 +4124,9 @@ public class UserGroupPersistenceImpl
 		_finderPathFetchByC_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "name"}, false, UserGroup::getCompanyId,
-			convertNullFunction(UserGroup::getName));
+			new String[] {"companyId", "name"}, new boolean[] {false, true},
+			false, UserGroup::getCompanyId,
+			convertCaseFunction(UserGroup::getName));
 
 		_uniquePersistenceFinderByC_N = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_N, _SQL_SELECT_USERGROUP_WHERE, "",
@@ -4200,7 +4201,8 @@ public class UserGroupPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(UserGroup::getExternalReferenceCode),
 			UserGroup::getCompanyId);
 
@@ -4294,4 +4296,4 @@ public class UserGroupPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2108732688
+// LIFERAY-SERVICE-BUILDER-HASH:-811019245

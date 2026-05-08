@@ -321,8 +321,8 @@ public class BrowserTrackerPersistenceImpl
 	public void afterPropertiesSet() {
 		_finderPathFetchByUserId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUserId",
-			new String[] {Long.class.getName()}, new String[] {"userId"}, false,
-			BrowserTracker::getUserId);
+			new String[] {Long.class.getName()}, new String[] {"userId"},
+			new boolean[] {false}, false, BrowserTracker::getUserId);
 
 		_uniquePersistenceFinderByUserId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUserId, _SQL_SELECT_BROWSERTRACKER_WHERE,
@@ -361,4 +361,4 @@ public class BrowserTrackerPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-140977384
+// LIFERAY-SERVICE-BUILDER-HASH:-1012746186

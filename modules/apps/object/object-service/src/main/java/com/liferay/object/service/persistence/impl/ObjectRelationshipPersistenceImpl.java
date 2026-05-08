@@ -3756,7 +3756,7 @@ public class ObjectRelationshipPersistenceImpl
 		_finderPathFetchByObjectFieldId2 = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByObjectFieldId2",
 			new String[] {Long.class.getName()},
-			new String[] {"objectFieldId2"}, false,
+			new String[] {"objectFieldId2"}, new boolean[] {false}, false,
 			ObjectRelationship::getObjectFieldId2);
 
 		_uniquePersistenceFinderByObjectFieldId2 =
@@ -4014,7 +4014,8 @@ public class ObjectRelationshipPersistenceImpl
 		_finderPathFetchByDTN_R = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByDTN_R",
 			new String[] {String.class.getName(), Boolean.class.getName()},
-			new String[] {"dbTableName", "reverse"}, false,
+			new String[] {"dbTableName", "reverse"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(ObjectRelationship::getDBTableName),
 			ObjectRelationship::isReverse);
 
@@ -4037,7 +4038,7 @@ public class ObjectRelationshipPersistenceImpl
 			new String[] {
 				"externalReferenceCode", "companyId", "objectDefinitionId1"
 			},
-			false,
+			new boolean[] {false, false, false}, false,
 			convertNullFunction(ObjectRelationship::getExternalReferenceCode),
 			ObjectRelationship::getCompanyId,
 			ObjectRelationship::getObjectDefinitionId1);
@@ -4321,7 +4322,8 @@ public class ObjectRelationshipPersistenceImpl
 				"objectDefinitionId1", "objectDefinitionId2", "name", "reverse",
 				"type_"
 			},
-			false, ObjectRelationship::getObjectDefinitionId1,
+			new boolean[] {false, false, false, false, false}, false,
+			ObjectRelationship::getObjectDefinitionId1,
 			ObjectRelationship::getObjectDefinitionId2,
 			convertNullFunction(ObjectRelationship::getName),
 			ObjectRelationship::isReverse,
@@ -4418,4 +4420,4 @@ public class ObjectRelationshipPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1250062286
+// LIFERAY-SERVICE-BUILDER-HASH:-2106426682

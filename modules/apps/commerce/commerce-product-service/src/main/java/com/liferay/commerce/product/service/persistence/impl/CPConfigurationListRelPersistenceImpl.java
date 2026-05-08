@@ -901,7 +901,8 @@ public class CPConfigurationListRelPersistenceImpl
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			new String[] {"classNameId", "classPK", "CPConfigurationListId"},
-			false, CPConfigurationListRel::getClassNameId,
+			new boolean[] {false, false, false}, false,
+			CPConfigurationListRel::getClassNameId,
 			CPConfigurationListRel::getClassPK,
 			CPConfigurationListRel::getCPConfigurationListId);
 
@@ -989,4 +990,4 @@ public class CPConfigurationListRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-918392175
+// LIFERAY-SERVICE-BUILDER-HASH:536644972

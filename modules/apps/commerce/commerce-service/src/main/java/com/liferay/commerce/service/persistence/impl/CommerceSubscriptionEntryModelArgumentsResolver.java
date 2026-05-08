@@ -11,8 +11,11 @@ import com.liferay.commerce.model.impl.CommerceSubscriptionEntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -56,7 +59,7 @@ public class CommerceSubscriptionEntryModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				commerceSubscriptionEntryModelImpl, columnNames, original);
+				commerceSubscriptionEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -85,7 +88,7 @@ public class CommerceSubscriptionEntryModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				commerceSubscriptionEntryModelImpl, columnNames, original);
+				commerceSubscriptionEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -103,23 +106,36 @@ public class CommerceSubscriptionEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CommerceSubscriptionEntryModelImpl commerceSubscriptionEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
+				value =
 					commerceSubscriptionEntryModelImpl.getColumnOriginalValue(
 						columnName);
 			}
 			else {
-				arguments[i] =
-					commerceSubscriptionEntryModelImpl.getColumnValue(
-						columnName);
+				value = commerceSubscriptionEntryModelImpl.getColumnValue(
+					columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -140,4 +156,4 @@ public class CommerceSubscriptionEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1693603554
+// LIFERAY-SERVICE-BUILDER-HASH:384345342

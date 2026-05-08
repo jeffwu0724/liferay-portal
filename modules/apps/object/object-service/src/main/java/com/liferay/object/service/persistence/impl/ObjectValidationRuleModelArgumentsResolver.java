@@ -11,8 +11,11 @@ import com.liferay.object.model.impl.ObjectValidationRuleModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class ObjectValidationRuleModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				objectValidationRuleModelImpl, columnNames, original);
+				objectValidationRuleModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -75,7 +78,7 @@ public class ObjectValidationRuleModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				objectValidationRuleModelImpl, columnNames, original);
+				objectValidationRuleModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +96,35 @@ public class ObjectValidationRuleModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ObjectValidationRuleModelImpl objectValidationRuleModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					objectValidationRuleModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = objectValidationRuleModelImpl.getColumnValue(
+				value = objectValidationRuleModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = objectValidationRuleModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +134,4 @@ public class ObjectValidationRuleModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:531850175
+// LIFERAY-SERVICE-BUILDER-HASH:1001533911

@@ -1349,8 +1349,8 @@ public class LayoutPageTemplateStructureRelPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(LayoutPageTemplateStructureRel::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutPageTemplateStructureRel::getUuid),
 			LayoutPageTemplateStructureRel::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1481,7 +1481,7 @@ public class LayoutPageTemplateStructureRelPersistenceImpl
 			new String[] {
 				"layoutPageTemplateStructureId", "segmentsExperienceId"
 			},
-			false,
+			new boolean[] {false, false}, false,
 			LayoutPageTemplateStructureRel::getLayoutPageTemplateStructureId,
 			LayoutPageTemplateStructureRel::getSegmentsExperienceId);
 
@@ -1574,4 +1574,4 @@ public class LayoutPageTemplateStructureRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-969822126
+// LIFERAY-SERVICE-BUILDER-HASH:198689039

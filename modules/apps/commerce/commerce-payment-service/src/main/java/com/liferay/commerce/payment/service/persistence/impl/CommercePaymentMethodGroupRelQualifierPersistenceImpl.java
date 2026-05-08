@@ -890,7 +890,8 @@ public class CommercePaymentMethodGroupRelQualifierPersistenceImpl
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			new String[] {"classNameId", "classPK", "CPaymentMethodGroupRelId"},
-			false, CommercePaymentMethodGroupRelQualifier::getClassNameId,
+			new boolean[] {false, false, false}, false,
+			CommercePaymentMethodGroupRelQualifier::getClassNameId,
 			CommercePaymentMethodGroupRelQualifier::getClassPK,
 			CommercePaymentMethodGroupRelQualifier::
 				getCommercePaymentMethodGroupRelId);
@@ -989,4 +990,4 @@ public class CommercePaymentMethodGroupRelQualifierPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-926452895
+// LIFERAY-SERVICE-BUILDER-HASH:-1532901018

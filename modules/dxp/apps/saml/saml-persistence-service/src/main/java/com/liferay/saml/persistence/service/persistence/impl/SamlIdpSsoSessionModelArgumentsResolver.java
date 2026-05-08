@@ -8,11 +8,14 @@ package com.liferay.saml.persistence.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.saml.persistence.model.SamlIdpSsoSessionTable;
 import com.liferay.saml.persistence.model.impl.SamlIdpSsoSessionImpl;
 import com.liferay.saml.persistence.model.impl.SamlIdpSsoSessionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class SamlIdpSsoSessionModelArgumentsResolver
 		long columnBitmask = samlIdpSsoSessionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(samlIdpSsoSessionModelImpl, columnNames, original);
+			return _getValue(samlIdpSsoSessionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class SamlIdpSsoSessionModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(samlIdpSsoSessionModelImpl, columnNames, original);
+			return _getValue(samlIdpSsoSessionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -91,22 +94,34 @@ public class SamlIdpSsoSessionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		SamlIdpSsoSessionModelImpl samlIdpSsoSessionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					samlIdpSsoSessionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = samlIdpSsoSessionModelImpl.getColumnValue(
+				value = samlIdpSsoSessionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = samlIdpSsoSessionModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -116,4 +131,4 @@ public class SamlIdpSsoSessionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-431777264
+// LIFERAY-SERVICE-BUILDER-HASH:2088173254

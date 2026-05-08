@@ -1628,7 +1628,7 @@ public class CommerceInventoryWarehouseItemPersistenceImpl
 			new String[] {
 				"commerceInventoryWarehouseId", "sku", "unitOfMeasureKey"
 			},
-			false,
+			new boolean[] {false, false, false}, false,
 			CommerceInventoryWarehouseItem::getCommerceInventoryWarehouseId,
 			convertNullFunction(CommerceInventoryWarehouseItem::getSku),
 			convertNullFunction(
@@ -1655,7 +1655,8 @@ public class CommerceInventoryWarehouseItemPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				CommerceInventoryWarehouseItem::getExternalReferenceCode),
 			CommerceInventoryWarehouseItem::getCompanyId);
@@ -1744,4 +1745,4 @@ public class CommerceInventoryWarehouseItemPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1232393895
+// LIFERAY-SERVICE-BUILDER-HASH:697062556

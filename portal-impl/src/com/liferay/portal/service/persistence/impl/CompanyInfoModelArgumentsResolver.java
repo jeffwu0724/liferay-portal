@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.CompanyInfoTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.CompanyInfoImpl;
 import com.liferay.portal.model.impl.CompanyInfoModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -52,7 +55,7 @@ public class CompanyInfoModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = companyInfoModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(companyInfoModelImpl, columnNames, original);
+			return _getValue(companyInfoModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class CompanyInfoModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(companyInfoModelImpl, columnNames, original);
+			return _getValue(companyInfoModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,21 +91,34 @@ public class CompanyInfoModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		CompanyInfoModelImpl companyInfoModelImpl, String[] columnNames,
+		CompanyInfoModelImpl companyInfoModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = companyInfoModelImpl.getColumnOriginalValue(
-					columnName);
+				value = companyInfoModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = companyInfoModelImpl.getColumnValue(columnName);
+				value = companyInfoModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -112,4 +128,4 @@ public class CompanyInfoModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:973827334
+// LIFERAY-SERVICE-BUILDER-HASH:49649594

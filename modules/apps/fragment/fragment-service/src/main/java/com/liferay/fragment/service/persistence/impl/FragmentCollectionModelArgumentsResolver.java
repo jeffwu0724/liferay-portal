@@ -11,8 +11,11 @@ import com.liferay.fragment.model.impl.FragmentCollectionModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,8 +57,7 @@ public class FragmentCollectionModelArgumentsResolver
 		long columnBitmask = fragmentCollectionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				fragmentCollectionModelImpl, columnNames, original);
+			return _getValue(fragmentCollectionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -82,8 +84,7 @@ public class FragmentCollectionModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				fragmentCollectionModelImpl, columnNames, original);
+			return _getValue(fragmentCollectionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -101,22 +102,34 @@ public class FragmentCollectionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		FragmentCollectionModelImpl fragmentCollectionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					fragmentCollectionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = fragmentCollectionModelImpl.getColumnValue(
+				value = fragmentCollectionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = fragmentCollectionModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -137,4 +150,4 @@ public class FragmentCollectionModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1950196730
+// LIFERAY-SERVICE-BUILDER-HASH:174015142

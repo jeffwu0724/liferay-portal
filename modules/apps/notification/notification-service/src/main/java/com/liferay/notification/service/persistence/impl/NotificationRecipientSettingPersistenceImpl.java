@@ -995,7 +995,8 @@ public class NotificationRecipientSettingPersistenceImpl
 		_finderPathFetchByNRI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByNRI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"notificationRecipientId", "name"}, false,
+			new String[] {"notificationRecipientId", "name"},
+			new boolean[] {false, false}, false,
 			NotificationRecipientSetting::getNotificationRecipientId,
 			convertNullFunction(NotificationRecipientSetting::getName));
 
@@ -1081,4 +1082,4 @@ public class NotificationRecipientSettingPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2058122620
+// LIFERAY-SERVICE-BUILDER-HASH:1741573449

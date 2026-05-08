@@ -1041,7 +1041,7 @@ public class AppPersistenceImpl
 		_finderPathFetchByRemoteAppId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByRemoteAppId",
 			new String[] {Long.class.getName()}, new String[] {"remoteAppId"},
-			false, App::getRemoteAppId);
+			new boolean[] {false}, false, App::getRemoteAppId);
 
 		_uniquePersistenceFinderByRemoteAppId = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByRemoteAppId, _SQL_SELECT_APP_WHERE, "",
@@ -1146,4 +1146,4 @@ public class AppPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1314011300
+// LIFERAY-SERVICE-BUILDER-HASH:-110833927

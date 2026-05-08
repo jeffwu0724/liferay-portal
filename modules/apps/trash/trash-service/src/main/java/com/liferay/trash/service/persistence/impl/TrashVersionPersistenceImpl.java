@@ -805,8 +805,9 @@ public class TrashVersionPersistenceImpl
 		_finderPathFetchByCN_CPK = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCN_CPK",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"classNameId", "classPK"}, false,
-			TrashVersion::getClassNameId, TrashVersion::getClassPK);
+			new String[] {"classNameId", "classPK"},
+			new boolean[] {false, false}, false, TrashVersion::getClassNameId,
+			TrashVersion::getClassPK);
 
 		_uniquePersistenceFinderByCN_CPK = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByCN_CPK, _SQL_SELECT_TRASHVERSION_WHERE, "",
@@ -886,4 +887,4 @@ public class TrashVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1130532417
+// LIFERAY-SERVICE-BUILDER-HASH:1586295536

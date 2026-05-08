@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.ImageTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.ImageImpl;
 import com.liferay.portal.model.impl.ImageModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -50,7 +53,7 @@ public class ImageModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = imageModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(imageModelImpl, columnNames, original);
+			return _getValue(imageModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -77,7 +80,7 @@ public class ImageModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(imageModelImpl, columnNames, original);
+			return _getValue(imageModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -94,20 +97,34 @@ public class ImageModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		ImageModelImpl imageModelImpl, String[] columnNames, boolean original) {
+		ImageModelImpl imageModelImpl, FinderPath finderPath,
+		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = imageModelImpl.getColumnOriginalValue(
-					columnName);
+				value = imageModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = imageModelImpl.getColumnValue(columnName);
+				value = imageModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -125,4 +142,4 @@ public class ImageModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1731572079
+// LIFERAY-SERVICE-BUILDER-HASH:1272650169

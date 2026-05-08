@@ -1200,8 +1200,8 @@ public class AssetTagGroupRelPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(AssetTagGroupRel::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(AssetTagGroupRel::getUuid),
 			AssetTagGroupRel::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1307,8 +1307,8 @@ public class AssetTagGroupRelPersistenceImpl
 		_finderPathFetchByG_T = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_T",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"groupId", "tagId"}, false,
-			AssetTagGroupRel::getGroupId, AssetTagGroupRel::getTagId);
+			new String[] {"groupId", "tagId"}, new boolean[] {false, false},
+			false, AssetTagGroupRel::getGroupId, AssetTagGroupRel::getTagId);
 
 		_uniquePersistenceFinderByG_T = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByG_T, _SQL_SELECT_ASSETTAGGROUPREL_WHERE, "",
@@ -1355,4 +1355,4 @@ public class AssetTagGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-236240406
+// LIFERAY-SERVICE-BUILDER-HASH:1082238827

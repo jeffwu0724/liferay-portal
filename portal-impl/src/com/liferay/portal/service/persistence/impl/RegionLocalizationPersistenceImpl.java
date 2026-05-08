@@ -620,7 +620,8 @@ public class RegionLocalizationPersistenceImpl
 		_finderPathFetchByRegionId_LanguageId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByRegionId_LanguageId",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"regionId", "languageId"}, false,
+			new String[] {"regionId", "languageId"},
+			new boolean[] {false, false}, false,
 			RegionLocalization::getRegionId,
 			convertNullFunction(RegionLocalization::getLanguageId));
 
@@ -669,4 +670,4 @@ public class RegionLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1379476113
+// LIFERAY-SERVICE-BUILDER-HASH:-1597665369

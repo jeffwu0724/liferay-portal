@@ -1439,7 +1439,8 @@ public class ChangesetEntryPersistenceImpl
 				"changesetCollectionId", "classExternalReferenceCode",
 				"classNameId"
 			},
-			false, ChangesetEntry::getChangesetCollectionId,
+			new boolean[] {false, false, false}, false,
+			ChangesetEntry::getChangesetCollectionId,
 			convertNullFunction(ChangesetEntry::getClassExternalReferenceCode),
 			ChangesetEntry::getClassNameId);
 
@@ -1464,7 +1465,8 @@ public class ChangesetEntryPersistenceImpl
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			new String[] {"changesetCollectionId", "classNameId", "classPK"},
-			false, ChangesetEntry::getChangesetCollectionId,
+			new boolean[] {false, false, false}, false,
+			ChangesetEntry::getChangesetCollectionId,
 			ChangesetEntry::getClassNameId, ChangesetEntry::getClassPK);
 
 		_uniquePersistenceFinderByC_C_C = new UniquePersistenceFinder<>(
@@ -1546,4 +1548,4 @@ public class ChangesetEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1749707602
+// LIFERAY-SERVICE-BUILDER-HASH:1494413662

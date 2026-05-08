@@ -1166,7 +1166,7 @@ public class CommercePriceListCommerceAccountGroupRelPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByCAGI_CPI",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"commercePriceListId", "commerceAccountGroupId"},
-			false,
+			new boolean[] {false, false}, false,
 			CommercePriceListCommerceAccountGroupRel::getCommercePriceListId,
 			CommercePriceListCommerceAccountGroupRel::
 				getCommerceAccountGroupId);
@@ -1264,4 +1264,4 @@ public class CommercePriceListCommerceAccountGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-905688604
+// LIFERAY-SERVICE-BUILDER-HASH:-1453674769

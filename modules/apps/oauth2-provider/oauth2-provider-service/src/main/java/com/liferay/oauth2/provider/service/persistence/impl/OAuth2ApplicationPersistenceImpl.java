@@ -2184,7 +2184,8 @@ public class OAuth2ApplicationPersistenceImpl
 		_finderPathFetchByC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "clientId"}, false,
+			new String[] {"companyId", "clientId"},
+			new boolean[] {false, false}, false,
 			OAuth2Application::getCompanyId,
 			convertNullFunction(OAuth2Application::getClientId));
 
@@ -2234,7 +2235,8 @@ public class OAuth2ApplicationPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(OAuth2Application::getExternalReferenceCode),
 			OAuth2Application::getCompanyId);
 
@@ -2341,4 +2343,4 @@ public class OAuth2ApplicationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1541747081
+// LIFERAY-SERVICE-BUILDER-HASH:1965666463

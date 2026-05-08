@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.model.LayoutSetPrototypeTable;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.impl.LayoutSetPrototypeImpl;
 import com.liferay.portal.model.impl.LayoutSetPrototypeModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -53,8 +56,7 @@ public class LayoutSetPrototypeModelArgumentsResolver
 		long columnBitmask = layoutSetPrototypeModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				layoutSetPrototypeModelImpl, columnNames, original);
+			return _getValue(layoutSetPrototypeModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,8 +75,7 @@ public class LayoutSetPrototypeModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				layoutSetPrototypeModelImpl, columnNames, original);
+			return _getValue(layoutSetPrototypeModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +93,34 @@ public class LayoutSetPrototypeModelArgumentsResolver
 
 	private static Object[] _getValue(
 		LayoutSetPrototypeModelImpl layoutSetPrototypeModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					layoutSetPrototypeModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = layoutSetPrototypeModelImpl.getColumnValue(
+				value = layoutSetPrototypeModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = layoutSetPrototypeModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +130,4 @@ public class LayoutSetPrototypeModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-960682546
+// LIFERAY-SERVICE-BUILDER-HASH:1615443188

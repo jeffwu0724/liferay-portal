@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryMetadataModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,7 +57,7 @@ public class DLFileEntryMetadataModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				dlFileEntryMetadataModelImpl, columnNames, original);
+				dlFileEntryMetadataModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,7 +77,7 @@ public class DLFileEntryMetadataModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				dlFileEntryMetadataModelImpl, columnNames, original);
+				dlFileEntryMetadataModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -92,22 +95,34 @@ public class DLFileEntryMetadataModelArgumentsResolver
 
 	private static Object[] _getValue(
 		DLFileEntryMetadataModelImpl dlFileEntryMetadataModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					dlFileEntryMetadataModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = dlFileEntryMetadataModelImpl.getColumnValue(
+				value = dlFileEntryMetadataModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = dlFileEntryMetadataModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -117,4 +132,4 @@ public class DLFileEntryMetadataModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1882278866
+// LIFERAY-SERVICE-BUILDER-HASH:-545682168

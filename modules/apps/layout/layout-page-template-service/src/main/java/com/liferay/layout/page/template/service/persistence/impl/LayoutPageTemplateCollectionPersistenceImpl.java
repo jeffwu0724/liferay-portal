@@ -3852,8 +3852,8 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(LayoutPageTemplateCollection::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutPageTemplateCollection::getUuid),
 			LayoutPageTemplateCollection::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -4062,7 +4062,8 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"groupId", "lptCollectionKey", "type_"}, false,
+			new String[] {"groupId", "lptCollectionKey", "type_"},
+			new boolean[] {false, false, false}, false,
 			LayoutPageTemplateCollection::getGroupId,
 			convertNullFunction(
 				LayoutPageTemplateCollection::
@@ -4177,7 +4178,8 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 				String.class.getName(), Integer.class.getName()
 			},
 			new String[] {"groupId", "parentLPTCollectionId", "name", "type_"},
-			false, LayoutPageTemplateCollection::getGroupId,
+			new boolean[] {false, false, false, false}, false,
+			LayoutPageTemplateCollection::getGroupId,
 			LayoutPageTemplateCollection::
 				getParentLayoutPageTemplateCollectionId,
 			convertNullFunction(LayoutPageTemplateCollection::getName),
@@ -4208,7 +4210,8 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				LayoutPageTemplateCollection::getExternalReferenceCode),
 			LayoutPageTemplateCollection::getGroupId);
@@ -4329,4 +4332,4 @@ public class LayoutPageTemplateCollectionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-479819951
+// LIFERAY-SERVICE-BUILDER-HASH:2043410601

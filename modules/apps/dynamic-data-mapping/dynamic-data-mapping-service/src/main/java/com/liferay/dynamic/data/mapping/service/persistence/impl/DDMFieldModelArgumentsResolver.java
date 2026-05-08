@@ -11,8 +11,11 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMFieldModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class DDMFieldModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = ddmFieldModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(ddmFieldModelImpl, columnNames, original);
+			return _getValue(ddmFieldModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -79,7 +82,7 @@ public class DDMFieldModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(ddmFieldModelImpl, columnNames, original);
+			return _getValue(ddmFieldModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,21 +99,34 @@ public class DDMFieldModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		DDMFieldModelImpl ddmFieldModelImpl, String[] columnNames,
+		DDMFieldModelImpl ddmFieldModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = ddmFieldModelImpl.getColumnOriginalValue(
-					columnName);
+				value = ddmFieldModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = ddmFieldModelImpl.getColumnValue(columnName);
+				value = ddmFieldModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -130,4 +146,4 @@ public class DDMFieldModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1102307368
+// LIFERAY-SERVICE-BUILDER-HASH:1698443682

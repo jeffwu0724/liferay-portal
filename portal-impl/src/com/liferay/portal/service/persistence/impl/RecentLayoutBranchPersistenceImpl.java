@@ -891,7 +891,8 @@ public class RecentLayoutBranchPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"userId", "layoutSetBranchId", "plid"}, false,
+			new String[] {"userId", "layoutSetBranchId", "plid"},
+			new boolean[] {false, false, false}, false,
 			RecentLayoutBranch::getUserId,
 			RecentLayoutBranch::getLayoutSetBranchId,
 			RecentLayoutBranch::getPlid);
@@ -943,4 +944,4 @@ public class RecentLayoutBranchPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-58393697
+// LIFERAY-SERVICE-BUILDER-HASH:-1613892767

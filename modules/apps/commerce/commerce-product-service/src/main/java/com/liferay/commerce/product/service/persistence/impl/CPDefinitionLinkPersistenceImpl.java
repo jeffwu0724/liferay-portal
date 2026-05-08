@@ -2641,8 +2641,8 @@ public class CPDefinitionLinkPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CPDefinitionLink::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CPDefinitionLink::getUuid),
 			CPDefinitionLink::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2940,7 +2940,8 @@ public class CPDefinitionLinkPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"CPDefinitionId", "CProductId", "type_"}, false,
+			new String[] {"CPDefinitionId", "CProductId", "type_"},
+			new boolean[] {false, false, false}, false,
 			CPDefinitionLink::getCPDefinitionId,
 			CPDefinitionLink::getCProductId,
 			convertNullFunction(CPDefinitionLink::getType));
@@ -3117,4 +3118,4 @@ public class CPDefinitionLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1814967055
+// LIFERAY-SERVICE-BUILDER-HASH:1288339058

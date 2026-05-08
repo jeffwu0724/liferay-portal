@@ -1597,8 +1597,8 @@ public class SegmentsExperimentPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(SegmentsExperiment::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(SegmentsExperiment::getUuid),
 			SegmentsExperiment::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1714,8 +1714,8 @@ public class SegmentsExperimentPersistenceImpl
 		_finderPathFetchByG_S = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_S",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "segmentsExperimentKey"}, false,
-			SegmentsExperiment::getGroupId,
+			new String[] {"groupId", "segmentsExperimentKey"},
+			new boolean[] {false, false}, false, SegmentsExperiment::getGroupId,
 			convertNullFunction(SegmentsExperiment::getSegmentsExperimentKey));
 
 		_uniquePersistenceFinderByG_S = new UniquePersistenceFinder<>(
@@ -1734,7 +1734,8 @@ public class SegmentsExperimentPersistenceImpl
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
-			new String[] {"groupId", "segmentsExperienceId", "plid"}, false,
+			new String[] {"groupId", "segmentsExperienceId", "plid"},
+			new boolean[] {false, false, false}, false,
 			SegmentsExperiment::getGroupId,
 			SegmentsExperiment::getSegmentsExperienceId,
 			SegmentsExperiment::getPlid);
@@ -1848,4 +1849,4 @@ public class SegmentsExperimentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-599607075
+// LIFERAY-SERVICE-BUILDER-HASH:-192068116

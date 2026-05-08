@@ -966,8 +966,9 @@ public class PLOEntryPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"companyId", "key_", "languageId"}, false,
-			PLOEntry::getCompanyId, convertNullFunction(PLOEntry::getKey),
+			new String[] {"companyId", "key_", "languageId"},
+			new boolean[] {false, false, false}, false, PLOEntry::getCompanyId,
+			convertNullFunction(PLOEntry::getKey),
 			convertNullFunction(PLOEntry::getLanguageId));
 
 		_uniquePersistenceFinderByC_K_L = new UniquePersistenceFinder<>(
@@ -1051,4 +1052,4 @@ public class PLOEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1290934514
+// LIFERAY-SERVICE-BUILDER-HASH:577067482

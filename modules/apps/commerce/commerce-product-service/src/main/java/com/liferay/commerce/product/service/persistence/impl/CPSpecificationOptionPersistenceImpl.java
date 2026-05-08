@@ -2365,8 +2365,8 @@ public class CPSpecificationOptionPersistenceImpl
 		_finderPathFetchByC_K = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"companyId", "key_"}, false,
-			CPSpecificationOption::getCompanyId,
+			new String[] {"companyId", "key_"}, new boolean[] {false, false},
+			false, CPSpecificationOption::getCompanyId,
 			convertNullFunction(CPSpecificationOption::getKey));
 
 		_uniquePersistenceFinderByC_K = new UniquePersistenceFinder<>(
@@ -2382,7 +2382,8 @@ public class CPSpecificationOptionPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				CPSpecificationOption::getExternalReferenceCode),
 			CPSpecificationOption::getCompanyId);
@@ -2494,4 +2495,4 @@ public class CPSpecificationOptionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1596025095
+// LIFERAY-SERVICE-BUILDER-HASH:-350295478

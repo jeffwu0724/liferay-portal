@@ -2330,7 +2330,8 @@ public class PortletPreferencesPersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName(), String.class.getName()
 			},
-			new String[] {"ownerId", "ownerType", "plid", "portletId"}, false,
+			new String[] {"ownerId", "ownerType", "plid", "portletId"},
+			new boolean[] {false, false, false, false}, false,
 			PortletPreferences::getOwnerId, PortletPreferences::getOwnerType,
 			PortletPreferences::getPlid,
 			convertNullFunction(PortletPreferences::getPortletId));
@@ -2384,4 +2385,4 @@ public class PortletPreferencesPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:74277168
+// LIFERAY-SERVICE-BUILDER-HASH:-512230202

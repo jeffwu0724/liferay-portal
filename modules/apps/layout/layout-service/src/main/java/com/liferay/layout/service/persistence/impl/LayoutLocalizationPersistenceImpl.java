@@ -1202,8 +1202,8 @@ public class LayoutLocalizationPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(LayoutLocalization::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutLocalization::getUuid),
 			LayoutLocalization::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1279,8 +1279,8 @@ public class LayoutLocalizationPersistenceImpl
 		_finderPathFetchByL_P = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByL_P",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"languageId", "plid"}, false,
-			convertNullFunction(LayoutLocalization::getLanguageId),
+			new String[] {"languageId", "plid"}, new boolean[] {false, false},
+			false, convertNullFunction(LayoutLocalization::getLanguageId),
 			LayoutLocalization::getPlid);
 
 		_uniquePersistenceFinderByL_P = new UniquePersistenceFinder<>(
@@ -1299,7 +1299,8 @@ public class LayoutLocalizationPersistenceImpl
 				Long.class.getName(), String.class.getName(),
 				Long.class.getName()
 			},
-			new String[] {"groupId", "languageId", "plid"}, false,
+			new String[] {"groupId", "languageId", "plid"},
+			new boolean[] {false, false, false}, false,
 			LayoutLocalization::getGroupId,
 			convertNullFunction(LayoutLocalization::getLanguageId),
 			LayoutLocalization::getPlid);
@@ -1389,4 +1390,4 @@ public class LayoutLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1534347639
+// LIFERAY-SERVICE-BUILDER-HASH:1093921686

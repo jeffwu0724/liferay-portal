@@ -11,8 +11,11 @@ import com.liferay.dynamic.data.lists.model.impl.DDLRecordSetModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class DDLRecordSetModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = ddlRecordSetModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(ddlRecordSetModelImpl, columnNames, original);
+			return _getValue(ddlRecordSetModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class DDLRecordSetModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(ddlRecordSetModelImpl, columnNames, original);
+			return _getValue(ddlRecordSetModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,21 +92,35 @@ public class DDLRecordSetModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		DDLRecordSetModelImpl ddlRecordSetModelImpl, String[] columnNames,
+		DDLRecordSetModelImpl ddlRecordSetModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = ddlRecordSetModelImpl.getColumnOriginalValue(
+				value = ddlRecordSetModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = ddlRecordSetModelImpl.getColumnValue(columnName);
+				value = ddlRecordSetModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -113,4 +130,4 @@ public class DDLRecordSetModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1134538167
+// LIFERAY-SERVICE-BUILDER-HASH:-942295387

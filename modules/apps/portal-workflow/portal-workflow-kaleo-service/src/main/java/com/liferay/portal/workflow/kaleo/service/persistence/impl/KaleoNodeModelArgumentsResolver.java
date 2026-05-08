@@ -8,11 +8,14 @@ package com.liferay.portal.workflow.kaleo.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoNodeTable;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoNodeModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class KaleoNodeModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = kaleoNodeModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(kaleoNodeModelImpl, columnNames, original);
+			return _getValue(kaleoNodeModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -79,7 +82,7 @@ public class KaleoNodeModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(kaleoNodeModelImpl, columnNames, original);
+			return _getValue(kaleoNodeModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -96,21 +99,34 @@ public class KaleoNodeModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		KaleoNodeModelImpl kaleoNodeModelImpl, String[] columnNames,
+		KaleoNodeModelImpl kaleoNodeModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = kaleoNodeModelImpl.getColumnOriginalValue(
-					columnName);
+				value = kaleoNodeModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = kaleoNodeModelImpl.getColumnValue(columnName);
+				value = kaleoNodeModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -128,4 +144,4 @@ public class KaleoNodeModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:156402876
+// LIFERAY-SERVICE-BUILDER-HASH:-1628724380

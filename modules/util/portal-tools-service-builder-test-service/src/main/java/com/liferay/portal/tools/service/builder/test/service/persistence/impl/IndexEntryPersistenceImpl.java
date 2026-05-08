@@ -2450,7 +2450,8 @@ public class IndexEntryPersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				Long.class.getName(), String.class.getName()
 			},
-			new String[] {"ownerId", "ownerType", "plid", "portletId"}, false,
+			new String[] {"ownerId", "ownerType", "plid", "portletId"},
+			new boolean[] {false, false, false, false}, false,
 			IndexEntry::getOwnerId, IndexEntry::getOwnerType,
 			IndexEntry::getPlid, convertNullFunction(IndexEntry::getPortletId));
 
@@ -2472,7 +2473,8 @@ public class IndexEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(IndexEntry::getExternalReferenceCode),
 			IndexEntry::getCompanyId);
 
@@ -2528,4 +2530,4 @@ public class IndexEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:384497914
+// LIFERAY-SERVICE-BUILDER-HASH:572808262

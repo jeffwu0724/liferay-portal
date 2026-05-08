@@ -1227,7 +1227,8 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 		_finderPathFetchByG_P = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_P",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "paymentIntegrationKey"}, false,
+			new String[] {"groupId", "paymentIntegrationKey"},
+			new boolean[] {false, false}, false,
 			CommercePaymentMethodGroupRel::getGroupId,
 			convertNullFunction(
 				CommercePaymentMethodGroupRel::getPaymentIntegrationKey));
@@ -1343,4 +1344,4 @@ public class CommercePaymentMethodGroupRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1595822406
+// LIFERAY-SERVICE-BUILDER-HASH:-901659749

@@ -663,7 +663,8 @@ public class JournalArticleLocalizationPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"companyId", "articlePK", "languageId"}, false,
+			new String[] {"companyId", "articlePK", "languageId"},
+			new boolean[] {false, false, false}, false,
 			JournalArticleLocalization::getCompanyId,
 			JournalArticleLocalization::getArticlePK,
 			convertNullFunction(JournalArticleLocalization::getLanguageId));
@@ -753,4 +754,4 @@ public class JournalArticleLocalizationPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1699739551
+// LIFERAY-SERVICE-BUILDER-HASH:2075294412

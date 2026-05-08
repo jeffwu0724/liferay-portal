@@ -1121,8 +1121,8 @@ public class OpenIdConnectSessionPersistenceImpl
 		_finderPathFetchByU_I = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByU_I",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"userId", "issuer"}, false,
-			OpenIdConnectSession::getUserId,
+			new String[] {"userId", "issuer"}, new boolean[] {false, false},
+			false, OpenIdConnectSession::getUserId,
 			convertNullFunction(OpenIdConnectSession::getIssuer));
 
 		_uniquePersistenceFinderByU_I = new UniquePersistenceFinder<>(
@@ -1138,8 +1138,8 @@ public class OpenIdConnectSessionPersistenceImpl
 		_finderPathFetchByI_S = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByI_S",
 			new String[] {String.class.getName(), String.class.getName()},
-			new String[] {"issuer", "sessionId"}, false,
-			convertNullFunction(OpenIdConnectSession::getIssuer),
+			new String[] {"issuer", "sessionId"}, new boolean[] {false, false},
+			false, convertNullFunction(OpenIdConnectSession::getIssuer),
 			convertNullFunction(OpenIdConnectSession::getSessionId));
 
 		_uniquePersistenceFinderByI_S = new UniquePersistenceFinder<>(
@@ -1205,7 +1205,8 @@ public class OpenIdConnectSessionPersistenceImpl
 				String.class.getName()
 			},
 			new String[] {"userId", "authServerWellKnownURI", "clientId"},
-			false, OpenIdConnectSession::getUserId,
+			new boolean[] {false, false, false}, false,
+			OpenIdConnectSession::getUserId,
 			convertNullFunction(
 				OpenIdConnectSession::getAuthServerWellKnownURI),
 			convertNullFunction(OpenIdConnectSession::getClientId));
@@ -1290,4 +1291,4 @@ public class OpenIdConnectSessionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1667374211
+// LIFERAY-SERVICE-BUILDER-HASH:1932058656

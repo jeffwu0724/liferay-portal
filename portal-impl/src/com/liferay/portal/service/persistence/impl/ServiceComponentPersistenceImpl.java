@@ -536,7 +536,8 @@ public class ServiceComponentPersistenceImpl
 		_finderPathFetchByBNS_BNU = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByBNS_BNU",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"buildNamespace", "buildNumber"}, false,
+			new String[] {"buildNamespace", "buildNumber"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(ServiceComponent::getBuildNamespace),
 			ServiceComponent::getBuildNumber);
 
@@ -586,4 +587,4 @@ public class ServiceComponentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1209136553
+// LIFERAY-SERVICE-BUILDER-HASH:-2138949023

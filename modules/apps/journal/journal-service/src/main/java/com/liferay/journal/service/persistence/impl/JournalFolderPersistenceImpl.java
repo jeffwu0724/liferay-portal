@@ -3336,8 +3336,8 @@ public class JournalFolderPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(JournalFolder::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(JournalFolder::getUuid),
 			JournalFolder::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -3474,7 +3474,8 @@ public class JournalFolderPersistenceImpl
 		_finderPathFetchByG_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"groupId", "name"}, false, JournalFolder::getGroupId,
+			new String[] {"groupId", "name"}, new boolean[] {false, false},
+			false, JournalFolder::getGroupId,
 			convertNullFunction(JournalFolder::getName));
 
 		_uniquePersistenceFinderByG_N = new UniquePersistenceFinder<>(
@@ -3519,7 +3520,8 @@ public class JournalFolderPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "parentFolderId", "name"}, false,
+			new String[] {"groupId", "parentFolderId", "name"},
+			new boolean[] {false, false, false}, false,
 			JournalFolder::getGroupId, JournalFolder::getParentFolderId,
 			convertNullFunction(JournalFolder::getName));
 
@@ -3650,7 +3652,8 @@ public class JournalFolderPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(JournalFolder::getExternalReferenceCode),
 			JournalFolder::getGroupId);
 
@@ -3759,4 +3762,4 @@ public class JournalFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:879088304
+// LIFERAY-SERVICE-BUILDER-HASH:-1178711673

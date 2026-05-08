@@ -11,8 +11,11 @@ import com.liferay.message.boards.model.impl.MBBanModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class MBBanModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = mbBanModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(mbBanModelImpl, columnNames, original);
+			return _getValue(mbBanModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class MBBanModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(mbBanModelImpl, columnNames, original);
+			return _getValue(mbBanModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,20 +91,34 @@ public class MBBanModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		MBBanModelImpl mbBanModelImpl, String[] columnNames, boolean original) {
+		MBBanModelImpl mbBanModelImpl, FinderPath finderPath,
+		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = mbBanModelImpl.getColumnOriginalValue(
-					columnName);
+				value = mbBanModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = mbBanModelImpl.getColumnValue(columnName);
+				value = mbBanModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -111,4 +128,4 @@ public class MBBanModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:316542863
+// LIFERAY-SERVICE-BUILDER-HASH:-1750793541

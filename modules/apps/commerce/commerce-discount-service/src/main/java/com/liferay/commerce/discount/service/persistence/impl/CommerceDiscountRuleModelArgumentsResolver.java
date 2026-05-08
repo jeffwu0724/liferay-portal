@@ -11,8 +11,11 @@ import com.liferay.commerce.discount.model.impl.CommerceDiscountRuleModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class CommerceDiscountRuleModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				commerceDiscountRuleModelImpl, columnNames, original);
+				commerceDiscountRuleModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -83,7 +86,7 @@ public class CommerceDiscountRuleModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				commerceDiscountRuleModelImpl, columnNames, original);
+				commerceDiscountRuleModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -101,22 +104,35 @@ public class CommerceDiscountRuleModelArgumentsResolver
 
 	private static Object[] _getValue(
 		CommerceDiscountRuleModelImpl commerceDiscountRuleModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					commerceDiscountRuleModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = commerceDiscountRuleModelImpl.getColumnValue(
+				value = commerceDiscountRuleModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = commerceDiscountRuleModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -137,4 +153,4 @@ public class CommerceDiscountRuleModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-75377110
+// LIFERAY-SERVICE-BUILDER-HASH:-1659609206

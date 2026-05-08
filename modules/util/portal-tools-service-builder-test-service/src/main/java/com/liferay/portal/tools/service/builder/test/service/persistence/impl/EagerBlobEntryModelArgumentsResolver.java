@@ -9,10 +9,12 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.tools.service.builder.test.model.EagerBlobEntryTable;
 import com.liferay.portal.tools.service.builder.test.model.impl.EagerBlobEntryImpl;
 import com.liferay.portal.tools.service.builder.test.model.impl.EagerBlobEntryModelImpl;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -51,7 +53,7 @@ public class EagerBlobEntryModelArgumentsResolver implements ArgumentsResolver {
 		if (!checkColumn ||
 			_hasModifiedColumns(eagerBlobEntryModelImpl, columnNames)) {
 
-			return _getValue(eagerBlobEntryModelImpl, columnNames, original);
+			return _getValue(eagerBlobEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -68,22 +70,35 @@ public class EagerBlobEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		EagerBlobEntryModelImpl eagerBlobEntryModelImpl, String[] columnNames,
+		EagerBlobEntryModelImpl eagerBlobEntryModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = eagerBlobEntryModelImpl.getColumnOriginalValue(
+				value = eagerBlobEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = eagerBlobEntryModelImpl.getColumnValue(
-					columnName);
+				value = eagerBlobEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -109,4 +124,4 @@ public class EagerBlobEntryModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-874121007
+// LIFERAY-SERVICE-BUILDER-HASH:1487084148

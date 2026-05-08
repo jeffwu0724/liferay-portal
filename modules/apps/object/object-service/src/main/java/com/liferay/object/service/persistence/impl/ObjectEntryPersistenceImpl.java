@@ -2466,8 +2466,9 @@ public class ObjectEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(ObjectEntry::getUuid), ObjectEntry::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(ObjectEntry::getUuid),
+			ObjectEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_OBJECTENTRY_WHERE, "",
@@ -2514,7 +2515,7 @@ public class ObjectEntryPersistenceImpl
 		_finderPathFetchByHeadObjectEntryId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByHeadObjectEntryId",
 			new String[] {Long.class.getName()},
-			new String[] {"headObjectEntryId"}, false,
+			new String[] {"headObjectEntryId"}, new boolean[] {false}, false,
 			ObjectEntry::getHeadObjectEntryId);
 
 		_uniquePersistenceFinderByHeadObjectEntryId =
@@ -2844,7 +2845,8 @@ public class ObjectEntryPersistenceImpl
 				"externalReferenceCode", "groupId", "companyId",
 				"objectDefinitionId"
 			},
-			false, convertNullFunction(ObjectEntry::getExternalReferenceCode),
+			new boolean[] {false, false, false, false}, false,
+			convertNullFunction(ObjectEntry::getExternalReferenceCode),
 			ObjectEntry::getGroupId, ObjectEntry::getCompanyId,
 			ObjectEntry::getObjectDefinitionId);
 
@@ -2934,4 +2936,4 @@ public class ObjectEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-68040947
+// LIFERAY-SERVICE-BUILDER-HASH:746148184

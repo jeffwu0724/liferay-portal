@@ -1112,7 +1112,8 @@ public class CommercePriceListDiscountRelPersistenceImpl
 		_finderPathFetchByCDI_CPI = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByCDI_CPI",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"commerceDiscountId", "commercePriceListId"}, false,
+			new String[] {"commerceDiscountId", "commercePriceListId"},
+			new boolean[] {false, false}, false,
 			CommercePriceListDiscountRel::getCommerceDiscountId,
 			CommercePriceListDiscountRel::getCommercePriceListId);
 
@@ -1201,4 +1202,4 @@ public class CommercePriceListDiscountRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1912417715
+// LIFERAY-SERVICE-BUILDER-HASH:1008410822

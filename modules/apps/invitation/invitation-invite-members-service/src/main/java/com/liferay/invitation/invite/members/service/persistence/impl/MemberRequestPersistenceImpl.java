@@ -785,7 +785,8 @@ public class MemberRequestPersistenceImpl
 	public void activate() {
 		_finderPathFetchByKey = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
-			new String[] {String.class.getName()}, new String[] {"key_"}, false,
+			new String[] {String.class.getName()}, new String[] {"key_"},
+			new boolean[] {false}, false,
 			convertNullFunction(MemberRequest::getKey));
 
 		_uniquePersistenceFinderByKey = new UniquePersistenceFinder<>(
@@ -860,7 +861,8 @@ public class MemberRequestPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			},
-			new String[] {"groupId", "receiverUserId", "status"}, false,
+			new String[] {"groupId", "receiverUserId", "status"},
+			new boolean[] {false, false, false}, false,
 			MemberRequest::getGroupId, MemberRequest::getReceiverUserId,
 			MemberRequest::getStatus);
 
@@ -945,4 +947,4 @@ public class MemberRequestPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1520849632
+// LIFERAY-SERVICE-BUILDER-HASH:158234739

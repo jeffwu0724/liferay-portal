@@ -11,8 +11,11 @@ import com.liferay.list.type.model.impl.ListTypeDefinitionModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,8 +57,7 @@ public class ListTypeDefinitionModelArgumentsResolver
 		long columnBitmask = listTypeDefinitionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				listTypeDefinitionModelImpl, columnNames, original);
+			return _getValue(listTypeDefinitionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,8 +76,7 @@ public class ListTypeDefinitionModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				listTypeDefinitionModelImpl, columnNames, original);
+			return _getValue(listTypeDefinitionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +94,34 @@ public class ListTypeDefinitionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		ListTypeDefinitionModelImpl listTypeDefinitionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					listTypeDefinitionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = listTypeDefinitionModelImpl.getColumnValue(
+				value = listTypeDefinitionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = listTypeDefinitionModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +131,4 @@ public class ListTypeDefinitionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1844998430
+// LIFERAY-SERVICE-BUILDER-HASH:1627285528

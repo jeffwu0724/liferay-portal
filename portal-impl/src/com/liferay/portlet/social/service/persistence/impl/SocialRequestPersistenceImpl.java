@@ -2344,8 +2344,8 @@ public class SocialRequestPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(SocialRequest::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(SocialRequest::getUuid),
 			SocialRequest::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -2579,7 +2579,8 @@ public class SocialRequestPersistenceImpl
 			new String[] {
 				"userId", "classNameId", "classPK", "type_", "receiverUserId"
 			},
-			false, SocialRequest::getUserId, SocialRequest::getClassNameId,
+			new boolean[] {false, false, false, false, false}, false,
+			SocialRequest::getUserId, SocialRequest::getClassNameId,
 			SocialRequest::getClassPK, SocialRequest::getType,
 			SocialRequest::getReceiverUserId);
 
@@ -2758,4 +2759,4 @@ public class SocialRequestPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-887813297
+// LIFERAY-SERVICE-BUILDER-HASH:575172563

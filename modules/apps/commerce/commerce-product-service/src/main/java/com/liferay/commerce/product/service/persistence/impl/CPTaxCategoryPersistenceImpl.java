@@ -1805,7 +1805,8 @@ public class CPTaxCategoryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CPTaxCategory::getExternalReferenceCode),
 			CPTaxCategory::getCompanyId);
 
@@ -1914,4 +1915,4 @@ public class CPTaxCategoryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1960388202
+// LIFERAY-SERVICE-BUILDER-HASH:-1669718085

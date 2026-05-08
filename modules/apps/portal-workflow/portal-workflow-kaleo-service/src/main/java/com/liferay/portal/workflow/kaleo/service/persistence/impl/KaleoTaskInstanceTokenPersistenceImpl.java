@@ -1627,7 +1627,8 @@ public class KaleoTaskInstanceTokenPersistenceImpl
 		_finderPathFetchByKII_KTI = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKII_KTI",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"kaleoInstanceId", "kaleoTaskId"}, false,
+			new String[] {"kaleoInstanceId", "kaleoTaskId"},
+			new boolean[] {false, false}, false,
 			KaleoTaskInstanceToken::getKaleoInstanceId,
 			KaleoTaskInstanceToken::getKaleoTaskId);
 
@@ -1792,4 +1793,4 @@ public class KaleoTaskInstanceTokenPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1005949869
+// LIFERAY-SERVICE-BUILDER-HASH:932664691

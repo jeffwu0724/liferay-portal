@@ -1104,7 +1104,8 @@ public class DLContentPersistenceImpl
 				String.class.getName(), String.class.getName()
 			},
 			new String[] {"companyId", "repositoryId", "path_", "version"},
-			false, DLContent::getCompanyId, DLContent::getRepositoryId,
+			new boolean[] {false, false, false, false}, false,
+			DLContent::getCompanyId, DLContent::getRepositoryId,
 			convertNullFunction(DLContent::getPath),
 			convertNullFunction(DLContent::getVersion));
 
@@ -1195,4 +1196,4 @@ public class DLContentPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1527239183
+// LIFERAY-SERVICE-BUILDER-HASH:-392728073

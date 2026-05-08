@@ -11,8 +11,11 @@ import com.liferay.dispatch.model.impl.DispatchLogModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class DispatchLogModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = dispatchLogModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(dispatchLogModelImpl, columnNames, original);
+			return _getValue(dispatchLogModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -80,7 +83,7 @@ public class DispatchLogModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(dispatchLogModelImpl, columnNames, original);
+			return _getValue(dispatchLogModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -97,21 +100,34 @@ public class DispatchLogModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		DispatchLogModelImpl dispatchLogModelImpl, String[] columnNames,
+		DispatchLogModelImpl dispatchLogModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = dispatchLogModelImpl.getColumnOriginalValue(
-					columnName);
+				value = dispatchLogModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = dispatchLogModelImpl.getColumnValue(columnName);
+				value = dispatchLogModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -132,4 +148,4 @@ public class DispatchLogModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-560814435
+// LIFERAY-SERVICE-BUILDER-HASH:-348388267

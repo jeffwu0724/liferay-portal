@@ -8,11 +8,14 @@ package com.liferay.style.book.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.style.book.model.StyleBookEntryVersionTable;
 import com.liferay.style.book.model.impl.StyleBookEntryVersionImpl;
 import com.liferay.style.book.model.impl.StyleBookEntryVersionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class StyleBookEntryVersionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				styleBookEntryVersionModelImpl, columnNames, original);
+				styleBookEntryVersionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -83,7 +86,7 @@ public class StyleBookEntryVersionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				styleBookEntryVersionModelImpl, columnNames, original);
+				styleBookEntryVersionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -101,22 +104,35 @@ public class StyleBookEntryVersionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		StyleBookEntryVersionModelImpl styleBookEntryVersionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					styleBookEntryVersionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = styleBookEntryVersionModelImpl.getColumnValue(
+				value = styleBookEntryVersionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = styleBookEntryVersionModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -137,4 +153,4 @@ public class StyleBookEntryVersionModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1775890255
+// LIFERAY-SERVICE-BUILDER-HASH:-1417636963

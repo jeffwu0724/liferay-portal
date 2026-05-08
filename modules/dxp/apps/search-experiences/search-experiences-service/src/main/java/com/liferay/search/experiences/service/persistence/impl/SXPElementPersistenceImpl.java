@@ -2928,7 +2928,8 @@ public class SXPElementPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(SXPElement::getExternalReferenceCode),
 			SXPElement::getCompanyId);
 
@@ -3034,4 +3035,4 @@ public class SXPElementPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1432819158
+// LIFERAY-SERVICE-BUILDER-HASH:364350565

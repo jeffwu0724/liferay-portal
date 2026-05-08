@@ -1153,8 +1153,8 @@ public class KaleoTransitionPersistenceImpl
 		_finderPathFetchByKNI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKNI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"kaleoNodeId", "name"}, false,
-			KaleoTransition::getKaleoNodeId,
+			new String[] {"kaleoNodeId", "name"}, new boolean[] {false, false},
+			false, KaleoTransition::getKaleoNodeId,
 			convertNullFunction(KaleoTransition::getName));
 
 		_uniquePersistenceFinderByKNI_N = new UniquePersistenceFinder<>(
@@ -1170,7 +1170,8 @@ public class KaleoTransitionPersistenceImpl
 		_finderPathFetchByKNI_DT = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByKNI_DT",
 			new String[] {Long.class.getName(), Boolean.class.getName()},
-			new String[] {"kaleoNodeId", "defaultTransition"}, false,
+			new String[] {"kaleoNodeId", "defaultTransition"},
+			new boolean[] {false, false}, false,
 			KaleoTransition::getKaleoNodeId,
 			KaleoTransition::isDefaultTransition);
 
@@ -1254,4 +1255,4 @@ public class KaleoTransitionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1653095886
+// LIFERAY-SERVICE-BUILDER-HASH:326457944

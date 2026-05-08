@@ -11,8 +11,11 @@ import com.liferay.marketplace.model.impl.AppModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +55,7 @@ public class AppModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = appModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(appModelImpl, columnNames, original);
+			return _getValue(appModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -71,7 +74,7 @@ public class AppModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(appModelImpl, columnNames, original);
+			return _getValue(appModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -88,19 +91,33 @@ public class AppModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		AppModelImpl appModelImpl, String[] columnNames, boolean original) {
+		AppModelImpl appModelImpl, FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = appModelImpl.getColumnOriginalValue(columnName);
+				value = appModelImpl.getColumnOriginalValue(columnName);
 			}
 			else {
-				arguments[i] = appModelImpl.getColumnValue(columnName);
+				value = appModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -110,4 +127,4 @@ public class AppModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-426543253
+// LIFERAY-SERVICE-BUILDER-HASH:-1692284681

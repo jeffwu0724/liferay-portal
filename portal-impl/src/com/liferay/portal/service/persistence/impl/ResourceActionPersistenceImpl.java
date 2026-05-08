@@ -500,8 +500,8 @@ public class ResourceActionPersistenceImpl
 		_finderPathFetchByN_A = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByN_A",
 			new String[] {String.class.getName(), String.class.getName()},
-			new String[] {"name", "actionId"}, false,
-			convertNullFunction(ResourceAction::getName),
+			new String[] {"name", "actionId"}, new boolean[] {false, false},
+			false, convertNullFunction(ResourceAction::getName),
 			convertNullFunction(ResourceAction::getActionId));
 
 		_uniquePersistenceFinderByN_A = new UniquePersistenceFinder<>(
@@ -546,4 +546,4 @@ public class ResourceActionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1876869238
+// LIFERAY-SERVICE-BUILDER-HASH:1157187470

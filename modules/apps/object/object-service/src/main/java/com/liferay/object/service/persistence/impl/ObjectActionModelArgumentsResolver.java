@@ -11,8 +11,11 @@ import com.liferay.object.model.impl.ObjectActionModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -53,7 +56,7 @@ public class ObjectActionModelArgumentsResolver implements ArgumentsResolver {
 		long columnBitmask = objectActionModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(objectActionModelImpl, columnNames, original);
+			return _getValue(objectActionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -72,7 +75,7 @@ public class ObjectActionModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(objectActionModelImpl, columnNames, original);
+			return _getValue(objectActionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -89,21 +92,35 @@ public class ObjectActionModelArgumentsResolver implements ArgumentsResolver {
 	}
 
 	private static Object[] _getValue(
-		ObjectActionModelImpl objectActionModelImpl, String[] columnNames,
+		ObjectActionModelImpl objectActionModelImpl, FinderPath finderPath,
 		boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = objectActionModelImpl.getColumnOriginalValue(
+				value = objectActionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = objectActionModelImpl.getColumnValue(columnName);
+				value = objectActionModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -113,4 +130,4 @@ public class ObjectActionModelArgumentsResolver implements ArgumentsResolver {
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-661246883
+// LIFERAY-SERVICE-BUILDER-HASH:101173237

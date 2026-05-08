@@ -708,8 +708,8 @@ public class CTPreferencesPersistenceImpl
 		_finderPathFetchByC_U = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByC_U",
 			new String[] {Long.class.getName(), Long.class.getName()},
-			new String[] {"companyId", "userId"}, false,
-			CTPreferences::getCompanyId, CTPreferences::getUserId);
+			new String[] {"companyId", "userId"}, new boolean[] {false, false},
+			false, CTPreferences::getCompanyId, CTPreferences::getUserId);
 
 		_uniquePersistenceFinderByC_U = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByC_U, _SQL_SELECT_CTPREFERENCES_WHERE, "",
@@ -786,4 +786,4 @@ public class CTPreferencesPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-563559136
+// LIFERAY-SERVICE-BUILDER-HASH:-1694204728

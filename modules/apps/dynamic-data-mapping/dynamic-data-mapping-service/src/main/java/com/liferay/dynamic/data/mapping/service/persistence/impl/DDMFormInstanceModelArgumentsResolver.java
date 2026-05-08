@@ -11,8 +11,11 @@ import com.liferay.dynamic.data.mapping.model.impl.DDMFormInstanceModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class DDMFormInstanceModelArgumentsResolver
 		long columnBitmask = ddmFormInstanceModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(ddmFormInstanceModelImpl, columnNames, original);
+			return _getValue(ddmFormInstanceModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +76,7 @@ public class DDMFormInstanceModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(ddmFormInstanceModelImpl, columnNames, original);
+			return _getValue(ddmFormInstanceModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -90,22 +93,35 @@ public class DDMFormInstanceModelArgumentsResolver
 	}
 
 	private static Object[] _getValue(
-		DDMFormInstanceModelImpl ddmFormInstanceModelImpl, String[] columnNames,
-		boolean original) {
+		DDMFormInstanceModelImpl ddmFormInstanceModelImpl,
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = ddmFormInstanceModelImpl.getColumnOriginalValue(
+				value = ddmFormInstanceModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = ddmFormInstanceModelImpl.getColumnValue(
-					columnName);
+				value = ddmFormInstanceModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -115,4 +131,4 @@ public class DDMFormInstanceModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-42424276
+// LIFERAY-SERVICE-BUILDER-HASH:-709032524

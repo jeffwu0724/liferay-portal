@@ -987,7 +987,8 @@ public class OAuth2ScopeGrantPersistenceImpl
 				"companyId", "oA2AScopeAliasesId", "applicationName",
 				"bundleSymbolicName", "scope"
 			},
-			false, OAuth2ScopeGrant::getCompanyId,
+			new boolean[] {false, false, false, false, false}, false,
+			OAuth2ScopeGrant::getCompanyId,
 			OAuth2ScopeGrant::getOAuth2ApplicationScopeAliasesId,
 			convertNullFunction(OAuth2ScopeGrant::getApplicationName),
 			convertNullFunction(OAuth2ScopeGrant::getBundleSymbolicName),
@@ -1090,4 +1091,4 @@ public class OAuth2ScopeGrantPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-281598916
+// LIFERAY-SERVICE-BUILDER-HASH:-884719362

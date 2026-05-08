@@ -8,11 +8,14 @@ package com.liferay.site.navigation.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.site.navigation.model.SiteNavigationMenuTable;
 import com.liferay.site.navigation.model.impl.SiteNavigationMenuImpl;
 import com.liferay.site.navigation.model.impl.SiteNavigationMenuModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,8 +57,7 @@ public class SiteNavigationMenuModelArgumentsResolver
 		long columnBitmask = siteNavigationMenuModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(
-				siteNavigationMenuModelImpl, columnNames, original);
+			return _getValue(siteNavigationMenuModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -74,8 +76,7 @@ public class SiteNavigationMenuModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(
-				siteNavigationMenuModelImpl, columnNames, original);
+			return _getValue(siteNavigationMenuModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -93,22 +94,34 @@ public class SiteNavigationMenuModelArgumentsResolver
 
 	private static Object[] _getValue(
 		SiteNavigationMenuModelImpl siteNavigationMenuModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					siteNavigationMenuModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = siteNavigationMenuModelImpl.getColumnValue(
+				value = siteNavigationMenuModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = siteNavigationMenuModelImpl.getColumnValue(columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -118,4 +131,4 @@ public class SiteNavigationMenuModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-313328846
+// LIFERAY-SERVICE-BUILDER-HASH:-831429642

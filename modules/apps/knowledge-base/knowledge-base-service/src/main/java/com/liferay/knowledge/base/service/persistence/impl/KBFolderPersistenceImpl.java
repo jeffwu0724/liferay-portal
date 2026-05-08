@@ -2162,8 +2162,9 @@ public class KBFolderPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(KBFolder::getUuid), KBFolder::getGroupId);
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(KBFolder::getUuid),
+			KBFolder::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByUUID_G, _SQL_SELECT_KBFOLDER_WHERE, "",
@@ -2273,8 +2274,9 @@ public class KBFolderPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "parentKBFolderId", "name"}, false,
-			KBFolder::getGroupId, KBFolder::getParentKBFolderId,
+			new String[] {"groupId", "parentKBFolderId", "name"},
+			new boolean[] {false, false, false}, false, KBFolder::getGroupId,
+			KBFolder::getParentKBFolderId,
 			convertNullFunction(KBFolder::getName));
 
 		_uniquePersistenceFinderByG_P_N = new UniquePersistenceFinder<>(
@@ -2295,8 +2297,9 @@ public class KBFolderPersistenceImpl
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName()
 			},
-			new String[] {"groupId", "parentKBFolderId", "urlTitle"}, false,
-			KBFolder::getGroupId, KBFolder::getParentKBFolderId,
+			new String[] {"groupId", "parentKBFolderId", "urlTitle"},
+			new boolean[] {false, false, false}, false, KBFolder::getGroupId,
+			KBFolder::getParentKBFolderId,
 			convertNullFunction(KBFolder::getUrlTitle));
 
 		_uniquePersistenceFinderByG_P_UT = new UniquePersistenceFinder<>(
@@ -2354,7 +2357,8 @@ public class KBFolderPersistenceImpl
 		_finderPathFetchByERC_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "groupId"}, false,
+			new String[] {"externalReferenceCode", "groupId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(KBFolder::getExternalReferenceCode),
 			KBFolder::getGroupId);
 
@@ -2462,4 +2466,4 @@ public class KBFolderPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-623517405
+// LIFERAY-SERVICE-BUILDER-HASH:921717885

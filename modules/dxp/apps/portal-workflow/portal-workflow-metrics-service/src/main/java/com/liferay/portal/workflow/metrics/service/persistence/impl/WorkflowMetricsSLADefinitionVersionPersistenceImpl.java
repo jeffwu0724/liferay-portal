@@ -1068,7 +1068,8 @@ public class WorkflowMetricsSLADefinitionVersionPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false,
 			convertNullFunction(WorkflowMetricsSLADefinitionVersion::getUuid),
 			WorkflowMetricsSLADefinitionVersion::getGroupId);
 
@@ -1164,7 +1165,8 @@ public class WorkflowMetricsSLADefinitionVersionPersistenceImpl
 		_finderPathFetchByV_WMSLAD = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByV_WMSLAD",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"version", "wmSLADefinitionId"}, false,
+			new String[] {"version", "wmSLADefinitionId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(
 				WorkflowMetricsSLADefinitionVersion::getVersion),
 			WorkflowMetricsSLADefinitionVersion::
@@ -1260,4 +1262,4 @@ public class WorkflowMetricsSLADefinitionVersionPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:294810049
+// LIFERAY-SERVICE-BUILDER-HASH:2027021938

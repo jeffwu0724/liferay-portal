@@ -1646,7 +1646,7 @@ public class DDMStorageLinkPersistenceImpl
 		_finderPathFetchByClassPK = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByClassPK",
 			new String[] {Long.class.getName()}, new String[] {"classPK"},
-			false, DDMStorageLink::getClassPK);
+			new boolean[] {false}, false, DDMStorageLink::getClassPK);
 
 		_uniquePersistenceFinderByClassPK = new UniquePersistenceFinder<>(
 			this, _finderPathFetchByClassPK, _SQL_SELECT_DDMSTORAGELINK_WHERE,
@@ -1698,8 +1698,8 @@ public class DDMStorageLinkPersistenceImpl
 			new String[] {"structureVersionId"}, true);
 
 		_finderPathCountByStructureVersionId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByStructureVersionId", new String[] {Long.class.getName()},
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByStructureVersionId",
+			new String[] {Long.class.getName()},
 			new String[] {"structureVersionId"}, false);
 
 		_finderPathWithPaginationCountByStructureVersionId = new FinderPath(
@@ -1779,4 +1779,4 @@ public class DDMStorageLinkPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1686212389
+// LIFERAY-SERVICE-BUILDER-HASH:652442133

@@ -883,7 +883,8 @@ public class SegmentsExperimentRelPersistenceImpl
 			FINDER_CLASS_NAME_ENTITY, "fetchByS_S",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"segmentsExperimentId", "segmentsExperienceId"},
-			false, SegmentsExperimentRel::getSegmentsExperimentId,
+			new boolean[] {false, false}, false,
+			SegmentsExperimentRel::getSegmentsExperimentId,
 			SegmentsExperimentRel::getSegmentsExperienceId);
 
 		_uniquePersistenceFinderByS_S = new UniquePersistenceFinder<>(
@@ -967,4 +968,4 @@ public class SegmentsExperimentRelPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-392437598
+// LIFERAY-SERVICE-BUILDER-HASH:709160960

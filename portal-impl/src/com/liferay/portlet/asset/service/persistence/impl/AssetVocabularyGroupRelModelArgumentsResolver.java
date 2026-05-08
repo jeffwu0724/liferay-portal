@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyGroupRelImpl;
 import com.liferay.portlet.asset.model.impl.AssetVocabularyGroupRelModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,7 +58,7 @@ public class AssetVocabularyGroupRelModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				assetVocabularyGroupRelModelImpl, columnNames, original);
+				assetVocabularyGroupRelModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -76,7 +79,7 @@ public class AssetVocabularyGroupRelModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				assetVocabularyGroupRelModelImpl, columnNames, original);
+				assetVocabularyGroupRelModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -94,22 +97,35 @@ public class AssetVocabularyGroupRelModelArgumentsResolver
 
 	private static Object[] _getValue(
 		AssetVocabularyGroupRelModelImpl assetVocabularyGroupRelModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					assetVocabularyGroupRelModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = assetVocabularyGroupRelModelImpl.getColumnValue(
+				value = assetVocabularyGroupRelModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = assetVocabularyGroupRelModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -119,4 +135,4 @@ public class AssetVocabularyGroupRelModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:310316851
+// LIFERAY-SERVICE-BUILDER-HASH:1975313563

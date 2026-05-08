@@ -713,4 +713,4 @@ public class ContactsLayoutTemplatePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-481917666
+// LIFERAY-SERVICE-BUILDER-HASH:-400109971

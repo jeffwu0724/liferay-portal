@@ -11,8 +11,11 @@ import com.liferay.json.storage.model.impl.JSONStorageEntryModelImpl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -54,7 +57,7 @@ public class JSONStorageEntryModelArgumentsResolver
 		long columnBitmask = jsonStorageEntryModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(jsonStorageEntryModelImpl, columnNames, original);
+			return _getValue(jsonStorageEntryModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -81,7 +84,7 @@ public class JSONStorageEntryModelArgumentsResolver
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(jsonStorageEntryModelImpl, columnNames, original);
+			return _getValue(jsonStorageEntryModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -99,21 +102,34 @@ public class JSONStorageEntryModelArgumentsResolver
 
 	private static Object[] _getValue(
 		JSONStorageEntryModelImpl jsonStorageEntryModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] = jsonStorageEntryModelImpl.getColumnOriginalValue(
+				value = jsonStorageEntryModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = jsonStorageEntryModelImpl.getColumnValue(
-					columnName);
+				value = jsonStorageEntryModelImpl.getColumnValue(columnName);
 			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -134,4 +150,4 @@ public class JSONStorageEntryModelArgumentsResolver
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1017834560
+// LIFERAY-SERVICE-BUILDER-HASH:-341485664

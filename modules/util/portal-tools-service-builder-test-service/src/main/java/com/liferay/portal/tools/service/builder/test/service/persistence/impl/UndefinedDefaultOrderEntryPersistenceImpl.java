@@ -507,7 +507,8 @@ public class UndefinedDefaultOrderEntryPersistenceImpl
 	public void afterPropertiesSet() {
 		_finderPathFetchByName = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByName",
-			new String[] {String.class.getName()}, new String[] {"name"}, false,
+			new String[] {String.class.getName()}, new String[] {"name"},
+			new boolean[] {false}, false,
 			convertNullFunction(UndefinedDefaultOrderEntry::getName));
 
 		_uniquePersistenceFinderByName = new UniquePersistenceFinder<>(
@@ -587,4 +588,4 @@ public class UndefinedDefaultOrderEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:200198814
+// LIFERAY-SERVICE-BUILDER-HASH:1723181746

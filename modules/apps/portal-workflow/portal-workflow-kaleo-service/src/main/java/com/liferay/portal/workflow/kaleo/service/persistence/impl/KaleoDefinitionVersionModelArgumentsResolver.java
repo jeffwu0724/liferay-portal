@@ -8,11 +8,14 @@ package com.liferay.portal.workflow.kaleo.service.persistence.impl;
 import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoDefinitionVersionTable;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionVersionImpl;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoDefinitionVersionModelImpl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +58,7 @@ public class KaleoDefinitionVersionModelArgumentsResolver
 
 		if (!checkColumn || (columnBitmask == 0)) {
 			return _getValue(
-				kaleoDefinitionVersionModelImpl, columnNames, original);
+				kaleoDefinitionVersionModelImpl, finderPath, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -76,7 +79,7 @@ public class KaleoDefinitionVersionModelArgumentsResolver
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
 			return _getValue(
-				kaleoDefinitionVersionModelImpl, columnNames, original);
+				kaleoDefinitionVersionModelImpl, finderPath, original);
 		}
 
 		return null;
@@ -94,22 +97,35 @@ public class KaleoDefinitionVersionModelArgumentsResolver
 
 	private static Object[] _getValue(
 		KaleoDefinitionVersionModelImpl kaleoDefinitionVersionModelImpl,
-		String[] columnNames, boolean original) {
+		FinderPath finderPath, boolean original) {
+
+		String[] columnNames = finderPath.getColumnNames();
 
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i++) {
 			String columnName = columnNames[i];
 
+			Object value;
+
 			if (original) {
-				arguments[i] =
-					kaleoDefinitionVersionModelImpl.getColumnOriginalValue(
-						columnName);
-			}
-			else {
-				arguments[i] = kaleoDefinitionVersionModelImpl.getColumnValue(
+				value = kaleoDefinitionVersionModelImpl.getColumnOriginalValue(
 					columnName);
 			}
+			else {
+				value = kaleoDefinitionVersionModelImpl.getColumnValue(
+					columnName);
+			}
+
+			if (value instanceof Date date) {
+				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(
+					StringUtil.toLowerCase((String)value), "");
+			}
+
+			arguments[i] = value;
 		}
 
 		return arguments;
@@ -119,4 +135,4 @@ public class KaleoDefinitionVersionModelArgumentsResolver
 		new ConcurrentHashMap<>();
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1965714682
+// LIFERAY-SERVICE-BUILDER-HASH:1602458706

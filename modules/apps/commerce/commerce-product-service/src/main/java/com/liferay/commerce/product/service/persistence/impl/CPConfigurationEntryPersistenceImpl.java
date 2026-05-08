@@ -1662,8 +1662,8 @@ public class CPConfigurationEntryPersistenceImpl
 		_finderPathFetchByUUID_G = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"uuid_", "groupId"}, false,
-			convertNullFunction(CPConfigurationEntry::getUuid),
+			new String[] {"uuid_", "groupId"}, new boolean[] {false, false},
+			false, convertNullFunction(CPConfigurationEntry::getUuid),
 			CPConfigurationEntry::getGroupId);
 
 		_uniquePersistenceFinderByUUID_G = new UniquePersistenceFinder<>(
@@ -1818,7 +1818,8 @@ public class CPConfigurationEntryPersistenceImpl
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			new String[] {"classNameId", "classPK", "CPConfigurationListId"},
-			false, CPConfigurationEntry::getClassNameId,
+			new boolean[] {false, false, false}, false,
+			CPConfigurationEntry::getClassNameId,
 			CPConfigurationEntry::getClassPK,
 			CPConfigurationEntry::getCPConfigurationListId);
 
@@ -1839,7 +1840,8 @@ public class CPConfigurationEntryPersistenceImpl
 		_finderPathFetchByERC_C = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByERC_C",
 			new String[] {String.class.getName(), Long.class.getName()},
-			new String[] {"externalReferenceCode", "companyId"}, false,
+			new String[] {"externalReferenceCode", "companyId"},
+			new boolean[] {false, false}, false,
 			convertNullFunction(CPConfigurationEntry::getExternalReferenceCode),
 			CPConfigurationEntry::getCompanyId);
 
@@ -1926,4 +1928,4 @@ public class CPConfigurationEntryPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-351248638
+// LIFERAY-SERVICE-BUILDER-HASH:-940515472

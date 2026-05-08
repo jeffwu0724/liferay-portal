@@ -3682,7 +3682,7 @@ public class PatcherFixPackPersistenceImpl
 		_finderPathFetchByPatcherBuildId = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByPatcherBuildId",
 			new String[] {Long.class.getName()},
-			new String[] {"patcherBuildId"}, false,
+			new String[] {"patcherBuildId"}, new boolean[] {false}, false,
 			PatcherFixPack::getPatcherBuildId);
 
 		_uniquePersistenceFinderByPatcherBuildId =
@@ -3831,7 +3831,8 @@ public class PatcherFixPackPersistenceImpl
 		_finderPathFetchByPFCI_N = createUniqueFinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByPFCI_N",
 			new String[] {Long.class.getName(), String.class.getName()},
-			new String[] {"patcherProjectVersionId", "name"}, false,
+			new String[] {"patcherProjectVersionId", "name"},
+			new boolean[] {false, false}, false,
 			PatcherFixPack::getPatcherProjectVersionId,
 			convertNullFunction(PatcherFixPack::getName));
 
@@ -3974,7 +3975,8 @@ public class PatcherFixPackPersistenceImpl
 				"patcherFixComponentId", "patcherProjectVersionId", "name",
 				"version"
 			},
-			false, PatcherFixPack::getPatcherFixComponentId,
+			new boolean[] {false, false, false, false}, false,
+			PatcherFixPack::getPatcherFixComponentId,
 			PatcherFixPack::getPatcherProjectVersionId,
 			convertNullFunction(PatcherFixPack::getName),
 			PatcherFixPack::getVersion);
@@ -4094,4 +4096,4 @@ public class PatcherFixPackPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:92040314
+// LIFERAY-SERVICE-BUILDER-HASH:1662571247
