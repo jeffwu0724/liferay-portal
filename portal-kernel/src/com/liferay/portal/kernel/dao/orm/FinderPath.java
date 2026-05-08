@@ -45,17 +45,20 @@ public class FinderPath {
 		String[] columnNames, boolean baseModelResult) {
 
 		this(
-			cacheName, methodName, params, columnNames, baseModelResult,
+			cacheName, methodName, params, columnNames,
+			new boolean[columnNames.length], baseModelResult,
 			_EMPTY_ARGS_EXTRACTOR_FUNCTION);
 	}
 
 	public FinderPath(
 		String cacheName, String methodName, String[] params,
-		String[] columnNames, boolean baseModelResult,
+		String[] columnNames, boolean[] caseInsensitives,
+		boolean baseModelResult,
 		Function<Object, Object[]> argsExtractorFunction) {
 
 		_cacheName = cacheName;
 		_columnNames = columnNames;
+		_caseInsensitives = caseInsensitives;
 		_baseModelResult = baseModelResult;
 		_argsExtractorFunction = argsExtractorFunction;
 
@@ -87,6 +90,10 @@ public class FinderPath {
 
 	public boolean isBaseModelResult() {
 		return _baseModelResult;
+	}
+
+	public boolean isCaseInsensitive(int columnIndex) {
+		return _caseInsensitives[columnIndex];
 	}
 
 	public boolean isTouched() {
@@ -163,6 +170,7 @@ public class FinderPath {
 	private final boolean _baseModelResult;
 	private String _cacheKeyPrefix;
 	private final String _cacheName;
+	private final boolean[] _caseInsensitives;
 	private final String[] _columnNames;
 	private final boolean _singleResult;
 	private volatile long _timestamp;
