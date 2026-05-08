@@ -2923,11 +2923,22 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 							}
 						<#if serviceBuilder.isVersionGTE_7_4_0()>
 							,
+							new boolean[] {
+								<#list entityColumns as entityColumn>
+									${(stringUtil.equals(entityColumn.type, "String") && !entityColumn.isCaseSensitive())?c}
+
+									<#if entityColumn_has_next>
+										,
+									</#if>
+								</#list>
+							},
 							<#if entityFinder.isPretouch()>true<#else>false</#if>
 
 							<#list entityColumns as entityColumn>
 								,
-								<#if stringUtil.equals(entityColumn.type, "String") && entityColumn.isConvertNull()>
+								<#if stringUtil.equals(entityColumn.type, "String") && !entityColumn.isCaseSensitive()>
+									convertCaseFunction(${entity.name}::get${entityColumn.methodName})
+								<#elseif stringUtil.equals(entityColumn.type, "String") && entityColumn.isConvertNull()>
 									convertNullFunction(${entity.name}::get${entityColumn.methodName})
 								<#elseif stringUtil.equals(entityColumn.type, "Date")>
 									convertDateFunction(${entity.name}::get${entityColumn.methodName})

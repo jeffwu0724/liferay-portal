@@ -9,6 +9,7 @@
 	import com.liferay.portal.kernel.dao.orm.FinderPath;
 	import com.liferay.portal.kernel.model.BaseModel;
 	import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+	import com.liferay.portal.kernel.util.StringUtil;
 
 	import java.util.ArrayList;
 	import java.util.Date;
@@ -59,7 +60,7 @@ class ${entity.name}ModelArgumentsResolver implements ArgumentsResolver {
 			long columnBitmask = ${entity.variableName}ModelImpl.getColumnBitmask();
 
 			if (!checkColumn || (columnBitmask == 0)) {
-				return _getValue(${entity.variableName}ModelImpl, columnNames, original);
+				return _getValue(${entity.variableName}ModelImpl, finderPath, original);
 			}
 
 			Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(finderPath);
@@ -81,7 +82,7 @@ class ${entity.name}ModelArgumentsResolver implements ArgumentsResolver {
 			}
 
 			if ((columnBitmask & finderPathColumnBitmask) != 0) {
-				return _getValue(${entity.variableName}ModelImpl, columnNames, original);
+				return _getValue(${entity.variableName}ModelImpl, finderPath, original);
 			}
 		<#else>
 			if (!checkColumn || _hasModifiedColumns(${entity.variableName}ModelImpl, columnNames)
@@ -91,7 +92,7 @@ class ${entity.name}ModelArgumentsResolver implements ArgumentsResolver {
 			</#if>
 
 			) {
-				return _getValue(${entity.variableName}ModelImpl, columnNames, original);
+				return _getValue(${entity.variableName}ModelImpl, finderPath, original);
 			}
 		</#if>
 
@@ -110,7 +111,9 @@ class ${entity.name}ModelArgumentsResolver implements ArgumentsResolver {
 		}
 	</#if>
 
-	private static Object[] _getValue(${entity.name}ModelImpl ${entity.variableName}ModelImpl, String[] columnNames, boolean original) {
+	private static Object[] _getValue(${entity.name}ModelImpl ${entity.variableName}ModelImpl, FinderPath finderPath, boolean original) {
+		String[] columnNames = finderPath.getColumnNames();
+
 		Object[] arguments = new Object[columnNames.length];
 
 		for (int i = 0; i < arguments.length; i ++) {
@@ -127,6 +130,9 @@ class ${entity.name}ModelArgumentsResolver implements ArgumentsResolver {
 
 			if (value instanceof Date date) {
 				value = date.getTime();
+			}
+			else if (finderPath.isCaseInsensitive(i)) {
+				value = Objects.toString(StringUtil.toLowerCase((String)value), "");
 			}
 
 			arguments[i] = value;
