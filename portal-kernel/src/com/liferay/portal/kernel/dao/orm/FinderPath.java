@@ -46,18 +46,21 @@ public class FinderPath {
 		String cacheName, String methodName, String[] params,
 		String[] columnNames, boolean baseModelResult) {
 
-		this(cacheName, methodName, params, columnNames, 0, baseModelResult, null);
+		this(
+			cacheName, methodName, params, columnNames, 0, 0, baseModelResult,
+			null);
 	}
 
 	public FinderPath(
 		String cacheName, String methodName, String[] params,
 		String[] columnNames, int caseInsensitiveBitmask,
-		boolean baseModelResult,
+		int convertNullBitmask, boolean baseModelResult,
 		Function<Object, Object[]> argsExtractorFunction) {
 
 		_cacheName = cacheName;
 		_columnNames = columnNames;
 		_caseInsensitiveBitmask = caseInsensitiveBitmask;
+		_convertNullBitmask = convertNullBitmask;
 		_baseModelResult = baseModelResult;
 
 		if (argsExtractorFunction == null) {
@@ -113,8 +116,11 @@ public class FinderPath {
 		}
 
 		if (_isCaseInsensitive(columnIndex)) {
-			value = Objects.toString(
-				StringUtil.toLowerCase((String)value), "");
+			value = StringUtil.toLowerCase((String)value);
+		}
+
+		if (_isConvertNull(columnIndex)) {
+			value = Objects.toString(value, "");
 		}
 
 		return value;
@@ -168,6 +174,10 @@ public class FinderPath {
 		return (_caseInsensitiveBitmask & (1 << columnIndex)) != 0;
 	}
 
+	private boolean _isConvertNull(int columnIndex) {
+		return (_convertNullBitmask & (1 << columnIndex)) != 0;
+	}
+
 	private static final String _ARGS_SEPARATOR = "_A_";
 
 	private static final long _COOL_DOWN_PERIOD = GetterUtil.getLong(
@@ -190,6 +200,7 @@ public class FinderPath {
 	private final String _cacheName;
 	private final int _caseInsensitiveBitmask;
 	private final String[] _columnNames;
+	private final int _convertNullBitmask;
 	private final boolean _singleResult;
 	private volatile long _timestamp;
 
