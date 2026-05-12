@@ -25,6 +25,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
 
+import java.net.InetAddress;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -70,6 +72,18 @@ public class ClusterLinkTest implements Serializable {
 		_tomcatNode2 = builder2.build();
 
 		_tomcatNode2.start(true);
+	}
+
+	@Test
+	public void testAutodetectClusteringAddress() throws Exception {
+		try (Closeable closeable = _applyPortalExtPropertiesLines(
+				true, _tomcatNode1, "cluster.link.autodetect.address=")) {
+
+			InetAddress bindInetAddress = _tomcatNode1.syncExecute(
+				ClusterLinkTest::_getControlChannelBindAddress);
+
+			Assert.assertTrue(bindInetAddress.isLoopbackAddress());
+		}
 	}
 
 	@Test
@@ -169,6 +183,19 @@ public class ClusterLinkTest implements Serializable {
 			"cluster.link.channel.properties.transport.0=udp.xml");
 	}
 
+	private static <S> InetAddress _getChannelBindAddress(
+		Class<S> clazz, Function<S, Object> clusterChannelExtractor) {
+
+		return SystemBundleUtil.callService(
+			clazz,
+			service -> {
+				Object clusterChannel = clusterChannelExtractor.apply(service);
+
+				return ReflectionTestUtil.invoke(
+					clusterChannel, "getBindInetAddress", new Class<?>[0]);
+			});
+	}
+
 	private static <S> String _getChannelTransportName(
 		Class<S> clazz, Function<S, Object> clusterChannelExtractor) {
 
@@ -189,6 +216,13 @@ public class ClusterLinkTest implements Serializable {
 				return transport.getClass(
 				).getSimpleName();
 			});
+	}
+
+	private static InetAddress _getControlChannelBindAddress() {
+		return _getChannelBindAddress(
+			ClusterExecutor.class,
+			clusterExecutor -> ReflectionTestUtil.getFieldValue(
+				clusterExecutor, "_clusterChannel"));
 	}
 
 	private static String _getControlChannelTransportName() {
