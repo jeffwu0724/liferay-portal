@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.workflow.kaleo.constants.KaleoInstanceTokenConstants;
 import com.liferay.portal.workflow.kaleo.definition.NodeType;
+import com.liferay.portal.workflow.kaleo.exception.NoSuchTransitionException;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
@@ -54,7 +55,10 @@ public class StateNodeExecutor extends BaseNodeExecutor {
 		KaleoInstanceToken kaleoInstanceToken =
 			executionContext.getKaleoInstanceToken();
 
-		if (!currentKaleoNode.hasKaleoTransition()) {
+		List<KaleoTransition> kaleoTransitions =
+			currentKaleoNode.getKaleoTransitions();
+
+		if (kaleoTransitions.isEmpty()) {
 			kaleoInstanceToken =
 				_kaleoInstanceTokenLocalService.completeKaleoInstanceToken(
 					kaleoInstanceToken.getKaleoInstanceTokenId());
@@ -85,7 +89,19 @@ public class StateNodeExecutor extends BaseNodeExecutor {
 		KaleoTransition kaleoTransition = null;
 
 		if (Validator.isNull(transitionName)) {
-			kaleoTransition = currentKaleoNode.getDefaultKaleoTransition();
+			for (KaleoTransition currentKaleoTransition : kaleoTransitions) {
+				if (currentKaleoTransition.isDefaultTransition()) {
+					kaleoTransition = currentKaleoTransition;
+
+					break;
+				}
+			}
+
+			if (kaleoTransition == null) {
+				throw new NoSuchTransitionException(
+					"No default KaleoTransition for KaleoNode id: " +
+						currentKaleoNode.getKaleoNodeId());
+			}
 		}
 		else {
 			kaleoTransition = currentKaleoNode.getKaleoTransition(
