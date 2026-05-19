@@ -242,6 +242,179 @@ public class KaleoTimerPersistenceImpl
 			finderCache, new Object[] {kaleoClassName, kaleoClassPK});
 	}
 
+	private FinderPath _finderPathWithPaginationFindByKCN_KDVI;
+	private FinderPath _finderPathWithoutPaginationFindByKCN_KDVI;
+	private FinderPath _finderPathCountByKCN_KDVI;
+	private CollectionPersistenceFinder<KaleoTimer>
+		_collectionPersistenceFinderByKCN_KDVI;
+
+	/**
+	 * Returns all the kaleo timers where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @return the matching kaleo timers
+	 */
+	@Override
+	public List<KaleoTimer> findByKCN_KDVI(
+		String kaleoClassName, long kaleoDefinitionVersionId) {
+
+		return findByKCN_KDVI(
+			kaleoClassName, kaleoDefinitionVersionId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the kaleo timers where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>KaleoTimerModelImpl</code>.
+	 * </p>
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @param start the lower bound of the range of kaleo timers
+	 * @param end the upper bound of the range of kaleo timers (not inclusive)
+	 * @return the range of matching kaleo timers
+	 */
+	@Override
+	public List<KaleoTimer> findByKCN_KDVI(
+		String kaleoClassName, long kaleoDefinitionVersionId, int start,
+		int end) {
+
+		return findByKCN_KDVI(
+			kaleoClassName, kaleoDefinitionVersionId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the kaleo timers where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>KaleoTimerModelImpl</code>.
+	 * </p>
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @param start the lower bound of the range of kaleo timers
+	 * @param end the upper bound of the range of kaleo timers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching kaleo timers
+	 */
+	@Override
+	public List<KaleoTimer> findByKCN_KDVI(
+		String kaleoClassName, long kaleoDefinitionVersionId, int start,
+		int end, OrderByComparator<KaleoTimer> orderByComparator) {
+
+		return findByKCN_KDVI(
+			kaleoClassName, kaleoDefinitionVersionId, start, end,
+			orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the kaleo timers where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>KaleoTimerModelImpl</code>.
+	 * </p>
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @param start the lower bound of the range of kaleo timers
+	 * @param end the upper bound of the range of kaleo timers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching kaleo timers
+	 */
+	@Override
+	public List<KaleoTimer> findByKCN_KDVI(
+		String kaleoClassName, long kaleoDefinitionVersionId, int start,
+		int end, OrderByComparator<KaleoTimer> orderByComparator,
+		boolean useFinderCache) {
+
+		return _collectionPersistenceFinderByKCN_KDVI.find(
+			finderCache,
+			new Object[] {kaleoClassName, kaleoDefinitionVersionId}, start, end,
+			orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first kaleo timer in the ordered set where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo timer
+	 * @throws NoSuchTimerException if a matching kaleo timer could not be found
+	 */
+	@Override
+	public KaleoTimer findByKCN_KDVI_First(
+			String kaleoClassName, long kaleoDefinitionVersionId,
+			OrderByComparator<KaleoTimer> orderByComparator)
+		throws NoSuchTimerException {
+
+		KaleoTimer kaleoTimer = fetchByKCN_KDVI_First(
+			kaleoClassName, kaleoDefinitionVersionId, orderByComparator);
+
+		if (kaleoTimer != null) {
+			return kaleoTimer;
+		}
+
+		throw new NoSuchTimerException(
+			_collectionPersistenceFinderByKCN_KDVI.buildNoSuchKeyMessage(
+				_NO_SUCH_ENTITY_WITH_KEY,
+				new Object[] {kaleoClassName, kaleoDefinitionVersionId}));
+	}
+
+	/**
+	 * Returns the first kaleo timer in the ordered set where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo timer, or <code>null</code> if a matching kaleo timer could not be found
+	 */
+	@Override
+	public KaleoTimer fetchByKCN_KDVI_First(
+		String kaleoClassName, long kaleoDefinitionVersionId,
+		OrderByComparator<KaleoTimer> orderByComparator) {
+
+		return _collectionPersistenceFinderByKCN_KDVI.fetchFirst(
+			finderCache,
+			new Object[] {kaleoClassName, kaleoDefinitionVersionId},
+			orderByComparator);
+	}
+
+	/**
+	 * Removes all the kaleo timers where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63; from the database.
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 */
+	@Override
+	public void removeByKCN_KDVI(
+		String kaleoClassName, long kaleoDefinitionVersionId) {
+
+		_collectionPersistenceFinderByKCN_KDVI.remove(
+			finderCache,
+			new Object[] {kaleoClassName, kaleoDefinitionVersionId});
+	}
+
+	/**
+	 * Returns the number of kaleo timers where kaleoClassName = &#63; and kaleoDefinitionVersionId = &#63;.
+	 *
+	 * @param kaleoClassName the kaleo class name
+	 * @param kaleoDefinitionVersionId the kaleo definition version ID
+	 * @return the number of matching kaleo timers
+	 */
+	@Override
+	public int countByKCN_KDVI(
+		String kaleoClassName, long kaleoDefinitionVersionId) {
+
+		return _collectionPersistenceFinderByKCN_KDVI.count(
+			finderCache,
+			new Object[] {kaleoClassName, kaleoDefinitionVersionId});
+	}
+
 	private FinderPath _finderPathWithPaginationFindByKCN_KCPK_Blocking;
 	private FinderPath _finderPathWithoutPaginationFindByKCN_KCPK_Blocking;
 	private FinderPath _finderPathCountByKCN_KCPK_Blocking;
@@ -729,6 +902,42 @@ public class KaleoTimerPersistenceImpl
 					"kaleoTimer.", "kaleoClassPK", FinderColumn.Type.LONG, "=",
 					true, true, KaleoTimer::getKaleoClassPK));
 
+		_finderPathWithPaginationFindByKCN_KDVI = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByKCN_KDVI",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"kaleoClassName", "kaleoDefinitionVersionId"}, true);
+
+		_finderPathWithoutPaginationFindByKCN_KDVI = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByKCN_KDVI",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"kaleoClassName", "kaleoDefinitionVersionId"}, 0, 1,
+			true, null);
+
+		_finderPathCountByKCN_KDVI = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKCN_KDVI",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"kaleoClassName", "kaleoDefinitionVersionId"}, 0, 1,
+			false, null);
+
+		_collectionPersistenceFinderByKCN_KDVI =
+			new CollectionPersistenceFinder<>(
+				this, _finderPathWithPaginationFindByKCN_KDVI,
+				_finderPathWithoutPaginationFindByKCN_KDVI,
+				_finderPathCountByKCN_KDVI, _SQL_SELECT_KALEOTIMER_WHERE,
+				_SQL_COUNT_KALEOTIMER_WHERE, KaleoTimerModelImpl.ORDER_BY_JPQL,
+				_ENTITY_ALIAS_PREFIX, "",
+				new FinderColumn<>(
+					"kaleoTimer.", "kaleoClassName", FinderColumn.Type.STRING,
+					"=", true, true, KaleoTimer::getKaleoClassName),
+				new FinderColumn<>(
+					"kaleoTimer.", "kaleoDefinitionVersionId",
+					FinderColumn.Type.LONG, "=", true, true,
+					KaleoTimer::getKaleoDefinitionVersionId));
+
 		_finderPathWithPaginationFindByKCN_KCPK_Blocking = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByKCN_KCPK_Blocking",
 			new String[] {
@@ -841,4 +1050,4 @@ public class KaleoTimerPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1370069834
+// LIFERAY-SERVICE-BUILDER-HASH:549912383
