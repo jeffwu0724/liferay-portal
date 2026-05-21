@@ -79,7 +79,7 @@ public class KaleoTimerPersistenceImpl
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION =
 		FINDER_CLASS_NAME_ENTITY + ".List2";
 
-	private CollectionPersistenceFinder<KaleoTimer>
+	private CollectionPersistenceFinder<KaleoTimer, NoSuchTimerException>
 		_collectionPersistenceFinderByKCN_KCPK;
 
 	/**
@@ -123,17 +123,9 @@ public class KaleoTimerPersistenceImpl
 			OrderByComparator<KaleoTimer> orderByComparator)
 		throws NoSuchTimerException {
 
-		KaleoTimer kaleoTimer = fetchByKCN_KCPK_First(
-			kaleoClassName, kaleoClassPK, orderByComparator);
-
-		if (kaleoTimer != null) {
-			return kaleoTimer;
-		}
-
-		throw new NoSuchTimerException(
-			_collectionPersistenceFinderByKCN_KCPK.buildNoSuchKeyMessage(
-				_NO_SUCH_ENTITY_WITH_KEY,
-				new Object[] {kaleoClassName, kaleoClassPK}));
+		return _collectionPersistenceFinderByKCN_KCPK.findFirst(
+			finderCache, new Object[] {kaleoClassName, kaleoClassPK},
+			orderByComparator);
 	}
 
 	/**
@@ -179,7 +171,7 @@ public class KaleoTimerPersistenceImpl
 			finderCache, new Object[] {kaleoClassName, kaleoClassPK});
 	}
 
-	private CollectionPersistenceFinder<KaleoTimer>
+	private CollectionPersistenceFinder<KaleoTimer, NoSuchTimerException>
 		_collectionPersistenceFinderByKCN_KCPK_Blocking;
 
 	/**
@@ -225,18 +217,9 @@ public class KaleoTimerPersistenceImpl
 			OrderByComparator<KaleoTimer> orderByComparator)
 		throws NoSuchTimerException {
 
-		KaleoTimer kaleoTimer = fetchByKCN_KCPK_Blocking_First(
-			kaleoClassName, kaleoClassPK, blocking, orderByComparator);
-
-		if (kaleoTimer != null) {
-			return kaleoTimer;
-		}
-
-		throw new NoSuchTimerException(
-			_collectionPersistenceFinderByKCN_KCPK_Blocking.
-				buildNoSuchKeyMessage(
-					_NO_SUCH_ENTITY_WITH_KEY,
-					new Object[] {kaleoClassName, kaleoClassPK, blocking}));
+		return _collectionPersistenceFinderByKCN_KCPK_Blocking.findFirst(
+			finderCache, new Object[] {kaleoClassName, kaleoClassPK, blocking},
+			orderByComparator);
 	}
 
 	/**
@@ -706,4 +689,4 @@ public class KaleoTimerPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-81938610
+// LIFERAY-SERVICE-BUILDER-HASH:639796894
