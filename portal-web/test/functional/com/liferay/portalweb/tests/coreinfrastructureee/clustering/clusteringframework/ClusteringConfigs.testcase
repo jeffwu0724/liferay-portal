@@ -29,6 +29,7 @@ definition {
 		}
 	}
 
+
 	@priority = 5
 	test StartupJDBCPING {
 		property app.server.types = "tomcat";
