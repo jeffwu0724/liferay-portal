@@ -78,6 +78,57 @@ public class ClusterMissingPluginsTest implements Serializable {
 	}
 
 	@Test
+	public void testScheduleJobOnAllClusterNodes() throws Exception {
+		String jobName = TestSchedulerJobConfiguration.class.getName();
+
+		TomcatNode masterTomcatNode = _tomcatNode1;
+		TomcatNode slaveTomcatNode = _tomcatNode2;
+
+		if (!_tomcatNode1.syncExecute(ClusterMasterExecutorUtil::isMaster)) {
+			masterTomcatNode = _tomcatNode2;
+			slaveTomcatNode = _tomcatNode1;
+		}
+
+		Future<?> slaveJobExecutionFuture = slaveTomcatNode.execute(
+			() -> {
+				TestSchedulerJobConfiguration.registerAndAwaitExecution();
+
+				return null;
+			});
+
+		masterTomcatNode.syncExecute(
+			() -> {
+				TestSchedulerJobConfiguration.registerAndAwaitExecution();
+
+				return null;
+			});
+
+		Assert.assertFalse(slaveJobExecutionFuture.isDone());
+
+		Future<?> slaveMasterTokenFuture = slaveTomcatNode.execute(
+			() -> {
+				TestClusterMasterTokenTransitionListener.
+					registerAndAwaitMasterToken();
+
+				return null;
+			});
+
+		masterTomcatNode.stop();
+
+		slaveMasterTokenFuture.get();
+
+		Assert.assertTrue(
+			slaveTomcatNode.syncExecute(ClusterMasterExecutorUtil::isMaster));
+
+		slaveJobExecutionFuture.get();
+
+		Assert.assertNotNull(
+			slaveTomcatNode.syncExecute(
+				() -> SchedulerEngineHelperUtil.getScheduledJob(
+					jobName, jobName, StorageType.MEMORY_CLUSTERED)));
+	}
+
+	@Test
 	public void testScheduleJobOnClusterNode1() throws Exception {
 		String jobName = TestSchedulerJobConfiguration.class.getName();
 
