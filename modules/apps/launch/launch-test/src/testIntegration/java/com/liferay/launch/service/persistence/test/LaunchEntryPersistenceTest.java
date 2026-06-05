@@ -112,9 +112,7 @@ public class LaunchEntryPersistenceTest {
 
 	@Test
 	public void testUpdateExisting() throws Exception {
-		long pk = RandomTestUtil.nextLong();
-
-		LaunchEntry newLaunchEntry = _persistence.create(pk);
+		LaunchEntry newLaunchEntry = addLaunchEntry();
 
 		newLaunchEntry.setMvccVersion(RandomTestUtil.nextLong());
 
@@ -600,4 +598,4 @@ public class LaunchEntryPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-379107591
+// LIFERAY-SERVICE-BUILDER-HASH:-1238200471
