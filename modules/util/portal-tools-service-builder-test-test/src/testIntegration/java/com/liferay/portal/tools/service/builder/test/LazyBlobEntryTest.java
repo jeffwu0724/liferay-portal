@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -8,6 +8,7 @@ package com.liferay.portal.tools.service.builder.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.io.Serializer;
+import com.liferay.portal.kernel.dao.jdbc.OutputBlob;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -16,12 +17,15 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.TransactionalTestRule;
 import com.liferay.portal.tools.service.builder.test.model.LazyBlobEntry;
 import com.liferay.portal.tools.service.builder.test.service.LazyBlobEntryLocalService;
 import com.liferay.portal.tools.service.builder.test.service.persistence.LazyBlobEntryPersistence;
+
+import java.io.ByteArrayInputStream;
 
 import java.sql.Blob;
 
@@ -46,11 +50,7 @@ public class LazyBlobEntryTest {
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new LiferayIntegrationTestRule(),
-			new TransactionalTestRule(
-				Propagation.REQUIRED,
-				"com.liferay.portal.tools.service.builder.test.service"));
+		new LiferayIntegrationTestRule();
 
 	@Before
 	public void setUp() throws Exception {
@@ -65,56 +65,94 @@ public class LazyBlobEntryTest {
 	}
 
 	@Test
-	public void testLazyBlobLoadedValueIsNull() {
+	public void testLazyBlobEntryWithFetchingFromDatabase() throws Exception {
 		_lazyBlobEntryPersistence.clearCache();
 
-		Session session = _lazyBlobEntryPersistence.openSession();
+		LazyBlobEntry lazyBlobEntry =
+			_lazyBlobEntryLocalService.fetchLazyBlobEntry(
+				_lazyBlobEntry.getLazyBlobEntryId());
 
-		try {
-			LazyBlobEntry loadedLazyBlobEntry = (LazyBlobEntry)session.load(
-				_lazyBlobEntry.getClass(), _lazyBlobEntry.getLazyBlobEntryId());
+		Assert.assertNotSame(_lazyBlobEntry, lazyBlobEntry);
 
-			Assert.assertNull(
-				ReflectionTestUtil.getFieldValue(
-					loadedLazyBlobEntry, "_blob1BlobModel"));
-			Assert.assertNull(
-				ReflectionTestUtil.getFieldValue(
-					loadedLazyBlobEntry, "_blob2BlobModel"));
-
-			SessionImplementor sessionImplementor =
-				(SessionImplementor)session.getWrappedSession();
-
-			PersistenceContext persistenceContext =
-				sessionImplementor.getPersistenceContext();
-
-			EntityEntry entityEntry = persistenceContext.getEntry(
-				loadedLazyBlobEntry);
-
-			Assert.assertNull(
-				"Loaded value of lazy blob property should be null.",
-				entityEntry.getLoadedValue("blob1BlobModel"));
-			Assert.assertNull(
-				"Loaded value of lazy blob property should be null.",
-				entityEntry.getLoadedValue("blob2BlobModel"));
-		}
-		finally {
-			_lazyBlobEntryPersistence.closeSession(session);
-		}
+		_assertLazyBlobEntry(_blobContent, lazyBlobEntry);
 	}
 
 	@Test
-	public void testSerialize() throws Exception {
+	public void testLazyBlobEntryWithLoadingFromSession() throws Throwable {
+		TransactionInvokerUtil.invoke(
+			TransactionConfig.Factory.create(
+				Propagation.REQUIRED, new Class<?>[] {Exception.class}),
+			() -> {
+				_lazyBlobEntryPersistence.clearCache();
+
+				Session session = _lazyBlobEntryPersistence.openSession();
+
+				try {
+					LazyBlobEntry lazyBlobEntry = (LazyBlobEntry)session.load(
+						_lazyBlobEntry.getClass(),
+						_lazyBlobEntry.getLazyBlobEntryId());
+
+					Assert.assertNull(
+						ReflectionTestUtil.getFieldValue(
+							lazyBlobEntry, "_blob1BlobModel"));
+					Assert.assertNull(
+						ReflectionTestUtil.getFieldValue(
+							lazyBlobEntry, "_blob2BlobModel"));
+
+					SessionImplementor sessionImplementor =
+						(SessionImplementor)session.getWrappedSession();
+
+					PersistenceContext persistenceContext =
+						sessionImplementor.getPersistenceContext();
+
+					EntityEntry entityEntry = persistenceContext.getEntry(
+						lazyBlobEntry);
+
+					Assert.assertNull(
+						entityEntry.getLoadedValue("blob1BlobModel"));
+					Assert.assertNull(
+						entityEntry.getLoadedValue("blob2BlobModel"));
+				}
+				finally {
+					_lazyBlobEntryPersistence.closeSession(session);
+				}
+
+				return null;
+			});
+	}
+
+	@Test
+	public void testLazyBlobEntryWithSerialization() throws Exception {
 		Serializer serializer = new Serializer();
 
 		serializer.writeObject(_lazyBlobEntry);
 
 		Deserializer deserializer = new Deserializer(serializer.toByteBuffer());
 
-		LazyBlobEntry serializedLazyBlobEntry = deserializer.readObject();
+		LazyBlobEntry lazyBlobEntry = deserializer.readObject();
 
-		Assert.assertEquals(_lazyBlobEntry, serializedLazyBlobEntry);
+		Assert.assertEquals(_lazyBlobEntry, lazyBlobEntry);
 
-		_assertLazyBlobEntry(_blobContent, serializedLazyBlobEntry);
+		_assertLazyBlobEntry(_blobContent, lazyBlobEntry);
+	}
+
+	@Test
+	public void testLazyBlobEntryWithUpdate() throws Exception {
+		String blobString = RandomTestUtil.randomString();
+
+		byte[] blobBytes = blobString.getBytes();
+
+		_lazyBlobEntry.setBlob1(
+			new OutputBlob(
+				new ByteArrayInputStream(blobBytes), blobBytes.length));
+		_lazyBlobEntry.setBlob2(
+			new OutputBlob(
+				new ByteArrayInputStream(blobBytes), blobBytes.length));
+
+		_lazyBlobEntry = _lazyBlobEntryLocalService.updateLazyBlobEntry(
+			_lazyBlobEntry);
+
+		_assertLazyBlobEntry(blobString, _lazyBlobEntry);
 	}
 
 	private void _assertLazyBlobEntry(
