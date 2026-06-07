@@ -6058,8 +6058,7 @@ public class JournalArticleLocalServiceImpl
 				try {
 					return TransactionInvokerUtil.invoke(
 						_transactionConfig,
-						() -> _expireArticle(
-							article.getId(), companyId, indexer));
+						() -> _expireArticle(article, companyId, indexer));
 				}
 				catch (Throwable throwable) {
 					if (_log.isDebugEnabled()) {
@@ -7859,11 +7858,9 @@ public class JournalArticleLocalServiceImpl
 	}
 
 	private Document _expireArticle(
-			long articleId, long companyId, Indexer<JournalArticle> indexer)
+			JournalArticle article, long companyId,
+			Indexer<JournalArticle> indexer)
 		throws PortalException {
-
-		JournalArticle article = journalArticleLocalService.getArticle(
-			articleId);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Expiring article " + article.getId());
