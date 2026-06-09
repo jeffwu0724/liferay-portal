@@ -96,4 +96,5 @@ public class SchedulerResponse implements Serializable {
 	private StorageType _storageType;
 	private Trigger _trigger;
 
+	
 }
