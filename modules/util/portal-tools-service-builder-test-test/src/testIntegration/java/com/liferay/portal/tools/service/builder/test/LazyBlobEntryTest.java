@@ -8,6 +8,7 @@ package com.liferay.portal.tools.service.builder.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.io.Serializer;
+import com.liferay.petra.io.StreamUtil;
 import com.liferay.portal.kernel.dao.jdbc.OutputBlob;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -26,8 +27,6 @@ import com.liferay.portal.tools.service.builder.test.service.LazyBlobEntryLocalS
 import com.liferay.portal.tools.service.builder.test.service.persistence.LazyBlobEntryPersistence;
 
 import java.io.ByteArrayInputStream;
-
-import java.sql.Blob;
 
 import org.hibernate.engine.spi.EntityEntry;
 import org.hibernate.engine.spi.PersistenceContext;
@@ -162,26 +161,32 @@ public class LazyBlobEntryTest {
 		Assert.assertNull(
 			ReflectionTestUtil.getFieldValue(lazyBlobEntry, "_blob1BlobModel"));
 
-		Blob blob1 = lazyBlobEntry.getBlob1();
-
-		Assert.assertEquals(
-			expectedContent,
-			new String(blob1.getBytes(1, (int)blob1.length())));
+		Assert.assertNotNull(lazyBlobEntry.getBlob1());
 
 		Assert.assertNotNull(
 			ReflectionTestUtil.getFieldValue(lazyBlobEntry, "_blob1BlobModel"));
 
+		Assert.assertEquals(
+			expectedContent,
+			new String(
+				StreamUtil.toByteArray(
+					_lazyBlobEntryLocalService.openBlob1InputStream(
+						lazyBlobEntry.getLazyBlobEntryId()))));
+
 		Assert.assertNull(
 			ReflectionTestUtil.getFieldValue(lazyBlobEntry, "_blob2BlobModel"));
 
-		Blob blob2 = lazyBlobEntry.getBlob2();
-
-		Assert.assertEquals(
-			expectedContent,
-			new String(blob2.getBytes(1, (int)blob2.length())));
+		Assert.assertNotNull(lazyBlobEntry.getBlob2());
 
 		Assert.assertNotNull(
 			ReflectionTestUtil.getFieldValue(lazyBlobEntry, "_blob2BlobModel"));
+
+		Assert.assertEquals(
+			expectedContent,
+			new String(
+				StreamUtil.toByteArray(
+					_lazyBlobEntryLocalService.openBlob2InputStream(
+						lazyBlobEntry.getLazyBlobEntryId()))));
 	}
 
 	private String _blobContent;
