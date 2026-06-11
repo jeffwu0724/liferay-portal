@@ -54,4 +54,35 @@ public class JPQLToHQLTransformerLogicTest {
 		Assert.assertEquals(sql, function.apply(sql));
 	}
 
+	@Test
+	public void testReplacePositionalParameters() {
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction();
+
+		Assert.assertEquals(
+			"SELECT * FROM Foo WHERE a = ?1 AND b = ?2 AND c = ?3",
+			function.apply("SELECT * FROM Foo WHERE a = ? AND b = ? AND c = ?"));
+	}
+
+	@Test
+	public void testReplacePositionalParametersWithNoParameters() {
+		String sql = "SELECT * FROM Foo WHERE a = 1";
+
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction();
+
+		Assert.assertEquals(sql, function.apply(sql));
+	}
+
+	@Test
+	public void testReplacePositionalParametersWithQuotedQuestionMark() {
+		String sql = "SELECT * FROM Foo WHERE a = '?' AND b = ?";
+
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction();
+
+		Assert.assertEquals(
+			"SELECT * FROM Foo WHERE a = '?' AND b = ?1", function.apply(sql));
+	}
+
 }
