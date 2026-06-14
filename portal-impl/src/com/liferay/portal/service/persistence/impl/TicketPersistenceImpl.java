@@ -12,8 +12,6 @@ import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.NoSuchTicketException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Ticket;
 import com.liferay.portal.kernel.model.TicketTable;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
@@ -920,12 +918,6 @@ public class TicketPersistenceImpl
 	private static final String _SQL_COUNT_TICKET_WHERE =
 		"SELECT COUNT(ticket) FROM Ticket ticket WHERE ";
 
-	private static final String _NO_SUCH_ENTITY_WITH_KEY =
-		"No Ticket exists with the key {";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		TicketPersistenceImpl.class);
-
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
 		new String[] {"key", "type"});
 
@@ -935,4 +927,4 @@ public class TicketPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1812265449
+// LIFERAY-SERVICE-BUILDER-HASH:1457010651

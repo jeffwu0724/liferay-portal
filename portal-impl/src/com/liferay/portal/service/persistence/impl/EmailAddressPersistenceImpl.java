@@ -15,8 +15,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.DuplicateEmailAddressExternalReferenceCodeException;
 import com.liferay.portal.kernel.exception.NoSuchEmailAddressException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.EmailAddress;
 import com.liferay.portal.kernel.model.EmailAddressTable;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
@@ -1436,12 +1434,6 @@ public class EmailAddressPersistenceImpl
 	private static final String _SQL_COUNT_EMAILADDRESS_WHERE =
 		"SELECT COUNT(emailAddress) FROM EmailAddress emailAddress WHERE ";
 
-	private static final String _NO_SUCH_ENTITY_WITH_KEY =
-		"No EmailAddress exists with the key {";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		EmailAddressPersistenceImpl.class);
-
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
 		new String[] {"uuid", "primary"});
 
@@ -1451,4 +1443,4 @@ public class EmailAddressPersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1422748586
+// LIFERAY-SERVICE-BUILDER-HASH:99829435

@@ -22,8 +22,6 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
@@ -879,16 +877,10 @@ public class AudienceEntryPersistenceImpl
 	private static final String _SQL_COUNT_AUDIENCEENTRY_WHERE =
 		"SELECT COUNT(audienceEntry) FROM AudienceEntry audienceEntry WHERE ";
 
-	private static final String _NO_SUCH_ENTITY_WITH_KEY =
-		"No AudienceEntry exists with the key {";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		AudienceEntryPersistenceImpl.class);
-
 	@Override
 	protected FinderCache getFinderCache() {
 		return finderCache;
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1137042411
+// LIFERAY-SERVICE-BUILDER-HASH:1439502795

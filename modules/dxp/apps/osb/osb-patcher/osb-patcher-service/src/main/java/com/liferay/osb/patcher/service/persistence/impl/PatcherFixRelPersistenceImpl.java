@@ -530,13 +530,10 @@ public class PatcherFixRelPersistenceImpl
 	private static final String _SQL_COUNT_PATCHERFIXREL_WHERE =
 		"SELECT COUNT(patcherFixRel) FROM PatcherFixRel patcherFixRel WHERE ";
 
-	private static final String _NO_SUCH_ENTITY_WITH_KEY =
-		"No PatcherFixRel exists with the key {";
-
 	@Override
 	protected FinderCache getFinderCache() {
 		return finderCache;
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:2105287051
+// LIFERAY-SERVICE-BUILDER-HASH:216397667
