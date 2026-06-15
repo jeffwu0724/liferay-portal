@@ -112,11 +112,7 @@ public class AudienceEntryPersistenceTest {
 
 	@Test
 	public void testUpdateExisting() throws Exception {
-		long pk = RandomTestUtil.nextLong();
-
-		AudienceEntry newAudienceEntry = _persistence.create(pk);
-
-		newAudienceEntry.setMvccVersion(RandomTestUtil.nextLong());
+		AudienceEntry newAudienceEntry = addAudienceEntry();
 
 		newAudienceEntry.setExternalReferenceCode(
 			RandomTestUtil.randomString());
@@ -135,7 +131,9 @@ public class AudienceEntryPersistenceTest {
 
 		newAudienceEntry.setName(RandomTestUtil.randomString());
 
-		_audienceEntries.add(_persistence.update(newAudienceEntry));
+		newAudienceEntry = _persistence.update(newAudienceEntry);
+
+		_audienceEntries.add(newAudienceEntry);
 
 		AudienceEntry existingAudienceEntry = _persistence.findByPrimaryKey(
 			newAudienceEntry.getPrimaryKey());
@@ -526,8 +524,6 @@ public class AudienceEntryPersistenceTest {
 
 		AudienceEntry audienceEntry = _persistence.create(pk);
 
-		audienceEntry.setMvccVersion(RandomTestUtil.nextLong());
-
 		audienceEntry.setExternalReferenceCode(RandomTestUtil.randomString());
 
 		audienceEntry.setCompanyId(RandomTestUtil.nextLong());
@@ -555,4 +551,4 @@ public class AudienceEntryPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1891683297
+// LIFERAY-SERVICE-BUILDER-HASH:1042626862

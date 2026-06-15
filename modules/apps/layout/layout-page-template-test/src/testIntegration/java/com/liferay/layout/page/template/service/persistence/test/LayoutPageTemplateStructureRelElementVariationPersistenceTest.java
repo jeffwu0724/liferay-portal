@@ -124,14 +124,9 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 
 	@Test
 	public void testUpdateExisting() throws Exception {
-		long pk = RandomTestUtil.nextLong();
-
 		LayoutPageTemplateStructureRelElementVariation
 			newLayoutPageTemplateStructureRelElementVariation =
-				_persistence.create(pk);
-
-		newLayoutPageTemplateStructureRelElementVariation.setMvccVersion(
-			RandomTestUtil.nextLong());
+				addLayoutPageTemplateStructureRelElementVariation();
 
 		newLayoutPageTemplateStructureRelElementVariation.setCtCollectionId(
 			RandomTestUtil.nextLong());
@@ -184,9 +179,11 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 		newLayoutPageTemplateStructureRelElementVariation.setTargetElement(
 			RandomTestUtil.randomString());
 
+		newLayoutPageTemplateStructureRelElementVariation = _persistence.update(
+			newLayoutPageTemplateStructureRelElementVariation);
+
 		_layoutPageTemplateStructureRelElementVariations.add(
-			_persistence.update(
-				newLayoutPageTemplateStructureRelElementVariation));
+			newLayoutPageTemplateStructureRelElementVariation);
 
 		LayoutPageTemplateStructureRelElementVariation
 			existingLayoutPageTemplateStructureRelElementVariation =
@@ -793,9 +790,6 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 			layoutPageTemplateStructureRelElementVariation =
 				_persistence.create(pk);
 
-		layoutPageTemplateStructureRelElementVariation.setMvccVersion(
-			RandomTestUtil.nextLong());
-
 		layoutPageTemplateStructureRelElementVariation.setCtCollectionId(
 			RandomTestUtil.nextLong());
 
@@ -862,4 +856,4 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1491999811
+// LIFERAY-SERVICE-BUILDER-HASH:806345008
