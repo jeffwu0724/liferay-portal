@@ -456,14 +456,16 @@ public class ClusterGeneralTest implements Serializable {
 
 	@Test
 	public void testShutdownAndStartupNodes() throws Exception {
+		for (int i = 0; i < 10; i++) {
 
-		// Assert node 1 and node 2 can see each other
+			// Assert node 1 and node 2 can see each other
 
-		_assertNodesVisibleToEachOther(_tomcatNode1, _tomcatNode2);
+			_assertNodesVisibleToEachOther(_tomcatNode1, _tomcatNode2);
 
-		// Restart node 2, use node 1 as the verifier node
+			// Restart node 2, use node 1 as the verifier node
 
-		_restartAndVerifyNode(_tomcatNode2, _tomcatNode1);
+			_restartAndVerifyNode(_tomcatNode2, _tomcatNode1);
+		}
 	}
 
 	@Test
