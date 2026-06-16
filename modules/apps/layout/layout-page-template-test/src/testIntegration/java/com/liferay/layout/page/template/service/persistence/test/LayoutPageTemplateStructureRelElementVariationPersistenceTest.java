@@ -331,13 +331,6 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 	}
 
 	@Test
-	public void testCountByPlid() throws Exception {
-		_persistence.countByPlid(RandomTestUtil.nextLong());
-
-		_persistence.countByPlid(0L);
-	}
-
-	@Test
 	public void testCountBySegmentsExperienceERC() throws Exception {
 		_persistence.countBySegmentsExperienceERC("");
 
@@ -400,8 +393,8 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 		getOrderByComparator() {
 
 		return OrderByComparatorFactoryUtil.create(
-			"LPTSRelElementVariation", "mvccVersion", true, "ctCollectionId",
-			true, "uuid", true, "externalReferenceCode", true,
+			"LPTStructureElementVariation", "mvccVersion", true,
+			"ctCollectionId", true, "uuid", true, "externalReferenceCode", true,
 			"layoutPageTemplateStructureRelElementVariationId", true, "groupId",
 			true, "companyId", true, "userId", true, "userName", true,
 			"createDate", true, "modifiedDate", true, "audienceEntryERC", true,
@@ -863,4 +856,4 @@ public class LayoutPageTemplateStructureRelElementVariationPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-389629694
+// LIFERAY-SERVICE-BUILDER-HASH:806345008

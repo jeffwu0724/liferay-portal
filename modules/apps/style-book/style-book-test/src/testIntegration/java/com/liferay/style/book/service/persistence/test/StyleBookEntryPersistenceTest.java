@@ -428,23 +428,11 @@ public class StyleBookEntryPersistenceTest {
 	}
 
 	@Test
-	public void testCountByGroupIdArrayable() throws Exception {
-		_persistence.countByGroupId(new long[] {RandomTestUtil.nextLong(), 0L});
-	}
-
-	@Test
 	public void testCountByGroupId_Head() throws Exception {
 		_persistence.countByGroupId_Head(
 			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean());
 
 		_persistence.countByGroupId_Head(0L, RandomTestUtil.randomBoolean());
-	}
-
-	@Test
-	public void testCountByGroupId_HeadArrayable() throws Exception {
-		_persistence.countByGroupId_Head(
-			new long[] {RandomTestUtil.nextLong(), 0L},
-			RandomTestUtil.randomBoolean());
 	}
 
 	@Test
@@ -538,13 +526,6 @@ public class StyleBookEntryPersistenceTest {
 	}
 
 	@Test
-	public void testCountByG_TArrayable() throws Exception {
-		_persistence.countByG_T(
-			new long[] {RandomTestUtil.nextLong(), 0L},
-			RandomTestUtil.randomString());
-	}
-
-	@Test
 	public void testCountByG_T_Head() throws Exception {
 		_persistence.countByG_T_Head(
 			RandomTestUtil.nextLong(), "", RandomTestUtil.randomBoolean());
@@ -554,13 +535,6 @@ public class StyleBookEntryPersistenceTest {
 
 		_persistence.countByG_T_Head(
 			0L, (String)null, RandomTestUtil.randomBoolean());
-	}
-
-	@Test
-	public void testCountByG_T_HeadArrayable() throws Exception {
-		_persistence.countByG_T_Head(
-			new long[] {RandomTestUtil.nextLong(), 0L},
-			RandomTestUtil.randomString(), RandomTestUtil.randomBoolean());
 	}
 
 	@Test
@@ -1004,4 +978,4 @@ public class StyleBookEntryPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1918586398
+// LIFERAY-SERVICE-BUILDER-HASH:982014874
