@@ -308,7 +308,11 @@ public class TomcatNode {
 		NoticeableFuture<?> noticeableFuture =
 			processChannel.getProcessNoticeableFuture();
 
-		noticeableFuture.get();
+		// Bound the wait so a node that refuses to exit fails fast with a
+		// TimeoutException instead of hanging until the top level build is
+		// killed at the wall clock timeout.
+
+		noticeableFuture.get(5, TimeUnit.MINUTES);
 	}
 
 	public <V extends Serializable> V syncExecute(

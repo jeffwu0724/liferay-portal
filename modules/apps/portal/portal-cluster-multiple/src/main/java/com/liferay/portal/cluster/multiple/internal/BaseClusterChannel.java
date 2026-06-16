@@ -35,7 +35,7 @@ public abstract class BaseClusterChannel implements ClusterChannel {
 		}
 
 		try {
-			_executorService.execute(() -> doSendMessage(message, null));
+			_executorService.execute(() -> _doSendMessage(message, null));
 		}
 		catch (RejectedExecutionException rejectedExecutionException) {
 			_log.error(
@@ -55,7 +55,7 @@ public abstract class BaseClusterChannel implements ClusterChannel {
 		}
 
 		try {
-			_executorService.execute(() -> doSendMessage(message, address));
+			_executorService.execute(() -> _doSendMessage(message, address));
 		}
 		catch (RejectedExecutionException rejectedExecutionException) {
 			_log.error(
@@ -68,6 +68,27 @@ public abstract class BaseClusterChannel implements ClusterChannel {
 
 	protected abstract void doSendMessage(
 		Serializable message, Address address);
+
+	private void _doSendMessage(Serializable message, Address address) {
+		try {
+			doSendMessage(message, address);
+		}
+		catch (Exception exception) {
+
+			// The channel may be tearing down while queued send tasks are
+			// still draining. Swallow the failure here so the worker thread is
+			// not killed by an uncaught exception, which would otherwise pile
+			// up dying threads against the shared stdout lock and keep the JVM
+			// from exiting.
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					StringBundler.concat(
+						"Unable to send message ", message, " to ", address),
+					exception);
+			}
+		}
+	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BaseClusterChannel.class);
