@@ -578,5 +578,8 @@ public class CTSContentPersistenceTest {
 	private CTSContentPersistence _persistence;
 	private ClassLoader _dynamicQueryClassLoader;
 
+
+	
+
 }
 // LIFERAY-SERVICE-BUILDER-HASH:-601863533
