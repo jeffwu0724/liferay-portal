@@ -45,26 +45,27 @@ public class HibernateTypedQueryUtil {
 	public static TypedQuery<?> buildTypedQuery(
 		DynamicQueryImpl dynamicQueryImpl, Session session) {
 
-		HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
 		Class<?> resultType = dynamicQueryImpl.getClazz();
 
 		if (dynamicQueryImpl.getProjection() != null) {
 			resultType = Object.class;
 		}
 
-		CriteriaQuery<?> criteriaQuery = criteriaBuilder.createQuery(
+		HibernateCriteriaBuilder hibernateCriteriaBuilder =
+			session.getCriteriaBuilder();
+
+		CriteriaQuery<?> criteriaQuery = hibernateCriteriaBuilder.createQuery(
 			resultType);
 
-		_apply(criteriaBuilder, criteriaQuery, dynamicQueryImpl);
+		_apply(criteriaQuery, dynamicQueryImpl, hibernateCriteriaBuilder);
 
 		return session.createQuery(criteriaQuery);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static void _apply(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, DynamicQueryImpl dynamicQueryImpl) {
+		AbstractQuery<?> abstractQuery, DynamicQueryImpl dynamicQueryImpl,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder) {
 
 		String alias = dynamicQueryImpl.getAlias();
 
@@ -81,8 +82,8 @@ public class HibernateTypedQueryUtil {
 
 			for (int i = 0; i < criterions.size(); i++) {
 				predicates[i] = _toPredicate(
-					criteriaBuilder, abstractQuery, root, alias,
-					criterions.get(i));
+					abstractQuery, alias, criterions.get(i), root,
+					hibernateCriteriaBuilder);
 			}
 
 			abstractQuery.where(predicates);
@@ -91,80 +92,54 @@ public class HibernateTypedQueryUtil {
 		List<Expression<?>> groupByExpressions = new ArrayList<>();
 
 		Selection<?> selection = _toSelection(
-			criteriaBuilder, abstractQuery, root, alias,
-			dynamicQueryImpl.getProjection(), groupByExpressions);
-
-		if (abstractQuery instanceof CriteriaQuery) {
-			CriteriaQuery criteriaQuery = (CriteriaQuery)abstractQuery;
-
-			criteriaQuery.select(selection);
-		}
-		else {
-			Subquery subquery = (Subquery)abstractQuery;
-
-			subquery.select((Expression)selection);
-		}
+			abstractQuery, alias, root, groupByExpressions,
+			hibernateCriteriaBuilder, dynamicQueryImpl.getProjection());
 
 		if (!groupByExpressions.isEmpty()) {
 			abstractQuery.groupBy(groupByExpressions);
 		}
 
+		if (abstractQuery instanceof Subquery<?>) {
+			Subquery subquery = (Subquery)abstractQuery;
+
+			subquery.select((Expression)selection);
+
+			return;
+		}
+
+		CriteriaQuery criteriaQuery = (CriteriaQuery)abstractQuery;
+
+		criteriaQuery.select(selection);
+
 		List<Order> orders = dynamicQueryImpl.getOrders();
 
-		if (!orders.isEmpty() && (abstractQuery instanceof CriteriaQuery)) {
-			List<jakarta.persistence.criteria.Order> jpaOrders =
-				new ArrayList<>(orders.size());
-
-			for (Order order : orders) {
-				OrderImpl orderImpl = (OrderImpl)order;
-
-				Path<?> path = _getPath(
-					orderImpl.getPropertyName(), abstractQuery, root, alias);
-
-				if (orderImpl.isAscending()) {
-					jpaOrders.add(criteriaBuilder.asc(path));
-				}
-				else {
-					jpaOrders.add(criteriaBuilder.desc(path));
-				}
-			}
-
-			CriteriaQuery<?> criteriaQuery = (CriteriaQuery<?>)abstractQuery;
-
-			criteriaQuery.orderBy(jpaOrders);
+		if (orders.isEmpty()) {
+			return;
 		}
-	}
 
-	private static Selection<?> _copySelection(
-		AbstractQuery<?> abstractQuery, Selection<?> selection) {
+		List<jakarta.persistence.criteria.Order> jpaOrders = new ArrayList<>(
+			orders.size());
 
-		SqmCopyContext sqmCopyContext = SqmCopyContext.simpleContext();
+		for (Order order : orders) {
+			OrderImpl orderImpl = (OrderImpl)order;
 
-		AbstractQuery<?> currentQuery = abstractQuery;
+			Path<?> path = _getPath(
+				abstractQuery, alias, root, orderImpl.getPropertyName());
 
-		while (currentQuery != null) {
-			for (Root<?> root : currentQuery.getRoots()) {
-				sqmCopyContext.registerCopy(root, root);
-			}
-
-			if (currentQuery instanceof Subquery) {
-				Subquery<?> subquery = (Subquery<?>)currentQuery;
-
-				currentQuery = (AbstractQuery<?>)subquery.getParent();
+			if (orderImpl.isAscending()) {
+				jpaOrders.add(hibernateCriteriaBuilder.asc(path));
 			}
 			else {
-				currentQuery = null;
+				jpaOrders.add(hibernateCriteriaBuilder.desc(path));
 			}
 		}
 
-		SqmSelectableNode<?> sqmSelectableNode = (SqmSelectableNode<?>)selection;
-
-		return sqmSelectableNode.copy(sqmCopyContext);
+		criteriaQuery.orderBy(jpaOrders);
 	}
 
 	private static Path<?> _getPath(
-		String name, AbstractQuery<?> abstractQuery, From<?, ?> from,
-		String alias) {
+		AbstractQuery<?> abstractQuery, String alias, From<?, ?> from,
+		String name) {
 
 		String[] parts = StringUtil.split(name, CharPool.PERIOD);
 
@@ -175,7 +150,9 @@ public class HibernateTypedQueryUtil {
 		String parsedAlias = parts[0];
 		String columnName = parts[1];
 
-		if (Objects.equals(parsedAlias, alias)) {
+		if (Objects.equals(parsedAlias, alias) ||
+			((alias == null) && parsedAlias.equals("this"))) {
+
 			return from.get(columnName);
 		}
 
@@ -196,7 +173,11 @@ public class HibernateTypedQueryUtil {
 
 			Root<?> root = roots.get(0);
 
-			if (Objects.equals(parsedAlias, root.getAlias())) {
+			String rootAlias = root.getAlias();
+
+			if (Objects.equals(parsedAlias, rootAlias) ||
+				((rootAlias == null) && parsedAlias.equals("this"))) {
+
 				return root.get(columnName);
 			}
 		}
@@ -204,6 +185,57 @@ public class HibernateTypedQueryUtil {
 		throw new IllegalArgumentException(
 			StringBundler.concat(
 				"Unable to resolve alias ", parsedAlias, " in ", name));
+	}
+
+	private static boolean _isColumnNameChar(char c) {
+		if (Character.isLetterOrDigit(c) || (c == CharPool.UNDERLINE)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static String _resolveSQL(
+		List<Expression<?>> arguments, From<?, ?> from,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder, String sql,
+		Object[] values) {
+
+		StringBundler sb = new StringBundler();
+
+		int valueIndex = 0;
+
+		for (int i = 0; i < sql.length(); i++) {
+			char c = sql.charAt(i);
+
+			if (c == CharPool.QUESTION) {
+				arguments.add(
+					hibernateCriteriaBuilder.literal(values[valueIndex++]));
+
+				sb.append(CharPool.QUESTION);
+			}
+			else if (sql.startsWith(_ROOT_ALIAS_PREFIX, i)) {
+				int start = i + _ROOT_ALIAS_PREFIX.length();
+
+				int end = start;
+
+				while ((end < sql.length()) &&
+					   _isColumnNameChar(sql.charAt(end))) {
+
+					end++;
+				}
+
+				arguments.add(from.get(sql.substring(start, end)));
+
+				sb.append(CharPool.QUESTION);
+
+				i = end - 1;
+			}
+			else {
+				sb.append(c);
+			}
+		}
+
+		return sb.toString();
 	}
 
 	private static List<String> _splitTopLevelCommas(String sql) {
@@ -233,14 +265,6 @@ public class HibernateTypedQueryUtil {
 		return parts;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static <T> Expression<T> _sql(
-		HibernateCriteriaBuilder criteriaBuilder, String sql,
-		Class<?> javaType) {
-
-		return criteriaBuilder.sql(sql, (Class)javaType);
-	}
-
 	private static BasicTypeReference<?>[] _toBasicTypeReferences(
 		Type[] types) {
 
@@ -259,9 +283,8 @@ public class HibernateTypedQueryUtil {
 	}
 
 	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		Criterion criterion) {
+		AbstractQuery<?> abstractQuery, String alias, Criterion criterion,
+		From<?, ?> from, HibernateCriteriaBuilder hibernateCriteriaBuilder) {
 
 		if (criterion instanceof ConjunctionImpl) {
 			ConjunctionImpl conjunctionImpl = (ConjunctionImpl)criterion;
@@ -272,11 +295,11 @@ public class HibernateTypedQueryUtil {
 
 			for (int i = 0; i < criterions.size(); i++) {
 				predicates[i] = _toPredicate(
-					criteriaBuilder, abstractQuery, from, alias,
-					criterions.get(i));
+					abstractQuery, alias, criterions.get(i), from,
+					hibernateCriteriaBuilder);
 			}
 
-			return criteriaBuilder.and(predicates);
+			return hibernateCriteriaBuilder.and(predicates);
 		}
 
 		if (criterion instanceof DisjunctionImpl) {
@@ -288,11 +311,11 @@ public class HibernateTypedQueryUtil {
 
 			for (int i = 0; i < criterions.size(); i++) {
 				predicates[i] = _toPredicate(
-					criteriaBuilder, abstractQuery, from, alias,
-					criterions.get(i));
+					abstractQuery, alias, criterions.get(i), from,
+					hibernateCriteriaBuilder);
 			}
 
-			return criteriaBuilder.or(predicates);
+			return hibernateCriteriaBuilder.or(predicates);
 		}
 
 		CriterionImpl criterionImpl = (CriterionImpl)criterion;
@@ -301,16 +324,17 @@ public class HibernateTypedQueryUtil {
 
 		if (criterions != null) {
 			return _toPredicate(
-				criteriaBuilder, abstractQuery, from, alias,
-				criterionImpl.getCriterionType(), criterions);
+				abstractQuery, alias, criterions,
+				criterionImpl.getCriterionType(), from,
+				hibernateCriteriaBuilder);
 		}
 
 		DynamicQuery dynamicQuery = criterionImpl.getDynamicQuery();
 
 		if (dynamicQuery != null) {
 			return _toPredicate(
-				criteriaBuilder, abstractQuery, from, alias,
-				criterionImpl.getCriterionType(), dynamicQuery,
+				abstractQuery, alias, criterionImpl.getCriterionType(),
+				dynamicQuery, from, hibernateCriteriaBuilder,
 				criterionImpl.getPropertyName());
 		}
 
@@ -318,39 +342,41 @@ public class HibernateTypedQueryUtil {
 
 		if (size != null) {
 			return _toPredicate(
-				criteriaBuilder, abstractQuery, from, alias,
-				criterionImpl.getCriterionType(),
-				criterionImpl.getPropertyName(), size.intValue());
+				abstractQuery, alias, criterionImpl.getCriterionType(), from,
+				hibernateCriteriaBuilder, criterionImpl.getPropertyName(),
+				size.intValue());
 		}
 
 		String targetPropertyName = criterionImpl.getTargetPropertyName();
 
 		if (targetPropertyName != null) {
 			return _toPredicate(
-				criteriaBuilder, abstractQuery, from, alias,
-				criterionImpl.getCriterionType(),
-				criterionImpl.getPropertyName(), targetPropertyName);
+				abstractQuery, alias, criterionImpl.getCriterionType(), from,
+				hibernateCriteriaBuilder, criterionImpl.getPropertyName(),
+				targetPropertyName);
 		}
 
 		Object[] values = criterionImpl.getValues();
 
 		if (values != null) {
 			return _toPredicate(
-				criteriaBuilder, abstractQuery, from, alias, criterionImpl,
-				criterionImpl.getCriterionType(),
-				criterionImpl.getPropertyName(), values);
+				abstractQuery, alias, criterionImpl,
+				criterionImpl.getCriterionType(), from,
+				hibernateCriteriaBuilder, criterionImpl.getPropertyName(),
+				values);
 		}
 
 		return _toPredicate(
-			criteriaBuilder, abstractQuery, from, alias, criterionImpl,
-			criterionImpl.getCriterionType(), criterionImpl.getPropertyName());
+			abstractQuery, alias, criterionImpl,
+			criterionImpl.getCriterionType(), from, hibernateCriteriaBuilder,
+			criterionImpl.getPropertyName());
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
+		AbstractQuery<?> abstractQuery, String alias,
 		CriterionImpl criterionImpl, CriterionType criterionType,
+		From<?, ?> from, HibernateCriteriaBuilder hibernateCriteriaBuilder,
 		String propertyName) {
 
 		if (criterionType == CriterionType.ALL_EQ) {
@@ -358,7 +384,7 @@ public class HibernateTypedQueryUtil {
 				criterionImpl.getPropertyNameValues();
 
 			if ((propertyNameValues == null) || propertyNameValues.isEmpty()) {
-				return criteriaBuilder.conjunction();
+				return hibernateCriteriaBuilder.conjunction();
 			}
 
 			Predicate[] predicates = new Predicate[propertyNameValues.size()];
@@ -369,31 +395,39 @@ public class HibernateTypedQueryUtil {
 					propertyNameValues.entrySet()) {
 
 				predicates[i++] = _toPredicate(
-					criteriaBuilder, abstractQuery, from, alias,
-					entry.getValue());
+					abstractQuery, alias, entry.getValue(), from,
+					hibernateCriteriaBuilder);
 			}
 
-			return criteriaBuilder.and(predicates);
+			return hibernateCriteriaBuilder.and(predicates);
 		}
 		else if (criterionType == CriterionType.IS_EMPTY) {
-			return criteriaBuilder.isEmpty(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias));
+			return hibernateCriteriaBuilder.isEmpty(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName));
 		}
 		else if (criterionType == CriterionType.IS_NOT_EMPTY) {
-			return criteriaBuilder.isNotEmpty(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias));
+			return hibernateCriteriaBuilder.isNotEmpty(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName));
 		}
 		else if (criterionType == CriterionType.IS_NOT_NULL) {
-			return criteriaBuilder.isNotNull(
-				_getPath(propertyName, abstractQuery, from, alias));
+			return hibernateCriteriaBuilder.isNotNull(
+				_getPath(abstractQuery, alias, from, propertyName));
 		}
 		else if (criterionType == CriterionType.IS_NULL) {
-			return criteriaBuilder.isNull(
-				_getPath(propertyName, abstractQuery, from, alias));
+			return hibernateCriteriaBuilder.isNull(
+				_getPath(abstractQuery, alias, from, propertyName));
 		}
 		else if (criterionType == CriterionType.SQL_RESTRICTION) {
-			return criteriaBuilder.wrap(
-				criteriaBuilder.sql(criterionImpl.getSQL(), Boolean.class));
+			List<Expression<?>> arguments = new ArrayList<>();
+
+			String sql = _resolveSQL(
+				arguments, from, hibernateCriteriaBuilder,
+				criterionImpl.getSQL(), new Object[0]);
+
+			return hibernateCriteriaBuilder.wrap(
+				hibernateCriteriaBuilder.sql(
+					sql, Boolean.class,
+					arguments.toArray(new Expression<?>[0])));
 		}
 
 		throw new IllegalStateException(
@@ -402,79 +436,81 @@ public class HibernateTypedQueryUtil {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
+		AbstractQuery<?> abstractQuery, String alias,
 		CriterionImpl criterionImpl, CriterionType criterionType,
+		From<?, ?> from, HibernateCriteriaBuilder hibernateCriteriaBuilder,
 		String propertyName, Object[] values) {
 
 		if (criterionType == CriterionType.BETWEEN) {
-			return criteriaBuilder.between(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias),
+			return hibernateCriteriaBuilder.between(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName),
 				(Comparable)values[0], (Comparable)values[1]);
 		}
 		else if (criterionType == CriterionType.EQ) {
-			return criteriaBuilder.equal(
-				_getPath(propertyName, abstractQuery, from, alias), values[0]);
+			return hibernateCriteriaBuilder.equal(
+				_getPath(abstractQuery, alias, from, propertyName), values[0]);
 		}
 		else if (criterionType == CriterionType.GE) {
-			return criteriaBuilder.greaterThanOrEqualTo(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias),
+			return hibernateCriteriaBuilder.greaterThanOrEqualTo(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName),
 				(Comparable)values[0]);
 		}
 		else if (criterionType == CriterionType.GT) {
-			return criteriaBuilder.greaterThan(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias),
+			return hibernateCriteriaBuilder.greaterThan(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName),
 				(Comparable)values[0]);
 		}
 		else if (criterionType == CriterionType.ILIKE) {
 			Expression<String> expression = _getPath(
-				propertyName, abstractQuery, from, alias
+				abstractQuery, alias, from, propertyName
 			).as(
 				String.class
 			);
 
-			return criteriaBuilder.like(
-				criteriaBuilder.lower(expression),
+			return hibernateCriteriaBuilder.like(
+				hibernateCriteriaBuilder.lower(expression),
 				StringUtil.toLowerCase(String.valueOf(values[0])));
 		}
 		else if (criterionType == CriterionType.IN) {
-			Path<?> path = _getPath(propertyName, abstractQuery, from, alias);
+			Path<?> path = _getPath(abstractQuery, alias, from, propertyName);
 
 			return path.in(values);
 		}
 		else if (criterionType == CriterionType.LE) {
-			return criteriaBuilder.lessThanOrEqualTo(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias),
+			return hibernateCriteriaBuilder.lessThanOrEqualTo(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName),
 				(Comparable)values[0]);
 		}
 		else if (criterionType == CriterionType.LIKE) {
 			Expression<String> expression = _getPath(
-				propertyName, abstractQuery, from, alias
+				abstractQuery, alias, from, propertyName
 			).as(
 				String.class
 			);
 
-			return criteriaBuilder.like(expression, String.valueOf(values[0]));
+			return hibernateCriteriaBuilder.like(
+				expression, String.valueOf(values[0]));
 		}
 		else if (criterionType == CriterionType.LT) {
-			return criteriaBuilder.lessThan(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias),
+			return hibernateCriteriaBuilder.lessThan(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName),
 				(Comparable)values[0]);
 		}
 		else if (criterionType == CriterionType.NE) {
-			return criteriaBuilder.notEqual(
-				_getPath(propertyName, abstractQuery, from, alias), values[0]);
+			return hibernateCriteriaBuilder.notEqual(
+				_getPath(abstractQuery, alias, from, propertyName), values[0]);
 		}
 		else if (criterionType == CriterionType.SQL_RESTRICTION) {
-			Expression<?>[] arguments = new Expression<?>[values.length];
+			List<Expression<?>> arguments = new ArrayList<>();
 
-			for (int i = 0; i < values.length; i++) {
-				arguments[i] = criteriaBuilder.literal(values[i]);
-			}
+			String sql = _resolveSQL(
+				arguments, from, hibernateCriteriaBuilder,
+				criterionImpl.getSQL(), values);
 
-			return criteriaBuilder.wrap(
-				criteriaBuilder.sql(
-					criterionImpl.getSQL(), Boolean.class, arguments));
+			return hibernateCriteriaBuilder.wrap(
+				hibernateCriteriaBuilder.sql(
+					sql, Boolean.class,
+					arguments.toArray(new Expression<?>[0])));
 		}
 
 		throw new IllegalStateException(
@@ -483,76 +519,85 @@ public class HibernateTypedQueryUtil {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		CriterionType criterionType, DynamicQuery dynamicQuery,
+		AbstractQuery<?> abstractQuery, String alias,
+		CriterionType criterionType, DynamicQuery dynamicQuery, From<?, ?> from,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder,
 		String propertyName) {
 
-		Path<?> path = _getPath(propertyName, abstractQuery, from, alias);
+		Path<?> path = _getPath(abstractQuery, alias, from, propertyName);
 
 		Subquery<?> subquery = _toSubquery(
-			criteriaBuilder, abstractQuery, (DynamicQueryImpl)dynamicQuery,
-			path.getJavaType());
+			abstractQuery, (DynamicQueryImpl)dynamicQuery, path.getJavaType(),
+			hibernateCriteriaBuilder);
 
 		if (criterionType == CriterionType.EQ) {
-			return criteriaBuilder.equal(path, subquery);
+			return hibernateCriteriaBuilder.equal(path, subquery);
 		}
 		else if (criterionType == CriterionType.EQ_ALL) {
-			return criteriaBuilder.equal(path, criteriaBuilder.all(subquery));
+			return hibernateCriteriaBuilder.equal(
+				path, hibernateCriteriaBuilder.all(subquery));
 		}
 		else if (criterionType == CriterionType.GE) {
-			return criteriaBuilder.greaterThanOrEqualTo(
+			return hibernateCriteriaBuilder.greaterThanOrEqualTo(
 				(Expression)path, (Expression)subquery);
 		}
 		else if (criterionType == CriterionType.GE_ALL) {
-			return criteriaBuilder.greaterThanOrEqualTo(
-				(Expression)path, (Expression)criteriaBuilder.all(subquery));
+			return hibernateCriteriaBuilder.greaterThanOrEqualTo(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.all(subquery));
 		}
 		else if (criterionType == CriterionType.GE_SOME) {
-			return criteriaBuilder.greaterThanOrEqualTo(
-				(Expression)path, (Expression)criteriaBuilder.some(subquery));
+			return hibernateCriteriaBuilder.greaterThanOrEqualTo(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.some(subquery));
 		}
 		else if (criterionType == CriterionType.GT) {
-			return criteriaBuilder.greaterThan(
+			return hibernateCriteriaBuilder.greaterThan(
 				(Expression)path, (Expression)subquery);
 		}
 		else if (criterionType == CriterionType.GT_ALL) {
-			return criteriaBuilder.greaterThan(
-				(Expression)path, (Expression)criteriaBuilder.all(subquery));
+			return hibernateCriteriaBuilder.greaterThan(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.all(subquery));
 		}
 		else if (criterionType == CriterionType.GT_SOME) {
-			return criteriaBuilder.greaterThan(
-				(Expression)path, (Expression)criteriaBuilder.some(subquery));
+			return hibernateCriteriaBuilder.greaterThan(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.some(subquery));
 		}
 		else if (criterionType == CriterionType.IN) {
 			return path.in(subquery);
 		}
 		else if (criterionType == CriterionType.LE) {
-			return criteriaBuilder.lessThanOrEqualTo(
+			return hibernateCriteriaBuilder.lessThanOrEqualTo(
 				(Expression)path, (Expression)subquery);
 		}
 		else if (criterionType == CriterionType.LE_ALL) {
-			return criteriaBuilder.lessThanOrEqualTo(
-				(Expression)path, (Expression)criteriaBuilder.all(subquery));
+			return hibernateCriteriaBuilder.lessThanOrEqualTo(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.all(subquery));
 		}
 		else if (criterionType == CriterionType.LE_SOME) {
-			return criteriaBuilder.lessThanOrEqualTo(
-				(Expression)path, (Expression)criteriaBuilder.some(subquery));
+			return hibernateCriteriaBuilder.lessThanOrEqualTo(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.some(subquery));
 		}
 		else if (criterionType == CriterionType.LT) {
-			return criteriaBuilder.lessThan(
+			return hibernateCriteriaBuilder.lessThan(
 				(Expression)path, (Expression)subquery);
 		}
 		else if (criterionType == CriterionType.LT_ALL) {
-			return criteriaBuilder.lessThan(
-				(Expression)path, (Expression)criteriaBuilder.all(subquery));
+			return hibernateCriteriaBuilder.lessThan(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.all(subquery));
 		}
 		else if (criterionType == CriterionType.LT_SOME) {
-			return criteriaBuilder.lessThan(
-				(Expression)path, (Expression)criteriaBuilder.some(subquery));
+			return hibernateCriteriaBuilder.lessThan(
+				(Expression)path,
+				(Expression)hibernateCriteriaBuilder.some(subquery));
 		}
 		else if (criterionType == CriterionType.NE) {
-			return criteriaBuilder.notEqual(path, subquery);
+			return hibernateCriteriaBuilder.notEqual(path, subquery);
 		}
 		else if (criterionType == CriterionType.NOT_IN) {
 			Predicate predicate = path.in(subquery);
@@ -564,108 +609,111 @@ public class HibernateTypedQueryUtil {
 			"Unexpected criterion type: " + criterionType);
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		CriterionType criterionType, List<Criterion> criterions) {
+		AbstractQuery<?> abstractQuery, String alias,
+		CriterionType criterionType, From<?, ?> from,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder, String propertyName,
+		int size) {
+
+		Expression<Integer> sizeExpression = hibernateCriteriaBuilder.size(
+			(Expression)_getPath(abstractQuery, alias, from, propertyName));
+
+		if (criterionType == CriterionType.EQ) {
+			return hibernateCriteriaBuilder.equal(sizeExpression, size);
+		}
+		else if (criterionType == CriterionType.GE) {
+			return hibernateCriteriaBuilder.greaterThanOrEqualTo(
+				sizeExpression, size);
+		}
+		else if (criterionType == CriterionType.GT) {
+			return hibernateCriteriaBuilder.greaterThan(sizeExpression, size);
+		}
+		else if (criterionType == CriterionType.LE) {
+			return hibernateCriteriaBuilder.lessThanOrEqualTo(
+				sizeExpression, size);
+		}
+		else if (criterionType == CriterionType.LT) {
+			return hibernateCriteriaBuilder.lessThan(sizeExpression, size);
+		}
+		else if (criterionType == CriterionType.NE) {
+			return hibernateCriteriaBuilder.notEqual(sizeExpression, size);
+		}
+
+		throw new IllegalStateException(
+			"Unexpected criterion type: " + criterionType);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private static Predicate _toPredicate(
+		AbstractQuery<?> abstractQuery, String alias,
+		CriterionType criterionType, From<?, ?> from,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder, String propertyName,
+		String targetPropertyName) {
+
+		Path<?> path = _getPath(abstractQuery, alias, from, propertyName);
+		Path<?> targetPath = _getPath(
+			abstractQuery, alias, from, targetPropertyName);
+
+		if (criterionType == CriterionType.EQ) {
+			return hibernateCriteriaBuilder.equal(path, targetPath);
+		}
+		else if (criterionType == CriterionType.GE) {
+			return hibernateCriteriaBuilder.greaterThanOrEqualTo(
+				(Expression)path, (Expression)targetPath);
+		}
+		else if (criterionType == CriterionType.GT) {
+			return hibernateCriteriaBuilder.greaterThan(
+				(Expression)path, (Expression)targetPath);
+		}
+		else if (criterionType == CriterionType.LE) {
+			return hibernateCriteriaBuilder.lessThanOrEqualTo(
+				(Expression)path, (Expression)targetPath);
+		}
+		else if (criterionType == CriterionType.LT) {
+			return hibernateCriteriaBuilder.lessThan(
+				(Expression)path, (Expression)targetPath);
+		}
+		else if (criterionType == CriterionType.NE) {
+			return hibernateCriteriaBuilder.notEqual(path, targetPath);
+		}
+
+		throw new IllegalStateException(
+			"Unexpected criterion type: " + criterionType);
+	}
+
+	private static Predicate _toPredicate(
+		AbstractQuery<?> abstractQuery, String alias,
+		List<Criterion> criterions, CriterionType criterionType,
+		From<?, ?> from, HibernateCriteriaBuilder hibernateCriteriaBuilder) {
 
 		if (criterions.size() == 1) {
-			return criteriaBuilder.not(
+			return hibernateCriteriaBuilder.not(
 				_toPredicate(
-					criteriaBuilder, abstractQuery, from, alias,
-					criterions.get(0)));
+					abstractQuery, alias, criterions.get(0), from,
+					hibernateCriteriaBuilder));
 		}
 
 		if (criterions.size() == 2) {
 			if (criterionType == CriterionType.OR) {
-				return criteriaBuilder.or(
+				return hibernateCriteriaBuilder.or(
 					_toPredicate(
-						criteriaBuilder, abstractQuery, from, alias,
-						criterions.get(0)),
+						abstractQuery, alias, criterions.get(0), from,
+						hibernateCriteriaBuilder),
 					_toPredicate(
-						criteriaBuilder, abstractQuery, from, alias,
-						criterions.get(1)));
+						abstractQuery, alias, criterions.get(1), from,
+						hibernateCriteriaBuilder));
 			}
 
 			if (criterionType == CriterionType.AND) {
-				return criteriaBuilder.and(
+				return hibernateCriteriaBuilder.and(
 					_toPredicate(
-						criteriaBuilder, abstractQuery, from, alias,
-						criterions.get(0)),
+						abstractQuery, alias, criterions.get(0), from,
+						hibernateCriteriaBuilder),
 					_toPredicate(
-						criteriaBuilder, abstractQuery, from, alias,
-						criterions.get(1)));
+						abstractQuery, alias, criterions.get(1), from,
+						hibernateCriteriaBuilder));
 			}
-		}
-
-		throw new IllegalStateException(
-			"Unexpected criterion type: " + criterionType);
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		CriterionType criterionType, String propertyName, int size) {
-
-		Expression<Integer> sizeExpression = criteriaBuilder.size(
-			(Expression)_getPath(propertyName, abstractQuery, from, alias));
-
-		if (criterionType == CriterionType.EQ) {
-			return criteriaBuilder.equal(sizeExpression, size);
-		}
-		else if (criterionType == CriterionType.GE) {
-			return criteriaBuilder.greaterThanOrEqualTo(sizeExpression, size);
-		}
-		else if (criterionType == CriterionType.GT) {
-			return criteriaBuilder.greaterThan(sizeExpression, size);
-		}
-		else if (criterionType == CriterionType.LE) {
-			return criteriaBuilder.lessThanOrEqualTo(sizeExpression, size);
-		}
-		else if (criterionType == CriterionType.LT) {
-			return criteriaBuilder.lessThan(sizeExpression, size);
-		}
-		else if (criterionType == CriterionType.NE) {
-			return criteriaBuilder.notEqual(sizeExpression, size);
-		}
-
-		throw new IllegalStateException(
-			"Unexpected criterion type: " + criterionType);
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static Predicate _toPredicate(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		CriterionType criterionType, String propertyName,
-		String targetPropertyName) {
-
-		Path<?> path = _getPath(propertyName, abstractQuery, from, alias);
-		Path<?> targetPath = _getPath(
-			targetPropertyName, abstractQuery, from, alias);
-
-		if (criterionType == CriterionType.EQ) {
-			return criteriaBuilder.equal(path, targetPath);
-		}
-		else if (criterionType == CriterionType.GE) {
-			return criteriaBuilder.greaterThanOrEqualTo(
-				(Expression)path, (Expression)targetPath);
-		}
-		else if (criterionType == CriterionType.GT) {
-			return criteriaBuilder.greaterThan(
-				(Expression)path, (Expression)targetPath);
-		}
-		else if (criterionType == CriterionType.LE) {
-			return criteriaBuilder.lessThanOrEqualTo(
-				(Expression)path, (Expression)targetPath);
-		}
-		else if (criterionType == CriterionType.LT) {
-			return criteriaBuilder.lessThan(
-				(Expression)path, (Expression)targetPath);
-		}
-		else if (criterionType == CriterionType.NE) {
-			return criteriaBuilder.notEqual(path, targetPath);
 		}
 
 		throw new IllegalStateException(
@@ -674,9 +722,48 @@ public class HibernateTypedQueryUtil {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private static Selection<?> _toSelection(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		Projection projection, List<Expression<?>> groupByExpressions) {
+		AbstractQuery<?> abstractQuery, String alias, From<?, ?> from,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder,
+		ProjectionType projectionType, String propertyName) {
+
+		if (projectionType == ProjectionType.AVG) {
+			return hibernateCriteriaBuilder.avg(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName));
+		}
+		else if (projectionType == ProjectionType.COUNT) {
+			return hibernateCriteriaBuilder.count(
+				_getPath(abstractQuery, alias, from, propertyName));
+		}
+		else if (projectionType == ProjectionType.COUNT_DISTINCT) {
+			return hibernateCriteriaBuilder.countDistinct(
+				_getPath(abstractQuery, alias, from, propertyName));
+		}
+		else if (projectionType == ProjectionType.MAX) {
+			return hibernateCriteriaBuilder.max(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName));
+		}
+		else if (projectionType == ProjectionType.MIN) {
+			return hibernateCriteriaBuilder.min(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName));
+		}
+		else if (projectionType == ProjectionType.ROW_COUNT) {
+			return hibernateCriteriaBuilder.count(from);
+		}
+		else if (projectionType == ProjectionType.SUM) {
+			return hibernateCriteriaBuilder.sum(
+				(Expression)_getPath(abstractQuery, alias, from, propertyName));
+		}
+
+		throw new IllegalStateException(
+			"Unexpected projection type: " + projectionType);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private static Selection<?> _toSelection(
+		AbstractQuery<?> abstractQuery, String alias, From<?, ?> from,
+		List<Expression<?>> groupByExpressions,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder,
+		Projection projection) {
 
 		if (projection == null) {
 			return from;
@@ -693,22 +780,22 @@ public class HibernateTypedQueryUtil {
 			for (Projection curProjection : projections) {
 				selections.add(
 					_toSelection(
-						criteriaBuilder, abstractQuery, from, alias,
-						curProjection, groupByExpressions));
+						abstractQuery, alias, from, groupByExpressions,
+						hibernateCriteriaBuilder, curProjection));
 			}
 
 			if (selections.size() == 1) {
 				return selections.get(0);
 			}
 
-			return criteriaBuilder.array(selections);
+			return hibernateCriteriaBuilder.array(selections);
 		}
 
 		if (projection instanceof PropertyImpl) {
 			PropertyImpl propertyImpl = (PropertyImpl)projection;
 
 			Path<?> path = _getPath(
-				propertyImpl.getPropertyName(), abstractQuery, from, alias);
+				abstractQuery, alias, from, propertyImpl.getPropertyName());
 
 			if (propertyImpl.isGroup()) {
 				groupByExpressions.add(path);
@@ -721,11 +808,31 @@ public class HibernateTypedQueryUtil {
 
 		if (projectionImpl.getAlias() != null) {
 			Selection<?> selection = _toSelection(
-				criteriaBuilder, abstractQuery, from, alias,
-				projectionImpl.getProjection(), groupByExpressions);
+				abstractQuery, alias, from, groupByExpressions,
+				hibernateCriteriaBuilder, projectionImpl.getProjection());
 
 			if (selection.getAlias() != null) {
-				selection = _copySelection(abstractQuery, selection);
+				SqmSelectableNode<?> sqmSelectableNode =
+					(SqmSelectableNode<?>)selection;
+
+				selection = sqmSelectableNode.copy(
+					new SqmCopyContext() {
+
+						@Override
+						public <T> T getCopy(T original) {
+							if (original instanceof From) {
+								return original;
+							}
+
+							return null;
+						}
+
+						@Override
+						public <T> T registerCopy(T original, T copy) {
+							return copy;
+						}
+
+					});
 			}
 
 			selection.alias(projectionImpl.getAlias());
@@ -737,62 +844,26 @@ public class HibernateTypedQueryUtil {
 			abstractQuery.distinct(true);
 
 			return _toSelection(
-				criteriaBuilder, abstractQuery, from, alias,
-				projectionImpl.getProjection(), groupByExpressions);
+				abstractQuery, alias, from, groupByExpressions,
+				hibernateCriteriaBuilder, projectionImpl.getProjection());
 		}
 
 		if (projectionImpl.getSQL() != null) {
 			return _toSqlSelection(
-				criteriaBuilder, projectionImpl, groupByExpressions);
+				from, groupByExpressions, hibernateCriteriaBuilder,
+				projectionImpl);
 		}
 
 		return _toSelection(
-			criteriaBuilder, abstractQuery, from, alias,
+			abstractQuery, alias, from, hibernateCriteriaBuilder,
 			projectionImpl.getProjectionType(),
 			projectionImpl.getPropertyName());
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static Selection<?> _toSelection(
-		HibernateCriteriaBuilder criteriaBuilder,
-		AbstractQuery<?> abstractQuery, From<?, ?> from, String alias,
-		ProjectionType projectionType, String propertyName) {
-
-		if (projectionType == ProjectionType.AVG) {
-			return criteriaBuilder.avg(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias));
-		}
-		else if (projectionType == ProjectionType.COUNT) {
-			return criteriaBuilder.count(
-				_getPath(propertyName, abstractQuery, from, alias));
-		}
-		else if (projectionType == ProjectionType.COUNT_DISTINCT) {
-			return criteriaBuilder.countDistinct(
-				_getPath(propertyName, abstractQuery, from, alias));
-		}
-		else if (projectionType == ProjectionType.MAX) {
-			return criteriaBuilder.max(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias));
-		}
-		else if (projectionType == ProjectionType.MIN) {
-			return criteriaBuilder.min(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias));
-		}
-		else if (projectionType == ProjectionType.ROW_COUNT) {
-			return criteriaBuilder.count(from);
-		}
-		else if (projectionType == ProjectionType.SUM) {
-			return criteriaBuilder.sum(
-				(Expression)_getPath(propertyName, abstractQuery, from, alias));
-		}
-
-		throw new IllegalStateException(
-			"Unexpected projection type: " + projectionType);
-	}
-
 	private static Selection<?> _toSqlSelection(
-		HibernateCriteriaBuilder criteriaBuilder, ProjectionImpl projectionImpl,
-		List<Expression<?>> groupByExpressions) {
+		From<?, ?> from, List<Expression<?>> groupByExpressions,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder,
+		ProjectionImpl projectionImpl) {
 
 		BasicTypeReference<?>[] basicTypeReferences = _toBasicTypeReferences(
 			projectionImpl.getTypes());
@@ -815,7 +886,14 @@ public class HibernateTypedQueryUtil {
 				javaType = basicTypeReferences[i].getJavaType();
 			}
 
-			Selection<?> selection = _sql(criteriaBuilder, columnSql, javaType);
+			List<Expression<?>> arguments = new ArrayList<>();
+
+			String resolvedSQL = _resolveSQL(
+				arguments, from, hibernateCriteriaBuilder, columnSql,
+				new Object[0]);
+
+			Selection<?> selection = hibernateCriteriaBuilder.sql(
+				resolvedSQL, javaType, arguments.toArray(new Expression<?>[0]));
 
 			if ((columnAliases != null) && (i < columnAliases.length) &&
 				(columnAliases[i] != null)) {
@@ -830,10 +908,16 @@ public class HibernateTypedQueryUtil {
 
 		if ((groupBy != null) && !groupBy.isEmpty()) {
 			for (String groupByPart : _splitTopLevelCommas(groupBy)) {
+				List<Expression<?>> arguments = new ArrayList<>();
+
+				String resolvedSQL = _resolveSQL(
+					arguments, from, hibernateCriteriaBuilder,
+					StringUtil.trim(groupByPart), new Object[0]);
+
 				groupByExpressions.add(
-					_sql(
-						criteriaBuilder, StringUtil.trim(groupByPart),
-						Object.class));
+					hibernateCriteriaBuilder.sql(
+						resolvedSQL, Object.class,
+						arguments.toArray(new Expression<?>[0])));
 			}
 		}
 
@@ -841,13 +925,13 @@ public class HibernateTypedQueryUtil {
 			return selections[0];
 		}
 
-		return criteriaBuilder.array(selections);
+		return hibernateCriteriaBuilder.array(selections);
 	}
 
 	private static Subquery<?> _toSubquery(
-		HibernateCriteriaBuilder criteriaBuilder,
 		AbstractQuery<?> abstractQuery, DynamicQueryImpl dynamicQueryImpl,
-		Class<?> expectedResultType) {
+		Class<?> expectedResultType,
+		HibernateCriteriaBuilder hibernateCriteriaBuilder) {
 
 		Class<?> resultType = dynamicQueryImpl.getClazz();
 
@@ -862,9 +946,11 @@ public class HibernateTypedQueryUtil {
 
 		Subquery<?> subquery = abstractQuery.subquery(resultType);
 
-		_apply(criteriaBuilder, subquery, dynamicQueryImpl);
+		_apply(subquery, dynamicQueryImpl, hibernateCriteriaBuilder);
 
 		return subquery;
 	}
+
+	private static final String _ROOT_ALIAS_PREFIX = "this_.";
 
 }
