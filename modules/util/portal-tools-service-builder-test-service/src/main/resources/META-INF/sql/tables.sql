@@ -41,6 +41,11 @@ create table CacheReplicatorEntry (
 	name VARCHAR(75) null
 );
 
+create table ColumnNameEntry (
+	cnEntryId LONG not null primary key,
+	name VARCHAR(75) null
+);
+
 create table DSLQueryEntry (
 	dslQueryEntryId LONG not null primary key,
 	name VARCHAR(75) null
@@ -308,6 +313,11 @@ create table PermissionCheckFinderEntry (
 	integer_ INTEGER,
 	name VARCHAR(75) null,
 	type_ VARCHAR(75) null
+);
+
+create table ReassociateEntry (
+	reassociateEntryId LONG not null primary key,
+	name VARCHAR(75) null
 );
 
 create table RedundantIndexEntry (
