@@ -1,6 +1,6 @@
 <#assign
 	entityColumns = entityFinder.entityColumns
-	entityFinderArrayableColsList = entityFinder.getArrayableColumns()
+	entityFinderArrayableColsList = entityFinder.getArrayableOrColumns()
 />
 
 <#--
@@ -362,12 +362,16 @@ that may or may not be enforced with a unique index at the database level. Case
 	</#list>
 
 	OrderByComparator<${entity.name}> orderByComparator) throws ${noSuchEntity}Exception {
-		<#if entityFinder.collectionPersistenceFinderEnabled && !entityFinder.hasArrayableOperator()>
+		<#if entityFinder.collectionPersistenceFinderEnabled>
 			return _collectionPersistenceFinderBy${entityFinder.name}.findFirst(
 				${finderCacheInstance},
 				new Object[] {
 					<#list entityColumns as entityColumn>
-						${entityColumn.name}
+						<#if entityColumn.hasArrayableOperator()>
+							new ${entityColumn.type}[] {${entityColumn.name}}
+						<#else>
+							${entityColumn.name}
+						</#if>
 
 						<#if entityColumn_has_next>
 							,
@@ -1175,7 +1179,7 @@ that may or may not be enforced with a unique index at the database level. Case
 		</#if>
 
 		<#if entityFinder.hasArrayableOperator()>
-			<#if !serviceBuilder.isVersionGTE_7_4_0() || entityFinder.hasCustomComparator() || entityFinder.hasArrayablePagination()>
+			<#if !serviceBuilder.isVersionGTE_7_4_0() || entityFinder.hasCustomComparator()>
 				/**
 				 * Returns all the ${entity.pluralHumanName} that the user has permission to view where ${entityFinder.getHumanConditions(true)}.
 				 *
@@ -1549,9 +1553,9 @@ that may or may not be enforced with a unique index at the database level. Case
 <#if !entityFinder.isUnique()>
 </#if>
 
-<#-- Case 7: entityFinder.isCollection() && entityFinder.hasArrayableOperator() && !entityFinder.hasArrayablePagination() -->
+<#-- Case 7: entityFinder.isCollection() && entityFinder.hasArrayableOperator() && (serviceBuilder.isVersionGTE_7_4_0() || !entityFinder.hasArrayablePagination()) -->
 
-<#if entityFinder.isCollection() && entityFinder.hasArrayableOperator() && !entityFinder.hasArrayablePagination()>
+<#if entityFinder.isCollection() && entityFinder.hasArrayableOperator() && (serviceBuilder.isVersionGTE_7_4_0() || !entityFinder.hasArrayablePagination())>
 	<#if !serviceBuilder.isVersionGTE_7_4_0() || entityFinder.hasCustomComparator()>
 		/**
 		 * Returns all the ${entity.pluralHumanName} where ${entityFinder.getHumanConditions(true)}.
@@ -1718,13 +1722,7 @@ that may or may not be enforced with a unique index at the database level. Case
 	</#list>
 
 	int start, int end, OrderByComparator<${entity.name}> orderByComparator, boolean useFinderCache) {
-		<#if entityFinder.collectionPersistenceFinderEnabled && entityFinder.isUnique()>
-			<#list entityColumns as entityColumn>
-				<#if entityColumn.hasArrayableOperator()>
-					${entityColumn.pluralName} = ArrayUtil.sortedUnique(${entityColumn.pluralName});
-				</#if>
-			</#list>
-		<#elseif !entityFinder.collectionPersistenceFinderEnabled>
+		<#if !entityFinder.collectionPersistenceFinderEnabled>
 			<#list entityColumns as entityColumn>
 				<#if entityColumn.hasArrayableOperator()>
 					if (${entityColumn.pluralName} == null) {
@@ -1760,7 +1758,7 @@ that may or may not be enforced with a unique index at the database level. Case
 			</#list>
 		</#if>
 
-		<#if entityFinder.isUnique()>
+		<#if entityFinder.isUnique() && !entityFinder.collectionPersistenceFinderEnabled>
 			if (
 			<#assign firstCol = true />
 			<#list entityColumns as entityColumn>
@@ -1805,11 +1803,7 @@ that may or may not be enforced with a unique index at the database level. Case
 				new Object[] {
 					<#list entityColumns as entityColumn>
 						<#if entityColumn.hasArrayableOperator()>
-							<#if entityFinder.isUnique()>
-								${entityColumn.pluralName}
-							<#else>
-								ArrayUtil.sortedUnique(${entityColumn.pluralName})
-							</#if>
+							ArrayUtil.sortedUnique(${entityColumn.pluralName})
 						<#else>
 							${entityColumn.name}
 						</#if>
@@ -1941,7 +1935,7 @@ that may or may not be enforced with a unique index at the database level. Case
 
 <#-- Case 7.1: entityFinder.isCollection() && entityFinder.hasArrayableOperator() && entityFinder.hasArrayablePagination() -->
 
-<#if entityFinder.isCollection() && entityFinder.hasArrayableOperator() && entityFinder.hasArrayablePagination()>
+<#if !serviceBuilder.isVersionGTE_7_4_0() && entityFinder.isCollection() && entityFinder.hasArrayableOperator() && entityFinder.hasArrayablePagination()>
 	/**
 	 * Returns all the ${entity.pluralHumanName} where ${entityFinder.getHumanConditions(true)}.
 	 *
@@ -2255,7 +2249,7 @@ that may or may not be enforced with a unique index at the database level. Case
 
 		if (list == null) {
 			try {
-				if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) && (${databaseInMaxParameters} > 0) && (<#list entityFinderArrayableColsList as arrayableentityColumn>
+				if ((${databaseInMaxParameters} > 0) && (<#list entityFinderArrayableColsList as arrayableentityColumn>
 						(${arrayableentityColumn.pluralName}.length > ${databaseInMaxParameters})
 
 						<#if arrayableentityColumn_has_next>
@@ -2277,20 +2271,26 @@ that may or may not be enforced with a unique index at the database level. Case
 
 						<#list entityColumns as entityColumn>
 							<#if entityColumn.hasArrayableOperator()>
-								${entityColumn.pluralName}Page,
+								<#if entityColumn.isArrayableAndOperator()>
+									${entityColumn.pluralName},
+								<#else>
+									${entityColumn.pluralName}Page,
+								</#if>
 							<#else>
 								${entityColumn.name},
 							</#if>
 						</#list>
 
-						start, end, orderByComparator));
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS, orderByComparator));
 					<#list entityFinderArrayableColsList as arrayableentityColumn>
 						}
 					</#list>
 
 					Collections.sort(list, orderByComparator);
 
-					list = Collections.unmodifiableList(list);
+					cacheResult(list);
+
+					list = Collections.unmodifiableList(ListUtil.subList(list, start, end));
 				}
 				else {
 					list = _findBy${entityFinder.name}(
@@ -2304,9 +2304,9 @@ that may or may not be enforced with a unique index at the database level. Case
 					</#list>
 
 					start, end, orderByComparator);
-				}
 
-				cacheResult(list);
+					cacheResult(list);
+				}
 
 				if (useFinderCache) {
 					${finderCache}.putResult(_finderPathWithPaginationFindBy${entityFinder.name}, finderArgs, list);
