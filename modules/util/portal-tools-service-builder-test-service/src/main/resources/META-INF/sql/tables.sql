@@ -327,6 +327,11 @@ create table RenameFinderColumnEntry (
 	columnToRename VARCHAR(75) null
 );
 
+create table RenamedPKColumnEntry (
+	rPKColumnEntryId LONG not null primary key,
+	name VARCHAR(75) null
+);
+
 create table UADPartialEntry (
 	uadPartialEntryId LONG not null primary key,
 	userId LONG,

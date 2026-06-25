@@ -33,6 +33,7 @@
 	<import class="com.liferay.portal.tools.service.builder.test.model.PermissionCheckFinderEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.ReassociateEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.RedundantIndexEntry" />
+	<import class="com.liferay.portal.tools.service.builder.test.model.RenamedPKColumnEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.RenameFinderColumnEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.UADPartialEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.UndefinedDefaultOrderEntry" />
@@ -391,6 +392,12 @@
 			<generator class="assigned" />
 		</id>
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.liferay.portal.tools.service.builder.test.model.impl.RenamedPKColumnEntryImpl" table="RenamedPKColumnEntry">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" column="rPKColumnEntryId" name="renamedPKColumnEntryId" type="long">
+			<generator class="assigned" />
+		</id>
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.liferay.portal.tools.service.builder.test.model.impl.RenameFinderColumnEntryImpl" table="RenameFinderColumnEntry">

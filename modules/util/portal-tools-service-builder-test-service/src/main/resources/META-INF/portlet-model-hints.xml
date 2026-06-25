@@ -276,6 +276,10 @@
 		<field name="companyId" type="long" />
 		<field name="name" type="String" />
 	</model>
+	<model name="com.liferay.portal.tools.service.builder.test.model.RenamedPKColumnEntry">
+		<field name="renamedPKColumnEntryId" type="long" />
+		<field name="name" type="String" />
+	</model>
 	<model name="com.liferay.portal.tools.service.builder.test.model.RenameFinderColumnEntry">
 		<field name="renameFinderColumnEntryId" type="long" />
 		<field name="groupId" type="long" />
