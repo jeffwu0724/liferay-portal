@@ -98,6 +98,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1553,8 +1554,18 @@ public class BasePersistenceImpl
 			}
 		}
 		else {
+			long[] primaryKeysArray = new long[uncachedPrimaryKeys.size()];
+
+			int i = 0;
+
 			for (Serializable primaryKey : uncachedPrimaryKeys) {
-				sb.append((long)primaryKey);
+				primaryKeysArray[i++] = (long)primaryKey;
+			}
+
+			Arrays.sort(primaryKeysArray);
+
+			for (long primaryKey : primaryKeysArray) {
+				sb.append(primaryKey);
 
 				sb.append(",");
 			}
