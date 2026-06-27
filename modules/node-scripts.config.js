@@ -10,7 +10,7 @@
  */
 
 module.exports = {
-	hash: '25dd559526796a64f0755892bb84ddc7d0fb413cdd0e9749baa86577e4ee8dae',
+	hash: '6b6a0640812706e4b300644a40e5b3a9ddddea49e94355d4f6fb2763a9b7bf10',
 	imports: {
 		'@liferay/accessibility-menu-web': [],
 		'@liferay/accessibility-settings-state-web': [],
@@ -22,6 +22,7 @@ module.exports = {
 		'@liferay/analytics-settings-web': [],
 		'@liferay/application-list-taglib': [],
 		'@liferay/asset-categories-item-selector-web': [],
+		'@liferay/audiences-web': [],
 		'@liferay/batch-planner-web': [],
 		'@liferay/captcha-taglib': [],
 		'@liferay/change-tracking-rest-client-js': [],
@@ -90,7 +91,7 @@ module.exports = {
 		'@liferay/frontend-data-set-fragment-web': [],
 		'@liferay/frontend-data-set-sample-web': [],
 		'@liferay/frontend-data-set-taglib': [],
-		'@liferay/frontend-data-set-web': [],
+		'@liferay/frontend-data-set-web': ['./api'],
 		'@liferay/frontend-editor-ckeditor4-sample-web': [],
 		'@liferay/frontend-editor-ckeditor5-sample-web': [],
 		'@liferay/frontend-icons-web': [],
@@ -216,6 +217,7 @@ module.exports = {
 		'@liferay/journal-taglib': [],
 		'@liferay/launch-web': [],
 		'@liferay/layout-content-page-editor-web': [],
+		'@liferay/layout-content-web': [],
 		'@liferay/layout-js-components-web': [],
 		'@liferay/layout-locked-layouts-web': [],
 		'@liferay/layout-page-template-admin-web': [],

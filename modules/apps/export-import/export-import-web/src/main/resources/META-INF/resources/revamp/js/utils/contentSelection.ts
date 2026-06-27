@@ -6,6 +6,7 @@
 import {sub} from 'frontend-js-web';
 
 import {
+	PreviewPortletDataHandlerBoolean,
 	PreviewPortletDataHandlerControl,
 	PreviewPortletDataHandlerSection,
 } from '../types/portletDataHandler';
@@ -24,14 +25,17 @@ export const COMPACT_SECTION_NAMES = [
 	'objects',
 ];
 
-export const CONTENT_SECTION_KEY = 'category.site_administration.content';
-
 export const LAYOUT_SET_LAYOUTS_PORTLET_DATA_KEY =
 	'PORTLET_DATA_com_liferay_layout_admin_web_portlet_LayoutSetLayoutsPortlet';
 
 export const SCROLLABLE_SECTION_NAMES = ['objects'];
 
-export const SITE_BUILDER_SECTION_KEY = 'category.site_administration.build';
+export const SECTION_KEY_CONTENT = 'category.content';
+
+export const SECTION_KEY_CONTENT_AND_DATA =
+	'category.site_administration.content';
+
+export const SECTION_KEY_SITE_BUILDER = 'category.site_administration.build';
 
 export function isAllLayoutsSelected(
 	value: HandlerSelection | undefined
@@ -67,7 +71,7 @@ export function isSelected(
 	);
 }
 
-export function getInitialSelection(
+export function getHandlerSelection(
 	entry: PreviewPortletDataHandlerControl
 ): HandlerSelection {
 	if (entry.name === LAYOUT_SET_LAYOUTS_PORTLET_DATA_KEY) {
@@ -82,14 +86,106 @@ export function getInitialSelection(
 		return true;
 	}
 
-	return getInitialSelections(entry.previewPortletDataHandlerControls);
+	return getHandlerSelections(entry.previewPortletDataHandlerControls);
 }
 
-export function getInitialSelections(
+export function getHandlerSelections(
 	controls: PreviewPortletDataHandlerControl[]
 ): Record<string, HandlerSelection> {
 	return Object.fromEntries(
-		controls.map((control) => [control.name, getInitialSelection(control)])
+		controls.map((control) => [control.name, getHandlerSelection(control)])
+	);
+}
+
+export function getSectionPreviewPortletDataHandlers(
+	section: PreviewPortletDataHandlerSection,
+	{lookAndFeelEnabled = false}: {lookAndFeelEnabled?: boolean} = {}
+): PreviewPortletDataHandlerBoolean[] {
+	const previewPortletDataHandlers =
+		section.previewPortletDataHandlers.map<PreviewPortletDataHandlerBoolean>(
+			(handler) => ({...handler, type: 'Boolean'})
+		);
+
+	if (!(lookAndFeelEnabled && section.name === SECTION_KEY_SITE_BUILDER)) {
+		return previewPortletDataHandlers;
+	}
+
+	return [
+		...previewPortletDataHandlers,
+		{
+			label: Liferay.Language.get('look-and-feel'),
+			name: 'lookAndFeel',
+			previewPortletDataHandlerControls: [
+				{
+					label: Liferay.Language.get('theme-settings'),
+					name: 'themeSettings',
+					type: 'Boolean',
+				},
+				{
+					label: Liferay.Language.get('logo'),
+					name: 'logo',
+					type: 'Boolean',
+				},
+				{
+					label: Liferay.Language.get('site-pages-settings'),
+					name: 'sitePagesSettings',
+					type: 'Boolean',
+				},
+				{
+					label: Liferay.Language.get('site-template-settings'),
+					name: 'siteTemplateSettings',
+					type: 'Boolean',
+				},
+			],
+			type: 'Boolean',
+		},
+	];
+}
+
+export function getSectionSelection(
+	section: PreviewPortletDataHandlerSection,
+	{
+		commentsAndRatingsEnabled = false,
+		lookAndFeelEnabled = false,
+	}: {commentsAndRatingsEnabled?: boolean; lookAndFeelEnabled?: boolean} = {}
+): Record<string, HandlerSelection> {
+	const selection = getHandlerSelections(
+		getSectionPreviewPortletDataHandlers(section, {lookAndFeelEnabled})
+	);
+
+	if (
+		commentsAndRatingsEnabled &&
+		(section.name === SECTION_KEY_CONTENT ||
+			section.name === SECTION_KEY_CONTENT_AND_DATA)
+	) {
+		selection.commentsAndRatings = {comments: true, ratings: true};
+	}
+
+	return selection;
+}
+
+export function getFullDataSelection(
+	sections: PreviewPortletDataHandlerSection[],
+	{
+		commentsAndRatingsEnabled = false,
+		lookAndFeelEnabled = false,
+		showDeletions = false,
+	}: {
+		commentsAndRatingsEnabled?: boolean;
+		lookAndFeelEnabled?: boolean;
+		showDeletions?: boolean;
+	} = {}
+): ContentSelection {
+	return Object.fromEntries(
+		getVisibleSections(sections, {lookAndFeelEnabled, showDeletions}).map(
+			(section) => [
+				section.name,
+				getSectionSelection(section, {
+					commentsAndRatingsEnabled,
+					lookAndFeelEnabled,
+				}),
+			]
+		)
 	);
 }
 
@@ -132,7 +228,7 @@ export function withSiteBuilderSection(
 	sections: PreviewPortletDataHandlerSection[],
 	label = ''
 ): PreviewPortletDataHandlerSection[] {
-	if (sections.some((section) => section.name === SITE_BUILDER_SECTION_KEY)) {
+	if (sections.some((section) => section.name === SECTION_KEY_SITE_BUILDER)) {
 		return sections;
 	}
 
@@ -140,18 +236,40 @@ export function withSiteBuilderSection(
 		...sections,
 		{
 			label,
-			name: SITE_BUILDER_SECTION_KEY,
+			name: SECTION_KEY_SITE_BUILDER,
 			previewPortletDataHandlers: [],
 		},
 	];
 }
 
+export function getVisibleSections(
+	sections: PreviewPortletDataHandlerSection[],
+	{
+		lookAndFeelEnabled = false,
+		showDeletions = false,
+	}: {lookAndFeelEnabled?: boolean; showDeletions?: boolean} = {}
+): PreviewPortletDataHandlerSection[] {
+	const filteredSections = sections.filter(
+		(section) =>
+			showDeletions || !!section.additionCount || !section.deletionCount
+	);
+
+	return lookAndFeelEnabled
+		? withSiteBuilderSection(
+				filteredSections,
+				Liferay.Language.get('category.site_administration.build')
+			)
+		: filteredSections;
+}
+
 export function toProcessRequestFlags(
 	contentSelection: ContentSelection | undefined
 ) {
-	const commentsAndRatings = (contentSelection?.[CONTENT_SECTION_KEY]
-		?.commentsAndRatings ?? {}) as Record<string, boolean>;
-	const lookAndFeel = (contentSelection?.[SITE_BUILDER_SECTION_KEY]
+	const commentsAndRatings = (contentSelection?.[SECTION_KEY_CONTENT]
+		?.commentsAndRatings ??
+		contentSelection?.[SECTION_KEY_CONTENT_AND_DATA]?.commentsAndRatings ??
+		{}) as Record<string, boolean>;
+	const lookAndFeel = (contentSelection?.[SECTION_KEY_SITE_BUILDER]
 		?.lookAndFeel ?? {}) as Record<string, boolean>;
 
 	return {

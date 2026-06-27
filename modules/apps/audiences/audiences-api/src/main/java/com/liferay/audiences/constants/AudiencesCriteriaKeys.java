@@ -40,4 +40,8 @@ public class AudiencesCriteriaKeys {
 
 	public static final String USER_AGENT = "user_agent";
 
+	public static final String USER_AUTHENTICATION = "user_authentication";
+
+	public static final String USER_LANGUAGE = "user_language";
+
 }

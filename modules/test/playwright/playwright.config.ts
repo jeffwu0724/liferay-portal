@@ -61,6 +61,7 @@ import {config as systemSettingsOverrideConfig} from './tests/configuration-admi
 import {config as systemSettingsOverrideOsgiConfig} from './tests/configuration-admin-web/override-with-osgi/config';
 import {config as systemSettingsExportConfig} from './tests/configuration-admin-web/site-settings-export/config';
 import {config as systemSettingsWithUIConfig} from './tests/configuration-admin-web/system-settings-with-ui/config';
+import {config as consentManagementPlatformIntegrationConfig} from './tests/consent-management-platform-integration/main/config';
 import {config as contactsWebConfig} from './tests/contacts-web/main/config';
 import {config as contentDashboardWebConfig} from './tests/content-dashboard-web/main/config';
 import {config as cookiesBannerWebConfig} from './tests/cookies-banner-web/main/config';
@@ -114,6 +115,7 @@ import {config as lockedItemsWebConfig} from './tests/locked-items-web/main/conf
 import {config as loginWebMainCaptchaEnableConfig} from './tests/login-web/main-captcha-enable/config';
 import {config as loginWebConfig} from './tests/login-web/main/config';
 import {config as loginWebSetupAdminConfig} from './tests/login-web/setup-admin/config';
+import {config as mapsConfig} from './tests/maps/main/config';
 import {config as marketplaceAppManagerWebConfig} from './tests/marketplace-app-manager-web/main/config';
 import {config as messageBoardsWebConfig} from './tests/message-boards-web/main/config';
 import {config as multifactorAuthenticationConfig} from './tests/multi-factor-authentication-timebased-otp-web/main/config';
@@ -184,6 +186,7 @@ import {config as searchExperiencesWebConfig} from './tests/search-experiences-w
 import {config as segmentExperimentWebConfig} from './tests/segment-experiment-web/main/config';
 import {config as segmentsWebConfig} from './tests/segments-web/main/config';
 import {config as seoStudioWebConfig} from './tests/seo-studio-web/main/config';
+import {config as serverAdminWebConfig} from './tests/server-admin-web/main/config';
 import {config as pageManagementSiteConfig} from './tests/setup/page-management-site/main/config';
 import {config as pageManagementSiteTeardownConfig} from './tests/setup/page-management-site/teardown/config';
 import {config as siteCmsSiteConfig} from './tests/setup/site-cms-site/main/config';
@@ -286,6 +289,7 @@ export default defineConfig({
 		commerceWishListWebConfig,
 		commerceWorkspaceConfig,
 		configurationAdminWebConfig,
+		consentManagementPlatformIntegrationConfig,
 		contactsWebConfig,
 		systemSettingsExportConfig,
 		systemSettingsOverrideOsgiConfig,
@@ -344,6 +348,7 @@ export default defineConfig({
 		loginWebConfig,
 		loginWebMainCaptchaEnableConfig,
 		loginWebSetupAdminConfig,
+		mapsConfig,
 		marketplaceAppManagerWebConfig,
 		marketplaceConfig,
 		messageBoardsWebConfig,
@@ -416,6 +421,7 @@ export default defineConfig({
 		segmentExperimentWebConfig,
 		segmentsWebConfig,
 		seoStudioWebConfig,
+		serverAdminWebConfig,
 		siteAdminWebConfig,
 		siteCmpSiteInitializerConfig,
 		siteCmsSiteInitializerConfig,

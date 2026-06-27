@@ -98,6 +98,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1150,6 +1151,10 @@ public class BasePersistenceImpl
 		throw new UnsupportedOperationException();
 	}
 
+	protected String getPKFieldName() {
+		return getPKDBName();
+	}
+
 	protected String getSelectSQL() {
 		throw new UnsupportedOperationException();
 	}
@@ -1538,11 +1543,12 @@ public class BasePersistenceImpl
 		}
 
 		StringBundler sb = new StringBundler(
-			(2 * uncachedPrimaryKeys.size()) + 4);
+			(2 * uncachedPrimaryKeys.size()) + 5);
 
 		sb.append(getSelectSQL());
 		sb.append(" WHERE ");
-		sb.append(getPKDBName());
+		sb.append(_entityAliasPrefix);
+		sb.append(getPKFieldName());
 		sb.append(" IN (");
 
 		if (_modelPKType == ModelPKType.STRING) {
@@ -1553,8 +1559,18 @@ public class BasePersistenceImpl
 			}
 		}
 		else {
+			long[] primaryKeysArray = new long[uncachedPrimaryKeys.size()];
+
+			int i = 0;
+
 			for (Serializable primaryKey : uncachedPrimaryKeys) {
-				sb.append((long)primaryKey);
+				primaryKeysArray[i++] = (long)primaryKey;
+			}
+
+			Arrays.sort(primaryKeysArray);
+
+			for (long primaryKey : primaryKeysArray) {
+				sb.append(primaryKey);
 
 				sb.append(",");
 			}

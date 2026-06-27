@@ -14,7 +14,7 @@ import {PreviewPortletDataHandlerControl} from '../../../types/portletDataHandle
 import {
 	HandlerSelection,
 	LAYOUT_SET_LAYOUTS_PORTLET_DATA_KEY,
-	getInitialSelection,
+	getHandlerSelection,
 	getSelectionSummary,
 	isSelected,
 	updateSelection,
@@ -74,7 +74,6 @@ export default function PortletDataControl({
 			? (value as Record<string, HandlerSelection>)
 			: {};
 	const nestedControls = control.previewPortletDataHandlerControls ?? [];
-	const expandable = !!nestedControls.length;
 
 	const additionCount =
 		control.type === 'Boolean' ? control.additionCount : undefined;
@@ -98,7 +97,7 @@ export default function PortletDataControl({
 			? 'font-weight-semi-bold'
 			: 'font-weight-normal',
 		onToggle: () =>
-			onChange(selected ? undefined : getInitialSelection(control)),
+			onChange(selected ? undefined : getHandlerSelection(control)),
 		selected,
 		tags: (
 			<SectionTags
@@ -109,23 +108,27 @@ export default function PortletDataControl({
 		),
 	};
 
-	const body = nestedControls.map((nestedControl) => (
-		<PortletDataControl
-			control={nestedControl}
-			key={nestedControl.name}
-			onChange={(controlValue) =>
-				onChange(
-					updateSelection(
-						currentSelection,
-						nestedControl.name,
-						controlValue
+	const body = nestedControls
+		.filter((nestedControl) => nestedControl.type !== 'Choice' || !!value)
+		.map((nestedControl) => (
+			<PortletDataControl
+				control={nestedControl}
+				key={nestedControl.name}
+				onChange={(controlValue) =>
+					onChange(
+						updateSelection(
+							currentSelection,
+							nestedControl.name,
+							controlValue
+						)
 					)
-				)
-			}
-			pageTreeModalConfiguration={pageTreeModalConfiguration}
-			value={currentSelection[nestedControl.name]}
-		/>
-	));
+				}
+				pageTreeModalConfiguration={pageTreeModalConfiguration}
+				value={currentSelection[nestedControl.name]}
+			/>
+		));
+
+	const expandable = !!body.length;
 
 	if (topLevel) {
 		return (
