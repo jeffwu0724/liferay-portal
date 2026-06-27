@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.audience.service.persistence.test;
+package com.liferay.audiences.service.persistence.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.audience.exception.DuplicateAudienceEntryExternalReferenceCodeException;
-import com.liferay.audience.exception.NoSuchAudienceEntryException;
-import com.liferay.audience.model.AudienceEntry;
-import com.liferay.audience.service.AudienceEntryLocalServiceUtil;
-import com.liferay.audience.service.persistence.AudienceEntryPersistence;
-import com.liferay.audience.service.persistence.AudienceEntryUtil;
+import com.liferay.audiences.exception.DuplicateAudiencesEntryExternalReferenceCodeException;
+import com.liferay.audiences.exception.NoSuchAudiencesEntryException;
+import com.liferay.audiences.model.AudiencesEntry;
+import com.liferay.audiences.service.AudiencesEntryLocalServiceUtil;
+import com.liferay.audiences.service.persistence.AudiencesEntryPersistence;
+import com.liferay.audiences.service.persistence.AudiencesEntryUtil;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -52,7 +52,7 @@ import org.junit.runner.RunWith;
  * @generated
  */
 @RunWith(Arquillian.class)
-public class AudienceEntryPersistenceTest {
+public class AudiencesEntryPersistenceTest {
 
 	@ClassRule
 	@Rule
@@ -60,11 +60,11 @@ public class AudienceEntryPersistenceTest {
 		new AggregateTestRule(
 			new LiferayIntegrationTestRule(), PersistenceTestRule.INSTANCE,
 			new TransactionalTestRule(
-				Propagation.REQUIRED, "com.liferay.audience.service"));
+				Propagation.REQUIRED, "com.liferay.audiences.service"));
 
 	@Before
 	public void setUp() {
-		_persistence = AudienceEntryUtil.getPersistence();
+		_persistence = AudiencesEntryUtil.getPersistence();
 
 		Class<?> clazz = _persistence.getClass();
 
@@ -73,7 +73,7 @@ public class AudienceEntryPersistenceTest {
 
 	@After
 	public void tearDown() throws Exception {
-		Iterator<AudienceEntry> iterator = _audienceEntries.iterator();
+		Iterator<AudiencesEntry> iterator = _audiencesEntries.iterator();
 
 		while (iterator.hasNext()) {
 			_persistence.remove(iterator.next());
@@ -86,105 +86,107 @@ public class AudienceEntryPersistenceTest {
 	public void testCreate() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 
-		AudienceEntry audienceEntry = _persistence.create(pk);
+		AudiencesEntry audiencesEntry = _persistence.create(pk);
 
-		Assert.assertNotNull(audienceEntry);
+		Assert.assertNotNull(audiencesEntry);
 
-		Assert.assertEquals(audienceEntry.getPrimaryKey(), pk);
+		Assert.assertEquals(audiencesEntry.getPrimaryKey(), pk);
 	}
 
 	@Test
 	public void testRemove() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
-		_persistence.remove(newAudienceEntry);
+		_persistence.remove(newAudiencesEntry);
 
-		AudienceEntry existingAudienceEntry = _persistence.fetchByPrimaryKey(
-			newAudienceEntry.getPrimaryKey());
+		AudiencesEntry existingAudiencesEntry = _persistence.fetchByPrimaryKey(
+			newAudiencesEntry.getPrimaryKey());
 
-		Assert.assertNull(existingAudienceEntry);
+		Assert.assertNull(existingAudiencesEntry);
 	}
 
 	@Test
 	public void testUpdateNew() throws Exception {
-		addAudienceEntry();
+		addAudiencesEntry();
 	}
 
 	@Test
 	public void testUpdateExisting() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
-		newAudienceEntry.setExternalReferenceCode(
+		newAudiencesEntry.setExternalReferenceCode(
 			RandomTestUtil.randomString());
 
-		newAudienceEntry.setCompanyId(RandomTestUtil.nextLong());
+		newAudiencesEntry.setCompanyId(RandomTestUtil.nextLong());
 
-		newAudienceEntry.setUserId(RandomTestUtil.nextLong());
+		newAudiencesEntry.setUserId(RandomTestUtil.nextLong());
 
-		newAudienceEntry.setUserName(RandomTestUtil.randomString());
+		newAudiencesEntry.setUserName(RandomTestUtil.randomString());
 
-		newAudienceEntry.setCreateDate(RandomTestUtil.nextDate());
+		newAudiencesEntry.setCreateDate(RandomTestUtil.nextDate());
 
-		newAudienceEntry.setModifiedDate(RandomTestUtil.nextDate());
+		newAudiencesEntry.setModifiedDate(RandomTestUtil.nextDate());
 
-		newAudienceEntry.setJSON(RandomTestUtil.randomString());
+		newAudiencesEntry.setJSON(RandomTestUtil.randomString());
 
-		newAudienceEntry.setName(RandomTestUtil.randomString());
+		newAudiencesEntry.setName(RandomTestUtil.randomString());
 
-		newAudienceEntry = _persistence.update(newAudienceEntry);
+		newAudiencesEntry = _persistence.update(newAudiencesEntry);
 
-		_audienceEntries.add(newAudienceEntry);
+		_audiencesEntries.add(newAudiencesEntry);
 
-		AudienceEntry existingAudienceEntry = _persistence.findByPrimaryKey(
-			newAudienceEntry.getPrimaryKey());
+		AudiencesEntry existingAudiencesEntry = _persistence.findByPrimaryKey(
+			newAudiencesEntry.getPrimaryKey());
 
 		Assert.assertEquals(
-			existingAudienceEntry.getMvccVersion(),
-			newAudienceEntry.getMvccVersion());
+			existingAudiencesEntry.getMvccVersion(),
+			newAudiencesEntry.getMvccVersion());
 		Assert.assertEquals(
-			existingAudienceEntry.getExternalReferenceCode(),
-			newAudienceEntry.getExternalReferenceCode());
+			existingAudiencesEntry.getExternalReferenceCode(),
+			newAudiencesEntry.getExternalReferenceCode());
 		Assert.assertEquals(
-			existingAudienceEntry.getAudienceEntryId(),
-			newAudienceEntry.getAudienceEntryId());
+			existingAudiencesEntry.getAudiencesEntryId(),
+			newAudiencesEntry.getAudiencesEntryId());
 		Assert.assertEquals(
-			existingAudienceEntry.getCompanyId(),
-			newAudienceEntry.getCompanyId());
+			existingAudiencesEntry.getCompanyId(),
+			newAudiencesEntry.getCompanyId());
 		Assert.assertEquals(
-			existingAudienceEntry.getUserId(), newAudienceEntry.getUserId());
+			existingAudiencesEntry.getUserId(), newAudiencesEntry.getUserId());
 		Assert.assertEquals(
-			existingAudienceEntry.getUserName(),
-			newAudienceEntry.getUserName());
+			existingAudiencesEntry.getUserName(),
+			newAudiencesEntry.getUserName());
 		Assert.assertEquals(
-			Time.getShortTimestamp(existingAudienceEntry.getCreateDate()),
-			Time.getShortTimestamp(newAudienceEntry.getCreateDate()));
+			Time.getShortTimestamp(existingAudiencesEntry.getCreateDate()),
+			Time.getShortTimestamp(newAudiencesEntry.getCreateDate()));
 		Assert.assertEquals(
-			Time.getShortTimestamp(existingAudienceEntry.getModifiedDate()),
-			Time.getShortTimestamp(newAudienceEntry.getModifiedDate()));
+			Time.getShortTimestamp(existingAudiencesEntry.getModifiedDate()),
+			Time.getShortTimestamp(newAudiencesEntry.getModifiedDate()));
 		Assert.assertEquals(
-			existingAudienceEntry.getJSON(), newAudienceEntry.getJSON());
+			existingAudiencesEntry.getJSON(), newAudiencesEntry.getJSON());
 		Assert.assertEquals(
-			existingAudienceEntry.getName(), newAudienceEntry.getName());
+			existingAudiencesEntry.getName(), newAudiencesEntry.getName());
 	}
 
-	@Test(expected = DuplicateAudienceEntryExternalReferenceCodeException.class)
+	@Test(
+		expected = DuplicateAudiencesEntryExternalReferenceCodeException.class
+	)
 	public void testUpdateWithExistingExternalReferenceCode() throws Exception {
-		AudienceEntry audienceEntry = addAudienceEntry();
+		AudiencesEntry audiencesEntry = addAudiencesEntry();
 
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
-		newAudienceEntry.setCompanyId(audienceEntry.getCompanyId());
+		newAudiencesEntry.setCompanyId(audiencesEntry.getCompanyId());
 
-		newAudienceEntry = _persistence.update(newAudienceEntry);
+		newAudiencesEntry = _persistence.update(newAudiencesEntry);
 
 		Session session = _persistence.getCurrentSession();
 
-		session.evict(newAudienceEntry);
+		session.evict(newAudiencesEntry);
 
-		newAudienceEntry.setExternalReferenceCode(
-			audienceEntry.getExternalReferenceCode());
+		newAudiencesEntry.setExternalReferenceCode(
+			audiencesEntry.getExternalReferenceCode());
 
-		_persistence.update(newAudienceEntry);
+		_persistence.update(newAudiencesEntry);
 	}
 
 	@Test
@@ -214,15 +216,15 @@ public class AudienceEntryPersistenceTest {
 
 	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
-		AudienceEntry existingAudienceEntry = _persistence.findByPrimaryKey(
-			newAudienceEntry.getPrimaryKey());
+		AudiencesEntry existingAudiencesEntry = _persistence.findByPrimaryKey(
+			newAudiencesEntry.getPrimaryKey());
 
-		Assert.assertEquals(existingAudienceEntry, newAudienceEntry);
+		Assert.assertEquals(existingAudiencesEntry, newAudiencesEntry);
 	}
 
-	@Test(expected = NoSuchAudienceEntryException.class)
+	@Test(expected = NoSuchAudiencesEntryException.class)
 	public void testFindByPrimaryKeyMissing() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 
@@ -235,55 +237,56 @@ public class AudienceEntryPersistenceTest {
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
 	}
 
-	protected OrderByComparator<AudienceEntry> getOrderByComparator() {
+	protected OrderByComparator<AudiencesEntry> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create(
-			"AudienceEntry", "mvccVersion", true, "externalReferenceCode", true,
-			"audienceEntryId", true, "companyId", true, "userId", true,
+			"AudiencesEntry", "mvccVersion", true, "externalReferenceCode",
+			true, "audiencesEntryId", true, "companyId", true, "userId", true,
 			"userName", true, "createDate", true, "modifiedDate", true, "name",
 			true);
 	}
 
 	@Test
 	public void testFetchByPrimaryKeyExisting() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
-		AudienceEntry existingAudienceEntry = _persistence.fetchByPrimaryKey(
-			newAudienceEntry.getPrimaryKey());
+		AudiencesEntry existingAudiencesEntry = _persistence.fetchByPrimaryKey(
+			newAudiencesEntry.getPrimaryKey());
 
-		Assert.assertEquals(existingAudienceEntry, newAudienceEntry);
+		Assert.assertEquals(existingAudiencesEntry, newAudiencesEntry);
 	}
 
 	@Test
 	public void testFetchByPrimaryKeyMissing() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 
-		AudienceEntry missingAudienceEntry = _persistence.fetchByPrimaryKey(pk);
+		AudiencesEntry missingAudiencesEntry = _persistence.fetchByPrimaryKey(
+			pk);
 
-		Assert.assertNull(missingAudienceEntry);
+		Assert.assertNull(missingAudiencesEntry);
 	}
 
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereAllPrimaryKeysExist()
 		throws Exception {
 
-		AudienceEntry newAudienceEntry1 = addAudienceEntry();
-		AudienceEntry newAudienceEntry2 = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry1 = addAudiencesEntry();
+		AudiencesEntry newAudiencesEntry2 = addAudiencesEntry();
 
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
-		primaryKeys.add(newAudienceEntry1.getPrimaryKey());
-		primaryKeys.add(newAudienceEntry2.getPrimaryKey());
+		primaryKeys.add(newAudiencesEntry1.getPrimaryKey());
+		primaryKeys.add(newAudiencesEntry2.getPrimaryKey());
 
-		Map<Serializable, AudienceEntry> audienceEntries =
+		Map<Serializable, AudiencesEntry> audiencesEntries =
 			_persistence.fetchByPrimaryKeys(primaryKeys);
 
-		Assert.assertEquals(2, audienceEntries.size());
+		Assert.assertEquals(2, audiencesEntries.size());
 		Assert.assertEquals(
-			newAudienceEntry1,
-			audienceEntries.get(newAudienceEntry1.getPrimaryKey()));
+			newAudiencesEntry1,
+			audiencesEntries.get(newAudiencesEntry1.getPrimaryKey()));
 		Assert.assertEquals(
-			newAudienceEntry2,
-			audienceEntries.get(newAudienceEntry2.getPrimaryKey()));
+			newAudiencesEntry2,
+			audiencesEntries.get(newAudiencesEntry2.getPrimaryKey()));
 	}
 
 	@Test
@@ -299,59 +302,59 @@ public class AudienceEntryPersistenceTest {
 		primaryKeys.add(pk1);
 		primaryKeys.add(pk2);
 
-		Map<Serializable, AudienceEntry> audienceEntries =
+		Map<Serializable, AudiencesEntry> audiencesEntries =
 			_persistence.fetchByPrimaryKeys(primaryKeys);
 
-		Assert.assertTrue(audienceEntries.isEmpty());
+		Assert.assertTrue(audiencesEntries.isEmpty());
 	}
 
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereSomePrimaryKeysExist()
 		throws Exception {
 
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
 		long pk = RandomTestUtil.nextLong();
 
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
-		primaryKeys.add(newAudienceEntry.getPrimaryKey());
+		primaryKeys.add(newAudiencesEntry.getPrimaryKey());
 		primaryKeys.add(pk);
 
-		Map<Serializable, AudienceEntry> audienceEntries =
+		Map<Serializable, AudiencesEntry> audiencesEntries =
 			_persistence.fetchByPrimaryKeys(primaryKeys);
 
-		Assert.assertEquals(1, audienceEntries.size());
+		Assert.assertEquals(1, audiencesEntries.size());
 		Assert.assertEquals(
-			newAudienceEntry,
-			audienceEntries.get(newAudienceEntry.getPrimaryKey()));
+			newAudiencesEntry,
+			audiencesEntries.get(newAudiencesEntry.getPrimaryKey()));
 	}
 
 	@Test
 	public void testFetchByPrimaryKeysWithNoPrimaryKeys() throws Exception {
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
-		Map<Serializable, AudienceEntry> audienceEntries =
+		Map<Serializable, AudiencesEntry> audiencesEntries =
 			_persistence.fetchByPrimaryKeys(primaryKeys);
 
-		Assert.assertTrue(audienceEntries.isEmpty());
+		Assert.assertTrue(audiencesEntries.isEmpty());
 	}
 
 	@Test
 	public void testFetchByPrimaryKeysWithOnePrimaryKey() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
-		primaryKeys.add(newAudienceEntry.getPrimaryKey());
+		primaryKeys.add(newAudiencesEntry.getPrimaryKey());
 
-		Map<Serializable, AudienceEntry> audienceEntries =
+		Map<Serializable, AudiencesEntry> audiencesEntries =
 			_persistence.fetchByPrimaryKeys(primaryKeys);
 
-		Assert.assertEquals(1, audienceEntries.size());
+		Assert.assertEquals(1, audiencesEntries.size());
 		Assert.assertEquals(
-			newAudienceEntry,
-			audienceEntries.get(newAudienceEntry.getPrimaryKey()));
+			newAudiencesEntry,
+			audiencesEntries.get(newAudiencesEntry.getPrimaryKey()));
 	}
 
 	@Test
@@ -359,14 +362,14 @@ public class AudienceEntryPersistenceTest {
 		final IntegerWrapper count = new IntegerWrapper();
 
 		ActionableDynamicQuery actionableDynamicQuery =
-			AudienceEntryLocalServiceUtil.getActionableDynamicQuery();
+			AudiencesEntryLocalServiceUtil.getActionableDynamicQuery();
 
 		actionableDynamicQuery.setPerformActionMethod(
-			new ActionableDynamicQuery.PerformActionMethod<AudienceEntry>() {
+			new ActionableDynamicQuery.PerformActionMethod<AudiencesEntry>() {
 
 				@Override
-				public void performAction(AudienceEntry audienceEntry) {
-					Assert.assertNotNull(audienceEntry);
+				public void performAction(AudiencesEntry audiencesEntry) {
+					Assert.assertNotNull(audiencesEntry);
 
 					count.increment();
 				}
@@ -380,35 +383,35 @@ public class AudienceEntryPersistenceTest {
 
 	@Test
 	public void testDynamicQueryByPrimaryKeyExisting() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			AudienceEntry.class, _dynamicQueryClassLoader);
+			AudiencesEntry.class, _dynamicQueryClassLoader);
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.eq(
-				"audienceEntryId", newAudienceEntry.getAudienceEntryId()));
+				"audiencesEntryId", newAudiencesEntry.getAudiencesEntryId()));
 
-		List<AudienceEntry> result = _persistence.findWithDynamicQuery(
+		List<AudiencesEntry> result = _persistence.findWithDynamicQuery(
 			dynamicQuery);
 
 		Assert.assertEquals(1, result.size());
 
-		AudienceEntry existingAudienceEntry = result.get(0);
+		AudiencesEntry existingAudiencesEntry = result.get(0);
 
-		Assert.assertEquals(existingAudienceEntry, newAudienceEntry);
+		Assert.assertEquals(existingAudiencesEntry, newAudiencesEntry);
 	}
 
 	@Test
 	public void testDynamicQueryByPrimaryKeyMissing() throws Exception {
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			AudienceEntry.class, _dynamicQueryClassLoader);
+			AudiencesEntry.class, _dynamicQueryClassLoader);
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.eq(
-				"audienceEntryId", RandomTestUtil.nextLong()));
+				"audiencesEntryId", RandomTestUtil.nextLong()));
 
-		List<AudienceEntry> result = _persistence.findWithDynamicQuery(
+		List<AudiencesEntry> result = _persistence.findWithDynamicQuery(
 			dynamicQuery);
 
 		Assert.assertEquals(0, result.size());
@@ -416,40 +419,40 @@ public class AudienceEntryPersistenceTest {
 
 	@Test
 	public void testDynamicQueryByProjectionExisting() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			AudienceEntry.class, _dynamicQueryClassLoader);
+			AudiencesEntry.class, _dynamicQueryClassLoader);
 
 		dynamicQuery.setProjection(
-			ProjectionFactoryUtil.property("audienceEntryId"));
+			ProjectionFactoryUtil.property("audiencesEntryId"));
 
-		Object newAudienceEntryId = newAudienceEntry.getAudienceEntryId();
+		Object newAudiencesEntryId = newAudiencesEntry.getAudiencesEntryId();
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.in(
-				"audienceEntryId", new Object[] {newAudienceEntryId}));
+				"audiencesEntryId", new Object[] {newAudiencesEntryId}));
 
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
 		Assert.assertEquals(1, result.size());
 
-		Object existingAudienceEntryId = result.get(0);
+		Object existingAudiencesEntryId = result.get(0);
 
-		Assert.assertEquals(existingAudienceEntryId, newAudienceEntryId);
+		Assert.assertEquals(existingAudiencesEntryId, newAudiencesEntryId);
 	}
 
 	@Test
 	public void testDynamicQueryByProjectionMissing() throws Exception {
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			AudienceEntry.class, _dynamicQueryClassLoader);
+			AudiencesEntry.class, _dynamicQueryClassLoader);
 
 		dynamicQuery.setProjection(
-			ProjectionFactoryUtil.property("audienceEntryId"));
+			ProjectionFactoryUtil.property("audiencesEntryId"));
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.in(
-				"audienceEntryId", new Object[] {RandomTestUtil.nextLong()}));
+				"audiencesEntryId", new Object[] {RandomTestUtil.nextLong()}));
 
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -458,12 +461,12 @@ public class AudienceEntryPersistenceTest {
 
 	@Test
 	public void testResetOriginalValues() throws Exception {
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
 		_persistence.clearCache();
 
 		_assertOriginalValues(
-			_persistence.findByPrimaryKey(newAudienceEntry.getPrimaryKey()));
+			_persistence.findByPrimaryKey(newAudiencesEntry.getPrimaryKey()));
 	}
 
 	@Test
@@ -483,7 +486,7 @@ public class AudienceEntryPersistenceTest {
 	private void _testResetOriginalValuesWithDynamicQuery(boolean clearSession)
 		throws Exception {
 
-		AudienceEntry newAudienceEntry = addAudienceEntry();
+		AudiencesEntry newAudiencesEntry = addAudiencesEntry();
 
 		if (clearSession) {
 			Session session = _persistence.openSession();
@@ -494,61 +497,61 @@ public class AudienceEntryPersistenceTest {
 		}
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			AudienceEntry.class, _dynamicQueryClassLoader);
+			AudiencesEntry.class, _dynamicQueryClassLoader);
 
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.eq(
-				"audienceEntryId", newAudienceEntry.getAudienceEntryId()));
+				"audiencesEntryId", newAudiencesEntry.getAudiencesEntryId()));
 
-		List<AudienceEntry> result = _persistence.findWithDynamicQuery(
+		List<AudiencesEntry> result = _persistence.findWithDynamicQuery(
 			dynamicQuery);
 
 		_assertOriginalValues(result.get(0));
 	}
 
-	private void _assertOriginalValues(AudienceEntry audienceEntry) {
+	private void _assertOriginalValues(AudiencesEntry audiencesEntry) {
 		Assert.assertEquals(
-			audienceEntry.getExternalReferenceCode(),
+			audiencesEntry.getExternalReferenceCode(),
 			ReflectionTestUtil.invoke(
-				audienceEntry, "getColumnOriginalValue",
+				audiencesEntry, "getColumnOriginalValue",
 				new Class<?>[] {String.class}, "externalReferenceCode"));
 		Assert.assertEquals(
-			Long.valueOf(audienceEntry.getCompanyId()),
+			Long.valueOf(audiencesEntry.getCompanyId()),
 			ReflectionTestUtil.<Long>invoke(
-				audienceEntry, "getColumnOriginalValue",
+				audiencesEntry, "getColumnOriginalValue",
 				new Class<?>[] {String.class}, "companyId"));
 	}
 
-	protected AudienceEntry addAudienceEntry() throws Exception {
+	protected AudiencesEntry addAudiencesEntry() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 
-		AudienceEntry audienceEntry = _persistence.create(pk);
+		AudiencesEntry audiencesEntry = _persistence.create(pk);
 
-		audienceEntry.setExternalReferenceCode(RandomTestUtil.randomString());
+		audiencesEntry.setExternalReferenceCode(RandomTestUtil.randomString());
 
-		audienceEntry.setCompanyId(RandomTestUtil.nextLong());
+		audiencesEntry.setCompanyId(RandomTestUtil.nextLong());
 
-		audienceEntry.setUserId(RandomTestUtil.nextLong());
+		audiencesEntry.setUserId(RandomTestUtil.nextLong());
 
-		audienceEntry.setUserName(RandomTestUtil.randomString());
+		audiencesEntry.setUserName(RandomTestUtil.randomString());
 
-		audienceEntry.setCreateDate(RandomTestUtil.nextDate());
+		audiencesEntry.setCreateDate(RandomTestUtil.nextDate());
 
-		audienceEntry.setModifiedDate(RandomTestUtil.nextDate());
+		audiencesEntry.setModifiedDate(RandomTestUtil.nextDate());
 
-		audienceEntry.setJSON(RandomTestUtil.randomString());
+		audiencesEntry.setJSON(RandomTestUtil.randomString());
 
-		audienceEntry.setName(RandomTestUtil.randomString());
+		audiencesEntry.setName(RandomTestUtil.randomString());
 
-		_audienceEntries.add(_persistence.update(audienceEntry));
+		_audiencesEntries.add(_persistence.update(audiencesEntry));
 
-		return audienceEntry;
+		return audiencesEntry;
 	}
 
-	private List<AudienceEntry> _audienceEntries =
-		new ArrayList<AudienceEntry>();
-	private AudienceEntryPersistence _persistence;
+	private List<AudiencesEntry> _audiencesEntries =
+		new ArrayList<AudiencesEntry>();
+	private AudiencesEntryPersistence _persistence;
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1042626862
+// LIFERAY-SERVICE-BUILDER-HASH:1067092027
