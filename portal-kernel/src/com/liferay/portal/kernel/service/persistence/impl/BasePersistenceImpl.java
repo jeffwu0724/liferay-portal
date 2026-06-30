@@ -1537,6 +1537,8 @@ public class BasePersistenceImpl
 			return map;
 		}
 
+
+
 		StringBundler sb = new StringBundler(
 			(2 * uncachedPrimaryKeys.size()) + 4);
 
