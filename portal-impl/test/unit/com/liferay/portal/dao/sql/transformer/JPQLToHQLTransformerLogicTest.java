@@ -37,6 +37,21 @@ public class JPQLToHQLTransformerLogicTest {
 	}
 
 	@Test
+	public void testReplaceCast() {
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getCastFunction();
+
+		Assert.assertEquals(
+			"foo.name LIKE COALESCE(CAST(? AS String),'')",
+			function.apply(
+				"foo.name LIKE COALESCE(CAST(? AS VARCHAR(2000)),'')"));
+		Assert.assertEquals(
+			"x = CAST(? AS String), y = CAST(? AS String)",
+			function.apply(
+				"x = CAST(? AS VARCHAR(1)), y = CAST(? AS VARCHAR(2))"));
+	}
+
+	@Test
 	public void testReplaceCount() {
 		Function<String, String> function =
 			JPQLToHQLTransformerLogic.getCountFunction();
