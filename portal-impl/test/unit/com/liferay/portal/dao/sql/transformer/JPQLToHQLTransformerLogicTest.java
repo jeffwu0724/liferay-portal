@@ -25,6 +25,18 @@ public class JPQLToHQLTransformerLogicTest {
 		LiferayUnitTestRule.INSTANCE;
 
 	@Test
+	public void testReplaceBoolean() {
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getBooleanFunction();
+
+		Assert.assertEquals(
+			"layout.system = FALSE AND layout.privateLayout = TRUE",
+			function.apply(
+				"layout.system = [$FALSE$] AND layout.privateLayout = " +
+					"[$TRUE$]"));
+	}
+
+	@Test
 	public void testReplaceCount() {
 		Function<String, String> function =
 			JPQLToHQLTransformerLogic.getCountFunction();
@@ -61,7 +73,8 @@ public class JPQLToHQLTransformerLogicTest {
 
 		Assert.assertEquals(
 			"SELECT * FROM Foo WHERE a = ?1 AND b = ?2 AND c = ?3",
-			function.apply("SELECT * FROM Foo WHERE a = ? AND b = ? AND c = ?"));
+			function.apply(
+				"SELECT * FROM Foo WHERE a = ? AND b = ? AND c = ?"));
 	}
 
 	@Test
