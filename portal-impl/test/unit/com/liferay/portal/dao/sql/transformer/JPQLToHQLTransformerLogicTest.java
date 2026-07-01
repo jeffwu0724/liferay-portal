@@ -25,6 +25,33 @@ public class JPQLToHQLTransformerLogicTest {
 		LiferayUnitTestRule.INSTANCE;
 
 	@Test
+	public void testReplaceBoolean() {
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getBooleanFunction();
+
+		Assert.assertEquals(
+			"layout.system = FALSE AND layout.privateLayout = TRUE",
+			function.apply(
+				"layout.system = [$FALSE$] AND layout.privateLayout = " +
+					"[$TRUE$]"));
+	}
+
+	@Test
+	public void testReplaceCast() {
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getCastFunction();
+
+		Assert.assertEquals(
+			"foo.name LIKE COALESCE(CAST(? AS String),'')",
+			function.apply(
+				"foo.name LIKE COALESCE(CAST(? AS VARCHAR(2000)),'')"));
+		Assert.assertEquals(
+			"x = CAST(? AS String), y = CAST(? AS String)",
+			function.apply(
+				"x = CAST(? AS VARCHAR(1)), y = CAST(? AS VARCHAR(2))"));
+	}
+
+	@Test
 	public void testReplaceCount() {
 		Function<String, String> function =
 			JPQLToHQLTransformerLogic.getCountFunction();
@@ -52,6 +79,38 @@ public class JPQLToHQLTransformerLogicTest {
 			JPQLToHQLTransformerLogic.getCountFunction();
 
 		Assert.assertEquals(sql, function.apply(sql));
+	}
+
+	@Test
+	public void testReplacePositionalParameters() {
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction();
+
+		Assert.assertEquals(
+			"SELECT * FROM Foo WHERE a = ?1 AND b = ?2 AND c = ?3",
+			function.apply(
+				"SELECT * FROM Foo WHERE a = ? AND b = ? AND c = ?"));
+	}
+
+	@Test
+	public void testReplacePositionalParametersWithNoParameters() {
+		String sql = "SELECT * FROM Foo WHERE a = 1";
+
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction();
+
+		Assert.assertEquals(sql, function.apply(sql));
+	}
+
+	@Test
+	public void testReplacePositionalParametersWithQuotedQuestionMark() {
+		String sql = "SELECT * FROM Foo WHERE a = '?' AND b = ?";
+
+		Function<String, String> function =
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction();
+
+		Assert.assertEquals(
+			"SELECT * FROM Foo WHERE a = '?' AND b = ?1", function.apply(sql));
 	}
 
 }
