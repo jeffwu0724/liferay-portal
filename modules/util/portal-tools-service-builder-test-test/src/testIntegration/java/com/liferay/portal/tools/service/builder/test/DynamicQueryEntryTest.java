@@ -517,14 +517,9 @@ public class DynamicQueryEntryTest {
 		projectionList.add(ProjectionFactoryUtil.count("dynamicQueryEntryId"));
 		projectionList.add(ProjectionFactoryUtil.groupProperty("status"));
 
-		DynamicQuery dynamicQuery =
-			_dynamicQueryEntryLocalService.dynamicQuery();
-
-		dynamicQuery.addOrder(OrderFactoryUtil.asc("status"));
-
 		_testDynamicQueryWithProjection(
-			projectionList, new Object[] {2L, 1}, new Object[] {1L, 2},
-			new Object[] {1L, 3});
+			projectionList, OrderFactoryUtil.asc("status"),
+			new Object[] {2L, 1}, new Object[] {1L, 2}, new Object[] {1L, 3});
 	}
 
 	@Test
@@ -544,16 +539,12 @@ public class DynamicQueryEntryTest {
 
 	@Test
 	public void testDynamicQueryWithProjectionSqlGroupProjection() {
-		DynamicQuery dynamicQuery =
-			_dynamicQueryEntryLocalService.dynamicQuery();
-
-		dynamicQuery.addOrder(OrderFactoryUtil.asc("status"));
-
 		_testDynamicQueryWithProjection(
 			ProjectionFactoryUtil.sqlGroupProjection(
 				"count(*) AS c, status AS s", "status", new String[] {"c", "s"},
 				new Type[] {Type.LONG, Type.INTEGER}),
-			new Object[] {2L, 1}, new Object[] {1L, 2}, new Object[] {1L, 3});
+			OrderFactoryUtil.asc("status"), new Object[] {2L, 1},
+			new Object[] {1L, 2}, new Object[] {1L, 3});
 	}
 
 	@Test
@@ -806,6 +797,18 @@ public class DynamicQueryEntryTest {
 			_dynamicQueryEntryLocalService.dynamicQuery();
 
 		dynamicQuery.setProjection(projection);
+
+		_testDynamicQuery(dynamicQuery, expectedResults);
+	}
+
+	private void _testDynamicQueryWithProjection(
+		Projection projection, Order order, Object... expectedResults) {
+
+		DynamicQuery dynamicQuery =
+			_dynamicQueryEntryLocalService.dynamicQuery();
+
+		dynamicQuery.setProjection(projection);
+		dynamicQuery.addOrder(order);
 
 		_testDynamicQuery(dynamicQuery, expectedResults);
 	}
