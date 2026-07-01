@@ -7,6 +7,7 @@
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="sequenceEntryId" type="long">
 			<generator class="sequence">
 				<param name="sequence_name">id_sequence</param>
+				<param name="increment_size">1</param>
 			</generator>
 		</id>
 		<version access="com.liferay.portal.dao.orm.hibernate.PrivateFieldPropertyAccessor" name="mvccVersion" type="long" />
