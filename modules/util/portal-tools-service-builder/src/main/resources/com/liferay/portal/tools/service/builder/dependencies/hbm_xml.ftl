@@ -80,7 +80,7 @@
 
 					<#if stringUtil.equals(class, "sequence")>
 						<#if serviceBuilder.isVersionGTE_7_4_0()>
-							><param name="sequence_name">${entityColumn.idParam}</param>
+							><param name="sequence_name">${entityColumn.idParam}</param><param name="increment_size">1</param>
 						<#else>
 							><param name="sequence">${entityColumn.idParam}</param>
 						</#if>
