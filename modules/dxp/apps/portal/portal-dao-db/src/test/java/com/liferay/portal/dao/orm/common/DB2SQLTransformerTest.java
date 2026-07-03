@@ -32,6 +32,24 @@ public class DB2SQLTransformerTest extends BaseSQLTransformerTestCase {
 					"[$FALSE$]"));
 	}
 
+	@Test
+	public void testReplaceLikeCastTarget() {
+		String transformedHQL = SQLTransformer.transformFromJPQLToHQL(
+			"SELECT indexEntry FROM IndexEntry indexEntry WHERE " +
+				"indexEntry.name LIKE ?");
+
+		// The DB2 dialect wraps "LIKE ?" as
+		// "LIKE COALESCE(CAST(? AS VARCHAR(2000)),'')". VARCHAR is a SQL type;
+		// Hibernate 7's HQL parser rejects it with "unrecognized cast target
+		// type: VARCHAR". The HQL cast target must be an HQL type such as
+		// String.
+
+		Assert.assertFalse(
+			"HQL must not contain a SQL-type VARCHAR cast target: " +
+				transformedHQL,
+			transformedHQL.contains("VARCHAR"));
+	}
+
 	@Override
 	protected DBType getDBType() {
 		return DBType.DB2;
