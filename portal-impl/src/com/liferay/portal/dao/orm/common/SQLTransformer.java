@@ -96,7 +96,12 @@ public class SQLTransformer {
 			return newSQL;
 		}
 
-		newSQL = _sqlTransformer.transform(sql);
+		newSQL = JPQLToHQLTransformerLogic.getBooleanFunction(
+		).apply(
+			sql
+		);
+
+		newSQL = _sqlTransformer.transform(newSQL);
 
 		Function[] functions = {
 			JPQLToHQLTransformerLogic.getCountFunction(),
