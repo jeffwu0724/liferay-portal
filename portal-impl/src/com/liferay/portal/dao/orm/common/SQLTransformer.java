@@ -104,6 +104,7 @@ public class SQLTransformer {
 		newSQL = _sqlTransformer.transform(newSQL);
 
 		Function[] functions = {
+			JPQLToHQLTransformerLogic.getCastFunction(),
 			JPQLToHQLTransformerLogic.getCountFunction(),
 			JPQLToHQLTransformerLogic.getPositionalParameterFunction()
 		};

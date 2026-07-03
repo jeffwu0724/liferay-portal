@@ -23,6 +23,14 @@ public class JPQLToHQLTransformerLogic {
 			new String[] {"FALSE", "TRUE"});
 	}
 
+	public static Function<String, String> getCastFunction() {
+		return (String sql) -> {
+			Matcher matcher = _castVarcharPattern.matcher(sql);
+
+			return matcher.replaceAll("CAST($1 AS String)");
+		};
+	}
+
 	public static Function<String, String> getCountFunction() {
 		return (String sql) -> {
 			Matcher matcher = _jpqlCountPattern.matcher(sql);
@@ -73,6 +81,8 @@ public class JPQLToHQLTransformerLogic {
 
 	private static final String _HQL_COUNT_SQL = "SELECT COUNT(*) FROM $2 $3";
 
+	private static final Pattern _castVarcharPattern = Pattern.compile(
+		"CAST\\((.+?) AS VARCHAR\\(\\d+\\)\\)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern _jpqlCountPattern = Pattern.compile(
 		"SELECT COUNT\\((\\S+)\\) FROM (\\S+) (\\S+)");
 
