@@ -412,7 +412,7 @@ public class SessionImpl implements Session {
 		throws ORMException {
 
 		try {
-			queryString = SQLTransformer.transformFromJPQLToHQL(queryString);
+			queryString = SQLTransformer.transformToHQL(queryString);
 
 			return new QueryImpl(
 				_session.createQuery(queryString, null), strictName);

@@ -6,6 +6,7 @@
 package com.liferay.portal.dao.sql.transformer;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -15,6 +16,12 @@ import java.util.regex.Pattern;
  * @author Manuel de la Peña
  */
 public class JPQLToHQLTransformerLogic {
+
+	public static Function<String, String> getBooleanFunction() {
+		return (String sql) -> StringUtil.replace(
+			sql, new String[] {"[$FALSE$]", "[$TRUE$]"},
+			new String[] {"FALSE", "TRUE"});
+	}
 
 	public static Function<String, String> getCountFunction() {
 		return (String sql) -> {
