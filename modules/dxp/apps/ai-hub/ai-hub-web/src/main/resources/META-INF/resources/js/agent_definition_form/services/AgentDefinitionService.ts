@@ -45,8 +45,14 @@ async function getAgentDefinition(externalReferenceCode: string) {
 	return response.json();
 }
 
-async function getAgentDefinitions() {
-	const response = await fetch('/o/ai-hub/v1.0/agent-definitions', {
+async function getAgentDefinitions(params?: Record<string, string>) {
+	const baseURL = '/o/ai-hub/v1.0/agent-definitions';
+
+	const queryString = params ? new URLSearchParams(params).toString() : '';
+
+	const url = queryString ? `${baseURL}?${queryString}` : baseURL;
+
+	const response = await fetch(url, {
 		method: 'GET',
 	});
 
@@ -71,9 +77,12 @@ async function postAgentDefinition(agentDefinition: AgentDefinition) {
 	return response.json();
 }
 
-async function putAgentDefinition(agentDefinition: AgentDefinition) {
+async function putAgentDefinition(
+	agentDefinition: AgentDefinition,
+	externalReferenceCode: string
+) {
 	const response = await fetch(
-		`${AGENT_DEFINITION_BY_ERC_URI}${agentDefinition.externalReferenceCode}`,
+		`${AGENT_DEFINITION_BY_ERC_URI}${externalReferenceCode}`,
 		{
 			body: JSON.stringify(agentDefinition),
 			headers: {

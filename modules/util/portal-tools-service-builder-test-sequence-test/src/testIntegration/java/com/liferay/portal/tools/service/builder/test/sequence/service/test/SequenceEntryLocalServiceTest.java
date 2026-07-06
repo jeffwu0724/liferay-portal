@@ -8,6 +8,9 @@ package com.liferay.portal.tools.service.builder.test.sequence.service.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.model.Release;
+import com.liferay.portal.kernel.service.ReleaseLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.AssumeTestRule;
 import com.liferay.portal.test.rule.Inject;
@@ -15,6 +18,10 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.tools.service.builder.test.sequence.service.SequenceEntryLocalService;
 
 import java.io.InputStream;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -51,6 +58,8 @@ public class SequenceEntryLocalServiceTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
+		_deleteSequenceEntrySchema();
+
 		Bundle bundle = FrameworkUtil.getBundle(
 			SequenceEntryLocalServiceTest.class);
 
@@ -73,6 +82,8 @@ public class SequenceEntryLocalServiceTest {
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 		_bundle.uninstall();
+
+		_deleteSequenceEntrySchema();
 	}
 
 	@Test
@@ -80,6 +91,35 @@ public class SequenceEntryLocalServiceTest {
 		Assert.assertNotNull(
 			_sequenceEntryLocalService.addSequenceEntry(
 				_sequenceEntryLocalService.createSequenceEntry(0)));
+	}
+
+	private static void _deleteSequenceEntrySchema() {
+		try (Connection connection = DataAccess.getConnection();
+
+			PreparedStatement preparedStatement = connection.prepareStatement(
+				"drop table SequenceEntry")) {
+
+			preparedStatement.executeUpdate();
+		}
+		catch (SQLException sqlException) {
+		}
+
+		try (Connection connection = DataAccess.getConnection();
+
+			PreparedStatement preparedStatement = connection.prepareStatement(
+				"drop sequence id_sequence")) {
+
+			preparedStatement.executeUpdate();
+		}
+		catch (SQLException sqlException) {
+		}
+
+		Release release = ReleaseLocalServiceUtil.fetchRelease(
+			"com.liferay.portal.tools.service.builder.test.sequence.service");
+
+		if (release != null) {
+			ReleaseLocalServiceUtil.deleteRelease(release);
+		}
 	}
 
 	private static Bundle _bundle;

@@ -5,6 +5,9 @@
 
 package com.liferay.portal.dao.sql.transformer;
 
+import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.util.StringUtil;
+
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +16,12 @@ import java.util.regex.Pattern;
  * @author Manuel de la Peña
  */
 public class JPQLToHQLTransformerLogic {
+
+	public static Function<String, String> getBooleanFunction() {
+		return (String sql) -> StringUtil.replace(
+			sql, new String[] {"[$FALSE$]", "[$TRUE$]"},
+			new String[] {"FALSE", "TRUE"});
+	}
 
 	public static Function<String, String> getCountFunction() {
 		return (String sql) -> {
@@ -28,6 +37,37 @@ public class JPQLToHQLTransformerLogic {
 			}
 
 			return sql;
+		};
+	}
+
+	public static Function<String, String> getPositionalParameterFunction() {
+		return (String sql) -> {
+			if (!sql.contains("?")) {
+				return sql;
+			}
+
+			StringBundler sb = new StringBundler();
+
+			int counter = 1;
+			boolean quoted = false;
+
+			for (int i = 0; i < sql.length(); i++) {
+				char c = sql.charAt(i);
+
+				if (c == '\'') {
+					quoted = !quoted;
+				}
+
+				if ((c == '?') && !quoted) {
+					sb.append('?');
+					sb.append(counter++);
+				}
+				else {
+					sb.append(c);
+				}
+			}
+
+			return sb.toString();
 		};
 	}
 

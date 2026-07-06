@@ -32,6 +32,7 @@ const test = mergeTests(
 		'LPD-17564': {enabled: true},
 		'LPD-65399': {enabled: true},
 		'LPS-155284': {enabled: true},
+		'LPS-178052': {enabled: true},
 	}),
 	isolatedSiteTest,
 	loginTest(),
@@ -139,7 +140,7 @@ test(
 			await assetPublisherPage.closeConfiguration();
 		}
 
-		await page.getByLabel('Publish', {exact: true}).click();
+		await pageEditorPage.publishPage();
 
 		await page.goto(`/web${site.friendlyUrlPath}${layout.friendlyUrlPath}`);
 
@@ -330,7 +331,7 @@ test(
 
 		// Publish the page and assert the rendered analytics attributes
 
-		await page.getByLabel('Publish', {exact: true}).click();
+		await pageEditorPage.publishPage();
 
 		await page.goto(`/web${site.friendlyUrlPath}${layout.friendlyUrlPath}`);
 

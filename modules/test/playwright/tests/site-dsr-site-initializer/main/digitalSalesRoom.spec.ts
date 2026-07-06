@@ -737,7 +737,7 @@ test(
 
 test(
 	'A viewer cannot upload files nor share but can make comments',
-	{tag: '@LPD-87116'},
+	{tag: ['@LPD-87116', '@LPD-96701']},
 	async ({
 		apiHelpers,
 		digitalSalesRoomUsersPage,
@@ -807,6 +807,7 @@ test(
 
 		await editDigitalSalesRoomPage.documentsMenuItem.click();
 
+		await expect(editDigitalSalesRoomPage.noDocumentsMessage).toBeVisible();
 		await expect(editDigitalSalesRoomPage.newButton).not.toBeVisible();
 
 		await performUserSwitch(page, 'test');
@@ -1057,6 +1058,11 @@ test(
 		);
 		await digitalSalesRoomUsersPage.userEmailAddressesInput.press('Enter');
 		await editDigitalSalesRoomPage.roleKeyButton.click();
+
+		await expect(
+			editDigitalSalesRoomPage.contributorRoleInputButton
+		).toBeVisible();
+
 		await editDigitalSalesRoomPage.contributorRoleInputButton.click();
 		await digitalSalesRoomUsersPage.inviteButton.click();
 
@@ -1078,7 +1084,7 @@ test(
 		).toBeVisible();
 
 		await digitalSalesRoomUsersPage.roleDropdown(email).click();
-		await editDigitalSalesRoomPage.contributorRoleButton.click();
+		await editDigitalSalesRoomPage.contributorRoleMenuItemButton.click();
 
 		await expect(
 			digitalSalesRoomUsersPage.roleText(email, 'Content Contributor')
@@ -1156,7 +1162,12 @@ test(
 		);
 		await digitalSalesRoomUsersPage.userEmailAddressesInput.press('Enter');
 		await editDigitalSalesRoomPage.roleKeyButton.click();
-		await editDigitalSalesRoomPage.contributorRoleButton.click();
+
+		await expect(
+			editDigitalSalesRoomPage.contributorRoleInputButton
+		).toBeVisible();
+
+		await editDigitalSalesRoomPage.contributorRoleInputButton.click();
 		await digitalSalesRoomUsersPage.inviteButton.click();
 
 		await waitForAlert(page, 'Success:User was invited successfully.');
@@ -1465,7 +1476,12 @@ test(
 		).toBeVisible();
 
 		await digitalSalesRoomUsersPage.roleDropdown(member.name).click();
-		await editDigitalSalesRoomPage.contributorRoleButton.click();
+
+		await expect(
+			editDigitalSalesRoomPage.contributorRoleMenuItemButton
+		).toBeVisible();
+
+		await editDigitalSalesRoomPage.contributorRoleMenuItemButton.click();
 
 		await expect(
 			digitalSalesRoomUsersPage.roleText(

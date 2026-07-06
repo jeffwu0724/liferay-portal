@@ -165,11 +165,12 @@ const List = () => {
 		() => [
 			{
 				apiURL: `/o/faro/contacts/${groupId}/account/search?channelId=${channelId}&filter=(rangeKey eq '${rangeSelectors.rangeKey}')`,
+				autocompleteEnabled: true,
 				entityFieldType: 'string',
 				id: 'accountIds',
 				itemKey: 'id',
 				itemLabel: 'accountName',
-				label: Liferay.Language.get('account'),
+				label: Liferay.Language.get('accounts'),
 				multiple: true,
 				...(accountId && {
 					preloadedData: {
@@ -178,55 +179,65 @@ const List = () => {
 						],
 					},
 				}),
-				searchable: true,
+				type: 'selection',
+			},
+			{
+				apiURL: `/o/faro/contacts/${groupId}/individual_segment/search?channelId=${channelId}&${rangeSelectorParams}`,
+				autocompleteEnabled: true,
+				entityFieldType: 'string',
+				id: 'segmentIds',
+				itemKey: 'id',
+				itemLabel: 'name',
+				label: Liferay.Language.get('segments'),
+				multiple: true,
 				type: 'selection',
 			},
 			{
 				apiURL: `/o/faro/contacts/${groupId}/asset-summary-types?channelId=${channelId}&${rangeSelectorParams}`,
+				autocompleteEnabled: true,
 				entityFieldType: 'string',
 				id: 'assetType',
 				itemKey: 'name',
 				itemLabel: 'name',
 				label: Liferay.Language.get('type'),
 				multiple: true,
-				searchable: true,
 				type: 'selection',
 			},
 			{
 				apiURL: `/o/faro/contacts/${groupId}/asset-summary-tags?channelId=${channelId}&${rangeSelectorParams}`,
+				autocompleteEnabled: true,
 				entityFieldType: 'string',
 				id: 'tags/id',
 				itemKey: 'id',
 				itemLabel: 'name',
 				label: Liferay.Language.get('tags'),
 				multiple: true,
-				searchable: true,
 				type: 'selection',
 			},
 			{
 				apiURL: `/o/faro/contacts/${groupId}/asset-summary-categories?channelId=${channelId}&${rangeSelectorParams}`,
+				autocompleteEnabled: true,
 				entityFieldType: 'string',
 				id: 'categories/id',
 				itemKey: 'id',
 				itemLabel: 'name',
 				label: Liferay.Language.get('categories'),
 				multiple: true,
-				searchable: true,
 				type: 'selection',
 			},
 			{
 				apiURL: `/o/faro/contacts/${groupId}/asset-summary-mime-types?channelId=${channelId}&${rangeSelectorParams}`,
+				autocompleteEnabled: true,
 				entityFieldType: 'string',
 				id: 'mimeType',
 				itemKey: 'id',
 				itemLabel: 'name',
 				label: Liferay.Language.get('file-type'),
 				multiple: true,
-				searchable: true,
 				type: 'selection',
 			},
 		],
-		[accountId, accountName, groupId, rangeSelectorParams]
+		[accountId, accountName, channelId, groupId, rangeSelectorParams]
 	);
 
 	return (
@@ -294,6 +305,21 @@ const List = () => {
 							),
 						}}
 						filters={filters}
+						groupedFilters={[
+							{
+								filters: [
+									'assetType',
+									'tags/id',
+									'categories/id',
+									'mimeType',
+								],
+								label: Liferay.Language.get('filter-by'),
+							},
+							{
+								filters: ['accountIds', 'segmentIds'],
+								label: Liferay.Language.get('filter-by-people'),
+							},
+						]}
 						id="assetTable"
 						itemsActions={[
 							{
