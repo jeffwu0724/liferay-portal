@@ -532,9 +532,9 @@ public class DynamicQueryEntryTest {
 		projectionList.add(projection, "b");
 
 		_testDynamicQueryWithProjection(
-			projectionList, new Object[] {"alpha", "alpha"},
-			new Object[] {"beta", "beta"}, new Object[] {"gamma", "gamma"},
-			new Object[] {"delta", "delta"});
+			projectionList, OrderFactoryUtil.asc("dynamicQueryEntryId"),
+			new Object[] {"alpha", "alpha"}, new Object[] {"beta", "beta"},
+			new Object[] {"gamma", "gamma"}, new Object[] {"delta", "delta"});
 	}
 
 	@Test
@@ -549,16 +549,12 @@ public class DynamicQueryEntryTest {
 
 	@Test
 	public void testDynamicQueryWithProjectionSqlProjection() {
-		DynamicQuery dynamicQuery =
-			_dynamicQueryEntryLocalService.dynamicQuery();
-
-		dynamicQuery.addOrder(OrderFactoryUtil.asc("amount"));
-
 		_testDynamicQueryWithProjection(
 			ProjectionFactoryUtil.sqlProjection(
 				"name AS sqlName", new String[] {"sqlName"},
 				new Type[] {Type.STRING}),
-			"alpha", "beta", "gamma", "delta");
+			OrderFactoryUtil.asc("dynamicQueryEntryId"), "alpha", "beta",
+			"gamma", "delta");
 	}
 
 	@Test
