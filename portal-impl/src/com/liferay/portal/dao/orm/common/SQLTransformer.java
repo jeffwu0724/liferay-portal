@@ -96,12 +96,22 @@ public class SQLTransformer {
 			return newSQL;
 		}
 
-		newSQL = _sqlTransformer.transform(sql);
+		newSQL = JPQLToHQLTransformerLogic.getBooleanFunction(
+		).apply(
+			sql
+		);
 
-		Function<String, String> countFunction =
-			JPQLToHQLTransformerLogic.getCountFunction();
+		newSQL = _sqlTransformer.transform(newSQL);
 
-		newSQL = countFunction.apply(newSQL);
+		Function[] functions = {
+			JPQLToHQLTransformerLogic.getCastFunction(),
+			JPQLToHQLTransformerLogic.getCountFunction(),
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction()
+		};
+
+		for (Function<String, String> function : functions) {
+			newSQL = function.apply(newSQL);
+		}
 
 		_transformedSQLsPortalCache.put(sql, newSQL);
 
