@@ -689,10 +689,10 @@ public class DB2DB extends BaseDB {
 	}
 
 	private static final String[] _DB2 = {
-		"--", "1", "0", "'1970-01-01-00.00.00.000000'", "current timestamp",
-		" blob", " blob", " decimal(30, 16)", " smallint", " timestamp",
-		" double", " integer", " bigint", " varchar(4000)", " clob(2G)",
-		" varchar", " generated always as identity", "commit"
+		"--", "TRUE", "FALSE", "'1970-01-01-00.00.00.000000'",
+		"current timestamp", " blob", " blob", " decimal(30, 16)", " boolean",
+		" timestamp", " double", " integer", " bigint", " varchar(4000)",
+		" clob(2G)", " varchar", " generated always as identity", "commit"
 	};
 
 	private static final int _SQL_STRING_SIZE = 4000;
