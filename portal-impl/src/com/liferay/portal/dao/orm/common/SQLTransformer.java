@@ -41,6 +41,10 @@ public class SQLTransformer {
 		return _instance._transformFromJPQLToHQL(sql);
 	}
 
+	public static String transformToHQL(String sql) {
+		return _instance._transformToHQL(sql);
+	}
+
 	private SQLTransformer() {
 		_reloadSQLTransformer();
 	}
@@ -98,10 +102,44 @@ public class SQLTransformer {
 
 		newSQL = _sqlTransformer.transform(sql);
 
-		Function<String, String> countFunction =
-			JPQLToHQLTransformerLogic.getCountFunction();
+		Function[] functions = {
+			JPQLToHQLTransformerLogic.getCountFunction(),
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction()
+		};
 
-		newSQL = countFunction.apply(newSQL);
+		for (Function<String, String> function : functions) {
+			newSQL = function.apply(newSQL);
+		}
+
+		_transformedSQLsPortalCache.put(sql, newSQL);
+
+		return newSQL;
+	}
+
+	private String _transformToHQL(String sql) {
+		String newSQL = _transformedSQLsPortalCache.get(sql);
+
+		if (newSQL != null) {
+			return newSQL;
+		}
+
+		// HQL is database independent. Resolve the Liferay tokens to HQL valid
+		// forms and let Hibernate translate them into each dialect. Do not run
+		// the native dialect chain (_sqlTransformer): it renders booleans as
+		// the dialect 0/1 and wraps "LIKE ?" as CAST(? AS VARCHAR(n)) for DB2
+		// and Oracle, both of which Hibernate 7's HQL parser rejects.
+
+		newSQL = sql;
+
+		Function[] functions = {
+			JPQLToHQLTransformerLogic.getBooleanFunction(),
+			JPQLToHQLTransformerLogic.getCountFunction(),
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction()
+		};
+
+		for (Function<String, String> function : functions) {
+			newSQL = function.apply(newSQL);
+		}
 
 		_transformedSQLsPortalCache.put(sql, newSQL);
 
