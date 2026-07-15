@@ -141,7 +141,7 @@ public class SessionImpl implements Session {
 		throws ORMException {
 
 		try {
-			queryString = SQLTransformer.transformFromJPQLToHQL(queryString);
+			queryString = SQLTransformer.transformForHibernate(queryString);
 
 			return new SQLQueryImpl(
 				_session.createNativeQuery(queryString, (Class<?>)null),
@@ -199,7 +199,7 @@ public class SessionImpl implements Session {
 		throws ORMException {
 
 		try {
-			queryString = SQLTransformer.transformFromJPQLToHQL(queryString);
+			queryString = SQLTransformer.transformForHibernate(queryString);
 
 			SQLQuery sqlQuery = new SQLQueryImpl(
 				_session.createNativeQuery(queryString, (Class<?>)null),
@@ -412,7 +412,7 @@ public class SessionImpl implements Session {
 		throws ORMException {
 
 		try {
-			queryString = SQLTransformer.transformFromJPQLToHQL(queryString);
+			queryString = SQLTransformer.transformForHibernate(queryString);
 
 			return new QueryImpl(
 				_session.createQuery(queryString, null), strictName);
