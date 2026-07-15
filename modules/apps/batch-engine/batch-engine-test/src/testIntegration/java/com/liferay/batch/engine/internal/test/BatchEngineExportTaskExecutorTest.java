@@ -219,8 +219,11 @@ public class BatchEngineExportTaskExecutorTest
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		Assert.assertEquals(
-			blogsEntry.getCreateDate(),
-			dateFormat.parse(jsonObject.getString("dateCreated")));
+			blogsEntry.getCreateDate(
+			).getTime(),
+			dateFormat.parse(
+				jsonObject.getString("dateCreated")
+			).getTime());
 	}
 
 	@Test
@@ -605,7 +608,11 @@ public class BatchEngineExportTaskExecutorTest
 				value = dateFormat.parse((String)value);
 			}
 
-			Assert.assertEquals(blogsEntry.getDisplayDate(), value);
+			Assert.assertEquals(
+				new Date(
+					blogsEntry.getDisplayDate(
+					).getTime()),
+				value);
 		}
 
 		if (fieldNames.isEmpty() || fieldNames.contains(FIELD_NAMES[3])) {

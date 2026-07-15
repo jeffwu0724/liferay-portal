@@ -977,7 +977,10 @@ public class FragmentEntryLinkLocalServiceTest {
 
 		Layout layout = _layoutLocalService.fetchLayout(_layout.getPlid());
 
-		Assert.assertEquals(modifiedDate, layout.getModifiedDate());
+		Assert.assertEquals(
+			modifiedDate.getTime(),
+			layout.getModifiedDate(
+			).getTime());
 	}
 
 	private FragmentEntry _addFragmentEntry(

@@ -236,7 +236,10 @@ public class JournalArticleLocalServiceCheckArticlesTest {
 
 		article = _journalArticleLocalService.getArticle(article.getId());
 
-		Assert.assertEquals(modifiedDate, article.getModifiedDate());
+		Assert.assertEquals(
+			modifiedDate.getTime(),
+			article.getModifiedDate(
+			).getTime());
 
 		updatedArticle.setExpirationDate(
 			new Date(System.currentTimeMillis() - (Time.HOUR * 2)));

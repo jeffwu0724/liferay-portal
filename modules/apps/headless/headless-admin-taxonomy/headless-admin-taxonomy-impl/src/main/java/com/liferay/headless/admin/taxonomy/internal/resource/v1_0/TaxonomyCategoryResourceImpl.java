@@ -72,8 +72,6 @@ import com.liferay.portlet.asset.service.permission.AssetCategoriesPermission;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.MultivaluedMap;
 
-import java.sql.Timestamp;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1115,11 +1113,11 @@ public class TaxonomyCategoryResourceImpl
 			{
 				setCategoryId((long)assetCategory[1]);
 				setCompanyId((long)assetCategory[2]);
-				setCreateDate(_toDate((Timestamp)assetCategory[3]));
+				setCreateDate(_toDate((Date)assetCategory[3]));
 				setDescription((String)assetCategory[4]);
 				setExternalReferenceCode((String)assetCategory[5]);
 				setGroupId((long)assetCategory[6]);
-				setModifiedDate(_toDate((Timestamp)assetCategory[7]));
+				setModifiedDate(_toDate((Date)assetCategory[7]));
 				setName((String)assetCategory[8]);
 				setParentCategoryId((long)assetCategory[9]);
 				setUserId((long)assetCategory[10]);
@@ -1128,8 +1126,8 @@ public class TaxonomyCategoryResourceImpl
 		};
 	}
 
-	private Date _toDate(Timestamp timestamp) {
-		return new Date(timestamp.getTime());
+	private Date _toDate(Date date) {
+		return new Date(date.getTime());
 	}
 
 	private String[] _toStringArray(

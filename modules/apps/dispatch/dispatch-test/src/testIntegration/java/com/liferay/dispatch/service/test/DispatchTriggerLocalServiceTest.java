@@ -169,10 +169,14 @@ public class DispatchTriggerLocalServiceTest {
 		TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
 
 		Assert.assertEquals(
-			dispatchTrigger.getStartDate(),
-			new Date(date.getTime() - timeZone.getOffset(date.getTime())));
+			dispatchTrigger.getStartDate(
+			).getTime(),
+			date.getTime() - timeZone.getOffset(date.getTime()));
 
-		Assert.assertEquals(dispatchTrigger.getTimeZoneStartDate(), date);
+		Assert.assertEquals(
+			dispatchTrigger.getTimeZoneStartDate(
+			).getTime(),
+			date.getTime());
 
 		String liferayMode = SystemProperties.get("liferay.mode");
 

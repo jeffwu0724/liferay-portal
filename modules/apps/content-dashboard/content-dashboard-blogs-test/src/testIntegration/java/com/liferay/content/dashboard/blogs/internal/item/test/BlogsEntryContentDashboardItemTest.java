@@ -321,8 +321,10 @@ public class BlogsEntryContentDashboardItemTest {
 			_contentDashboardItemFactory.create(blogsEntry.getEntryId());
 
 		Assert.assertEquals(
-			blogsEntry.getModifiedDate(),
-			contentDashboardItem.getModifiedDate());
+			blogsEntry.getModifiedDate(
+			).getTime(),
+			contentDashboardItem.getModifiedDate(
+			).getTime());
 	}
 
 	@Test
