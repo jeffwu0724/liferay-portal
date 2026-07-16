@@ -89,11 +89,15 @@ public class TemplateEntryStagedModelDataHandlerTest
 			templateEntry.getUuid(), liveGroup);
 
 		Assert.assertEquals(
-			templateEntry.getCreateDate(),
-			importedTemplateEntry.getCreateDate());
+			templateEntry.getCreateDate(
+			).getTime(),
+			importedTemplateEntry.getCreateDate(
+			).getTime());
 		Assert.assertEquals(
-			templateEntry.getModifiedDate(),
-			importedTemplateEntry.getModifiedDate());
+			templateEntry.getModifiedDate(
+			).getTime(),
+			importedTemplateEntry.getModifiedDate(
+			).getTime());
 	}
 
 	@Test

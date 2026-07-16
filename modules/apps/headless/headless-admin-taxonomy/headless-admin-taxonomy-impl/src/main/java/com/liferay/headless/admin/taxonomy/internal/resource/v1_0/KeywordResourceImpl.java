@@ -60,8 +60,6 @@ import com.liferay.portlet.asset.service.permission.AssetTagsPermission;
 
 import jakarta.ws.rs.core.MultivaluedMap;
 
-import java.sql.Timestamp;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -661,9 +659,9 @@ public class KeywordResourceImpl
 				}
 
 				setCompanyId((long)assetTags[1]);
-				setCreateDate(_toDate((Timestamp)assetTags[2]));
+				setCreateDate(_toDate((Date)assetTags[2]));
 				setGroupId((long)assetTags[3]);
-				setModifiedDate(_toDate((Timestamp)assetTags[4]));
+				setModifiedDate(_toDate((Date)assetTags[4]));
 				setName((String)assetTags[5]);
 				setTagId((long)assetTags[6]);
 				setUserId((long)assetTags[7]);
@@ -671,8 +669,8 @@ public class KeywordResourceImpl
 		};
 	}
 
-	private Date _toDate(Timestamp timestamp) {
-		return new Date(timestamp.getTime());
+	private Date _toDate(Date date) {
+		return new Date(date.getTime());
 	}
 
 	private Keyword _toKeyword(AssetTag assetTag) throws Exception {

@@ -3388,9 +3388,18 @@ public class DefaultObjectEntryManagerImplTest
 			},
 			null);
 
-		Assert.assertEquals(timestamp, objectEntry1.getDisplayDate());
-		Assert.assertEquals(timestamp, objectEntry1.getExpirationDate());
-		Assert.assertEquals(timestamp, objectEntry1.getReviewDate());
+		Assert.assertEquals(
+			timestamp.getTime(),
+			objectEntry1.getDisplayDate(
+			).getTime());
+		Assert.assertEquals(
+			timestamp.getTime(),
+			objectEntry1.getExpirationDate(
+			).getTime());
+		Assert.assertEquals(
+			timestamp.getTime(),
+			objectEntry1.getReviewDate(
+			).getTime());
 	}
 
 	@Test

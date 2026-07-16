@@ -2538,7 +2538,10 @@ public class JournalArticleLocalServiceTest {
 			journalArticle1);
 
 		Assert.assertEquals(
-			journalArticle1.getDisplayDate(), journalArticle2.getDisplayDate());
+			journalArticle1.getDisplayDate(
+			).getTime(),
+			journalArticle2.getDisplayDate(
+			).getTime());
 
 		Calendar calendar = Calendar.getInstance();
 

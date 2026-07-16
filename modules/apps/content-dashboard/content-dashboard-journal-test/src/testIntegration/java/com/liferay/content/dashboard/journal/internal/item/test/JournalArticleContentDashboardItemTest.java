@@ -602,8 +602,10 @@ public class JournalArticleContentDashboardItemTest {
 				journalArticle.getResourcePrimKey());
 
 		Assert.assertEquals(
-			journalArticle.getModifiedDate(),
-			contentDashboardItem.getModifiedDate());
+			journalArticle.getModifiedDate(
+			).getTime(),
+			contentDashboardItem.getModifiedDate(
+			).getTime());
 	}
 
 	@Test

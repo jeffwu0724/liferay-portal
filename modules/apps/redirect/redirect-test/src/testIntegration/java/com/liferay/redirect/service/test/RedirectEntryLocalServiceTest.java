@@ -586,7 +586,9 @@ public class RedirectEntryLocalServiceTest {
 			_friendlyURLNormalizer.normalizeWithEncoding(_URL_SOURCE), true);
 
 		Assert.assertEquals(
-			lastOccurrenceDate, _redirectEntry.getLastOccurrenceDate());
+			lastOccurrenceDate.getTime(),
+			_redirectEntry.getLastOccurrenceDate(
+			).getTime());
 	}
 
 	@Test
