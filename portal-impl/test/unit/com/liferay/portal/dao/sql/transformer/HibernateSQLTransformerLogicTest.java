@@ -110,6 +110,21 @@ public class HibernateSQLTransformerLogicTest {
 	}
 
 	@Test
+	public void testReplacePositionalParameters() {
+		Assert.assertEquals(
+			"select * from Foo where foo = ?1 and bar = ?2",
+			SQLTransformer.transformForHibernate(
+				"select * from Foo where foo = ? and bar = ?"));
+	}
+
+	@Test
+	public void testReplacePositionalParametersIgnoresQuoted() {
+		String sql = "select * from Foo where foo = '?'";
+
+		Assert.assertEquals(sql, SQLTransformer.transformForHibernate(sql));
+	}
+
+	@Test
 	public void testReplaceInstr() {
 		Assert.assertEquals(
 			"select LOCATE('fooText', foo) from Foo",

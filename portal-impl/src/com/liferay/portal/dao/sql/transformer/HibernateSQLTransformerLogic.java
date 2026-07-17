@@ -31,7 +31,8 @@ public class HibernateSQLTransformerLogic extends BaseSQLTransformerLogic {
 			_getUnsupportedMacroFunction(
 				"INTEGER_DIV", getIntegerDivisionPattern()),
 			_getUnsupportedMacroFunction(
-				"TRUNCATE TABLE", getTruncateTablePattern()));
+				"TRUNCATE TABLE", getTruncateTablePattern()),
+			_getPositionalParameterFunction());
 	}
 
 	@Override
@@ -57,6 +58,37 @@ public class HibernateSQLTransformerLogic extends BaseSQLTransformerLogic {
 	@Override
 	protected String replaceInstr(Matcher matcher) {
 		return matcher.replaceAll("LOCATE($2, $1)");
+	}
+
+	private Function<String, String> _getPositionalParameterFunction() {
+		return (String sql) -> {
+			if (!sql.contains("?")) {
+				return sql;
+			}
+
+			StringBundler sb = new StringBundler();
+
+			int counter = 1;
+			boolean quoted = false;
+
+			for (int i = 0; i < sql.length(); i++) {
+				char c = sql.charAt(i);
+
+				if (c == '\'') {
+					quoted = !quoted;
+				}
+
+				if ((c == '?') && !quoted) {
+					sb.append('?');
+					sb.append(counter++);
+				}
+				else {
+					sb.append(c);
+				}
+			}
+
+			return sb.toString();
+		};
 	}
 
 	private Function<String, String> _getCountFunction() {
