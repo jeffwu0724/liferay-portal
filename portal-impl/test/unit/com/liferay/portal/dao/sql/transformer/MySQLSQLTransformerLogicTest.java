@@ -112,7 +112,7 @@ public class MySQLSQLTransformerLogicTest
 
 	@Override
 	protected String getBooleanTransformedSQL() {
-		return "select * from Foo where foo = 0 and bar = 1";
+		return "select * from Foo where foo = false and bar = true";
 	}
 
 	@Override
