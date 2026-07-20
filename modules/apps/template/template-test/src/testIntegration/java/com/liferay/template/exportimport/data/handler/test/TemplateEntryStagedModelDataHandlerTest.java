@@ -88,12 +88,19 @@ public class TemplateEntryStagedModelDataHandlerTest
 		TemplateEntry importedTemplateEntry = (TemplateEntry)getStagedModel(
 			templateEntry.getUuid(), liveGroup);
 
+		Date createDate = templateEntry.getCreateDate();
+
+		Date importedCreateDate = importedTemplateEntry.getCreateDate();
+
+		Assert.assertEquals(createDate.getTime(), importedCreateDate.getTime());
+
+		Date templateEntryModifiedDate = templateEntry.getModifiedDate();
+
+		Date importedModifiedDate = importedTemplateEntry.getModifiedDate();
+
 		Assert.assertEquals(
-			templateEntry.getCreateDate(),
-			importedTemplateEntry.getCreateDate());
-		Assert.assertEquals(
-			templateEntry.getModifiedDate(),
-			importedTemplateEntry.getModifiedDate());
+			templateEntryModifiedDate.getTime(),
+			importedModifiedDate.getTime());
 	}
 
 	@Test

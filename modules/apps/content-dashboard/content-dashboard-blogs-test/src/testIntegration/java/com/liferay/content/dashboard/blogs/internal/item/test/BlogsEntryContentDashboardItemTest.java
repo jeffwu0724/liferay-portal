@@ -46,6 +46,7 @@ import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -320,9 +321,14 @@ public class BlogsEntryContentDashboardItemTest {
 		ContentDashboardItem contentDashboardItem =
 			_contentDashboardItemFactory.create(blogsEntry.getEntryId());
 
+		Date blogsEntryModifiedDate = blogsEntry.getModifiedDate();
+
+		Date contentDashboardItemModifiedDate =
+			contentDashboardItem.getModifiedDate();
+
 		Assert.assertEquals(
-			blogsEntry.getModifiedDate(),
-			contentDashboardItem.getModifiedDate());
+			blogsEntryModifiedDate.getTime(),
+			contentDashboardItemModifiedDate.getTime());
 	}
 
 	@Test
