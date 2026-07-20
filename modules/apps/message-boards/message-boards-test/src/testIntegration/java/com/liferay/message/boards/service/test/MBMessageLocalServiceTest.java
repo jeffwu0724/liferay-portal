@@ -528,7 +528,11 @@ public class MBMessageLocalServiceTest {
 			mbMessage.getMessageId());
 
 		Assert.assertEquals(user.getFullName(), mbMessage.getUserName());
-		Assert.assertEquals(expectedModifiedDate, mbMessage.getModifiedDate());
+
+		Date actualModifiedDate = mbMessage.getModifiedDate();
+
+		Assert.assertEquals(
+			expectedModifiedDate.getTime(), actualModifiedDate.getTime());
 	}
 
 	protected MBMessage addMessage() throws Exception {

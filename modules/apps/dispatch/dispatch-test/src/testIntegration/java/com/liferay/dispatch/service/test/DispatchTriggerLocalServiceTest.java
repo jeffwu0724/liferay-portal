@@ -168,9 +168,11 @@ public class DispatchTriggerLocalServiceTest {
 
 		TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
 
+		Date startDate = dispatchTrigger.getStartDate();
+
 		Assert.assertEquals(
-			dispatchTrigger.getStartDate(),
-			new Date(date.getTime() - timeZone.getOffset(date.getTime())));
+			startDate.getTime(),
+			date.getTime() - timeZone.getOffset(date.getTime()));
 
 		Assert.assertEquals(dispatchTrigger.getTimeZoneStartDate(), date);
 
