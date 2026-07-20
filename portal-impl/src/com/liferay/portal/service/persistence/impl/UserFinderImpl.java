@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
@@ -809,11 +810,19 @@ public class UserFinderImpl extends UserFinderBaseImpl implements UserFinder {
 
 		String[] orderByFields = orderByComparator.getOrderByFields();
 
+		Set<String> aliases = new HashSet<>();
+
+		aliases.add("userId");
+
 		StringBundler sb = new StringBundler((orderByFields.length * 4) + 1);
 
 		sb.append("DISTINCT User_.userId AS userId");
 
 		for (String field : orderByFields) {
+			if (!aliases.add(field)) {
+				continue;
+			}
+
 			sb.append(", User_.");
 			sb.append(field);
 			sb.append(" AS ");
