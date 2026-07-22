@@ -921,7 +921,10 @@ public class LayoutCTTest {
 
 		Assert.assertNotNull(productionLayout);
 
-		Assert.assertEquals(modifiedDate, productionLayout.getModifiedDate());
+		Date productionLayoutModifiedDate = productionLayout.getModifiedDate();
+
+		Assert.assertEquals(
+			modifiedDate.getTime(), productionLayoutModifiedDate.getTime());
 	}
 
 	@Test
@@ -965,7 +968,10 @@ public class LayoutCTTest {
 
 		Assert.assertNotNull(productionLayout);
 
-		Assert.assertEquals(modifiedDate, productionLayout.getModifiedDate());
+		Date productionLayoutModifiedDate = productionLayout.getModifiedDate();
+
+		Assert.assertEquals(
+			modifiedDate.getTime(), productionLayoutModifiedDate.getTime());
 	}
 
 	@Test
