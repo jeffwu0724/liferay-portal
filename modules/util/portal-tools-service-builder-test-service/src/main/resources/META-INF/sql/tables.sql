@@ -74,6 +74,11 @@ create table DefinedDefaultOrderEntry (
 	name VARCHAR(75) null
 );
 
+create table DistinctUserIdEntry (
+	distinctUserIdEntryId LONG not null primary key,
+	userId LONG
+);
+
 create table DynamicQueryEntry (
 	dynamicQueryEntryId LONG not null primary key,
 	createDate DATE null,

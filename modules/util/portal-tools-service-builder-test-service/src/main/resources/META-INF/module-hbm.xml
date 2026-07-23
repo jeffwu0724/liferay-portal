@@ -11,6 +11,7 @@
 	<import class="com.liferay.portal.tools.service.builder.test.model.ColumnNameEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.DataLimitEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.DefinedDefaultOrderEntry" />
+	<import class="com.liferay.portal.tools.service.builder.test.model.DistinctUserIdEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.DSLQueryEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.DSLQueryStatusEntry" />
 	<import class="com.liferay.portal.tools.service.builder.test.model.DynamicQueryEntry" />
@@ -103,6 +104,12 @@
 		</id>
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="timestamp" />
 		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.liferay.portal.tools.service.builder.test.model.impl.DistinctUserIdEntryImpl" table="DistinctUserIdEntry">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="distinctUserIdEntryId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="com.liferay.portal.tools.service.builder.test.model.impl.DSLQueryEntryImpl" table="DSLQueryEntry">
 		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="dslQueryEntryId" type="long">
