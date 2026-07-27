@@ -333,6 +333,11 @@ create table RenameFinderColumnEntry (
 	columnToRename VARCHAR(75) null
 );
 
+create table SQLQueryEntry (
+	sqlQueryEntryId LONG not null primary key,
+	userId LONG
+);
+
 create table UADPartialEntry (
 	uadPartialEntryId LONG not null primary key,
 	userId LONG,
