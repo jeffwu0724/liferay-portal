@@ -98,10 +98,14 @@ public class SQLTransformer {
 
 		newSQL = _sqlTransformer.transform(sql);
 
-		Function<String, String> countFunction =
-			JPQLToHQLTransformerLogic.getCountFunction();
+		Function[] functions = {
+			JPQLToHQLTransformerLogic.getCountFunction(),
+			JPQLToHQLTransformerLogic.getPositionalParameterFunction()
+		};
 
-		newSQL = countFunction.apply(newSQL);
+		for (Function<String, String> function : functions) {
+			newSQL = function.apply(newSQL);
+		}
 
 		_transformedSQLsPortalCache.put(sql, newSQL);
 
