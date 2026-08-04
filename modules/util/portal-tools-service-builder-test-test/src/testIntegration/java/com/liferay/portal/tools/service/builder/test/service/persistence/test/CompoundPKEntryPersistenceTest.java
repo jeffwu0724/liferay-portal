@@ -364,4 +364,4 @@ public class CompoundPKEntryPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1078125304
+// LIFERAY-SERVICE-BUILDER-HASH:1902537594
