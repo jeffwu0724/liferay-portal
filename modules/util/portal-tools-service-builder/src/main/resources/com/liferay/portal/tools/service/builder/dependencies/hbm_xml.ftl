@@ -80,7 +80,8 @@
 
 					<#if stringUtil.equals(class, "sequence")>
 						<#if serviceBuilder.isVersionGTE_7_4_0()>
-							><param name="sequence_name">${entityColumn.idParam}</param>
+							><param name="increment_size">1</param>
+							<param name="sequence_name">${entityColumn.idParam}</param>
 						<#else>
 							><param name="sequence">${entityColumn.idParam}</param>
 						</#if>
@@ -154,7 +155,7 @@
 				<one-to-one
 					<#if serviceBuilder.isVersionGTE_7_4_0()>
 						access="com.liferay.portal.dao.orm.hibernate.PrivateFieldPropertyAccessor"
-						cascade="merge,persist,save-update"
+						cascade="merge,persist"
 					<#else>
 						access="com.liferay.portal.dao.orm.hibernate.PrivatePropertyAccessor"
 						cascade="save-update"
@@ -211,13 +212,21 @@
 					</composite-id>
 				<#else>
 					<id column="${entityColumn.DBName}" name="${entityColumn.name}">
-						<generator class="foreign">
-							<param name="property">${packagePath}.model.impl.${entity.name}Impl</param>
-						</generator>
+						<#if serviceBuilder.isVersionGTE_7_4_0()>
+							<generator class="assigned" />
+						<#else>
+							<generator class="foreign">
+								<param name="property">${packagePath}.model.impl.${entity.name}Impl</param>
+							</generator>
+						</#if>
 					</id>
 				</#if>
 
 				<property column="${blobEntityColumn.DBName}" name="${blobEntityColumn.name}Blob" type="blob" />
+
+				<#if serviceBuilder.isVersionGTE_7_4_0() && !entity.hasCompoundPK()>
+					<sql-insert>UPDATE ${entity.table} SET ${blobEntityColumn.DBName} = ? WHERE ${entityColumn.DBName} = ?</sql-insert>
+				</#if>
 			</class>
 		</#if>
 	</#list>
