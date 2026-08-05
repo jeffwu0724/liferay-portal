@@ -55,7 +55,7 @@ import com.liferay.osb.faro.engine.client.model.IndividualTransformation;
 import com.liferay.osb.faro.engine.client.model.Interest;
 import com.liferay.osb.faro.engine.client.model.PageExperience;
 import com.liferay.osb.faro.engine.client.model.PageVisited;
-import com.liferay.osb.faro.engine.client.model.ProjectDataSourceCount;
+import com.liferay.osb.faro.engine.client.model.ProjectMetric;
 import com.liferay.osb.faro.engine.client.model.ProjectUsageMetric;
 import com.liferay.osb.faro.engine.client.model.Provider;
 import com.liferay.osb.faro.engine.client.model.RealTimeMembershipMetric;
@@ -241,12 +241,13 @@ public interface ContactsEngineClient {
 
 	public Results<Account> getAccounts(
 		FaroProject faroProject, String channelId, String filterString,
-		String query, int cur, int delta, String sortString);
+		boolean includeAnonymousUsers, String query, String rangeEnd,
+		Integer rangeKey, String rangeStart, String segmentId, int cur,
+		int delta, String sortString);
 
 	public Results<Account> getAccounts(
 		FaroProject faroProject, String channelId, String filterString,
-		String query, String rangeEnd, Integer rangeKey, String rangeStart,
-		int cur, int delta, String sortString);
+		String query, int cur, int delta, String sortString);
 
 	public Results<Distribution> getAccountsDistribution(
 		FaroProject faroProject, String channelId, String fieldMappingFieldName,
@@ -329,8 +330,8 @@ public interface ContactsEngineClient {
 		List<OrderByField> orderByFields);
 
 	public Results<CatalogField> getCatalogFields(
-			FaroProject faroProject, String query, String tableName, int cur,
-			int delta, String sortString)
+			FaroProject faroProject, String capability, String query,
+			String tableName, int cur, int delta, String sortString)
 		throws FaroEngineClientException;
 
 	public Channel getChannel(FaroProject faroProject, String id)
@@ -590,8 +591,7 @@ public interface ContactsEngineClient {
 
 	public PageVisited getPageVisited(FaroProject faroProject, String id);
 
-	public Results<ProjectDataSourceCount> getProjectDataSourceCounts(
-		FaroProject faroProject);
+	public Results<ProjectMetric> getProjectMetrics(FaroProject faroProject);
 
 	public Results<ProjectUsageMetric> getProjectUsageMetrics(
 		FaroProject faroProject, Date sinceDate);

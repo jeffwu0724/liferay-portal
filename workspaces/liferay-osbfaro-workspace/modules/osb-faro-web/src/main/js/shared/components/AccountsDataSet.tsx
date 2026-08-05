@@ -21,9 +21,13 @@ interface IAccountsDataSetProps {
 	apiURL: string;
 	channelId: string;
 	countryFilter?: string;
+	dataSetId?: string;
 	groupId: string;
 	industryFilter?: string;
 	lifecycleStageFilter?: LifecycleStages;
+	rangeKeyFilter?: RangeKeyTimeRanges;
+	segmentFilter?: string;
+	segmentName?: string;
 	stageSelectionNonce?: number;
 }
 
@@ -45,9 +49,13 @@ const AccountsDataSet: React.FC<IAccountsDataSetProps> = ({
 	apiURL,
 	channelId,
 	countryFilter,
+	dataSetId = 'accounts-list-dataset',
 	groupId,
 	industryFilter,
 	lifecycleStageFilter,
+	rangeKeyFilter,
+	segmentFilter,
+	segmentName,
 	stageSelectionNonce,
 }) => {
 	const {data: lifecycleStageFieldValues} = useRequest({
@@ -67,6 +75,10 @@ const AccountsDataSet: React.FC<IAccountsDataSetProps> = ({
 		label: lifecycleStagesLabelMap[stageType].label,
 		value: id,
 	}));
+
+	const preloadedRangeSelector = rangeSelectors.find(
+		({value}) => value === rangeKeyFilter
+	);
 
 	const preloadedLifecycleStage = lifecycleStageFilter
 		? lifecycleStages.find(
@@ -127,8 +139,8 @@ const AccountsDataSet: React.FC<IAccountsDataSetProps> = ({
 						label: Liferay.Language.get('active-individuals'),
 						name: 'rangeKey',
 						preloadedData: buildSelectionPreloadedData(
-							RangeKeyTimeRanges.Last30Days,
-							Liferay.Language.get('last-30-days')
+							rangeKeyFilter,
+							preloadedRangeSelector?.label
 						),
 						type: 'selection',
 					},
@@ -175,12 +187,26 @@ const AccountsDataSet: React.FC<IAccountsDataSetProps> = ({
 							buildSelectionPreloadedData(countryFilter),
 						type: 'selection',
 					},
+					{
+						apiURL: `/o/faro/contacts/${groupId}/individual_segment?channelId=${channelId}`,
+						entityFieldType: 'string',
+						id: 'segmentId',
+						itemKey: 'id',
+						itemLabel: 'name',
+						label: Liferay.Language.get('segment'),
+						preloadedData: buildSelectionPreloadedData(
+							segmentFilter,
+							segmentName
+						),
+						type: 'selection',
+					},
 				]}
-				id="accounts-list-dataset"
+				id={dataSetId}
 				key={[
 					countryFilter,
 					industryFilter,
 					lifecycleStageFilter,
+					segmentFilter,
 					stageSelectionNonce,
 					lifecycleStages.length,
 				].join()}

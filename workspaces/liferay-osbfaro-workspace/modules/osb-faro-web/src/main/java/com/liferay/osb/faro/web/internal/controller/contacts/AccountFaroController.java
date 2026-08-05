@@ -207,11 +207,13 @@ public class AccountFaroController extends BaseFaroController {
 			@PathParam("groupId") long groupId,
 			@QueryParam("channelId") String channelId,
 			@QueryParam("filter") String filterString,
+			@QueryParam("includeAnonymousUsers") boolean includeAnonymousUsers,
 			@QueryParam("rangeEnd") String rangeEnd,
 			@QueryParam("rangeKey") Integer rangeKey,
 			@QueryParam("rangeStart") String rangeStart,
-			@QueryParam("search") String search, @QueryParam("page") int page,
-			@QueryParam("pageSize") int pageSize,
+			@QueryParam("search") String search,
+			@QueryParam("segmentId") String segmentId,
+			@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,
 			@DefaultValue(StringPool.BLANK) @QueryParam("sort") String
 				sortString)
 		throws Exception {
@@ -219,8 +221,9 @@ public class AccountFaroController extends BaseFaroController {
 		return new FaroFDSResultsDisplay<>(
 			contactsEngineClient.getAccounts(
 				faroProjectLocalService.getFaroProjectByGroupId(groupId),
-				channelId, filterString, search, rangeEnd, rangeKey, rangeStart,
-				page, pageSize, sortString),
+				channelId, filterString, includeAnonymousUsers, search,
+				rangeEnd, rangeKey, rangeStart, segmentId, page, pageSize,
+				sortString),
 			AccountDisplay::new, page, pageSize);
 	}
 
