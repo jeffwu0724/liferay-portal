@@ -198,6 +198,18 @@ public class ERCVersionedEntryPersistenceTest {
 
 		_ercVersionedEntries.add(_persistence.update(draftERCVersionedEntry));
 
+		Session session = _persistence.openSession();
+
+		session.flush();
+
+		session.clear();
+
+		ERCVersionedEntry persistedERCVersionedEntry =
+			_persistence.findByPrimaryKey(ercVersionedEntry.getPrimaryKey());
+
+		ERCVersionedEntry persistedDraftERCVersionedEntry =
+			_persistence.findByPrimaryKey(pk);
+
 		Assert.assertEquals(
 			ercVersionedEntry.getMvccVersion(),
 			draftERCVersionedEntry.getMvccVersion());
@@ -214,12 +226,12 @@ public class ERCVersionedEntryPersistenceTest {
 		Assert.assertEquals(
 			ercVersionedEntry.getCompanyId(),
 			draftERCVersionedEntry.getCompanyId());
-		Blob Blob = ercVersionedEntry.getBlob();
-		Blob draftBlob = draftERCVersionedEntry.getBlob();
+		Blob persistedBlob = persistedERCVersionedEntry.getBlob();
+		Blob persistedDraftBlob = persistedDraftERCVersionedEntry.getBlob();
 
 		Assert.assertArrayEquals(
-			Blob.getBytes(1, (int)Blob.length()),
-			draftBlob.getBytes(1, (int)draftBlob.length()));
+			persistedBlob.getBytes(1, (int)persistedBlob.length()),
+			persistedDraftBlob.getBytes(1, (int)persistedDraftBlob.length()));
 	}
 
 	@Test(
@@ -734,4 +746,4 @@ public class ERCVersionedEntryPersistenceTest {
 	private ClassLoader _dynamicQueryClassLoader;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-13325117
+// LIFERAY-SERVICE-BUILDER-HASH:420617433
