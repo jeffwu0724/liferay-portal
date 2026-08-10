@@ -80,6 +80,10 @@ public class CollectionPersistenceFinder
 
 			normalizeValues(values);
 
+			if (isEmptyArrayable(values)) {
+				return 0;
+			}
+
 			Object[] finderArgs = buildFinderArgs(values);
 
 			Long count = (Long)finderCache.getResult(
@@ -138,6 +142,10 @@ public class CollectionPersistenceFinder
 			}
 
 			normalizeValues(values);
+
+			if (isEmptyArrayable(values)) {
+				return Collections.emptyList();
+			}
 
 			FinderPath finderPath = null;
 			Object[] finderArgs = null;
@@ -221,6 +229,25 @@ public class CollectionPersistenceFinder
 
 			basePersistenceImpl.remove(entity);
 		}
+	}
+
+	protected boolean isEmptyArrayable(Object[] values) {
+		if (_arrayableIndexes == null) {
+			return false;
+		}
+
+		for (int index : _arrayableIndexes) {
+			ArrayableFinderColumn<?> arrayableFinderColumn =
+				(ArrayableFinderColumn<?>)finderColumns[index];
+
+			if (!arrayableFinderColumn.isAndOperator() &&
+				(Array.getLength(values[index]) == 0)) {
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private String _buildFindSql(

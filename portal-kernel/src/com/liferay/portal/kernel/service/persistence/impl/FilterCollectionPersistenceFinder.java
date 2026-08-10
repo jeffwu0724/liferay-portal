@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -241,6 +242,10 @@ public class FilterCollectionPersistenceFinder
 
 		normalizeValues(values);
 
+		if (isEmptyArrayable(values)) {
+			return 0;
+		}
+
 		String sql = _replacePermissionCheck(
 			buildSQLWhere(_filterSqlCountWhere, values, true), groupIds);
 
@@ -286,6 +291,10 @@ public class FilterCollectionPersistenceFinder
 		}
 
 		normalizeValues(values);
+
+		if (isEmptyArrayable(values)) {
+			return Collections.emptyList();
+		}
 
 		boolean inlineDistinct = basePersistenceImpl.getDB(
 		).isSupportsInlineDistinct();
