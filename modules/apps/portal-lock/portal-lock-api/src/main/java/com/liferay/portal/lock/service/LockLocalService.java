@@ -17,6 +17,9 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.service.SQLStateAcceptor;
+import com.liferay.portal.kernel.spring.aop.Property;
+import com.liferay.portal.kernel.spring.aop.Retry;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -317,8 +320,26 @@ public interface LockLocalService
 			boolean inheritable, long expirationTime, boolean renew)
 		throws PortalException;
 
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
 	public Lock lock(String className, String key, String owner);
 
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
 	public Lock lock(
 		String className, String key, String expectedOwner,
 		String updatedOwner);
@@ -330,6 +351,15 @@ public interface LockLocalService
 
 	public void unlock(String className, String key);
 
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
 	public void unlock(String className, String key, String owner);
 
 	/**
@@ -346,4 +376,4 @@ public interface LockLocalService
 	public Lock updateLock(Lock lock);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:758571434
+// LIFERAY-SERVICE-BUILDER-HASH:1528784630
