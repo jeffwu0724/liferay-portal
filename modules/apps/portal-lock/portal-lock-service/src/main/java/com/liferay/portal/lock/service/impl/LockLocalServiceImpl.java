@@ -11,13 +11,15 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.change.tracking.CTAware;
-import com.liferay.portal.kernel.dao.orm.ORMException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lock.LockListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.SQLStateAcceptor;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.spring.aop.Property;
+import com.liferay.portal.kernel.spring.aop.Retry;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
@@ -27,14 +29,9 @@ import com.liferay.portal.lock.exception.NoSuchLockException;
 import com.liferay.portal.lock.model.Lock;
 import com.liferay.portal.lock.service.base.LockLocalServiceBaseImpl;
 
-import jakarta.persistence.PersistenceException;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.exception.LockAcquisitionException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -243,74 +240,70 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 	}
 
 	@Override
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
 	public Lock lock(String className, String key, String owner) {
 		return lock(className, key, null, owner);
 	}
 
 	@Override
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
 	public Lock lock(
 		String className, String key, String expectedOwner,
 		String updatedOwner) {
 
-		while (true) {
-			try {
-				return TransactionInvokerUtil.invoke(
-					_transactionConfig,
-					() -> {
-						Lock lock = lockPersistence.fetchByC_K(
-							className, key, false);
+		try {
+			return TransactionInvokerUtil.invoke(
+				_transactionConfig,
+				() -> {
+					Lock lock = lockPersistence.fetchByC_K(
+						className, key, false);
 
-						if (lock == null) {
-							long lockId = counterLocalService.increment();
+					if (lock == null) {
+						long lockId = counterLocalService.increment();
 
-							lock = lockPersistence.create(lockId);
+						lock = lockPersistence.create(lockId);
 
-							lock.setCreateDate(new Date());
-							lock.setClassName(className);
-							lock.setKey(key);
-							lock.setOwner(updatedOwner);
+						lock.setCreateDate(new Date());
+						lock.setClassName(className);
+						lock.setKey(key);
+						lock.setOwner(updatedOwner);
 
-							lock = lockPersistence.update(lock);
+						lock = lockPersistence.update(lock);
 
-							lock.setNew(true);
-						}
-						else if (Objects.equals(
-									lock.getOwner(), expectedOwner)) {
+						lock.setNew(true);
+					}
+					else if (Objects.equals(lock.getOwner(), expectedOwner)) {
+						lock.setCreateDate(new Date());
+						lock.setClassName(className);
+						lock.setKey(key);
+						lock.setOwner(updatedOwner);
 
-							lock.setCreateDate(new Date());
-							lock.setClassName(className);
-							lock.setKey(key);
-							lock.setOwner(updatedOwner);
+						lock = lockPersistence.update(lock);
 
-							lock = lockPersistence.update(lock);
-
-							lock.setNew(true);
-						}
-
-						return lock;
-					});
-			}
-			catch (Throwable throwable) {
-				Throwable causeThrowable = throwable;
-
-				if (throwable instanceof ORMException ||
-					throwable instanceof PersistenceException) {
-
-					causeThrowable = throwable.getCause();
-				}
-
-				if (causeThrowable instanceof ConstraintViolationException ||
-					causeThrowable instanceof LockAcquisitionException) {
-
-					if (_log.isInfoEnabled()) {
-						_log.info("Unable to acquire lock, retrying");
+						lock.setNew(true);
 					}
 
-					continue;
-				}
-
-				ReflectionUtil.throwException(throwable);
-			}
+					return lock;
+				});
+		}
+		catch (Throwable throwable) {
+			return ReflectionUtil.throwException(throwable);
 		}
 	}
 
@@ -373,47 +366,36 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 	}
 
 	@Override
+	@Retry(
+		acceptor = SQLStateAcceptor.class,
+		properties = {
+			@Property(
+				name = SQLStateAcceptor.SQLSTATE,
+				value = SQLStateAcceptor.SQLSTATE_INTEGRITY_CONSTRAINT_VIOLATION + "," + SQLStateAcceptor.SQLSTATE_TRANSACTION_ROLLBACK
+			)
+		}
+	)
 	public void unlock(String className, String key, String owner) {
-		while (true) {
-			try {
-				TransactionInvokerUtil.invoke(
-					_transactionConfig,
-					() -> {
-						Lock lock = lockPersistence.fetchByC_K(
-							className, key, false);
+		try {
+			TransactionInvokerUtil.invoke(
+				_transactionConfig,
+				() -> {
+					Lock lock = lockPersistence.fetchByC_K(
+						className, key, false);
 
-						if (lock == null) {
-							return null;
-						}
-
-						if (Objects.equals(lock.getOwner(), owner)) {
-							lockPersistence.remove(lock);
-						}
-
+					if (lock == null) {
 						return null;
-					});
-
-				return;
-			}
-			catch (Throwable throwable) {
-				Throwable causeThrowable = throwable;
-
-				if (throwable instanceof ORMException) {
-					causeThrowable = throwable.getCause();
-				}
-
-				if (causeThrowable instanceof ConstraintViolationException ||
-					causeThrowable instanceof LockAcquisitionException) {
-
-					if (_log.isInfoEnabled()) {
-						_log.info("Unable to remove lock, retrying");
 					}
 
-					continue;
-				}
+					if (Objects.equals(lock.getOwner(), owner)) {
+						lockPersistence.remove(lock);
+					}
 
-				ReflectionUtil.throwException(throwable);
-			}
+					return null;
+				});
+		}
+		catch (Throwable throwable) {
+			ReflectionUtil.throwException(throwable);
 		}
 	}
 
