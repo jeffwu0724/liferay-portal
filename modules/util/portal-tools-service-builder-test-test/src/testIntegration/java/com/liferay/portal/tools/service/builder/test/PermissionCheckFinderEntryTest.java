@@ -35,6 +35,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.tools.service.builder.test.model.PermissionCheckFinderEntry;
 import com.liferay.portal.tools.service.builder.test.service.PermissionCheckFinderEntryLocalService;
+import com.liferay.portal.tools.service.builder.test.service.persistence.PermissionCheckFinderEntryPersistence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +79,14 @@ public class PermissionCheckFinderEntryTest {
 			_group1.getGroupId(), _user.getUserId());
 		_permissionCheckFinderEntry3 = _addPermissionCheckFinderEntry(
 			_group2.getGroupId(), _user.getUserId());
+	}
+
+	@Test
+	public void testFilterFindByEmptyGroupIds() {
+		Assert.assertEquals(
+			Collections.emptyList(),
+			_permissionCheckFinderEntryLocalService.filterFindByGroupId(
+				new long[0]));
 	}
 
 	@Test
@@ -170,6 +179,22 @@ public class PermissionCheckFinderEntryTest {
 			Arrays.asList(
 				_permissionCheckFinderEntry2, _permissionCheckFinderEntry3),
 			Collections.singletonList(_permissionCheckFinderEntry2));
+	}
+
+	@Test
+	public void testFindByEmptyGroupIds() {
+		PermissionCheckFinderEntryPersistence
+			permissionCheckFinderEntryPersistence =
+				(PermissionCheckFinderEntryPersistence)
+					_permissionCheckFinderEntryLocalService.
+						getBasePersistence();
+
+		Assert.assertEquals(
+			Collections.emptyList(),
+			permissionCheckFinderEntryPersistence.findByGroupId(new long[0]));
+		Assert.assertEquals(
+			0,
+			permissionCheckFinderEntryPersistence.countByGroupId(new long[0]));
 	}
 
 	private PermissionCheckFinderEntry _addPermissionCheckFinderEntry(
