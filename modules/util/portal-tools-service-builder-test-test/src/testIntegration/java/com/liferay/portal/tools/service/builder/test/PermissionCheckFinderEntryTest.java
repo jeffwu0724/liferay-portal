@@ -30,11 +30,15 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.RoleTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.tools.service.builder.test.model.PermissionCheckFinderEntry;
 import com.liferay.portal.tools.service.builder.test.service.PermissionCheckFinderEntryLocalService;
+import com.liferay.portal.tools.service.builder.test.service.persistence.PermissionCheckFinderEntryPersistence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +82,14 @@ public class PermissionCheckFinderEntryTest {
 			_group1.getGroupId(), _user.getUserId());
 		_permissionCheckFinderEntry3 = _addPermissionCheckFinderEntry(
 			_group2.getGroupId(), _user.getUserId());
+	}
+
+	@Test
+	public void testFilterFindByEmptyGroupIds() {
+		Assert.assertEquals(
+			Collections.emptyList(),
+			_permissionCheckFinderEntryLocalService.filterFindByGroupId(
+				new long[0]));
 	}
 
 	@Test
@@ -170,6 +182,30 @@ public class PermissionCheckFinderEntryTest {
 			Arrays.asList(
 				_permissionCheckFinderEntry2, _permissionCheckFinderEntry3),
 			Collections.singletonList(_permissionCheckFinderEntry2));
+	}
+
+	@Test
+	public void testFindByEmptyGroupIds() throws Throwable {
+		PermissionCheckFinderEntryPersistence
+			permissionCheckFinderEntryPersistence =
+				(PermissionCheckFinderEntryPersistence)
+					_permissionCheckFinderEntryLocalService.
+						getBasePersistence();
+
+		TransactionInvokerUtil.invoke(
+			_transactionConfig,
+			() -> {
+				Assert.assertEquals(
+					Collections.emptyList(),
+					permissionCheckFinderEntryPersistence.findByGroupId(
+						new long[0]));
+				Assert.assertEquals(
+					0,
+					permissionCheckFinderEntryPersistence.countByGroupId(
+						new long[0]));
+
+				return null;
+			});
 	}
 
 	private PermissionCheckFinderEntry _addPermissionCheckFinderEntry(
@@ -306,6 +342,10 @@ public class PermissionCheckFinderEntryTest {
 				expectedEntriesGroup1AndAdminGroup, _permissionedUser);
 		}
 	}
+
+	private static final TransactionConfig _transactionConfig =
+		TransactionConfig.Factory.create(
+			Propagation.REQUIRED, new Class<?>[] {Exception.class});
 
 	private long _adminGroupId;
 	private User _adminUser;
