@@ -20,16 +20,50 @@ import org.junit.Test;
 public class ArrayableFinderColumnTest {
 
 	@Test
-	public void testEmptyArrayDropsConstraint() {
+	public void testEmptyArrayAndOperatorDropsConstraint() {
 		ArrayableFinderColumn<TestModel> arrayableFinderColumn = _newLongColumn(
-			false, entity -> 0L);
+			true, entity -> 0L);
 
 		Object normalizedValue = arrayableFinderColumn.normalizeValue(null);
 
 		Assert.assertEquals(
 			"", arrayableFinderColumn.getSqlFragment(normalizedValue, false));
 		Assert.assertEquals(
+			"", arrayableFinderColumn.getSqlFragment(normalizedValue, true));
+	}
+
+	@Test
+	public void testEmptyArrayNeverMatches() {
+		ArrayableFinderColumn<TestModel> arrayableFinderColumn = _newLongColumn(
+			false, entity -> 0L);
+
+		Object normalizedValue = arrayableFinderColumn.normalizeValue(null);
+
+		Assert.assertEquals(
+			"(t.col IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, false));
+		Assert.assertEquals(
+			"(t.col IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, true));
+		Assert.assertEquals(
 			"", arrayableFinderColumn.toFinderArg(normalizedValue));
+	}
+
+	@Test
+	public void testEmptyArrayNeverMatchesNative() {
+		ArrayableFinderColumn<TestModel> arrayableFinderColumn =
+			new ArrayableFinderColumn<>(
+				"t.", "active", "active_", FinderColumn.Type.BOOLEAN, "=",
+				false, true, true, entity -> true);
+
+		Object normalizedValue = arrayableFinderColumn.normalizeValue(null);
+
+		Assert.assertEquals(
+			"(t.active IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, false));
+		Assert.assertEquals(
+			"(t.active_ IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, true));
 	}
 
 	@Test
@@ -129,14 +163,15 @@ public class ArrayableFinderColumnTest {
 	}
 
 	@Test
-	public void testStringEmptyArrayDropsConstraint() {
+	public void testStringEmptyArrayNeverMatches() {
 		ArrayableFinderColumn<TestModel> arrayableFinderColumn =
 			_newStringColumn(false, true, false, entity -> "anything");
 
 		Object normalizedValue = arrayableFinderColumn.normalizeValue(null);
 
 		Assert.assertEquals(
-			"", arrayableFinderColumn.getSqlFragment(normalizedValue, false));
+			"(t.col IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, false));
 	}
 
 	@Test
