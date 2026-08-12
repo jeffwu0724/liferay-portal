@@ -75,6 +75,7 @@ import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -601,9 +602,14 @@ public class JournalArticleContentDashboardItemTest {
 			_contentDashboardItemFactory.create(
 				journalArticle.getResourcePrimKey());
 
+		Date journalArticleModifiedDate = journalArticle.getModifiedDate();
+
+		Date contentDashboardItemModifiedDate =
+			contentDashboardItem.getModifiedDate();
+
 		Assert.assertEquals(
-			journalArticle.getModifiedDate(),
-			contentDashboardItem.getModifiedDate());
+			journalArticleModifiedDate.getTime(),
+			contentDashboardItemModifiedDate.getTime());
 	}
 
 	@Test

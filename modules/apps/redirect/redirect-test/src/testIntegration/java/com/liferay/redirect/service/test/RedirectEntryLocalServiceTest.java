@@ -585,8 +585,10 @@ public class RedirectEntryLocalServiceTest {
 			_group.getGroupId(),
 			_friendlyURLNormalizer.normalizeWithEncoding(_URL_SOURCE), true);
 
+		Date actualLastOccurrenceDate = _redirectEntry.getLastOccurrenceDate();
+
 		Assert.assertEquals(
-			lastOccurrenceDate, _redirectEntry.getLastOccurrenceDate());
+			lastOccurrenceDate.getTime(), actualLastOccurrenceDate.getTime());
 	}
 
 	@Test
