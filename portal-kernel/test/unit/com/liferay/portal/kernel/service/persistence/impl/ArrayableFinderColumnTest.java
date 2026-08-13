@@ -20,14 +20,15 @@ import org.junit.Test;
 public class ArrayableFinderColumnTest {
 
 	@Test
-	public void testEmptyArrayDropsConstraint() {
+	public void testEmptyArrayNeverMatches() {
 		ArrayableFinderColumn<TestModel> arrayableFinderColumn = _newLongColumn(
 			false, entity -> 0L);
 
 		Object normalizedValue = arrayableFinderColumn.normalizeValue(null);
 
 		Assert.assertEquals(
-			"", arrayableFinderColumn.getSqlFragment(normalizedValue, false));
+			"(t.col IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, false));
 		Assert.assertEquals(
 			"", arrayableFinderColumn.toFinderArg(normalizedValue));
 	}
@@ -129,14 +130,15 @@ public class ArrayableFinderColumnTest {
 	}
 
 	@Test
-	public void testStringEmptyArrayDropsConstraint() {
+	public void testStringEmptyArrayNeverMatches() {
 		ArrayableFinderColumn<TestModel> arrayableFinderColumn =
 			_newStringColumn(false, true, false, entity -> "anything");
 
 		Object normalizedValue = arrayableFinderColumn.normalizeValue(null);
 
 		Assert.assertEquals(
-			"", arrayableFinderColumn.getSqlFragment(normalizedValue, false));
+			"(t.col IN (NULL))",
+			arrayableFinderColumn.getSqlFragment(normalizedValue, false));
 	}
 
 	@Test
