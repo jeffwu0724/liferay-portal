@@ -34,12 +34,18 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 		_hqlInPrefix = StringBundler.concat(
 			"(", entityAlias, columnName, andOperator ? " NOT IN (" : " IN (");
 
+		_hqlNeverMatches = StringBundler.concat(
+			"(", entityAlias, columnName, " IN (NULL))");
+
 		if (Objects.equals(columnName, dbColumnName)) {
 			_sqlInPrefix = _hqlInPrefix;
+			_sqlNeverMatches = _hqlNeverMatches;
 		}
 		else {
 			_sqlInPrefix = StringUtil.replace(
 				_hqlInPrefix, columnName, dbColumnName);
+			_sqlNeverMatches = StringUtil.replace(
+				_hqlNeverMatches, columnName, dbColumnName);
 		}
 	}
 
@@ -75,7 +81,15 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 		Object[] array = (Object[])normalizedValue;
 
 		if (array.length == 0) {
-			return "";
+			if (_andOperator) {
+				return "";
+			}
+
+			if (sqlQuery) {
+				return _sqlNeverMatches;
+			}
+
+			return _hqlNeverMatches;
 		}
 
 		if (type == Type.STRING) {
@@ -233,6 +247,8 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 
 	private final boolean _andOperator;
 	private final String _hqlInPrefix;
+	private final String _hqlNeverMatches;
 	private final String _sqlInPrefix;
+	private final String _sqlNeverMatches;
 
 }
