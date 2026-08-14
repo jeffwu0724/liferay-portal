@@ -252,9 +252,21 @@ public class HibernateTypedQueryUtil {
 			}
 		}
 
-		throw new IllegalArgumentException(
-			StringBundler.concat(
-				"Unable to resolve alias ", parsedAlias, " in ", name));
+		try {
+			Path<?> path = from;
+
+			for (String part : parts) {
+				path = path.get(part);
+			}
+
+			return path;
+		}
+		catch (IllegalArgumentException illegalArgumentException) {
+			throw new IllegalArgumentException(
+				StringBundler.concat(
+					"Unable to resolve alias ", parsedAlias, " in ", name),
+				illegalArgumentException);
+		}
 	}
 
 	private static String _resolveSQL(
