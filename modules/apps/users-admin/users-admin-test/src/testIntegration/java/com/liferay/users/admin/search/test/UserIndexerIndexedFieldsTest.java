@@ -60,6 +60,7 @@ import com.liferay.users.admin.test.util.search.UserSearchFixture;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -119,6 +120,23 @@ public class UserIndexerIndexedFieldsTest {
 			name ->
 				!name.contains(StringPool.PERIOD) && !name.equals("timestamp"),
 			searchTerm);
+
+		try (SafeCloseable safeCloseable =
+				ReindexCacheThreadLocal.openReindexMode()) {
+
+			_indexerFixture.reindexCompany(user2.getCompanyId());
+		}
+
+		document = _indexerFixture.searchOnlyOne(searchTerm);
+
+		_indexedFieldsFixture.postProcessDocument(document);
+
+		Map<String, String> addressMap = new HashMap<>();
+
+		_populateAddressFieldValues(user2, addressMap);
+
+		FieldValuesAssert.assertFieldValues(
+			document, addressMap, addressMap::containsKey, searchTerm);
 	}
 
 	@Test
