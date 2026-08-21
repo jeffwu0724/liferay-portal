@@ -11,28 +11,38 @@ import com.liferay.expando.kernel.model.ExpandoColumnConstants;
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.expando.kernel.service.ExpandoTableLocalService;
+import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.ListType;
+import com.liferay.portal.kernel.model.ListTypeConstants;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Region;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.ReindexCacheThreadLocal;
 import com.liferay.portal.kernel.search.SearchEngineHelper;
+import com.liferay.portal.kernel.service.AddressLocalService;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.CountryService;
 import com.liferay.portal.kernel.service.ListTypeService;
 import com.liferay.portal.kernel.service.OrganizationService;
 import com.liferay.portal.kernel.service.RegionService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.search.document.Document;
 import com.liferay.portal.search.model.uid.UIDFactory;
 import com.liferay.portal.search.searcher.SearchRequestBuilderFactory;
 import com.liferay.portal.search.searcher.Searcher;
@@ -48,10 +58,12 @@ import com.liferay.users.admin.test.util.search.GroupSearchFixture;
 
 import java.io.Serializable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -104,6 +116,44 @@ public class OrganizationIndexerIndexedFieldsTest {
 
 		_organizationFixture = organizationFixture;
 		_organizations = organizationFixture.getOrganizations();
+	}
+
+	@Test
+	public void testAddress() throws Exception {
+		Organization organization = _organizationFixture.createOrganization(
+			RandomTestUtil.randomString());
+
+		Country country = countryService.getCountryByName(
+			organization.getCompanyId(), "canada");
+
+		List<ListType> listTypes = listTypeService.getListTypes(
+			organization.getCompanyId(),
+			ListTypeConstants.ORGANIZATION_ADDRESS);
+
+		ListType listType = listTypes.get(0);
+
+		Region region = regionService.getRegion(country.getCountryId(), "AB");
+
+		addressLocalService.addAddress(
+			null, TestPropsValues.getUserId(), Organization.class.getName(),
+			organization.getOrganizationId(), country.getCountryId(),
+			listType.getListTypeId(), region.getRegionId(),
+			RandomTestUtil.randomString(), RandomTestUtil.randomString(), false,
+			RandomTestUtil.randomString(), false, RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(), RandomTestUtil.randomString(), null,
+			RandomTestUtil.randomString(), null, new ServiceContext());
+
+		indexer.reindexCompany(organization.getCompanyId());
+
+		_assertRegionNames(organization);
+
+		try (SafeCloseable safeCloseable =
+				ReindexCacheThreadLocal.openReindexMode()) {
+
+			indexer.reindexCompany(organization.getCompanyId());
+		}
+
+		_assertRegionNames(organization);
 	}
 
 	@Test
@@ -162,6 +212,9 @@ public class OrganizationIndexerIndexedFieldsTest {
 	}
 
 	@Inject
+	protected AddressLocalService addressLocalService;
+
+	@Inject
 	protected ClassNameLocalService classNameLocalService;
 
 	@Inject
@@ -207,6 +260,27 @@ public class OrganizationIndexerIndexedFieldsTest {
 
 	@Inject
 	protected UserLocalService userLocalService;
+
+	private void _assertRegionNames(Organization organization) {
+		List<Document> documents = searcher.search(
+			searchRequestBuilderFactory.builder(
+			).companyId(
+				organization.getCompanyId()
+			).fields(
+				StringPool.STAR
+			).modelIndexerClasses(
+				Organization.class
+			).queryString(
+				organization.getName()
+			).build()
+		).getDocuments();
+
+		Document document = documents.get(0);
+
+		Assert.assertEquals(
+			Arrays.asList("alabama", "alberta"),
+			ListUtil.sort(document.getStrings("region")));
+	}
 
 	private Map<String, Object> _expectedFieldValues(Organization organization)
 		throws Exception {
