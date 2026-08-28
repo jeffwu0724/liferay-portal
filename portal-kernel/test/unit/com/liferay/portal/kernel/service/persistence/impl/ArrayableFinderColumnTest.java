@@ -116,6 +116,33 @@ public class ArrayableFinderColumnTest {
 	}
 
 	@Test
+	public void testNormalizePreservesArgument() {
+		ArrayableFinderColumn<TestModel> arrayableFinderColumn =
+			_newStringColumn(false, false, true, entity -> "any");
+
+		String[] strings = {"Beta", null, "Alpha"};
+
+		arrayableFinderColumn.normalizeValue(strings);
+
+		Assert.assertArrayEquals(new String[] {"Beta", null, "Alpha"}, strings);
+	}
+
+	@Test
+	public void testNormalizeSortsAndDeduplicates() {
+		ArrayableFinderColumn<TestModel> stringColumn = _newStringColumn(
+			false, true, true, entity -> "any");
+
+		Object normalizedValue = stringColumn.normalizeValue(
+			new String[] {"b", "a", "b"});
+
+		Assert.assertArrayEquals(
+			new String[] {"a", "b"}, (String[])normalizedValue);
+		Assert.assertEquals(
+			"((t.col = ?) OR (t.col = ?))",
+			stringColumn.getSqlFragment(normalizedValue, false));
+	}
+
+	@Test
 	public void testSqlFragmentBuildsInClause() {
 		ArrayableFinderColumn<TestModel> arrayableFinderColumn = _newLongColumn(
 			false, entity -> 0L);

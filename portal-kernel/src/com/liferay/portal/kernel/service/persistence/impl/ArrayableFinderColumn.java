@@ -173,20 +173,20 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 			return new String[0];
 		}
 
-		if (!convertNull && caseSensitive) {
-			return array;
-		}
+		if (convertNull || !caseSensitive) {
+			array = ArrayUtil.clone(array);
 
-		if (convertNull) {
-			for (int i = 0; i < array.length; i++) {
-				array[i] = Objects.toString(array[i], "");
+			if (convertNull) {
+				for (int i = 0; i < array.length; i++) {
+					array[i] = Objects.toString(array[i], "");
+				}
 			}
-		}
 
-		if (!caseSensitive) {
-			for (int i = 0; i < array.length; i++) {
-				if (array[i] != null) {
-					array[i] = StringUtil.toLowerCase(array[i]);
+			if (!caseSensitive) {
+				for (int i = 0; i < array.length; i++) {
+					if (array[i] != null) {
+						array[i] = StringUtil.toLowerCase(array[i]);
+					}
 				}
 			}
 		}
