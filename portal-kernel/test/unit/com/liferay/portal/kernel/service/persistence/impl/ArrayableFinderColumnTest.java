@@ -129,10 +129,24 @@ public class ArrayableFinderColumnTest {
 
 	@Test
 	public void testNormalizeSortsAndDeduplicates() {
+		ArrayableFinderColumn<TestModel> longColumn = _newLongColumn(
+			false, entity -> 0L);
+
+		Object normalizedValue = longColumn.normalizeValue(
+			new long[] {30L, 10L, 30L, 20L});
+
+		Assert.assertArrayEquals(
+			new Long[] {10L, 20L, 30L}, (Object[])normalizedValue);
+		Assert.assertEquals(
+			"(t.col IN (?,?,?))",
+			longColumn.getSqlFragment(normalizedValue, false));
+		Assert.assertEquals(
+			"10,20,30", longColumn.toFinderArg(normalizedValue));
+
 		ArrayableFinderColumn<TestModel> stringColumn = _newStringColumn(
 			false, true, true, entity -> "any");
 
-		Object normalizedValue = stringColumn.normalizeValue(
+		normalizedValue = stringColumn.normalizeValue(
 			new String[] {"b", "a", "b"});
 
 		Assert.assertArrayEquals(

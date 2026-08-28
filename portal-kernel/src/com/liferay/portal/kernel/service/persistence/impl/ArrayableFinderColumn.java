@@ -204,15 +204,15 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 		}
 
 		if (value instanceof long[] longs) {
-			return ArrayUtil.toArray(longs);
+			return ArrayUtil.toArray(ArrayUtil.sortedUnique(longs));
 		}
 
 		if (value instanceof int[] ints) {
-			return ArrayUtil.toArray(ints);
+			return ArrayUtil.toArray(ArrayUtil.sortedUnique(ints));
 		}
 
 		if (value instanceof short[] shorts) {
-			return ArrayUtil.toArray(shorts);
+			return ArrayUtil.toArray(ArrayUtil.sortedUnique(shorts));
 		}
 
 		if (value instanceof boolean[] booleans) {
@@ -220,11 +220,11 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 		}
 
 		if (value instanceof double[] doubles) {
-			return ArrayUtil.toArray(doubles);
+			return ArrayUtil.toArray(ArrayUtil.sortedUnique(doubles));
 		}
 
 		if (value instanceof float[] floats) {
-			return ArrayUtil.toArray(floats);
+			return ArrayUtil.toArray(ArrayUtil.sortedUnique(floats));
 		}
 
 		throw new IllegalStateException(
