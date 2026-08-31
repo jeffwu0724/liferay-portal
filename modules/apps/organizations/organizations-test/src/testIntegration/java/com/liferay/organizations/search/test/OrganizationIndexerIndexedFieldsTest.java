@@ -281,6 +281,7 @@ public class OrganizationIndexerIndexedFieldsTest {
 		).build();
 	}
 
+	
 	private Map<String, Object> _expectedFieldValuesWithExpando(
 			Organization organization)
 		throws Exception {
