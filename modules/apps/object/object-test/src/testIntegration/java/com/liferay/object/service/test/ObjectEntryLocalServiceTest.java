@@ -221,6 +221,7 @@ import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.BigDecimalUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaDetector;
@@ -5524,6 +5525,57 @@ public class ObjectEntryLocalServiceTest {
 	}
 
 	@Test
+	public void testGetObjectEntriesByStatus() throws Exception {
+		ObjectEntry objectEntry1 = _addObjectEntry(
+			HashMapBuilder.<String, Serializable>put(
+				"emailAddressRequired", "peter@liferay.com"
+			).put(
+				"firstName", "Peter"
+			).put(
+				"listTypeEntryKeyRequired", "listTypeEntryKey1"
+			).build());
+		ObjectEntry objectEntry2 = _addObjectEntry(
+			HashMapBuilder.<String, Serializable>put(
+				"emailAddressRequired", "james@liferay.com"
+			).put(
+				"firstName", "James"
+			).put(
+				"listTypeEntryKeyRequired", "listTypeEntryKey2"
+			).build());
+		ObjectEntry objectEntry3 = _addObjectEntry(
+			HashMapBuilder.<String, Serializable>put(
+				"emailAddressRequired", "john@liferay.com"
+			).put(
+				"firstName", "John"
+			).put(
+				"listTypeEntryKeyRequired", "listTypeEntryKey3"
+			).build());
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext();
+
+		_objectEntryLocalService.updateStatus(
+			TestPropsValues.getUserId(), objectEntry2.getObjectEntryId(),
+			WorkflowConstants.STATUS_DRAFT, serviceContext);
+
+		_objectEntryLocalService.moveObjectEntryToTrash(
+			TestPropsValues.getUserId(), objectEntry3, serviceContext);
+
+		_assertObjectEntries(
+			Arrays.asList(objectEntry1, objectEntry2),
+			WorkflowConstants.STATUS_ANY);
+		_assertObjectEntries(
+			Collections.singletonList(objectEntry1),
+			WorkflowConstants.STATUS_APPROVED);
+		_assertObjectEntries(
+			Collections.singletonList(objectEntry2),
+			WorkflowConstants.STATUS_DRAFT);
+		_assertObjectEntries(
+			Collections.singletonList(objectEntry3),
+			WorkflowConstants.STATUS_IN_TRASH);
+	}
+
+	@Test
 	public void testGetObjectEntry() throws Exception {
 		ObjectEntry objectEntry = _addObjectEntry(
 			HashMapBuilder.<String, Serializable>put(
@@ -8833,7 +8885,8 @@ public class ObjectEntryLocalServiceTest {
 
 		Assert.assertEquals(
 			WorkflowConstants.STATUS_EXPIRED, objectEntryAA.getStatus());
-		Assert.assertEquals(expirationDate, objectEntryAA.getExpirationDate());
+		Assert.assertTrue(
+			DateUtil.equals(expirationDate, objectEntryAA.getExpirationDate()));
 	}
 
 	@Test
@@ -9577,6 +9630,27 @@ public class ObjectEntryLocalServiceTest {
 			objectAction.getObjectActionId());
 
 		Assert.assertEquals(expectedStatus, objectAction.getStatus());
+	}
+
+	private void _assertObjectEntries(
+		List<ObjectEntry> expectedObjectEntries, int status) {
+
+		List<Long> expectedObjectEntryIds = ListUtil.sort(
+			TransformUtil.transform(
+				expectedObjectEntries, ObjectEntry::getObjectEntryId));
+
+		Assert.assertEquals(
+			expectedObjectEntryIds,
+			ListUtil.sort(
+				TransformUtil.transform(
+					_objectEntryLocalService.getObjectEntries(
+						0, _objectDefinition.getObjectDefinitionId(), status,
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS),
+					ObjectEntry::getObjectEntryId)));
+		Assert.assertEquals(
+			expectedObjectEntryIds.size(),
+			_objectEntryLocalService.getObjectEntriesCount(
+				0, _objectDefinition.getObjectDefinitionId(), status));
 	}
 
 	private void _assertObjectEntryLocalizedValues(

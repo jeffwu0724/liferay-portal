@@ -2004,6 +2004,12 @@
 		},
 		{
 			"properties": {
+				"detectionTimeout": {
+					"default": 0,
+					"description": "Define the time, in milliseconds, after which the detection of audiences is stopped and the variations (for the audiences that matched before the timeout) are immediately applied to the page. Set it to 0 to disable the timeout and wait until every audience has been detected.",
+					"title": "Detection Timeout",
+					"type": "number"
+				},
 				"enableLog": {
 					"default": false,
 					"description": "If this is checked, the frontend audiences infrastructure will print informational messages to the browser console.",
@@ -3749,36 +3755,6 @@
 		},
 		{
 			"properties": {
-				"idleTimeout": {
-					"default": 15,
-					"title": "Session Idle Timeout",
-					"type": "number"
-				},
-				"idleTimeoutTimeUnit": {
-					"title": "Time Unit",
-					"type": "string"
-				},
-				"maximumAge": {
-					"default": 30,
-					"title": "Session Maximum Age",
-					"type": "number"
-				},
-				"maximumAgeTimeUnit": {
-					"title": "Time Unit",
-					"type": "string"
-				},
-				"pid": {
-					"const": "com.liferay.portal.security.fips.configuration.FIPSSessionConfiguration",
-					"title": "FIPS Session Configuration"
-				}
-			},
-			"required": [
-				"pid"
-			],
-			"title": "FIPS Session Configuration"
-		},
-		{
-			"properties": {
 				"blacklist": {
 					"items": {
 						"type": "string"
@@ -5089,6 +5065,12 @@
 					"default": "",
 					"title": "Subscription Key",
 					"type": "string"
+				},
+				"userAgent": {
+					"default": "",
+					"description": "Specify the user agent sent to the translation API. If left blank, the portal identifies itself as Liferay.",
+					"title": "User Agent Header",
+					"type": "string"
 				}
 			},
 			"required": [
@@ -5115,6 +5097,12 @@
 				"url": {
 					"default": "https://api-free.deepl.com/v2/translate",
 					"title": "API URL",
+					"type": "string"
+				},
+				"userAgent": {
+					"default": "",
+					"description": "Specify the user agent sent to the translation API. If left blank, the portal identifies itself as Liferay.",
+					"title": "User Agent Header",
 					"type": "string"
 				},
 				"validateLanguageURL": {
@@ -5317,7 +5305,6 @@
 				"com.liferay.portal.security.audit.router.configuration.PersistentAuditMessageProcessorConfiguration",
 				"com.liferay.portal.security.auto.login.internal.basic.auth.header.configuration.BasicAuthHeaderAutoLoginConfiguration",
 				"com.liferay.portal.security.configuration.BasicAuthHeaderSupportConfiguration",
-				"com.liferay.portal.security.fips.configuration.FIPSSessionConfiguration",
 				"com.liferay.portal.security.iframe.sanitizer.configuration.IFrameConfiguration",
 				"com.liferay.portal.security.ldap.authenticator.configuration.LDAPAuthConfiguration",
 				"com.liferay.portal.security.ldap.configuration.LDAPServerConfiguration",
