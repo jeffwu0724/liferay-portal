@@ -134,7 +134,7 @@ public class DateEntryTest {
 
 		Assert.assertEquals(results.toString(), 1, results.size());
 
-		_assertSQLDate(_midnightTime, results.get(0));
+		_assertSQLDate(_MILLIS_TIME, results.get(0));
 
 		_assertSQLDateRows(
 			_dateEntryLocalService.dslQuery(
@@ -382,7 +382,7 @@ public class DateEntryTest {
 	@Test
 	public void testSQLQuery() {
 		_assertTimestamp(_microsNanos, _getMaxSnapshotDateBySQLQuery(null));
-		_assertSQLDate(_midnightTime, _getMaxSnapshotDateBySQLQuery(Type.DATE));
+		_assertSQLDate(_MILLIS_TIME, _getMaxSnapshotDateBySQLQuery(Type.DATE));
 		_assertTimestamp(
 			_microsNanos, _getMaxSnapshotDateBySQLQuery(Type.TIMESTAMP));
 
@@ -482,28 +482,30 @@ public class DateEntryTest {
 		Assert.assertEquals(expectedTime, date.getTime());
 	}
 
-	private void _assertSQLDate(long expectedTime, Object object) {
+	private void _assertSQLDate(long time, Object object) {
 		Assert.assertEquals(java.sql.Date.class, object.getClass());
 
 		Date date = (Date)object;
 
-		Assert.assertEquals(expectedTime, date.getTime());
+		Assert.assertEquals(time - (time % Time.DAY), date.getTime());
 	}
 
-	private void _assertSQLDateRow(long expectedDateEntryId, Object[] row) {
+	private void _assertSQLDateRow(
+		long expectedDateEntryId, long time, Object[] row) {
+
 		Number number = (Number)row[0];
 
 		Assert.assertEquals(expectedDateEntryId, number.longValue());
 
-		_assertSQLDate(_midnightTime, row[1]);
+		_assertSQLDate(time, row[1]);
 	}
 
 	private void _assertSQLDateRows(List<Object[]> rows) {
 		Assert.assertEquals(rows.toString(), 3, rows.size());
 
-		_assertSQLDateRow(_midnightDateEntryId, rows.get(0));
-		_assertSQLDateRow(_millisDateEntryId, rows.get(1));
-		_assertSQLDateRow(_microsDateEntryId, rows.get(2));
+		_assertSQLDateRow(_midnightDateEntryId, _midnightTime, rows.get(0));
+		_assertSQLDateRow(_millisDateEntryId, _MILLIS_TIME, rows.get(1));
+		_assertSQLDateRow(_microsDateEntryId, _MILLIS_TIME, rows.get(2));
 	}
 
 	private void _assertTimestamp(long expectedNanos, Object object) {
