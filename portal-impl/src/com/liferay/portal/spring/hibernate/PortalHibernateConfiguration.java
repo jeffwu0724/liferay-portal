@@ -50,10 +50,15 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.jaxb.Origin;
 import org.hibernate.boot.jaxb.SourceType;
+import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmHibernateMapping;
+import org.hibernate.boot.jaxb.hbm.spi.JaxbHbmRootEntityType;
 import org.hibernate.boot.jaxb.internal.InputStreamXmlSource;
 import org.hibernate.boot.jaxb.spi.Binding;
 import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.boot.spi.XmlMappingBinderAccess;
+import org.hibernate.bytecode.internal.none.BytecodeProviderImpl;
+import org.hibernate.bytecode.spi.BytecodeProvider;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.resource.jdbc.spi.PhysicalConnectionHandlingMode;
@@ -232,14 +237,20 @@ public class PortalHibernateConfiguration
 	private SessionFactory _buildSessionFactory(Configuration configuration)
 		throws HibernateException {
 
+		boolean proxyRequired = false;
+
 		try {
 			String[] resources = getConfigurationResources();
 
 			for (String resource : resources) {
 				try {
-					_readResource(configuration, resource);
+					if (_readResource(configuration, resource)) {
+						proxyRequired = true;
+					}
 				}
 				catch (Exception exception) {
+					proxyRequired = true;
+
 					if (_log.isWarnEnabled()) {
 						_log.warn(exception);
 					}
@@ -247,7 +258,17 @@ public class PortalHibernateConfiguration
 			}
 		}
 		catch (Exception exception) {
+			proxyRequired = true;
+
 			_log.error(exception);
+		}
+
+		if (!proxyRequired) {
+			StandardServiceRegistryBuilder standardServiceRegistryBuilder =
+				configuration.getStandardServiceRegistryBuilder();
+
+			standardServiceRegistryBuilder.addService(
+				BytecodeProvider.class, new BytecodeProviderImpl());
 		}
 
 		return configuration.buildSessionFactory();
@@ -278,6 +299,31 @@ public class PortalHibernateConfiguration
 				new char[] {
 					CharPool.UNDERLINE, CharPool.UNDERLINE, CharPool.UNDERLINE
 				}));
+	}
+
+	private boolean _isProxyRequired(Binding<?> binding) {
+		Object root = binding.getRoot();
+
+		if (!(root instanceof JaxbHbmHibernateMapping)) {
+			return true;
+		}
+
+		JaxbHbmHibernateMapping jaxbHbmHibernateMapping =
+			(JaxbHbmHibernateMapping)root;
+
+		if (jaxbHbmHibernateMapping.isDefaultLazy()) {
+			return true;
+		}
+
+		for (JaxbHbmRootEntityType jaxbHbmRootEntityType :
+				jaxbHbmHibernateMapping.getClazz()) {
+
+			if (Boolean.TRUE.equals(jaxbHbmRootEntityType.isLazy())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private Binding<?> _loadBinding(Configuration configuration, URL url)
@@ -338,8 +384,10 @@ public class PortalHibernateConfiguration
 		return binding;
 	}
 
-	private void _readResource(Configuration configuration, String resource)
+	private boolean _readResource(Configuration configuration, String resource)
 		throws Exception {
+
+		boolean proxyRequired = false;
 
 		ClassLoader classLoader = getConfigurationClassLoader();
 
@@ -355,25 +403,35 @@ public class PortalHibernateConfiguration
 			while (enumeration.hasMoreElements()) {
 				URL url = enumeration.nextElement();
 
-				_readResource(configuration, url);
+				if (_readResource(configuration, url)) {
+					proxyRequired = true;
+				}
 			}
 		}
-		else {
-			_readResource(configuration, classLoader.getResource(resource));
+		else if (_readResource(
+					configuration, classLoader.getResource(resource))) {
+
+			proxyRequired = true;
 		}
+
+		return proxyRequired;
 	}
 
-	private void _readResource(Configuration configuration, URL url)
+	private boolean _readResource(Configuration configuration, URL url)
 		throws Exception {
 
 		if (url == null) {
-			return;
+			return false;
 		}
 
 		try (SafeCloseable safeCloseable = ThreadContextClassLoaderUtil.swap(
 				PortalHibernateConfiguration.class.getClassLoader())) {
 
-			configuration.addXmlMapping(_loadBinding(configuration, url));
+			Binding<?> binding = _loadBinding(configuration, url);
+
+			configuration.addXmlMapping(binding);
+
+			return _isProxyRequired(binding);
 		}
 	}
 
