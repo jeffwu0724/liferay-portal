@@ -5,6 +5,8 @@
 
 package com.liferay.feature.flag.web.internal.manager;
 
+import com.liferay.petra.lang.SafeCloseable;
+import com.liferay.portal.kernel.change.tracking.CTCollectionThreadLocal;
 import com.liferay.portal.kernel.feature.flag.constants.FeatureFlagConstants;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
@@ -23,23 +25,28 @@ import org.osgi.service.component.annotations.Reference;
 public class FeatureFlagPreferencesManager {
 
 	public Boolean isEnabled(long companyId, String key) {
-		if (Validator.isNull(
-				_portalPreferencesLocalService.fetchPortalPreferences(
-					companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY))) {
+		try (SafeCloseable safeCloseable =
+				CTCollectionThreadLocal.setProductionModeWithSafeCloseable()) {
 
-			return null;
+			if (Validator.isNull(
+					_portalPreferencesLocalService.fetchPortalPreferences(
+						companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY))) {
+
+				return null;
+			}
+
+			PortalPreferences portalPreferences = _getPortalPreferences(
+				companyId);
+
+			String value = portalPreferences.getValue(
+				FeatureFlagConstants.PREFERENCE_NAMESPACE, key);
+
+			if (value == null) {
+				return null;
+			}
+
+			return GetterUtil.getBoolean(value);
 		}
-
-		PortalPreferences portalPreferences = _getPortalPreferences(companyId);
-
-		String value = portalPreferences.getValue(
-			FeatureFlagConstants.PREFERENCE_NAMESPACE, key);
-
-		if (value == null) {
-			return null;
-		}
-
-		return GetterUtil.getBoolean(value);
 	}
 
 	public void setEnabled(long companyId, String key, boolean enabled) {

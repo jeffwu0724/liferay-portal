@@ -311,8 +311,6 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		Future<?> future2 = future1.get();
 
-		future2.get();
-
 		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
 
 		ClassLoaderPool.register(_portalServletContextName, portalClassLoader);
@@ -335,6 +333,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 			springInitTask = new FutureTask<>(
 				() -> {
+					future2.get();
+
 					super.contextInitialized(servletContextEvent);
 
 					return null;
@@ -348,6 +348,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		ModuleFrameworkUtil.startFramework();
 
 		if (springInitTask == null) {
+			future2.get();
+
 			super.contextInitialized(servletContextEvent);
 		}
 		else {
