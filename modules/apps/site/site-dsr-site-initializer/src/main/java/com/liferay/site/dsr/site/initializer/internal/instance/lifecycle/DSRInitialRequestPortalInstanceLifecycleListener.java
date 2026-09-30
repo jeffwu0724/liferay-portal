@@ -54,7 +54,11 @@ public class DSRInitialRequestPortalInstanceLifecycleListener
 
 	@Override
 	protected void doPortalInstanceRegistered(long companyId) throws Exception {
-		if (!LicenseManagerUtil.isAppEnabled(App.DSR)) {
+
+		// TEMP LPD-107496 Skip DSR so that only CMS initializes on the first
+		// request. Do not merge.
+
+		if (true || !LicenseManagerUtil.isAppEnabled(App.DSR)) {
 			return;
 		}
 
