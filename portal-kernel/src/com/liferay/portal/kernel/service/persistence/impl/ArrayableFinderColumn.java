@@ -7,6 +7,8 @@ package com.liferay.portal.kernel.service.persistence.impl;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -75,6 +77,16 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 		Object[] array = (Object[])normalizedValue;
 
 		if (array.length == 0) {
+			if (!_andOperator && _log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Dropping the condition for arrayable column ",
+						getKeyFragment(),
+						" because its value array is empty, which can match ",
+						"no row"),
+					new Throwable());
+			}
+
 			return "";
 		}
 
@@ -230,6 +242,9 @@ public class ArrayableFinderColumn<T extends BaseModel<T>>
 		throw new IllegalStateException(
 			"Unsupported arrayable value: " + value);
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		ArrayableFinderColumn.class);
 
 	private final boolean _andOperator;
 	private final String _hqlInPrefix;
