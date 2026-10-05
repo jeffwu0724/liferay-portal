@@ -82,6 +82,8 @@ public class ResourcePermissionServiceImpl
 			String primKey, long roleId, String actionId)
 		throws PortalException {
 
+		_validateScope(scope);
+
 		_permissionService.checkPermission(0, Role.class.getName(), roleId);
 
 		resourcePermissionLocalService.addResourcePermission(
@@ -114,6 +116,8 @@ public class ResourcePermissionServiceImpl
 			String primKey, long roleId, String actionId)
 		throws PortalException {
 
+		_validateScope(scope);
+
 		_permissionService.checkPermission(0, Role.class.getName(), roleId);
 
 		resourcePermissionLocalService.removeResourcePermission(
@@ -139,6 +143,8 @@ public class ResourcePermissionServiceImpl
 			long groupId, long companyId, String name, int scope, long roleId,
 			String actionId)
 		throws PortalException {
+
+		_validateScope(scope);
 
 		_permissionService.checkPermission(0, Role.class.getName(), roleId);
 
@@ -270,6 +276,16 @@ public class ResourcePermissionServiceImpl
 		}
 
 		return classPK;
+	}
+
+	private void _validateScope(int scope) {
+		if ((scope != ResourceConstants.SCOPE_COMPANY) &&
+			(scope != ResourceConstants.SCOPE_GROUP) &&
+			(scope != ResourceConstants.SCOPE_GROUP_TEMPLATE)) {
+
+			throw new IllegalArgumentException(
+				"Use setIndividualResourcePermissions for scope " + scope);
+		}
 	}
 
 	@BeanReference(type = GroupPersistence.class)
