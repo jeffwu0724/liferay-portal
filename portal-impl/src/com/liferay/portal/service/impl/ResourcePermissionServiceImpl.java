@@ -82,8 +82,7 @@ public class ResourcePermissionServiceImpl
 			String primKey, long roleId, String actionId)
 		throws PortalException {
 
-		_permissionService.checkPermission(
-			groupId, Role.class.getName(), roleId);
+		_permissionService.checkPermission(0, Role.class.getName(), roleId);
 
 		resourcePermissionLocalService.addResourcePermission(
 			companyId, name, scope, primKey, roleId, actionId);
@@ -115,8 +114,7 @@ public class ResourcePermissionServiceImpl
 			String primKey, long roleId, String actionId)
 		throws PortalException {
 
-		_permissionService.checkPermission(
-			groupId, Role.class.getName(), roleId);
+		_permissionService.checkPermission(0, Role.class.getName(), roleId);
 
 		resourcePermissionLocalService.removeResourcePermission(
 			companyId, name, scope, primKey, roleId, actionId);
@@ -142,8 +140,7 @@ public class ResourcePermissionServiceImpl
 			String actionId)
 		throws PortalException {
 
-		_permissionService.checkPermission(
-			groupId, Role.class.getName(), roleId);
+		_permissionService.checkPermission(0, Role.class.getName(), roleId);
 
 		resourcePermissionLocalService.removeResourcePermissions(
 			companyId, name, scope, roleId, actionId);
