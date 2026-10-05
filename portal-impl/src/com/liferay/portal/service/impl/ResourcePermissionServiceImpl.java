@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.PermissionService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
 import com.liferay.portal.kernel.service.persistence.GroupPersistence;
@@ -323,6 +324,59 @@ public class ResourcePermissionServiceImpl
 		resourcePermissionLocalService.setResourcePermissions(
 			companyId, name, ResourceConstants.SCOPE_INDIVIDUAL, primKey,
 			roleIdsToActionIds);
+	}
+
+	/**
+	 * Replaces the actions the role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleId the primary key of the role
+	 * @param actionIds the action IDs of the actions
+	 */
+	@Override
+	public void setIndividualResourcePermissions(
+			String name, String primKey, long roleId, String[] actionIds)
+		throws PortalException {
+
+		_permissionService.checkPermission(
+			_getGroupId(name, primKey), name, primKey);
+
+		resourcePermissionLocalService.setResourcePermissions(
+			CompanyThreadLocal.getCompanyId(), name,
+			ResourceConstants.SCOPE_INDIVIDUAL, primKey, roleId, actionIds);
+	}
+
+	/**
+	 * Replaces the actions each role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 */
+	@Override
+	public void setIndividualResourcePermissions(
+			String name, String primKey, Map<Long, String[]> roleIdsToActionIds)
+		throws PortalException {
+
+		_permissionService.checkPermission(
+			_getGroupId(name, primKey), name, primKey);
+
+		resourcePermissionLocalService.setResourcePermissions(
+			CompanyThreadLocal.getCompanyId(), name,
+			ResourceConstants.SCOPE_INDIVIDUAL, primKey, roleIdsToActionIds);
 	}
 
 	private long _getGroupId(String name, String primKey) {
