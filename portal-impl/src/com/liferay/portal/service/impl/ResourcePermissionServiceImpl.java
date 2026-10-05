@@ -8,6 +8,7 @@ package com.liferay.portal.service.impl;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.PersistedModel;
@@ -18,6 +19,7 @@ import com.liferay.portal.kernel.service.PermissionService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
 import com.liferay.portal.kernel.service.persistence.GroupPersistence;
 import com.liferay.portal.kernel.service.persistence.LayoutPersistence;
+import com.liferay.portal.kernel.service.persistence.RolePersistence;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
@@ -91,6 +93,46 @@ public class ResourcePermissionServiceImpl
 	}
 
 	/**
+	 * Grants the role permission to perform the action on every resource of
+	 * the type within the scope. Existing actions are retained.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * <p>
+	 * If a company scope permission is granted to resources that the role
+	 * already had group scope permissions to, the group scope permissions are
+	 * deleted. Likewise, if a group scope permission is granted to resources
+	 * that the role already had company scope permissions to, the company scope
+	 * permissions are deleted. Be aware that this latter behavior can result in
+	 * an overall reduction in permissions for the role.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 *        at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void addRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException {
+
+		Role role = _getRole(roleId);
+
+		resourcePermissionLocalService.addResourcePermission(
+			role.getCompanyId(), name, scope,
+			_getPrimKey(role, scope, targetGroupId), roleId, actionId);
+	}
+
+	/**
 	 * Revokes permission at the scope from the role to perform the action on
 	 * resources of the type. For example, this method could be used to revoke a
 	 * group scope permission to edit blog posts.
@@ -150,6 +192,62 @@ public class ResourcePermissionServiceImpl
 
 		resourcePermissionLocalService.removeResourcePermissions(
 			companyId, name, scope, roleId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on every resource of
+	 * the type within the scope.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 *        at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void removeRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException {
+
+		Role role = _getRole(roleId);
+
+		resourcePermissionLocalService.removeResourcePermission(
+			role.getCompanyId(), name, scope,
+			_getPrimKey(role, scope, targetGroupId), roleId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on resources of the
+	 * type in every group of the scope. For example, this method could be used
+	 * to revoke the role's group scope permissions to edit blog posts in all
+	 * groups.
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void removeRoleResourcePermissions(
+			long roleId, String name, int scope, String actionId)
+		throws PortalException {
+
+		Role role = _getRole(roleId);
+
+		_validateScope(scope);
+
+		resourcePermissionLocalService.removeResourcePermissions(
+			role.getCompanyId(), name, scope, roleId, actionId);
 	}
 
 	/**
@@ -278,6 +376,36 @@ public class ResourcePermissionServiceImpl
 		return classPK;
 	}
 
+	private String _getPrimKey(Role role, int scope, long targetGroupId) {
+		_validateScope(scope);
+
+		if (scope == ResourceConstants.SCOPE_GROUP) {
+			if (targetGroupId <= 0) {
+				throw new IllegalArgumentException(
+					"Group scope requires a target group");
+			}
+
+			return String.valueOf(targetGroupId);
+		}
+
+		if (targetGroupId != 0) {
+			throw new IllegalArgumentException(
+				"Only the group scope takes a target group");
+		}
+
+		if (scope == ResourceConstants.SCOPE_COMPANY) {
+			return String.valueOf(role.getCompanyId());
+		}
+
+		return String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID);
+	}
+
+	private Role _getRole(long roleId) throws PortalException {
+		_permissionService.checkPermission(0, Role.class.getName(), roleId);
+
+		return _rolePersistence.findByPrimaryKey(roleId);
+	}
+
 	private void _validateScope(int scope) {
 		if ((scope != ResourceConstants.SCOPE_COMPANY) &&
 			(scope != ResourceConstants.SCOPE_GROUP) &&
@@ -296,5 +424,8 @@ public class ResourcePermissionServiceImpl
 
 	@BeanReference(type = PermissionService.class)
 	private PermissionService _permissionService;
+
+	@BeanReference(type = RolePersistence.class)
+	private RolePersistence _rolePersistence;
 
 }
