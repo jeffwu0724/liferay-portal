@@ -61,7 +61,10 @@ public class ResourcePermissionServiceWrapper
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #addRoleResourcePermission(long, String, int, long, String)}
 	 */
+	@Deprecated
 	@Override
 	public void addResourcePermission(
 			long groupId, long companyId, java.lang.String name, int scope,
@@ -138,7 +141,11 @@ public class ResourcePermissionServiceWrapper
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermission(long, String, int, long,
+	 String)}
 	 */
+	@Deprecated
 	@Override
 	public void removeResourcePermission(
 			long groupId, long companyId, java.lang.String name, int scope,
@@ -162,7 +169,10 @@ public class ResourcePermissionServiceWrapper
 	 * @param scope the scope
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermissions(long, String, int, String)}
 	 */
+	@Deprecated
 	@Override
 	public void removeResourcePermissions(
 			long groupId, long companyId, java.lang.String name, int scope,
@@ -246,7 +256,11 @@ public class ResourcePermissionServiceWrapper
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionIds the action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, long,
+	 String[])}
 	 */
+	@Deprecated
 	@Override
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, java.lang.String name,
@@ -279,7 +293,10 @@ public class ResourcePermissionServiceWrapper
 	 portlet ID
 	 * @param primKey the primary key
 	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, Map)}
 	 */
+	@Deprecated
 	@Override
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, java.lang.String name,
@@ -355,4 +372,4 @@ public class ResourcePermissionServiceWrapper
 	private ResourcePermissionService _resourcePermissionService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-640728201
+// LIFERAY-SERVICE-BUILDER-HASH:-1442444663

@@ -77,7 +77,10 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #addRoleResourcePermission(long, String, int, long, String)}
 	 */
+	@Deprecated
 	public void addResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
@@ -141,7 +144,11 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermission(long, String, int, long,
+	 String)}
 	 */
+	@Deprecated
 	public void removeResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
@@ -160,7 +167,10 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param scope the scope
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermissions(long, String, int, String)}
 	 */
+	@Deprecated
 	public void removeResourcePermissions(
 			long groupId, long companyId, String name, int scope, long roleId,
 			String actionId)
@@ -228,7 +238,11 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionIds the action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, long,
+	 String[])}
 	 */
+	@Deprecated
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			long roleId, String[] actionIds)
@@ -256,7 +270,10 @@ public interface ResourcePermissionService extends BaseService {
 	 portlet ID
 	 * @param primKey the primary key
 	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, Map)}
 	 */
+	@Deprecated
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			Map<Long, String[]> roleIdsToActionIds)
@@ -298,4 +315,4 @@ public interface ResourcePermissionService extends BaseService {
 		throws PortalException;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1371570485
+// LIFERAY-SERVICE-BUILDER-HASH:560767054

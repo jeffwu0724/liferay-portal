@@ -64,7 +64,10 @@ public class ResourcePermissionServiceUtil {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #addRoleResourcePermission(long, String, int, long, String)}
 	 */
+	@Deprecated
 	public static void addResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
@@ -138,7 +141,11 @@ public class ResourcePermissionServiceUtil {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermission(long, String, int, long,
+	 String)}
 	 */
+	@Deprecated
 	public static void removeResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
@@ -161,7 +168,10 @@ public class ResourcePermissionServiceUtil {
 	 * @param scope the scope
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermissions(long, String, int, String)}
 	 */
+	@Deprecated
 	public static void removeResourcePermissions(
 			long groupId, long companyId, String name, int scope, long roleId,
 			String actionId)
@@ -241,7 +251,11 @@ public class ResourcePermissionServiceUtil {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionIds the action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, long,
+	 String[])}
 	 */
+	@Deprecated
 	public static void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			long roleId, String[] actionIds)
@@ -273,7 +287,10 @@ public class ResourcePermissionServiceUtil {
 	 portlet ID
 	 * @param primKey the primary key
 	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, Map)}
 	 */
+	@Deprecated
 	public static void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			Map<Long, String[]> roleIdsToActionIds)
@@ -337,4 +354,4 @@ public class ResourcePermissionServiceUtil {
 	private static volatile ResourcePermissionService _service;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-2078229014
+// LIFERAY-SERVICE-BUILDER-HASH:1729705030
