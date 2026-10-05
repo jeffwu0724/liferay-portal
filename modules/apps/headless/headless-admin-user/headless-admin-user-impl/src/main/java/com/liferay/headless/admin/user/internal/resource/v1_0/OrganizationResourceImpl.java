@@ -1461,10 +1461,9 @@ public class OrganizationResourceImpl
 		}
 
 		return ResourcePermissionUtil.setResourcePermissions(
-			serviceBuilderOrganization,
-			serviceBuilderOrganization.getCompanyId(),
-			organization.getPermissions(), _resourcePermissionService,
-			_roleService, _roleTypeContributorProvider);
+			serviceBuilderOrganization, organization.getPermissions(),
+			_resourcePermissionService, _roleService,
+			_roleTypeContributorProvider);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

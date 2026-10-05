@@ -125,8 +125,7 @@ public class PortletPermissionsImporterImpl
 				plid, portletId);
 
 			_resourcePermissionService.setIndividualResourcePermissions(
-				layout.getGroupId(), layout.getCompanyId(), portletName,
-				resourcePrimKey, roleIdsToActionIds);
+				portletName, resourcePrimKey, roleIdsToActionIds);
 		}
 	}
 

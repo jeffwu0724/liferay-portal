@@ -468,13 +468,19 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 				}
 			}
 
+			long targetGroupId = 0;
+
+			if (resourcePermission.getScope() ==
+					ResourceConstants.SCOPE_GROUP) {
+
+				targetGroupId = GetterUtil.getLong(
+					resourcePermission.getPrimKey());
+			}
+
 			for (String actionId : actionIdsSet) {
-				_resourcePermissionService.addResourcePermission(
-					serviceContext.getScopeGroupId(),
-					serviceContext.getCompanyId(), resourcePermission.getName(),
-					resourcePermission.getScope(),
-					resourcePermission.getPrimKey(), targetRole.getRoleId(),
-					actionId);
+				_resourcePermissionService.addRoleResourcePermission(
+					targetRole.getRoleId(), resourcePermission.getName(),
+					resourcePermission.getScope(), targetGroupId, actionId);
 			}
 		}
 

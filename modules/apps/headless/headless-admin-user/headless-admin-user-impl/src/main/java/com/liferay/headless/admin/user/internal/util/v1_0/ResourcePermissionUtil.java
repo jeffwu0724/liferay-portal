@@ -28,7 +28,7 @@ import java.util.List;
 public class ResourcePermissionUtil {
 
 	public static <T> T setResourcePermissions(
-			BaseModel<T> baseModel, long companyId, Permission[] permissions,
+			BaseModel<T> baseModel, Permission[] permissions,
 			ResourcePermissionService resourcePermissionService,
 			RoleService roleService,
 			RoleTypeContributorProvider roleTypeContributorProvider)
@@ -77,7 +77,7 @@ public class ResourcePermissionUtil {
 				RoleConstants.getLabelType(permission.getRoleType()));
 
 			resourcePermissionService.setIndividualResourcePermissions(
-				0, companyId, baseModel.getModelClassName(),
+				baseModel.getModelClassName(),
 				String.valueOf(
 					GetterUtil.getLong(baseModel.getPrimaryKeyObj())),
 				role.getRoleId(), actionIds);

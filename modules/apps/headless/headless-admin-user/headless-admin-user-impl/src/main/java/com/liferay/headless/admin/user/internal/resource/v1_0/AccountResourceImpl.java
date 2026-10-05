@@ -1429,9 +1429,8 @@ public class AccountResourceImpl
 		}
 
 		return ResourcePermissionUtil.setResourcePermissions(
-			accountEntry, accountEntry.getCompanyId(), account.getPermissions(),
-			_resourcePermissionService, _roleService,
-			_roleTypeContributorProvider);
+			accountEntry, account.getPermissions(), _resourcePermissionService,
+			_roleService, _roleTypeContributorProvider);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

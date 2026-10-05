@@ -88,7 +88,6 @@ public abstract class BasePermissionPropagator implements PermissionPropagator {
 		}
 
 		ResourcePermissionServiceUtil.setIndividualResourcePermissions(
-			themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(),
 			childClassName, String.valueOf(childPrimKey), roleId,
 			actionIds.toArray(new String[0]));
 	}
