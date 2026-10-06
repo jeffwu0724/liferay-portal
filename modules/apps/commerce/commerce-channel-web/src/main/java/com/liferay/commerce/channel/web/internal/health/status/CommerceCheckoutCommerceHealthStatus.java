@@ -98,7 +98,6 @@ public class CommerceCheckoutCommerceHealthStatus
 
 		if (role != null) {
 			_resourcePermissionService.setIndividualResourcePermissions(
-				layout.getGroupId(), layout.getCompanyId(),
 				layout.getModelClassName(), String.valueOf(layout.getPlid()),
 				role.getRoleId(), new String[0]);
 		}

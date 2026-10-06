@@ -10,6 +10,7 @@ import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
@@ -126,16 +127,13 @@ public class ProductNavigationControlMenuManagerTest {
 
 		Role role = RoleTestUtil.addRole(RoleConstants.TYPE_REGULAR);
 
-		ResourcePermissionServiceUtil.addResourcePermission(
-			_group.getGroupId(), TestPropsValues.getCompanyId(),
-			"com.liferay.portal.kernel.model.Group", 1,
-			String.valueOf(TestPropsValues.getCompanyId()), role.getRoleId(),
-			"VIEW_SITE_ADMINISTRATION");
-		ResourcePermissionServiceUtil.addResourcePermission(
-			_group.getGroupId(), TestPropsValues.getCompanyId(),
-			"com_liferay_style_book_web_internal_portlet_StyleBookPortlet", 1,
-			String.valueOf(TestPropsValues.getCompanyId()), role.getRoleId(),
-			"ACCESS_IN_CONTROL_PANEL");
+		ResourcePermissionServiceUtil.addRoleResourcePermission(
+			role.getRoleId(), "com.liferay.portal.kernel.model.Group",
+			ResourceConstants.SCOPE_COMPANY, 0, "VIEW_SITE_ADMINISTRATION");
+		ResourcePermissionServiceUtil.addRoleResourcePermission(
+			role.getRoleId(),
+			"com_liferay_style_book_web_internal_portlet_StyleBookPortlet",
+			ResourceConstants.SCOPE_COMPANY, 0, "ACCESS_IN_CONTROL_PANEL");
 
 		_menuAccessConfigurationManager.updateMenuAccessConfiguration(
 			_group.getGroupId(),
@@ -174,16 +172,13 @@ public class ProductNavigationControlMenuManagerTest {
 
 		Role role = RoleTestUtil.addRole(RoleConstants.TYPE_REGULAR);
 
-		ResourcePermissionServiceUtil.addResourcePermission(
-			_group.getGroupId(), TestPropsValues.getCompanyId(),
-			"com.liferay.portal.kernel.model.Group", 1,
-			String.valueOf(TestPropsValues.getCompanyId()), role.getRoleId(),
-			"VIEW_SITE_ADMINISTRATION");
-		ResourcePermissionServiceUtil.addResourcePermission(
-			_group.getGroupId(), TestPropsValues.getCompanyId(),
-			"com_liferay_style_book_web_internal_portlet_StyleBookPortlet", 1,
-			String.valueOf(TestPropsValues.getCompanyId()), role.getRoleId(),
-			"ACCESS_IN_CONTROL_PANEL");
+		ResourcePermissionServiceUtil.addRoleResourcePermission(
+			role.getRoleId(), "com.liferay.portal.kernel.model.Group",
+			ResourceConstants.SCOPE_COMPANY, 0, "VIEW_SITE_ADMINISTRATION");
+		ResourcePermissionServiceUtil.addRoleResourcePermission(
+			role.getRoleId(),
+			"com_liferay_style_book_web_internal_portlet_StyleBookPortlet",
+			ResourceConstants.SCOPE_COMPANY, 0, "ACCESS_IN_CONTROL_PANEL");
 
 		UserGroup userGroup = UserGroupTestUtil.addUserGroup();
 

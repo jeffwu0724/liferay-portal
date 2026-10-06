@@ -524,10 +524,9 @@ public class AccountGroupResourceImpl
 		}
 
 		return ResourcePermissionUtil.setResourcePermissions(
-			serviceBuilderAccountGroup,
-			serviceBuilderAccountGroup.getCompanyId(),
-			accountGroup.getPermissions(), _resourcePermissionService,
-			_roleService, _roleTypeContributorProvider);
+			serviceBuilderAccountGroup, accountGroup.getPermissions(),
+			_resourcePermissionService, _roleService,
+			_roleTypeContributorProvider);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

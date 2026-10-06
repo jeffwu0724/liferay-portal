@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.exception.RolePermissionsException;
 import com.liferay.portal.kernel.exception.RoleSubtypeException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.role.RoleConstants;
@@ -190,9 +189,6 @@ public class RolesAdminPortlet extends MVCPortlet {
 			throw new RolePermissionsException(roleName);
 		}
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		String name = ParamUtil.getString(actionRequest, "name");
 		int scope = ParamUtil.getInteger(actionRequest, "scope");
 		String[] primKeys = ParamUtil.getStringValues(
@@ -200,9 +196,14 @@ public class RolesAdminPortlet extends MVCPortlet {
 		String actionId = ParamUtil.getString(actionRequest, "actionId");
 
 		for (String primKey : primKeys) {
-			_resourcePermissionService.removeResourcePermission(
-				themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(),
-				name, scope, primKey, roleId, actionId);
+			long targetGroupId = 0;
+
+			if (scope == ResourceConstants.SCOPE_GROUP) {
+				targetGroupId = GetterUtil.getLong(primKey);
+			}
+
+			_resourcePermissionService.removeRoleResourcePermission(
+				roleId, name, scope, targetGroupId, actionId);
 		}
 
 		// Send redirect
@@ -300,16 +301,13 @@ public class RolesAdminPortlet extends MVCPortlet {
 		Role role = _roleLocalService.getRole(roleId);
 
 		if (name.equals(RoleConstants.SITE_ADMINISTRATOR)) {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
 			boolean manageSubgroups = ParamUtil.getBoolean(
 				actionRequest, "manageSubgroups");
 
 			_updateAction(
-				role, themeDisplay.getScopeGroupId(), Group.class.getName(),
-				ActionKeys.MANAGE_SUBGROUPS, manageSubgroups,
-				ResourceConstants.SCOPE_GROUP_TEMPLATE, new String[0]);
+				role, Group.class.getName(), ActionKeys.MANAGE_SUBGROUPS,
+				manageSubgroups, ResourceConstants.SCOPE_GROUP_TEMPLATE,
+				new String[0]);
 		}
 
 		return _roleService.updateRole(
@@ -515,15 +513,13 @@ public class RolesAdminPortlet extends MVCPortlet {
 				}
 
 				_updateAction(
-					role, themeDisplay.getScopeGroupId(), selResource, actionId,
-					selected, scope, groupIds);
+					role, selResource, actionId, selected, scope, groupIds);
 
 				if (selected &&
 					actionId.equals(ActionKeys.ACCESS_IN_CONTROL_PANEL)) {
 
 					_updateViewControlPanelPermission(
-						role, themeDisplay.getScopeGroupId(), selResource,
-						scope, groupIds);
+						role, selResource, scope, groupIds);
 
 					rootResourceScope = scope;
 					rootResourceGroupIds = groupIds;
@@ -535,8 +531,7 @@ public class RolesAdminPortlet extends MVCPortlet {
 
 		if (rootResourceGroupIds != null) {
 			_updateViewRootResourcePermission(
-				role, themeDisplay.getScopeGroupId(), portletResource,
-				rootResourceScope, rootResourceGroupIds);
+				role, portletResource, rootResourceScope, rootResourceGroupIds);
 		}
 
 		// Send redirect
@@ -774,76 +769,65 @@ public class RolesAdminPortlet extends MVCPortlet {
 	}
 
 	private void _updateAction(
-			Role role, long groupId, String selResource, String actionId,
-			boolean selected, int scope, String[] groupIds)
+			Role role, String selResource, String actionId, boolean selected,
+			int scope, String[] groupIds)
 		throws Exception {
 
-		long companyId = role.getCompanyId();
 		long roleId = role.getRoleId();
 
 		if (selected) {
-			if (scope == ResourceConstants.SCOPE_COMPANY) {
-				_resourcePermissionService.addResourcePermission(
-					groupId, companyId, selResource, scope,
-					String.valueOf(role.getCompanyId()), roleId, actionId);
-			}
-			else if (scope == ResourceConstants.SCOPE_GROUP_TEMPLATE) {
-				_resourcePermissionService.addResourcePermission(
-					groupId, companyId, selResource,
-					ResourceConstants.SCOPE_GROUP_TEMPLATE,
-					String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID),
-					roleId, actionId);
+			if ((scope == ResourceConstants.SCOPE_COMPANY) ||
+				(scope == ResourceConstants.SCOPE_GROUP_TEMPLATE)) {
+
+				_resourcePermissionService.addRoleResourcePermission(
+					roleId, selResource, scope, 0, actionId);
 			}
 			else if (scope == ResourceConstants.SCOPE_GROUP) {
-				_resourcePermissionService.removeResourcePermissions(
-					groupId, companyId, selResource,
-					ResourceConstants.SCOPE_GROUP, roleId, actionId);
+				_resourcePermissionService.removeRoleResourcePermissions(
+					roleId, selResource, ResourceConstants.SCOPE_GROUP,
+					actionId);
 
 				for (String curGroupId : groupIds) {
-					_resourcePermissionService.addResourcePermission(
-						groupId, companyId, selResource,
-						ResourceConstants.SCOPE_GROUP, curGroupId, roleId,
-						actionId);
+					_resourcePermissionService.addRoleResourcePermission(
+						roleId, selResource, ResourceConstants.SCOPE_GROUP,
+						GetterUtil.getLong(curGroupId), actionId);
 				}
 			}
 		}
 		else if (role.getType() == RoleConstants.TYPE_ACCOUNT) {
 			if (scope == ResourceConstants.SCOPE_GROUP_TEMPLATE) {
-				_resourcePermissionService.removeResourcePermissions(
-					groupId, companyId, selResource,
-					ResourceConstants.SCOPE_GROUP_TEMPLATE, roleId, actionId);
+				_resourcePermissionService.removeRoleResourcePermissions(
+					roleId, selResource, ResourceConstants.SCOPE_GROUP_TEMPLATE,
+					actionId);
 			}
 			else {
-				_resourcePermissionService.removeResourcePermissions(
-					groupId, companyId, selResource,
-					ResourceConstants.SCOPE_COMPANY, roleId, actionId);
+				_resourcePermissionService.removeRoleResourcePermissions(
+					roleId, selResource, ResourceConstants.SCOPE_COMPANY,
+					actionId);
 
-				_resourcePermissionService.removeResourcePermissions(
-					groupId, companyId, selResource,
-					ResourceConstants.SCOPE_GROUP, roleId, actionId);
+				_resourcePermissionService.removeRoleResourcePermissions(
+					roleId, selResource, ResourceConstants.SCOPE_GROUP,
+					actionId);
 			}
 		}
 		else {
 
 			// Remove company, group template, and group permissions
 
-			_resourcePermissionService.removeResourcePermissions(
-				groupId, companyId, selResource,
-				ResourceConstants.SCOPE_COMPANY, roleId, actionId);
+			_resourcePermissionService.removeRoleResourcePermissions(
+				roleId, selResource, ResourceConstants.SCOPE_COMPANY, actionId);
 
-			_resourcePermissionService.removeResourcePermissions(
-				groupId, companyId, selResource,
-				ResourceConstants.SCOPE_GROUP_TEMPLATE, roleId, actionId);
+			_resourcePermissionService.removeRoleResourcePermissions(
+				roleId, selResource, ResourceConstants.SCOPE_GROUP_TEMPLATE,
+				actionId);
 
-			_resourcePermissionService.removeResourcePermissions(
-				groupId, companyId, selResource, ResourceConstants.SCOPE_GROUP,
-				roleId, actionId);
+			_resourcePermissionService.removeRoleResourcePermissions(
+				roleId, selResource, ResourceConstants.SCOPE_GROUP, actionId);
 		}
 	}
 
 	private void _updateViewControlPanelPermission(
-			Role role, long scopeGroupId, String portletId, int scope,
-			String[] groupIds)
+			Role role, String portletId, int scope, String[] groupIds)
 		throws Exception {
 
 		PanelCategoryHelper panelCategoryHelper = new PanelCategoryHelper(
@@ -865,7 +849,7 @@ public class RolesAdminPortlet extends MVCPortlet {
 					portletId, PanelCategoryKeys.SITE_ADMINISTRATION)) {
 
 			_updateAction(
-				role, scopeGroupId, DepotEntry.class.getName(),
+				role, DepotEntry.class.getName(),
 				ActionKeys.VIEW_SITE_ADMINISTRATION, true, scope,
 				ArrayUtil.filter(
 					groupIds,
@@ -876,15 +860,12 @@ public class RolesAdminPortlet extends MVCPortlet {
 		}
 
 		if (selResource != null) {
-			_updateAction(
-				role, scopeGroupId, selResource, actionId, true, scope,
-				groupIds);
+			_updateAction(role, selResource, actionId, true, scope, groupIds);
 		}
 	}
 
 	private void _updateViewRootResourcePermission(
-			Role role, long scopeGroupId, String portletId, int scope,
-			String[] groupIds)
+			Role role, String portletId, int scope, String[] groupIds)
 		throws Exception {
 
 		String modelResource = ResourceActionsUtil.getPortletRootModelResource(
@@ -896,8 +877,8 @@ public class RolesAdminPortlet extends MVCPortlet {
 
 			if (actions.contains(ActionKeys.VIEW)) {
 				_updateAction(
-					role, scopeGroupId, modelResource, ActionKeys.VIEW, true,
-					scope, groupIds);
+					role, modelResource, ActionKeys.VIEW, true, scope,
+					groupIds);
 			}
 		}
 	}
