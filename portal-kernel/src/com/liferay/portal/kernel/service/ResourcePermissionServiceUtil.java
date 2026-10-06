@@ -75,6 +75,42 @@ public class ResourcePermissionServiceUtil {
 	}
 
 	/**
+	 * Grants the role permission to perform the action on every resource of
+	 * the type within the scope. Existing actions are retained.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * <p>
+	 * If a company scope permission is granted to resources that the role
+	 * already had group scope permissions to, the group scope permissions are
+	 * deleted. Likewise, if a group scope permission is granted to resources
+	 * that the role already had company scope permissions to, the company scope
+	 * permissions are deleted. Be aware that this latter behavior can result in
+	 * an overall reduction in permissions for the role.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	public static void addRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException {
+
+		getService().addRoleResourcePermission(
+			roleId, name, scope, targetGroupId, actionId);
+	}
+
+	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
@@ -133,6 +169,53 @@ public class ResourcePermissionServiceUtil {
 
 		getService().removeResourcePermissions(
 			groupId, companyId, name, scope, roleId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on every resource of
+	 * the type within the scope.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	public static void removeRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException {
+
+		getService().removeRoleResourcePermission(
+			roleId, name, scope, targetGroupId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on resources of the
+	 * type in every group of the scope. For example, this method could be used
+	 * to revoke the role's group scope permissions to edit blog posts in all
+	 * groups.
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param actionId the action ID
+	 */
+	public static void removeRoleResourcePermissions(
+			long roleId, String name, int scope, String actionId)
+		throws PortalException {
+
+		getService().removeRoleResourcePermissions(
+			roleId, name, scope, actionId);
 	}
 
 	/**
@@ -200,6 +283,49 @@ public class ResourcePermissionServiceUtil {
 			groupId, companyId, name, primKey, roleIdsToActionIds);
 	}
 
+	/**
+	 * Replaces the actions the role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleId the primary key of the role
+	 * @param actionIds the action IDs of the actions
+	 */
+	public static void setIndividualResourcePermissions(
+			String name, String primKey, long roleId, String[] actionIds)
+		throws PortalException {
+
+		getService().setIndividualResourcePermissions(
+			name, primKey, roleId, actionIds);
+	}
+
+	/**
+	 * Replaces the actions each role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 */
+	public static void setIndividualResourcePermissions(
+			String name, String primKey, Map<Long, String[]> roleIdsToActionIds)
+		throws PortalException {
+
+		getService().setIndividualResourcePermissions(
+			name, primKey, roleIdsToActionIds);
+	}
+
 	public static ResourcePermissionService getService() {
 		return _service;
 	}
@@ -211,4 +337,4 @@ public class ResourcePermissionServiceUtil {
 	private static volatile ResourcePermissionService _service;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1738667227
+// LIFERAY-SERVICE-BUILDER-HASH:-2078229014

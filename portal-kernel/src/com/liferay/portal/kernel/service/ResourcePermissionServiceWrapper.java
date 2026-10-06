@@ -73,6 +73,43 @@ public class ResourcePermissionServiceWrapper
 	}
 
 	/**
+	 * Grants the role permission to perform the action on every resource of
+	 * the type within the scope. Existing actions are retained.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * <p>
+	 * If a company scope permission is granted to resources that the role
+	 * already had group scope permissions to, the group scope permissions are
+	 * deleted. Likewise, if a group scope permission is granted to resources
+	 * that the role already had company scope permissions to, the company scope
+	 * permissions are deleted. Be aware that this latter behavior can result in
+	 * an overall reduction in permissions for the role.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void addRoleResourcePermission(
+			long roleId, java.lang.String name, int scope, long targetGroupId,
+			java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionService.addRoleResourcePermission(
+			roleId, name, scope, targetGroupId, actionId);
+	}
+
+	/**
 	 * Returns the OSGi service identifier.
 	 *
 	 * @return the OSGi service identifier
@@ -134,6 +171,56 @@ public class ResourcePermissionServiceWrapper
 
 		_resourcePermissionService.removeResourcePermissions(
 			groupId, companyId, name, scope, roleId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on every resource of
+	 * the type within the scope.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void removeRoleResourcePermission(
+			long roleId, java.lang.String name, int scope, long targetGroupId,
+			java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionService.removeRoleResourcePermission(
+			roleId, name, scope, targetGroupId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on resources of the
+	 * type in every group of the scope. For example, this method could be used
+	 * to revoke the role's group scope permissions to edit blog posts in all
+	 * groups.
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void removeRoleResourcePermissions(
+			long roleId, java.lang.String name, int scope,
+			java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionService.removeRoleResourcePermissions(
+			roleId, name, scope, actionId);
 	}
 
 	/**
@@ -205,6 +292,54 @@ public class ResourcePermissionServiceWrapper
 			groupId, companyId, name, primKey, roleIdsToActionIds);
 	}
 
+	/**
+	 * Replaces the actions the role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleId the primary key of the role
+	 * @param actionIds the action IDs of the actions
+	 */
+	@Override
+	public void setIndividualResourcePermissions(
+			java.lang.String name, java.lang.String primKey, long roleId,
+			java.lang.String[] actionIds)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionService.setIndividualResourcePermissions(
+			name, primKey, roleId, actionIds);
+	}
+
+	/**
+	 * Replaces the actions each role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 */
+	@Override
+	public void setIndividualResourcePermissions(
+			java.lang.String name, java.lang.String primKey,
+			java.util.Map<java.lang.Long, java.lang.String[]>
+				roleIdsToActionIds)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionService.setIndividualResourcePermissions(
+			name, primKey, roleIdsToActionIds);
+	}
+
 	@Override
 	public ResourcePermissionService getWrappedService() {
 		return _resourcePermissionService;
@@ -220,4 +355,4 @@ public class ResourcePermissionServiceWrapper
 	private ResourcePermissionService _resourcePermissionService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:993922002
+// LIFERAY-SERVICE-BUILDER-HASH:-640728201
