@@ -1750,7 +1750,6 @@ public class LayoutSetPrototypePropagationTest
 			TestPropsValues.getCompanyId(), RoleConstants.POWER_USER);
 
 		ResourcePermissionServiceUtil.setIndividualResourcePermissions(
-			prototypeLayout.getGroupId(), prototypeLayout.getCompanyId(),
 			Layout.class.getName(),
 			String.valueOf(prototypeLayout.getPrimaryKey()), role.getRoleId(),
 			new String[] {ActionKeys.CUSTOMIZE});

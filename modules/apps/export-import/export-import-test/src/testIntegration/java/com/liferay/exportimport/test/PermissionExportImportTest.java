@@ -294,7 +294,6 @@ public class PermissionExportImportTest {
 		throws Exception {
 
 		ResourcePermissionServiceUtil.setIndividualResourcePermissions(
-			exportGroup.getGroupId(), TestPropsValues.getCompanyId(),
 			_PORTLET_ID, exportResourcePrimKey,
 			HashMapBuilder.put(
 				role.getRoleId(), actionIds
