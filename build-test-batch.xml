@@ -9797,6 +9797,19 @@ junit.jvm.override.version=21</echo>
 		</antcall>
 	</target>
 
+	<target name="modules-unit-jdk25_zulu">
+		<get-java-jdk-home type="zulu" version="25" />
+
+		<echo append="true" file="build.${user.name}.properties">
+junit.jvm.override=${java.jdk.home}/bin/java
+junit.jvm.override.version=25</echo>
+
+		<antcall target="modules-unit">
+			<param name="junit.jvm.override" value="${java.jdk.home}/bin/java" />
+			<param name="junit.jvm.override.version" value="25" />
+		</antcall>
+	</target>
+
 	<target name="modules-unit-opensearch2">
 		<antcall target="modules-unit">
 			<param name="run.opensearch2.unit.tests" value="true" />
@@ -11080,6 +11093,19 @@ junit.jvm.override.version=21</echo>
 		<antcall target="unit">
 			<param name="junit.jvm.override" value="${java.jdk.home}/bin/java" />
 			<param name="junit.jvm.override.version" value="21" />
+		</antcall>
+	</target>
+
+	<target name="unit-jdk25_zulu">
+		<get-java-jdk-home type="zulu" version="25" />
+
+		<echo append="true" file="build.${user.name}.properties">
+junit.jvm.override=${java.jdk.home}/bin/java
+junit.jvm.override.version=25</echo>
+
+		<antcall target="unit">
+			<param name="junit.jvm.override" value="${java.jdk.home}/bin/java" />
+			<param name="junit.jvm.override.version" value="25" />
 		</antcall>
 	</target>
 
