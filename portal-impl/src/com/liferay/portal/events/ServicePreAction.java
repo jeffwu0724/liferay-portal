@@ -616,7 +616,7 @@ public class ServicePreAction extends Action {
 		LayoutComposite defaultLayoutComposite =
 			_getDefaultVirtualHostLayoutComposite(httpServletRequest);
 
-		defaultLayoutComposite = _getViewableLayoutComposite(
+		defaultLayoutComposite = _filterViewableLayoutComposite(
 			httpServletRequest, user, permissionChecker,
 			defaultLayoutComposite.getLayout(),
 			defaultLayoutComposite.getLayouts(), ignoreHiddenLayouts);
@@ -624,6 +624,9 @@ public class ServicePreAction extends Action {
 		if (ListUtil.isNotEmpty(defaultLayoutComposite.getLayouts())) {
 			return defaultLayoutComposite;
 		}
+
+		boolean layoutPermissionDenied =
+			defaultLayoutComposite.isLayoutPermissionDenied();
 
 		if (signedIn) {
 			defaultLayoutComposite = _getDefaultUserPersonalSiteLayoutComposite(
@@ -634,7 +637,7 @@ public class ServicePreAction extends Action {
 					user);
 			}
 
-			defaultLayoutComposite = _getViewableLayoutComposite(
+			defaultLayoutComposite = _filterViewableLayoutComposite(
 				httpServletRequest, user, permissionChecker,
 				defaultLayoutComposite.getLayout(),
 				defaultLayoutComposite.getLayouts(), ignoreHiddenLayouts);
@@ -642,14 +645,31 @@ public class ServicePreAction extends Action {
 			if (ListUtil.isNotEmpty(defaultLayoutComposite.getLayouts())) {
 				return defaultLayoutComposite;
 			}
+
+			if (defaultLayoutComposite.isLayoutPermissionDenied()) {
+				layoutPermissionDenied = true;
+			}
 		}
 
 		defaultLayoutComposite = _getGuestSiteLayoutComposite(user);
 
-		return _getViewableLayoutComposite(
+		defaultLayoutComposite = _filterViewableLayoutComposite(
 			httpServletRequest, user, permissionChecker,
 			defaultLayoutComposite.getLayout(),
 			defaultLayoutComposite.getLayouts(), ignoreHiddenLayouts);
+
+		if (defaultLayoutComposite.isLayoutPermissionDenied()) {
+			layoutPermissionDenied = true;
+		}
+
+		if (ListUtil.isEmpty(defaultLayoutComposite.getLayouts()) &&
+			layoutPermissionDenied) {
+
+			SessionErrors.add(
+				httpServletRequest, LayoutPermissionException.class.getName());
+		}
+
+		return defaultLayoutComposite;
 	}
 
 	private LayoutComposite _getDefaultVirtualHostLayoutComposite(
