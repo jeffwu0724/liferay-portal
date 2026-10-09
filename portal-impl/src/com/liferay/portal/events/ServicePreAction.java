@@ -203,8 +203,16 @@ public class ServicePreAction extends Action {
 	protected class LayoutComposite {
 
 		protected LayoutComposite(Layout layout, List<Layout> layouts) {
+			this(layout, layouts, false);
+		}
+
+		protected LayoutComposite(
+			Layout layout, List<Layout> layouts,
+			boolean layoutPermissionDenied) {
+
 			_layout = layout;
 			_layouts = layouts;
+			_layoutPermissionDenied = layoutPermissionDenied;
 		}
 
 		protected Layout getLayout() {
@@ -215,7 +223,12 @@ public class ServicePreAction extends Action {
 			return _layouts;
 		}
 
+		protected boolean isLayoutPermissionDenied() {
+			return _layoutPermissionDenied;
+		}
+
 		private final Layout _layout;
+		private final boolean _layoutPermissionDenied;
 		private final List<Layout> _layouts;
 
 	}
@@ -460,6 +473,57 @@ public class ServicePreAction extends Action {
 			userGroup.getGroupId(), false, new ServiceContext());
 	}
 
+	private LayoutComposite _filterViewableLayoutComposite(
+			HttpServletRequest httpServletRequest, User user,
+			PermissionChecker permissionChecker, Layout layout,
+			List<Layout> layouts, boolean ignoreHiddenLayouts)
+		throws Exception {
+
+		if (ListUtil.isEmpty(layouts)) {
+			return new LayoutComposite(layout, layouts);
+		}
+
+		boolean hasViewLayoutPermission = false;
+
+		if (layout.isPublished() &&
+			_hasAccessPermission(permissionChecker, layout, false)) {
+
+			hasViewLayoutPermission = true;
+		}
+
+		List<Layout> accessibleLayouts = new ArrayList<>();
+
+		for (Layout curLayout : layouts) {
+			if ((ignoreHiddenLayouts || !curLayout.isHidden()) &&
+				curLayout.isPublished() &&
+				_hasAccessPermission(permissionChecker, curLayout, false)) {
+
+				if (accessibleLayouts.isEmpty() && !hasViewLayoutPermission) {
+					layout = curLayout;
+				}
+
+				accessibleLayouts.add(curLayout);
+			}
+		}
+
+		if (!accessibleLayouts.isEmpty()) {
+			return new LayoutComposite(layout, accessibleLayouts);
+		}
+
+		if (_isLoginRequest(httpServletRequest) || hasViewLayoutPermission) {
+			return new LayoutComposite(layout, null);
+		}
+
+		if (user.isGuestUser() &&
+			AuthLoginGroupSettingsUtil.isPromptEnabled(layout.getGroupId())) {
+
+			throw new PrincipalException.MustBeAuthenticated(
+				String.valueOf(user.getUserId()));
+		}
+
+		return new LayoutComposite(layout, null, true);
+	}
+
 	private LayoutComposite _getDefaultUserPersonalSiteLayoutComposite(
 		User user) {
 
@@ -687,57 +751,16 @@ public class ServicePreAction extends Action {
 			List<Layout> layouts, boolean ignoreHiddenLayouts)
 		throws Exception {
 
-		if (ListUtil.isEmpty(layouts)) {
-			return new LayoutComposite(layout, layouts);
+		LayoutComposite layoutComposite = _filterViewableLayoutComposite(
+			httpServletRequest, user, permissionChecker, layout, layouts,
+			ignoreHiddenLayouts);
+
+		if (layoutComposite.isLayoutPermissionDenied()) {
+			SessionErrors.add(
+				httpServletRequest, LayoutPermissionException.class.getName());
 		}
 
-		boolean hasViewLayoutPermission = false;
-
-		if (layout.isPublished() &&
-			_hasAccessPermission(permissionChecker, layout, false)) {
-
-			hasViewLayoutPermission = true;
-		}
-
-		List<Layout> accessibleLayouts = new ArrayList<>();
-
-		for (Layout curLayout : layouts) {
-			if ((ignoreHiddenLayouts || !curLayout.isHidden()) &&
-				curLayout.isPublished() &&
-				_hasAccessPermission(permissionChecker, curLayout, false)) {
-
-				if (accessibleLayouts.isEmpty() && !hasViewLayoutPermission) {
-					layout = curLayout;
-				}
-
-				accessibleLayouts.add(curLayout);
-			}
-		}
-
-		if (accessibleLayouts.isEmpty()) {
-			layouts = null;
-
-			if (!_isLoginRequest(httpServletRequest) &&
-				!hasViewLayoutPermission) {
-
-				if (user.isGuestUser() &&
-					AuthLoginGroupSettingsUtil.isPromptEnabled(
-						layout.getGroupId())) {
-
-					throw new PrincipalException.MustBeAuthenticated(
-						String.valueOf(user.getUserId()));
-				}
-
-				SessionErrors.add(
-					httpServletRequest,
-					LayoutPermissionException.class.getName());
-			}
-		}
-		else {
-			layouts = accessibleLayouts;
-		}
-
-		return new LayoutComposite(layout, layouts);
+		return layoutComposite;
 	}
 
 	private boolean _hasAccessPermission(
