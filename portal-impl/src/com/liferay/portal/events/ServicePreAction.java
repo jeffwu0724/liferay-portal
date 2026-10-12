@@ -203,16 +203,17 @@ public class ServicePreAction extends Action {
 	protected class LayoutComposite {
 
 		protected LayoutComposite(Layout layout, List<Layout> layouts) {
-			this(layout, layouts, false);
+			this(layout, layouts, false, false);
 		}
 
 		protected LayoutComposite(
-			Layout layout, List<Layout> layouts,
-			boolean layoutPermissionDenied) {
+			Layout layout, List<Layout> layouts, boolean layoutPermissionDenied,
+			boolean mustBeAuthenticated) {
 
 			_layout = layout;
 			_layouts = layouts;
 			_layoutPermissionDenied = layoutPermissionDenied;
+			_mustBeAuthenticated = mustBeAuthenticated;
 		}
 
 		protected Layout getLayout() {
@@ -227,9 +228,14 @@ public class ServicePreAction extends Action {
 			return _layoutPermissionDenied;
 		}
 
+		protected boolean isMustBeAuthenticated() {
+			return _mustBeAuthenticated;
+		}
+
 		private final Layout _layout;
 		private final boolean _layoutPermissionDenied;
 		private final List<Layout> _layouts;
+		private final boolean _mustBeAuthenticated;
 
 	}
 
@@ -514,14 +520,10 @@ public class ServicePreAction extends Action {
 			return new LayoutComposite(layout, null);
 		}
 
-		if (user.isGuestUser() &&
-			AuthLoginGroupSettingsUtil.isPromptEnabled(layout.getGroupId())) {
-
-			throw new PrincipalException.MustBeAuthenticated(
-				String.valueOf(user.getUserId()));
-		}
-
-		return new LayoutComposite(layout, null, true);
+		return new LayoutComposite(
+			layout, null, true,
+			user.isGuestUser() &&
+			AuthLoginGroupSettingsUtil.isPromptEnabled(layout.getGroupId()));
 	}
 
 	private LayoutComposite _getDefaultUserPersonalSiteLayoutComposite(
@@ -627,6 +629,8 @@ public class ServicePreAction extends Action {
 
 		boolean layoutPermissionDenied =
 			defaultLayoutComposite.isLayoutPermissionDenied();
+		boolean mustBeAuthenticated =
+			defaultLayoutComposite.isMustBeAuthenticated();
 
 		if (signedIn) {
 			defaultLayoutComposite = _getDefaultUserPersonalSiteLayoutComposite(
@@ -649,6 +653,10 @@ public class ServicePreAction extends Action {
 			if (defaultLayoutComposite.isLayoutPermissionDenied()) {
 				layoutPermissionDenied = true;
 			}
+
+			if (defaultLayoutComposite.isMustBeAuthenticated()) {
+				mustBeAuthenticated = true;
+			}
 		}
 
 		defaultLayoutComposite = _getGuestSiteLayoutComposite(user);
@@ -658,13 +666,24 @@ public class ServicePreAction extends Action {
 			defaultLayoutComposite.getLayout(),
 			defaultLayoutComposite.getLayouts(), ignoreHiddenLayouts);
 
+		if (ListUtil.isNotEmpty(defaultLayoutComposite.getLayouts())) {
+			return defaultLayoutComposite;
+		}
+
 		if (defaultLayoutComposite.isLayoutPermissionDenied()) {
 			layoutPermissionDenied = true;
 		}
 
-		if (ListUtil.isEmpty(defaultLayoutComposite.getLayouts()) &&
-			layoutPermissionDenied) {
+		if (defaultLayoutComposite.isMustBeAuthenticated()) {
+			mustBeAuthenticated = true;
+		}
 
+		if (mustBeAuthenticated) {
+			throw new PrincipalException.MustBeAuthenticated(
+				String.valueOf(user.getUserId()));
+		}
+
+		if (layoutPermissionDenied) {
 			SessionErrors.add(
 				httpServletRequest, LayoutPermissionException.class.getName());
 		}
@@ -774,6 +793,11 @@ public class ServicePreAction extends Action {
 		LayoutComposite layoutComposite = _filterViewableLayoutComposite(
 			httpServletRequest, user, permissionChecker, layout, layouts,
 			ignoreHiddenLayouts);
+
+		if (layoutComposite.isMustBeAuthenticated()) {
+			throw new PrincipalException.MustBeAuthenticated(
+				String.valueOf(user.getUserId()));
+		}
 
 		if (layoutComposite.isLayoutPermissionDenied()) {
 			SessionErrors.add(
