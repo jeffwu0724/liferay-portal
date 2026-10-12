@@ -9,6 +9,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
 import com.liferay.portal.events.ServicePreAction;
 import com.liferay.portal.kernel.cookies.constants.CookiesConstants;
 import com.liferay.portal.kernel.events.ActionException;
@@ -44,6 +45,7 @@ import com.liferay.portal.kernel.test.util.PropsValuesTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.Portal;
@@ -468,6 +470,46 @@ public class ServicePreActionTest {
 			SessionErrors.contains(
 				_mockHttpServletRequest,
 				LayoutPermissionException.class.getName()));
+	}
+
+	@Test
+	@TestInfo("LPD-107079")
+	public void testInitThemeDisplayWhenVirtualHostLayoutsAreNotViewableAndPromptEnabled()
+		throws Exception {
+
+		Role role = _roleLocalService.getRole(
+			_company.getCompanyId(), RoleConstants.GUEST);
+
+		for (Layout layout :
+				_layoutLocalService.getLayouts(_group.getGroupId(), false)) {
+
+			_resourcePermissionLocalService.removeResourcePermission(
+				layout.getCompanyId(), Layout.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(layout.getPlid()), role.getRoleId(),
+				ActionKeys.VIEW);
+		}
+
+		_mockHttpServletRequest.setRequestURI(
+			_portal.getPathMain() + "/portal/captcha/get_image");
+
+		try (ConfigurationTemporarySwapper configurationTemporarySwapper =
+				new ConfigurationTemporarySwapper(
+					"com.liferay.login.web.internal.configuration." +
+						"AuthLoginConfiguration",
+					HashMapDictionaryBuilder.<String, Object>put(
+						"promptEnabled", true
+					).build())) {
+
+			long plid = _getThemeDisplayPlid(true, false);
+
+			Layout layout = _getLayout(
+				ReflectionTestUtil.invoke(
+					_servicePreAction, "_getGuestSiteLayoutComposite",
+					new Class<?>[] {User.class}, _user));
+
+			Assert.assertEquals(layout.getPlid(), plid);
+		}
 	}
 
 	private Layout _getLayout(Object layoutComposite) {
