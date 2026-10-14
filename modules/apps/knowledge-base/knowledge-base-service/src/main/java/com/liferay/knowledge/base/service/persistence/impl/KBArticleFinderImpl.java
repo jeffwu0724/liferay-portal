@@ -187,6 +187,10 @@ public class KBArticleFinderImpl
 	}
 
 	protected String replaceWorkflowStatus(String sql, int[] status) {
+		if (status.length == 0) {
+			return StringUtil.replace(sql, "[$WORKFLOW_STATUS$]", "NULL");
+		}
+
 		StringBundler sb = new StringBundler(status.length);
 
 		for (int i = 0; i < status.length; i++) {

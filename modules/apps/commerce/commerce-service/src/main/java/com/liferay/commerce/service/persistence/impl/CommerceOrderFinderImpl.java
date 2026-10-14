@@ -168,6 +168,10 @@ public class CommerceOrderFinderImpl
 	}
 
 	protected String replaceOrderStatus(String sql, int[] orderStatuses) {
+		if (orderStatuses.length == 0) {
+			return StringUtil.replace(sql, "[$ORDER_STATUS$]", "NULL");
+		}
+
 		StringBundler sb = new StringBundler(orderStatuses.length);
 
 		for (int i = 0; i < orderStatuses.length; i++) {
