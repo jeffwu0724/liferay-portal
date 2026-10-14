@@ -77,10 +77,45 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #addRoleResourcePermission(long, String, int, long, String)}
 	 */
+	@Deprecated
 	public void addResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
+		throws PortalException;
+
+	/**
+	 * Grants the role permission to perform the action on every resource of
+	 * the type within the scope. Existing actions are retained.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * <p>
+	 * If a company scope permission is granted to resources that the role
+	 * already had group scope permissions to, the group scope permissions are
+	 * deleted. Likewise, if a group scope permission is granted to resources
+	 * that the role already had company scope permissions to, the company scope
+	 * permissions are deleted. Be aware that this latter behavior can result in
+	 * an overall reduction in permissions for the role.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	public void addRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
 		throws PortalException;
 
 	/**
@@ -109,7 +144,11 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermission(long, String, int, long,
+	 String)}
 	 */
+	@Deprecated
 	public void removeResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
@@ -128,10 +167,52 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param scope the scope
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #removeRoleResourcePermissions(long, String, int, String)}
 	 */
+	@Deprecated
 	public void removeResourcePermissions(
 			long groupId, long companyId, String name, int scope, long roleId,
 			String actionId)
+		throws PortalException;
+
+	/**
+	 * Revokes the role's permission to perform the action on every resource of
+	 * the type within the scope.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	public void removeRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException;
+
+	/**
+	 * Revokes the role's permission to perform the action on resources of the
+	 * type in every group of the scope. For example, this method could be used
+	 * to revoke the role's group scope permissions to edit blog posts in all
+	 * groups.
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param actionId the action ID
+	 */
+	public void removeRoleResourcePermissions(
+			long roleId, String name, int scope, String actionId)
 		throws PortalException;
 
 	/**
@@ -157,7 +238,11 @@ public interface ResourcePermissionService extends BaseService {
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionIds the action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, long,
+	 String[])}
 	 */
+	@Deprecated
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			long roleId, String[] actionIds)
@@ -185,11 +270,49 @@ public interface ResourcePermissionService extends BaseService {
 	 portlet ID
 	 * @param primKey the primary key
 	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 #setIndividualResourcePermissions(String, String, Map)}
 	 */
+	@Deprecated
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			Map<Long, String[]> roleIdsToActionIds)
 		throws PortalException;
 
+	/**
+	 * Replaces the actions the role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleId the primary key of the role
+	 * @param actionIds the action IDs of the actions
+	 */
+	public void setIndividualResourcePermissions(
+			String name, String primKey, long roleId, String[] actionIds)
+		throws PortalException;
+
+	/**
+	 * Replaces the actions each role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 */
+	public void setIndividualResourcePermissions(
+			String name, String primKey, Map<Long, String[]> roleIdsToActionIds)
+		throws PortalException;
+
 }
-// LIFERAY-SERVICE-BUILDER-HASH:728193349
+// LIFERAY-SERVICE-BUILDER-HASH:560767054

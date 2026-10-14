@@ -419,9 +419,9 @@ public class UserGroupResourceImpl
 		}
 
 		return ResourcePermissionUtil.setResourcePermissions(
-			serviceBuilderUserGroup, serviceBuilderUserGroup.getCompanyId(),
-			userGroup.getPermissions(), _resourcePermissionService,
-			_roleService, _roleTypeContributorProvider);
+			serviceBuilderUserGroup, userGroup.getPermissions(),
+			_resourcePermissionService, _roleService,
+			_roleTypeContributorProvider);
 	}
 
 	private static final EntityModel _entityModel = new UserGroupEntityModel();

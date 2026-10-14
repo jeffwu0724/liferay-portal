@@ -80,6 +80,44 @@ public class ResourcePermissionServiceHttp {
 		}
 	}
 
+	public static void addRoleResourcePermission(
+			HttpPrincipal httpPrincipal, long roleId, String name, int scope,
+			long targetGroupId, String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ResourcePermissionServiceUtil.class,
+				"addRoleResourcePermission",
+				_addRoleResourcePermissionParameterTypes1);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, roleId, name, scope, targetGroupId, actionId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static void removeResourcePermission(
 			HttpPrincipal httpPrincipal, long groupId, long companyId,
 			String name, int scope, String primKey, long roleId,
@@ -89,7 +127,7 @@ public class ResourcePermissionServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				ResourcePermissionServiceUtil.class, "removeResourcePermission",
-				_removeResourcePermissionParameterTypes1);
+				_removeResourcePermissionParameterTypes2);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, companyId, name, scope, primKey, roleId,
@@ -128,10 +166,86 @@ public class ResourcePermissionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ResourcePermissionServiceUtil.class,
 				"removeResourcePermissions",
-				_removeResourcePermissionsParameterTypes2);
+				_removeResourcePermissionsParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, companyId, name, scope, roleId, actionId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void removeRoleResourcePermission(
+			HttpPrincipal httpPrincipal, long roleId, String name, int scope,
+			long targetGroupId, String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ResourcePermissionServiceUtil.class,
+				"removeRoleResourcePermission",
+				_removeRoleResourcePermissionParameterTypes4);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, roleId, name, scope, targetGroupId, actionId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void removeRoleResourcePermissions(
+			HttpPrincipal httpPrincipal, long roleId, String name, int scope,
+			String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ResourcePermissionServiceUtil.class,
+				"removeRoleResourcePermissions",
+				_removeRoleResourcePermissionsParameterTypes5);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, roleId, name, scope, actionId);
 
 			try {
 				TunnelUtil.invoke(httpPrincipal, methodHandler);
@@ -166,7 +280,7 @@ public class ResourcePermissionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ResourcePermissionServiceUtil.class,
 				"setIndividualResourcePermissions",
-				_setIndividualResourcePermissionsParameterTypes3);
+				_setIndividualResourcePermissionsParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, companyId, name, primKey, roleId,
@@ -206,11 +320,87 @@ public class ResourcePermissionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ResourcePermissionServiceUtil.class,
 				"setIndividualResourcePermissions",
-				_setIndividualResourcePermissionsParameterTypes4);
+				_setIndividualResourcePermissionsParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, groupId, companyId, name, primKey,
 				roleIdsToActionIds);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void setIndividualResourcePermissions(
+			HttpPrincipal httpPrincipal, String name, String primKey,
+			long roleId, String[] actionIds)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ResourcePermissionServiceUtil.class,
+				"setIndividualResourcePermissions",
+				_setIndividualResourcePermissionsParameterTypes8);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, name, primKey, roleId, actionIds);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static void setIndividualResourcePermissions(
+			HttpPrincipal httpPrincipal, String name, String primKey,
+			java.util.Map<Long, String[]> roleIdsToActionIds)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ResourcePermissionServiceUtil.class,
+				"setIndividualResourcePermissions",
+				_setIndividualResourcePermissionsParameterTypes9);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, name, primKey, roleIdsToActionIds);
 
 			try {
 				TunnelUtil.invoke(httpPrincipal, methodHandler);
@@ -244,26 +434,46 @@ public class ResourcePermissionServiceHttp {
 			long.class, long.class, String.class, int.class, String.class,
 			long.class, String.class
 		};
-	private static final Class<?>[] _removeResourcePermissionParameterTypes1 =
+	private static final Class<?>[] _addRoleResourcePermissionParameterTypes1 =
+		new Class[] {
+			long.class, String.class, int.class, long.class, String.class
+		};
+	private static final Class<?>[] _removeResourcePermissionParameterTypes2 =
 		new Class[] {
 			long.class, long.class, String.class, int.class, String.class,
 			long.class, String.class
 		};
-	private static final Class<?>[] _removeResourcePermissionsParameterTypes2 =
+	private static final Class<?>[] _removeResourcePermissionsParameterTypes3 =
 		new Class[] {
 			long.class, long.class, String.class, int.class, long.class,
 			String.class
 		};
 	private static final Class<?>[]
-		_setIndividualResourcePermissionsParameterTypes3 = new Class[] {
+		_removeRoleResourcePermissionParameterTypes4 = new Class[] {
+			long.class, String.class, int.class, long.class, String.class
+		};
+	private static final Class<?>[]
+		_removeRoleResourcePermissionsParameterTypes5 = new Class[] {
+			long.class, String.class, int.class, String.class
+		};
+	private static final Class<?>[]
+		_setIndividualResourcePermissionsParameterTypes6 = new Class[] {
 			long.class, long.class, String.class, String.class, long.class,
 			String[].class
 		};
 	private static final Class<?>[]
-		_setIndividualResourcePermissionsParameterTypes4 = new Class[] {
+		_setIndividualResourcePermissionsParameterTypes7 = new Class[] {
 			long.class, long.class, String.class, String.class,
 			java.util.Map.class
 		};
+	private static final Class<?>[]
+		_setIndividualResourcePermissionsParameterTypes8 = new Class[] {
+			String.class, String.class, long.class, String[].class
+		};
+	private static final Class<?>[]
+		_setIndividualResourcePermissionsParameterTypes9 = new Class[] {
+			String.class, String.class, java.util.Map.class
+		};
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:29309143
+// LIFERAY-SERVICE-BUILDER-HASH:-292842548

@@ -532,17 +532,18 @@ public class RoleResourceImpl
 				continue;
 			}
 
-			String primKey = rolePermission.getPrimaryKey();
+			long targetGroupId = 0;
 
-			if (scope == ResourceConstants.SCOPE_COMPANY) {
-				primKey = String.valueOf(contextCompany.getCompanyId());
+			if (scope == ResourceConstants.SCOPE_GROUP) {
+				targetGroupId = GetterUtil.getLong(
+					rolePermission.getPrimaryKey());
 			}
 
 			for (String actionId : rolePermission.getActionIds()) {
-				_resourcePermissionService.addResourcePermission(
-					contextUser.getGroupId(), contextCompany.getCompanyId(),
-					rolePermission.getResourceName(), scope, primKey,
-					serviceBuilderRole.getRoleId(), actionId);
+				_resourcePermissionService.addRoleResourcePermission(
+					serviceBuilderRole.getRoleId(),
+					rolePermission.getResourceName(), scope, targetGroupId,
+					actionId);
 			}
 		}
 	}
@@ -630,8 +631,8 @@ public class RoleResourceImpl
 		throws Exception {
 
 		return ResourcePermissionUtil.setResourcePermissions(
-			serviceBuilderRole, serviceBuilderRole.getCompanyId(),
-			role.getPermissions(), _resourcePermissionService, _roleService,
+			serviceBuilderRole, role.getPermissions(),
+			_resourcePermissionService, _roleService,
 			_roleTypeContributorProvider);
 	}
 

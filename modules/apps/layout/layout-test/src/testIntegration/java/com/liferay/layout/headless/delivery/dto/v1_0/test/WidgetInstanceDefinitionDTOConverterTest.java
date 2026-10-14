@@ -189,8 +189,7 @@ public class WidgetInstanceDefinitionDTOConverterTest {
 			layout.getPlid(), testPortletId);
 
 		_resourcePermissionService.setIndividualResourcePermissions(
-			layout.getGroupId(), layout.getCompanyId(), _testPortletName,
-			resourcePrimKey, roleIdsToActionIds);
+			_testPortletName, resourcePrimKey, roleIdsToActionIds);
 
 		WidgetInstance widgetInstance = ReflectionTestUtil.invoke(
 			_getWidgetInstanceMapper(), "getWidgetInstance",

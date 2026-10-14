@@ -5,11 +5,25 @@
 
 package com.liferay.portal.service.impl;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.GroupedModel;
+import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.model.PortletConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.PermissionService;
+import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.service.persistence.GroupPersistence;
+import com.liferay.portal.kernel.service.persistence.LayoutPersistence;
+import com.liferay.portal.kernel.service.persistence.RolePersistence;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.base.ResourcePermissionServiceBaseImpl;
 
 import java.util.Map;
@@ -64,18 +78,58 @@ public class ResourcePermissionServiceImpl
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #addRoleResourcePermission(long, String, int, long, String)}
 	 */
+	@Deprecated
 	@Override
 	public void addResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
 		throws PortalException {
 
-		_permissionService.checkPermission(
-			groupId, Role.class.getName(), roleId);
+		addRoleResourcePermission(
+			roleId, name, scope, _getTargetGroupId(scope, primKey), actionId);
+	}
+
+	/**
+	 * Grants the role permission to perform the action on every resource of
+	 * the type within the scope. Existing actions are retained.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * <p>
+	 * If a company scope permission is granted to resources that the role
+	 * already had group scope permissions to, the group scope permissions are
+	 * deleted. Likewise, if a group scope permission is granted to resources
+	 * that the role already had company scope permissions to, the company scope
+	 * permissions are deleted. Be aware that this latter behavior can result in
+	 * an overall reduction in permissions for the role.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 *        at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void addRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException {
+
+		Role role = _getRole(roleId);
 
 		resourcePermissionLocalService.addResourcePermission(
-			companyId, name, scope, primKey, roleId, actionId);
+			role.getCompanyId(), name, scope,
+			_getPrimKey(role, scope, targetGroupId), roleId, actionId);
 	}
 
 	/**
@@ -97,18 +151,19 @@ public class ResourcePermissionServiceImpl
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #removeRoleResourcePermission(long, String, int, long,
+	 *             String)}
 	 */
+	@Deprecated
 	@Override
 	public void removeResourcePermission(
 			long groupId, long companyId, String name, int scope,
 			String primKey, long roleId, String actionId)
 		throws PortalException {
 
-		_permissionService.checkPermission(
-			groupId, Role.class.getName(), roleId);
-
-		resourcePermissionLocalService.removeResourcePermission(
-			companyId, name, scope, primKey, roleId, actionId);
+		removeRoleResourcePermission(
+			roleId, name, scope, _getTargetGroupId(scope, primKey), actionId);
 	}
 
 	/**
@@ -124,18 +179,73 @@ public class ResourcePermissionServiceImpl
 	 * @param scope the scope
 	 * @param roleId the primary key of the role
 	 * @param actionId the action ID
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #removeRoleResourcePermissions(long, String, int, String)}
 	 */
+	@Deprecated
 	@Override
 	public void removeResourcePermissions(
 			long groupId, long companyId, String name, int scope, long roleId,
 			String actionId)
 		throws PortalException {
 
-		_permissionService.checkPermission(
-			groupId, Role.class.getName(), roleId);
+		removeRoleResourcePermissions(roleId, name, scope, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on every resource of
+	 * the type within the scope.
+	 *
+	 * <p>
+	 * Only the company, group, and group template scopes are supported. Use
+	 * {@link #setIndividualResourcePermissions(String, String, Map)} for a
+	 * single resource.
+	 * </p>
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param targetGroupId the primary key of the group the permission covers
+	 *        at the group scope, or <code>0</code> at any other scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void removeRoleResourcePermission(
+			long roleId, String name, int scope, long targetGroupId,
+			String actionId)
+		throws PortalException {
+
+		Role role = _getRole(roleId);
+
+		resourcePermissionLocalService.removeResourcePermission(
+			role.getCompanyId(), name, scope,
+			_getPrimKey(role, scope, targetGroupId), roleId, actionId);
+	}
+
+	/**
+	 * Revokes the role's permission to perform the action on resources of the
+	 * type in every group of the scope. For example, this method could be used
+	 * to revoke the role's group scope permissions to edit blog posts in all
+	 * groups.
+	 *
+	 * @param roleId the primary key of the role
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param scope the company, group, or group template scope
+	 * @param actionId the action ID
+	 */
+	@Override
+	public void removeRoleResourcePermissions(
+			long roleId, String name, int scope, String actionId)
+		throws PortalException {
+
+		Role role = _getRole(roleId);
+
+		_validateScope(scope);
 
 		resourcePermissionLocalService.removeResourcePermissions(
-			companyId, name, scope, roleId, actionId);
+			role.getCompanyId(), name, scope, roleId, actionId);
 	}
 
 	/**
@@ -161,18 +271,18 @@ public class ResourcePermissionServiceImpl
 	 * @param primKey the primary key
 	 * @param roleId the primary key of the role
 	 * @param actionIds the action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #setIndividualResourcePermissions(String, String, long,
+	 *             String[])}
 	 */
+	@Deprecated
 	@Override
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			long roleId, String[] actionIds)
 		throws PortalException {
 
-		_permissionService.checkPermission(groupId, name, primKey);
-
-		resourcePermissionLocalService.setResourcePermissions(
-			companyId, name, ResourceConstants.SCOPE_INDIVIDUAL, primKey,
-			roleId, actionIds);
+		setIndividualResourcePermissions(name, primKey, roleId, actionIds);
 	}
 
 	/**
@@ -197,21 +307,181 @@ public class ResourcePermissionServiceImpl
 	 *        portlet ID
 	 * @param primKey the primary key
 	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link
+	 *             #setIndividualResourcePermissions(String, String, Map)}
 	 */
+	@Deprecated
 	@Override
 	public void setIndividualResourcePermissions(
 			long groupId, long companyId, String name, String primKey,
 			Map<Long, String[]> roleIdsToActionIds)
 		throws PortalException {
 
-		_permissionService.checkPermission(groupId, name, primKey);
+		setIndividualResourcePermissions(name, primKey, roleIdsToActionIds);
+	}
+
+	/**
+	 * Replaces the actions the role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleId the primary key of the role
+	 * @param actionIds the action IDs of the actions
+	 */
+	@Override
+	public void setIndividualResourcePermissions(
+			String name, String primKey, long roleId, String[] actionIds)
+		throws PortalException {
+
+		_permissionService.checkPermission(
+			_getGroupId(name, primKey), name, primKey);
 
 		resourcePermissionLocalService.setResourcePermissions(
-			companyId, name, ResourceConstants.SCOPE_INDIVIDUAL, primKey,
-			roleIdsToActionIds);
+			CompanyThreadLocal.getCompanyId(), name,
+			ResourceConstants.SCOPE_INDIVIDUAL, primKey, roleId, actionIds);
 	}
+
+	/**
+	 * Replaces the actions each role can perform on the single resource.
+	 *
+	 * <p>
+	 * The permission check runs against the group the resource belongs to,
+	 * which is derived from the resource and never supplied by the caller.
+	 * </p>
+	 *
+	 * @param name the resource's name, which can be either a class name or a
+	 *        portlet ID
+	 * @param primKey the primary key of the resource
+	 * @param roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 */
+	@Override
+	public void setIndividualResourcePermissions(
+			String name, String primKey, Map<Long, String[]> roleIdsToActionIds)
+		throws PortalException {
+
+		_permissionService.checkPermission(
+			_getGroupId(name, primKey), name, primKey);
+
+		resourcePermissionLocalService.setResourcePermissions(
+			CompanyThreadLocal.getCompanyId(), name,
+			ResourceConstants.SCOPE_INDIVIDUAL, primKey, roleIdsToActionIds);
+	}
+
+	private long _getGroupId(String name, String primKey) {
+		String plid = StringUtil.extractFirst(
+			primKey, PortletConstants.LAYOUT_SEPARATOR);
+
+		if (plid != null) {
+			Layout layout = _layoutPersistence.fetchByPrimaryKey(
+				GetterUtil.getLong(plid));
+
+			if (layout == null) {
+				return 0;
+			}
+
+			return layout.getGroupId();
+		}
+
+		long classPK = GetterUtil.getLong(primKey);
+
+		if (classPK <= 0) {
+			return 0;
+		}
+
+		String className = StringUtil.extractFirst(name, CharPool.DASH);
+
+		if (className == null) {
+			className = name;
+		}
+
+		PersistedModelLocalService persistedModelLocalService =
+			PersistedModelLocalServiceRegistryUtil.
+				getPersistedModelLocalService(className);
+
+		if (persistedModelLocalService != null) {
+			PersistedModel persistedModel =
+				persistedModelLocalService.fetchPersistedModel(classPK);
+
+			if (persistedModel instanceof GroupedModel) {
+				GroupedModel groupedModel = (GroupedModel)persistedModel;
+
+				return groupedModel.getGroupId();
+			}
+
+			return 0;
+		}
+
+		if (_groupPersistence.fetchByPrimaryKey(classPK) == null) {
+			return 0;
+		}
+
+		return classPK;
+	}
+
+	private String _getPrimKey(Role role, int scope, long targetGroupId) {
+		_validateScope(scope);
+
+		if (scope == ResourceConstants.SCOPE_GROUP) {
+			if (targetGroupId <= 0) {
+				throw new IllegalArgumentException(
+					"Group scope requires a target group");
+			}
+
+			return String.valueOf(targetGroupId);
+		}
+
+		if (targetGroupId != 0) {
+			throw new IllegalArgumentException(
+				"Only the group scope takes a target group");
+		}
+
+		if (scope == ResourceConstants.SCOPE_COMPANY) {
+			return String.valueOf(role.getCompanyId());
+		}
+
+		return String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID);
+	}
+
+	private Role _getRole(long roleId) throws PortalException {
+		_permissionService.checkPermission(0, Role.class.getName(), roleId);
+
+		return _rolePersistence.findByPrimaryKey(roleId);
+	}
+
+	private long _getTargetGroupId(int scope, String primKey) {
+		if (scope == ResourceConstants.SCOPE_GROUP) {
+			return GetterUtil.getLong(primKey);
+		}
+
+		return 0;
+	}
+
+	private void _validateScope(int scope) {
+		if ((scope != ResourceConstants.SCOPE_COMPANY) &&
+			(scope != ResourceConstants.SCOPE_GROUP) &&
+			(scope != ResourceConstants.SCOPE_GROUP_TEMPLATE)) {
+
+			throw new IllegalArgumentException(
+				"Use setIndividualResourcePermissions for scope " + scope);
+		}
+	}
+
+	@BeanReference(type = GroupPersistence.class)
+	private GroupPersistence _groupPersistence;
+
+	@BeanReference(type = LayoutPersistence.class)
+	private LayoutPersistence _layoutPersistence;
 
 	@BeanReference(type = PermissionService.class)
 	private PermissionService _permissionService;
+
+	@BeanReference(type = RolePersistence.class)
+	private RolePersistence _rolePersistence;
 
 }

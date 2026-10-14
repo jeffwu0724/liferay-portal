@@ -556,8 +556,6 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 			selResource = modelResource;
 		}
 
-		long resourceGroupId = ParamUtil.getLong(
-			actionRequest, "resourceGroupId", themeDisplay.getScopeGroupId());
 		String[] resourcePrimKeys = ParamUtil.getStringValues(
 			actionRequest, "resourcePrimKey");
 
@@ -604,8 +602,7 @@ public class PortletConfigurationPortlet extends MVCPortlet {
 						ctCollectionId)) {
 
 				_resourcePermissionService.setIndividualResourcePermissions(
-					resourceGroupId, themeDisplay.getCompanyId(), selResource,
-					resourcePrimKey, roleIdActionIdsMap);
+					selResource, resourcePrimKey, roleIdActionIdsMap);
 			}
 
 			if (permissionPropagator != null) {
