@@ -96,6 +96,8 @@ import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.webserver.WebServerServletTokenUtil;
+import com.liferay.portal.struts.AuthPublicPathRegistry;
+import com.liferay.portal.struts.PortalRequestProcessor;
 import com.liferay.portal.theme.ThemeDisplayFactory;
 import com.liferay.portal.util.LayoutClone;
 import com.liferay.portal.util.LayoutCloneFactory;
@@ -811,6 +813,19 @@ public class ServicePreAction extends Action {
 			HttpServletResponse httpServletResponse,
 			boolean initPermissionChecker)
 		throws Exception {
+
+		// Auth public path
+
+		String path = (String)httpServletRequest.getAttribute(
+			PortalRequestProcessor.INCLUDE_PATH_INFO);
+
+		if (path == null) {
+			path = httpServletRequest.getPathInfo();
+		}
+
+		httpServletRequest.setAttribute(
+			PortalRequestProcessor.AUTH_PUBLIC_PATH,
+			(path != null) && AuthPublicPathRegistry.contains(path));
 
 		// Company
 
