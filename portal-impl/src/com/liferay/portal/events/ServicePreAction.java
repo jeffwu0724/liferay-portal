@@ -551,13 +551,18 @@ public class ServicePreAction extends Action {
 			boolean ignoreHiddenLayouts)
 		throws Exception {
 
+		boolean authPublicPath = GetterUtil.getBoolean(
+			httpServletRequest.getAttribute(
+				PortalRequestProcessor.AUTH_PUBLIC_PATH));
+
 		LayoutComposite defaultLayoutComposite =
 			_getDefaultVirtualHostLayoutComposite(httpServletRequest);
 
 		defaultLayoutComposite = _getViewableLayoutComposite(
 			httpServletRequest, ignoreHiddenLayouts,
 			defaultLayoutComposite.getLayout(),
-			defaultLayoutComposite.getLayouts(), permissionChecker, true, user);
+			defaultLayoutComposite.getLayouts(), permissionChecker,
+			!authPublicPath, true, user);
 
 		if (ListUtil.isNotEmpty(defaultLayoutComposite.getLayouts())) {
 			return defaultLayoutComposite;
@@ -575,8 +580,8 @@ public class ServicePreAction extends Action {
 			defaultLayoutComposite = _getViewableLayoutComposite(
 				httpServletRequest, ignoreHiddenLayouts,
 				defaultLayoutComposite.getLayout(),
-				defaultLayoutComposite.getLayouts(), permissionChecker, true,
-				user);
+				defaultLayoutComposite.getLayouts(), permissionChecker,
+				!authPublicPath, true, user);
 
 			if (ListUtil.isNotEmpty(defaultLayoutComposite.getLayouts())) {
 				return defaultLayoutComposite;
@@ -687,8 +692,8 @@ public class ServicePreAction extends Action {
 	private LayoutComposite _getViewableLayoutComposite(
 			HttpServletRequest httpServletRequest, boolean ignoreHiddenLayouts,
 			Layout layout, List<Layout> layouts,
-			PermissionChecker permissionChecker, boolean requirePublishedLayout,
-			User user)
+			PermissionChecker permissionChecker, boolean addPermissionError,
+			boolean requirePublishedLayout, User user)
 		throws Exception {
 
 		if (ListUtil.isEmpty(layouts)) {
@@ -723,7 +728,7 @@ public class ServicePreAction extends Action {
 		if (accessibleLayouts.isEmpty()) {
 			layouts = null;
 
-			if (!_isLoginRequest(httpServletRequest) &&
+			if (addPermissionError && !_isLoginRequest(httpServletRequest) &&
 				!hasViewLayoutPermission) {
 
 				if (user.isGuestUser() &&
@@ -744,6 +749,18 @@ public class ServicePreAction extends Action {
 		}
 
 		return new LayoutComposite(layout, layouts);
+	}
+
+	private LayoutComposite _getViewableLayoutComposite(
+			HttpServletRequest httpServletRequest, boolean ignoreHiddenLayouts,
+			Layout layout, List<Layout> layouts,
+			PermissionChecker permissionChecker, boolean requirePublishedLayout,
+			User user)
+		throws Exception {
+
+		return _getViewableLayoutComposite(
+			httpServletRequest, ignoreHiddenLayouts, layout, layouts,
+			permissionChecker, true, requirePublishedLayout, user);
 	}
 
 	private boolean _hasAccessPermission(
