@@ -335,6 +335,13 @@ gradle.beforeProject {
 				}
 			}
 
+			pluginManager.withPlugin("com.liferay.whip") {
+				dependencies {
+					testImplementation group: "org.ow2.asm", name: "asm", version: "9.7"
+					testImplementation group: "org.ow2.asm", name: "asm-tree", version: "9.7"
+				}
+			}
+
 			pluginManager.withPlugin("eclipse") {
 				if (tasks.eclipse.ext.has("gradleVersion")) {
 					String gradleVersion = tasks.eclipse.ext.get("gradleVersion")
