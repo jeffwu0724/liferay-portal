@@ -5674,6 +5674,9 @@ information. Make sure to commit in all build-lib-versions results.
 		<run-empty-osgi-core-dir-test database.type="mysql" database.version="8.4" />
 	</target>
 
+	<target name="empty-osgi-core-dir-mysql84-jdk25_zulu">
+		<run-empty-osgi-core-dir-test database.type="mysql" database.version="8.4" />
+	</target>
 
 	<target name="empty-osgi-core-dir-postgresql163">
 		<run-empty-osgi-core-dir-test database.type="postgresql" database.version="16.3" />
@@ -7886,6 +7889,9 @@ information. Make sure to commit in all format-javadoc results.
 		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.4" />
 	</target>
 
+	<target name="functional-tomcat101-mysql84-jdk25_zulu">
+		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.4" />
+	</target>
 
 	<target name="functional-tomcat101-mysql84_stable">
 		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.4" />
