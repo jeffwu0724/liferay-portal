@@ -7869,10 +7869,6 @@ information. Make sure to commit in all format-javadoc results.
 		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.0" />
 	</target>
 
-	<target name="functional-tomcat101-mysql80-jdk25_zulu">
-		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.0" />
-	</target>
-
 	<target name="functional-tomcat101-mysql84">
 		<run-functional-test app.server.type="tomcat" database.type="mysql" database.version="8.4" />
 	</target>
