@@ -5318,11 +5318,31 @@ tell application "Safari" to quit
 			<if>
 				<equals arg1="${app.server.type}" arg2="weblogic" />
 				<then>
+					<local name="weblogic.domain.java.jdk.home" />
+
+					<get-java-jdk-bundle-type test.batch.name="${test.batch.name}" />
+					<get-java-jdk-bundle-version test.batch.name="${test.batch.name}" />
+
+					<if>
+						<equals arg1="${java.jdk.bundle.version}" arg2="none" />
+						<then>
+							<property name="weblogic.domain.java.jdk.home" value="" />
+						</then>
+						<else>
+							<local name="java.jdk.home" />
+
+							<get-java-jdk-home type="${java.jdk.bundle.type}" version="${java.jdk.bundle.version}" />
+
+							<property name="weblogic.domain.java.jdk.home" value="${java.jdk.home}" />
+						</else>
+					</if>
+
 					<local name="java.jdk.home" />
 
 					<get-java-jdk-home type="oracle" version="21" />
 
 					<ant antfile="build-dist.xml" inheritAll="false" target="unzip-${app.server.type}-custom">
+						<property name="weblogic.domain.java.jdk.home" value="${weblogic.domain.java.jdk.home}" />
 						<property name="weblogic.java.jdk.home" value="${java.jdk.home}" />
 					</ant>
 
