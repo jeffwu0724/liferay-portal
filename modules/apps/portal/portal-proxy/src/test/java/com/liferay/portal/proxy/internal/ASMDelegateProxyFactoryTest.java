@@ -8,15 +8,14 @@ package com.liferay.portal.proxy.internal;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.util.MethodSwapTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.kernel.test.util.ReflectionUtilTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DelegateProxyFactory;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
@@ -207,18 +206,31 @@ public class ASMDelegateProxyFactoryTest {
 				illegalArgumentException.getMessage());
 		}
 
-		SecurityException securityException = new SecurityException();
+		Map<ClassLoader, Map<String, Class<?>>> classReferencesMap =
+			ReflectionTestUtil.getFieldValue(
+				ASMDelegateProxyFactory.class, "_classReferencesMap");
 
-		try (SwappableSecurityManager swappableSecurityManager =
-				ReflectionUtilTestUtil.throwForSuppressAccessChecks(
-					securityException)) {
+		classReferencesMap.put(
+			TestInterface.class.getClassLoader(),
+			HashMapBuilder.<String, Class<?>>put(
+				StringBundler.concat(
+					TestDelegate.class.getPackageName(), ".",
+					TestInterface.class.getSimpleName(), "ASMWrapper"),
+				Object.class
+			).build());
 
+		try {
 			delegateProxyFactory.newDelegateProxyInstance(
 				TestInterface.class.getClassLoader(), TestInterface.class,
 				new TestDelegate(), new TestDefault());
+
+			Assert.fail();
 		}
 		catch (RuntimeException runtimeException) {
-			Assert.assertSame(securityException, runtimeException.getCause());
+			Throwable throwable = runtimeException.getCause();
+
+			Assert.assertSame(
+				NoSuchMethodException.class, throwable.getClass());
 		}
 	}
 
