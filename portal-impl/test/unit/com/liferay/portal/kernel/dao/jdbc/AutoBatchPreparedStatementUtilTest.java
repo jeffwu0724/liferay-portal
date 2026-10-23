@@ -9,14 +9,13 @@ import com.liferay.petra.concurrent.DefaultNoticeableFuture;
 import com.liferay.petra.concurrent.NoticeableThreadPoolExecutor;
 import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 import com.liferay.petra.executor.PortalExecutorManager;
-import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
-import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.util.MethodSwapTestUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PrimitiveIntList;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -46,7 +45,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -70,6 +68,13 @@ public class AutoBatchPreparedStatementUtilTest {
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
 			CodeCoverageAssertor.INSTANCE, LiferayUnitTestRule.INSTANCE);
+
+	public static Method throwNoSuchMethodException(
+			Class<?> clazz, String name, Class<?>... parameterTypes)
+		throws NoSuchMethodException {
+
+		throw _noSuchMethodException;
+	}
 
 	@Before
 	public void setUp() {
@@ -98,34 +103,21 @@ public class AutoBatchPreparedStatementUtilTest {
 	}
 
 	@Test
-	public void testCINITFailure() throws ClassNotFoundException {
+	public void testCINITFailure() throws Exception {
 		PropsUtil.set(PropsKeys.HIBERNATE_JDBC_BATCH_SIZE, "0");
 
-		final NoSuchMethodException noSuchMethodException =
-			new NoSuchMethodException();
-		final AtomicInteger counter = new AtomicInteger();
+		try {
+			MethodSwapTestUtil.swapAndRunStaticBlock(
+				AutoBatchPreparedStatementUtil.class.getName(),
+				Class.class.getMethod("getMethod", String.class, Class[].class),
+				AutoBatchPreparedStatementUtilTest.class.getMethod(
+					"throwNoSuchMethodException", Class.class, String.class,
+					Class[].class));
 
-		try (SwappableSecurityManager swappableSecurityManager =
-				new SwappableSecurityManager() {
-
-					@Override
-					public void checkPackageAccess(String pkg) {
-						if (pkg.equals("java.sql") &&
-							(counter.getAndIncrement() == 1)) {
-
-							ReflectionUtil.throwException(
-								noSuchMethodException);
-						}
-					}
-
-				}) {
-
-			swappableSecurityManager.install();
-
-			Class.forName(AutoBatchPreparedStatementUtil.class.getName());
+			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(noSuchMethodException, eiie.getCause());
+			Assert.assertSame(_noSuchMethodException, eiie.getCause());
 		}
 	}
 
@@ -690,6 +682,9 @@ public class AutoBatchPreparedStatementUtilTest {
 				new int[] {4, 5}, preparedStatement.executeBatch());
 		}
 	}
+
+	private static final NoSuchMethodException _noSuchMethodException =
+		new NoSuchMethodException();
 
 	private ServiceRegistration<?> _serviceRegistration;
 

@@ -5,18 +5,19 @@
 
 package com.liferay.portal.proxy.internal;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.util.MethodSwapTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ReflectionUtilTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DelegateProxyFactory;
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.lang.reflect.Method;
@@ -40,6 +41,13 @@ public class ASMDelegateProxyFactoryTest {
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
 			CodeCoverageAssertor.INSTANCE, LiferayUnitTestRule.INSTANCE);
+
+	public static Method throwNoSuchMethodException(
+			Class<?> clazz, String name, Class<?>... parameterTypes)
+		throws NoSuchMethodException {
+
+		throw _noSuchMethodException;
+	}
 
 	@Test
 	public void testASMWrapper() throws Exception {
@@ -66,30 +74,22 @@ public class ASMDelegateProxyFactoryTest {
 		Assert.assertEquals(randomInt, method.invoke(asmWrapper, randomInt));
 	}
 
-	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testClassInitializationFailure() throws Exception {
-		Class.forName(
-			SystemProperties.class.getName(), true,
-			SystemProperties.class.getClassLoader());
-
-		SecurityException securityException = new SecurityException();
-
-		try (SwappableSecurityManager swappableSecurityManager =
-				ReflectionUtilTestUtil.throwForSuppressAccessChecks(
-					securityException)) {
-
-			DelegateProxyFactory delegateProxyFactory =
-				new ASMDelegateProxyFactory();
-
-			delegateProxyFactory.newDelegateProxyInstance(
-				TestInterface.class.getClassLoader(), TestInterface.class,
-				new TestDelegate(), new TestDefault());
+		try {
+			MethodSwapTestUtil.swapAndRunStaticBlock(
+				ASMDelegateProxyFactory.class.getName(),
+				ReflectionUtil.class.getMethod(
+					"getDeclaredMethod", Class.class, String.class,
+					Class[].class),
+				ASMDelegateProxyFactoryTest.class.getMethod(
+					"throwNoSuchMethodException", Class.class, String.class,
+					Class[].class));
 
 			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(securityException, eiie.getCause());
+			Assert.assertSame(_noSuchMethodException, eiie.getCause());
 		}
 	}
 
@@ -376,5 +376,8 @@ public class ASMDelegateProxyFactoryTest {
 
 		return methods;
 	}
+
+	private static final NoSuchMethodException _noSuchMethodException =
+		new NoSuchMethodException();
 
 }

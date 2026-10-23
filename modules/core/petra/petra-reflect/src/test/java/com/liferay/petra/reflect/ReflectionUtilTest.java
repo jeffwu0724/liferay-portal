@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.util.MethodSwapTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.lang.reflect.Field;
@@ -42,76 +43,68 @@ public class ReflectionUtilTest {
 		new AggregateTestRule(
 			CodeCoverageAssertor.INSTANCE, LiferayUnitTestRule.INSTANCE);
 
-	@NewEnv(type = NewEnv.Type.JVM)
-	@NewEnv.JVMArgsLine("-Djava.security.manager=allow")
+	public static Field throwNoSuchFieldException(Class<?> clazz, String name)
+		throws NoSuchFieldException {
+
+		throw _noSuchFieldException;
+	}
+
+	public static Method throwNoSuchMethodException(
+			Class<?> clazz, String name, Class<?>... parameterTypes)
+		throws NoSuchMethodException {
+
+		throw new NoSuchMethodException();
+	}
+
 	@Test
 	public void testClassInitializationFailure() throws Exception {
-		SecurityException securityException = new SecurityException();
-
-		try (SwappableSecurityManager swappableSecurityManager =
-				new SwappableSecurityManager() {
-
-					@Override
-					public void checkPermission(Permission permission) {
-						if (Objects.equals(
-								permission.getName(),
-								"accessDeclaredMembers")) {
-
-							throw securityException;
-						}
-					}
-
-				}) {
-
-			swappableSecurityManager.install();
-
-			Class.forName(ReflectionUtil.class.getName());
+		try {
+			MethodSwapTestUtil.swapAndRunStaticBlock(
+				ReflectionUtil.class.getName(),
+				Class.class.getMethod("getDeclaredField", String.class),
+				ReflectionUtilTest.class.getMethod(
+					"throwNoSuchFieldException", Class.class, String.class));
 
 			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(securityException, eiie.getCause());
+			Assert.assertSame(_noSuchFieldException, eiie.getCause());
 		}
 	}
 
-	@NewEnv(type = NewEnv.Type.JVM)
-	@NewEnv.JVMArgsLine("-Djava.security.manager=allow")
 	@Test
 	public void testClassInitializationFallback() throws Exception {
-		_runInFallbackMode(
-			() -> {
-				Class.forName(ReflectionUtil.class.getName());
+		Class<?> clazz = MethodSwapTestUtil.swapAndRunStaticBlock(
+			ReflectionUtil.class.getName(),
+			Class.class.getMethod(
+				"getDeclaredMethod", String.class, Class[].class),
+			ReflectionUtilTest.class.getMethod(
+				"throwNoSuchMethodException", Class.class, String.class,
+				Class[].class));
 
-				Field field = ReflectionUtil.class.getDeclaredField(
-					"_fetchDeclaredFieldMethodHandle");
+		Field field = clazz.getDeclaredField("_fetchDeclaredFieldMethodHandle");
 
-				field.setAccessible(true);
+		field.setAccessible(true);
 
-				Assert.assertNull(field.get(null));
+		Assert.assertNull(field.get(null));
 
-				field = ReflectionUtil.class.getDeclaredField(
-					"_fetchDeclaredMethodMethodHandle");
+		field = clazz.getDeclaredField("_fetchDeclaredMethodMethodHandle");
 
-				field.setAccessible(true);
+		field.setAccessible(true);
 
-				Assert.assertNull(field.get(null));
+		Assert.assertNull(field.get(null));
 
-				field = ReflectionUtil.class.getDeclaredField(
-					"_fetchFieldMethodHandle");
+		field = clazz.getDeclaredField("_fetchFieldMethodHandle");
 
-				field.setAccessible(true);
+		field.setAccessible(true);
 
-				Assert.assertNull(field.get(null));
+		Assert.assertNull(field.get(null));
 
-				field = ReflectionUtil.class.getDeclaredField(
-					"_fetchMethodMethodHandle");
+		field = clazz.getDeclaredField("_fetchMethodMethodHandle");
 
-				field.setAccessible(true);
+		field.setAccessible(true);
 
-				Assert.assertNull(field.get(null));
-
-				return null;
-			});
+		Assert.assertNull(field.get(null));
 	}
 
 	@Test
@@ -559,6 +552,9 @@ public class ReflectionUtilTest {
 			callable.call();
 		}
 	}
+
+	private static final NoSuchFieldException _noSuchFieldException =
+		new NoSuchFieldException();
 
 	private static class TestClass implements TestInterface {
 
