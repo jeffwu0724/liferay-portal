@@ -7,17 +7,19 @@ package com.liferay.portal.configuration.metatype.bnd.util;
 
 import aQute.bnd.annotation.metatype.Meta;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
-import com.liferay.portal.kernel.test.util.ReflectionUtilTestUtil;
+import com.liferay.portal.kernel.test.util.MethodSwapTestUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+
+import java.lang.reflect.Method;
 
 import java.util.Collections;
 import java.util.concurrent.Callable;
@@ -44,27 +46,35 @@ public class ConfigurableUtilTest {
 		new AggregateTestRule(
 			CodeCoverageAssertor.INSTANCE, LiferayUnitTestRule.INSTANCE);
 
+	public static Method throwNoSuchMethodException(
+			Class<?> clazz, String name, Class<?>... parameterTypes)
+		throws NoSuchMethodException {
+
+		throw _noSuchMethodException;
+	}
+
 	@Test
 	public void testBigString() {
 		_testBigString(65535);
 		_testBigString(65536);
 	}
 
-	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testClassInitializationFailure() throws Exception {
-		SecurityException securityException = new SecurityException();
-
-		try (SwappableSecurityManager swappableSecurityManager =
-				ReflectionUtilTestUtil.throwForSuppressAccessChecks(
-					securityException)) {
-
-			Class.forName(ConfigurableUtil.class.getName());
+		try {
+			MethodSwapTestUtil.swapAndRunStaticBlock(
+				ConfigurableUtil.class.getName(),
+				ReflectionUtil.class.getMethod(
+					"getDeclaredMethod", Class.class, String.class,
+					Class[].class),
+				ConfigurableUtilTest.class.getMethod(
+					"throwNoSuchMethodException", Class.class, String.class,
+					Class[].class));
 
 			Assert.fail();
 		}
 		catch (ExceptionInInitializerError eiie) {
-			Assert.assertSame(securityException, eiie.getCause());
+			Assert.assertSame(_noSuchMethodException, eiie.getCause());
 		}
 	}
 
@@ -285,6 +295,9 @@ public class ConfigurableUtilTest {
 				Collections.singletonMap("testReqiredString", bigString)),
 			bigString);
 	}
+
+	private static final NoSuchMethodException _noSuchMethodException =
+		new NoSuchMethodException();
 
 	private interface TestConfiguration {
 
