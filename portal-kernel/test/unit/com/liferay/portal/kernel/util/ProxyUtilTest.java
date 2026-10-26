@@ -5,14 +5,13 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
-import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
+import com.liferay.portal.kernel.test.util.MethodSwapTestUtil;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,40 +51,30 @@ public class ProxyUtilTest {
 			},
 			NewEnvTestRule.INSTANCE);
 
-	@NewEnv(type = NewEnv.Type.CLASSLOADER)
+	public static Method throwNoSuchMethodException(
+			Class<?> clazz, String name, Class<?>... parameterTypes)
+		throws NoSuchMethodException {
+
+		throw _noSuchMethodException;
+	}
+
 	@Test
 	public void testDelegateInvocationHandlerInitializationFailure()
-		throws ClassNotFoundException {
+		throws Exception {
 
-		NoSuchMethodException noSuchMethodException =
-			new NoSuchMethodException();
+		try {
+			MethodSwapTestUtil.swapAndRunStaticBlock(
+				ProxyUtil.class.getName() + "$DelegateInvocationHandler",
+				Class.class.getMethod("getMethod", String.class, Class[].class),
+				ProxyUtilTest.class.getMethod(
+					"throwNoSuchMethodException", Class.class, String.class,
+					Class[].class));
 
-		AtomicInteger counter = new AtomicInteger();
-
-		try (SwappableSecurityManager swappableSecurityManager =
-				new SwappableSecurityManager() {
-
-					@Override
-					public void checkPackageAccess(String pkg) {
-						if (pkg.equals("java.lang") &&
-							(counter.getAndIncrement() == 18)) {
-
-							ReflectionUtil.throwException(
-								noSuchMethodException);
-						}
-					}
-
-				}) {
-
-			swappableSecurityManager.install();
-
-			String name = ProxyUtil.class.getName();
-
-			Class.forName(name.concat("$DelegateInvocationHandler"));
+			Assert.fail();
 		}
 		catch (ExceptionInInitializerError exceptionInInitializerError) {
 			Assert.assertSame(
-				noSuchMethodException, exceptionInInitializerError.getCause());
+				_noSuchMethodException, exceptionInInitializerError.getCause());
 		}
 	}
 
@@ -176,6 +165,9 @@ public class ProxyUtilTest {
 		Assert.assertEquals(
 			testInterface.hashCode(), identityObject.hashCode());
 	}
+
+	private static final NoSuchMethodException _noSuchMethodException =
+		new NoSuchMethodException();
 
 	private static class DelegateClass {
 
