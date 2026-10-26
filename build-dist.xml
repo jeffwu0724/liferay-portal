@@ -1090,6 +1090,10 @@ org.apache.level=WARNING]]>
 			sed -i "s;NativeVersionManager=.*;NativeVersionManager=false;g" nodemanager.properties
 		</execute>
 
+		<execute dir="${app.server.weblogic.bin.dir}">
+			sed -i '/^\s*JAVA_HOME="\//d' setDomainEnv.sh
+		</execute>
+
 		<replace
 			file="${app.server.weblogic.instance.dir}/startWebLogic.sh"
 		>
