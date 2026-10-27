@@ -1920,6 +1920,21 @@ artifact.url=${remote.repository.cdn.url}/com/liferay/portal/com.liferay.${proce
 		<attribute name="test.type" />
 
 		<sequential>
+			<if>
+				<and>
+					<available file="${project.dir}/modules/test/whip" />
+					<equals arg1="${com.liferay.whip.ignore.local}" arg2="false" />
+					<not>
+						<isset property="whip.local.deployed" />
+					</not>
+				</and>
+				<then>
+					<gradle-execute dir="${project.dir}/modules/test/whip" task="deploy" />
+
+					<property name="whip.local.deployed" value="true" />
+				</then>
+			</if>
+
 			<var name="junit.classpath" value="${classpath.full}" />
 
 			<if>

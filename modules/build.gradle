@@ -836,6 +836,18 @@ gradle.beforeProject {
 			}
 		}
 
+		pluginManager.withPlugin("com.liferay.whip") {
+			if ((findProject(":test:whip") != null) && !GradleUtil.getProperty(project, "com.liferay.whip.ignore.local", true)) {
+				configurations.all {
+					resolutionStrategy.dependencySubstitution {
+						DependencySubstitutions dependencySubstitutions ->
+
+						dependencySubstitutions.substitute(dependencySubstitutions.module("com.liferay:com.liferay.whip")).using(dependencySubstitutions.project(":test:whip"))
+					}
+				}
+			}
+		}
+
 		pluginManager.withPlugin("eclipse") {
 			tasks.eclipse.dependsOn {
 				Set<ProjectDependency> projectDependencies = configurations.runtimeOnly.allDependencies.withType(ProjectDependency)
