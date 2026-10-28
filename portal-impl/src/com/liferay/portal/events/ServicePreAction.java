@@ -96,6 +96,8 @@ import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.webserver.WebServerServletTokenUtil;
+import com.liferay.portal.struts.AuthPublicPathRegistry;
+import com.liferay.portal.struts.PortalRequestProcessor;
 import com.liferay.portal.theme.ThemeDisplayFactory;
 import com.liferay.portal.util.LayoutClone;
 import com.liferay.portal.util.LayoutCloneFactory;
@@ -725,6 +727,9 @@ public class ServicePreAction extends Action {
 				!hasViewLayoutPermission) {
 
 				if (user.isGuestUser() &&
+					!GetterUtil.getBoolean(
+						httpServletRequest.getAttribute(
+							PortalRequestProcessor.AUTH_PUBLIC_PATH)) &&
 					AuthLoginGroupSettingsUtil.isPromptEnabled(
 						layout.getGroupId())) {
 
@@ -1118,6 +1123,22 @@ public class ServicePreAction extends Action {
 		List<Layout> layouts = null;
 		boolean loginRequest = _isLoginRequest(httpServletRequest);
 
+		boolean authPublicPath = false;
+
+		String path = (String)httpServletRequest.getAttribute(
+			PortalRequestProcessor.INCLUDE_PATH_INFO);
+
+		if (path == null) {
+			path = httpServletRequest.getPathInfo();
+		}
+
+		if ((path != null) && AuthPublicPathRegistry.contains(path)) {
+			authPublicPath = true;
+		}
+
+		httpServletRequest.setAttribute(
+			PortalRequestProcessor.AUTH_PUBLIC_PATH, authPublicPath);
+
 		Boolean redirectToDefaultLayout =
 			(Boolean)httpServletRequest.getAttribute(
 				WebKeys.REDIRECT_TO_DEFAULT_LAYOUT);
@@ -1220,6 +1241,14 @@ public class ServicePreAction extends Action {
 			viewableLayoutComposite = _getDefaultViewableLayoutComposite(
 				httpServletRequest, user, permissionChecker, signedIn,
 				ignoreHiddenLayouts);
+
+			if (authPublicPath &&
+				ListUtil.isNotEmpty(viewableLayoutComposite.getLayouts())) {
+
+				SessionErrors.remove(
+					httpServletRequest,
+					LayoutPermissionException.class.getName());
+			}
 
 			httpServletRequest.setAttribute(
 				WebKeys.LAYOUT_DEFAULT, Boolean.TRUE);

@@ -9,11 +9,14 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.test.util.GroupConfigurationTemporarySwapper;
 import com.liferay.portal.events.ServicePreAction;
 import com.liferay.portal.kernel.cookies.constants.CookiesConstants;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.LifecycleAction;
 import com.liferay.portal.kernel.events.LifecycleEvent;
+import com.liferay.portal.kernel.exception.LayoutPermissionException;
+import com.liferay.portal.kernel.login.AuthLoginGroupSettingsUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
@@ -34,6 +37,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -43,6 +47,7 @@ import com.liferay.portal.kernel.test.util.PropsValuesTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -264,6 +269,52 @@ public class ServicePreActionTest {
 	}
 
 	@Test
+	@TestInfo("LPD-107079")
+	public void testInitThemeDisplayAuthPublicPath() throws Exception {
+		_assertAuthPublicPathUsesGuestSiteLayout();
+	}
+
+	@Test
+	@TestInfo("LPD-107079")
+	public void testInitThemeDisplayAuthPublicPathWhenNoLayoutIsViewable()
+		throws Exception {
+
+		_mockHttpServletRequest.setPathInfo("/portal/captcha/get_image");
+		_mockHttpServletRequest.setRequestURI(
+			_portal.getPathMain() + "/portal/captcha/get_image");
+
+		_getThemeDisplayPlid(false, false);
+
+		Assert.assertTrue(
+			SessionErrors.contains(
+				_mockHttpServletRequest,
+				LayoutPermissionException.class.getName()));
+	}
+
+	@Test
+	@TestInfo("LPD-107079")
+	public void testInitThemeDisplayAuthPublicPathWhenPromptIsEnabled()
+		throws Exception {
+
+		try (GroupConfigurationTemporarySwapper
+				groupConfigurationTemporarySwapper =
+					new GroupConfigurationTemporarySwapper(
+						_group.getGroupId(),
+						"com.liferay.login.web.internal.configuration." +
+							"AuthLoginConfiguration",
+						HashMapDictionaryBuilder.<String, Object>put(
+							"promptEnabled", true
+						).build())) {
+
+			Assert.assertTrue(
+				AuthLoginGroupSettingsUtil.isPromptEnabled(
+					_group.getGroupId()));
+
+			_assertAuthPublicPathUsesGuestSiteLayout();
+		}
+	}
+
+	@Test
 	@TestInfo({"LPD-100303", "LPD-105580"})
 	public void testInitThemeDisplayDefaultLayoutIsPublished()
 		throws Exception {
@@ -458,6 +509,48 @@ public class ServicePreActionTest {
 		_resourceLocalService.addResources(
 			_company.getCompanyId(), _group.getGroupId(), layout.getUserId(),
 			Layout.class.getName(), layout.getPlid(), false, true, true);
+	}
+
+	private void _assertAuthPublicPathUsesGuestSiteLayout() throws Exception {
+		Role role = _roleLocalService.getRole(
+			_company.getCompanyId(), RoleConstants.GUEST);
+
+		for (Layout layout :
+				_layoutLocalService.getLayouts(_group.getGroupId(), false)) {
+
+			_resourcePermissionLocalService.setResourcePermissions(
+				layout.getCompanyId(), Layout.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(layout.getPlid()), role.getRoleId(),
+				new String[0]);
+		}
+
+		_mockHttpServletRequest.setPathInfo("/portal/captcha/get_image");
+		_mockHttpServletRequest.setRequestURI(
+			_portal.getPathMain() + "/portal/captcha/get_image");
+
+		_user = _portal.initUser(_mockHttpServletRequest);
+
+		_mockHttpServletRequest.setAttribute(WebKeys.USER, _user);
+
+		_servicePreAction.run(
+			_mockHttpServletRequest, _mockHttpServletResponse);
+
+		Assert.assertFalse(
+			SessionErrors.contains(
+				_mockHttpServletRequest,
+				LayoutPermissionException.class.getName()));
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)_mockHttpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+		Layout layout = _getLayout(
+			ReflectionTestUtil.invoke(
+				_servicePreAction, "_getGuestSiteLayoutComposite",
+				new Class<?>[] {User.class}, _user));
+
+		Assert.assertEquals(layout.getPlid(), themeDisplay.getPlid());
 	}
 
 	private Layout _getLayout(Object layoutComposite) {
