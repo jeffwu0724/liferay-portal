@@ -7,6 +7,7 @@ package com.liferay.portal.upload.internal.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
 
+import com.liferay.portal.configuration.metatype.annotations.ExtendedAttributeDefinition;
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 
 /**
@@ -19,6 +20,13 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 	name = "upload-servlet-request-configuration-name"
 )
 public interface UploadServletRequestConfiguration {
+
+	@ExtendedAttributeDefinition(descriptionArguments = {"-1", "1000"})
+	@Meta.AD(
+		deflt = "1000", description = "max-files-count-help",
+		name = "overall-maximum-upload-request-files-count", required = false
+	)
+	public long maxFilesCount();
 
 	@Meta.AD(
 		deflt = "104857600", description = "max-size-help",
